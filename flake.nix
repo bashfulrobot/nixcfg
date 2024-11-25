@@ -33,8 +33,7 @@
       secrets =
         builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
 
-      user-settings =
-        builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
+      # user-settings = builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
 
       commonModules = [
         nix-flatpak.nixosModules.nix-flatpak

@@ -54,34 +54,28 @@ in {
 
       # SSH configuration to use 1Password SSH agent
       # TODO: TEST this
-      # programs.ssh = {
-      #   enable = true;
-      #   extraConfig = ''
-      #     Host *
-      #         IdentityAgent ${onePassPath}
-      #   '';
-      # };
+      programs.ssh = {
+        enable = true;
+        extraConfig = ''
+          Host *
+              IdentityAgent ${onePassPath}
+        '';
+      };
 
       # You can enable Git's SSH singing with Home Manager:
       # TODO: TEST this
-      #     git = {
-      #   enable = true;
-      #   extraConfig = {
-      #     gpg = {
-      #       format = "ssh";
-      #     };
-      #     "gpg \"ssh\"" = {
-      #       program = "${lib.getExe' pkgs._1password-gui "op-ssh-sign"}";
-      #     };
-      #     commit = {
-      #       gpgsign = true;
-      #     };
+      git = {
+        enable = true;
+        extraConfig = {
+          gpg = { format = "ssh"; };
+          "gpg \"ssh\"" = {
+            program = "${lib.getExe' pkgs._1password-gui "op-ssh-sign"}";
+          };
+          commit = { gpgsign = true; };
 
-      #     user = {
-      #       signingKey = "...";
-      #     };
-      #   };
-      # };
+          user = { signingKey = "..."; };
+        };
+      };
     };
   };
 }

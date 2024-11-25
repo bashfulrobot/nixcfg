@@ -1,9 +1,12 @@
 { config, pkgs, ... }: {
 
-  apps = { one-password.enable = true; };
-
   nixcfg = {
     nix-settings.enable = true;
     home-manager.enable = true;
   };
+
+  # Enable gnome desktop
+  desktops.gnome.enable = true;
+
+  apps = { one-password.enable = true; };
 }

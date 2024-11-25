@@ -18,16 +18,16 @@ let
   # Also, make the strings absolute
 
 # No Trace
-  validFiles = dir:
-    map (file: ./. + "/${file}") (filter (file:
-      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "cfg" file && !hasInfix "disabled" file && file
-      != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
+  # validFiles = dir:
+  #   map (file: ./. + "/${file}") (filter (file:
+  #     !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "cfg" file && !hasInfix "disabled" file && file
+  #     != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
 
 # With Trace
-# validFiles = dir:
-#     map (file: let absFile = ./. + "/${file}"; in builtins.trace "Importing ${absFile} from ${builtins.dirOf absFile}" absFile)
-#     (filter (file:
-#       !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && file
-#       != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
+validFiles = dir:
+    map (file: let absFile = ./. + "/${file}"; in builtins.trace "Importing ${absFile} from ${builtins.dirOf absFile}" absFile)
+    (filter (file:
+      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && file
+      != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
 
 in { imports = validFiles ./.; }

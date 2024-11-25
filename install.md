@@ -1,3 +1,5 @@
+- Ensure you have the proper `hardware-configuration.nix` from the machine checked in already.
+- TODO: doc how to generate for a new system
 - boot iso
 - connect wifi
 - `sudo su -`

@@ -1,6 +1,6 @@
 { config, lib, ... }: {
 
-  config.nixcfg = {
+  nixcfg = {
     nix-settings.enable = true;
     home-manager.enable = true;
   };

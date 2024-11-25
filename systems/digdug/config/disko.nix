@@ -2,13 +2,13 @@
   disko.devices = {
     disk = {
       main = {
-        device = "/dev/disk/by-path/pci-0000:02:00.0-nvme-1";
+        device = "/dev/nvme0n1";
         type = "disk";
         content = {
           type = "gpt";
           partitions = {
             ESP = {
-              end = "4096M";
+              size = "4096M";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -18,12 +18,27 @@
               };
             };
             root = {
-              name = "root";
-              end = "-0";
+              end = "-1G";
               content = {
                 type = "filesystem";
-                format = "bcachefs";
+                format = "ext4";
                 mountpoint = "/";
+              };
+            };
+            encryptedSwap = {
+              size = "100M";
+              content = {
+                type = "swap";
+                randomEncryption = true;
+                priority = 100; # prefer to encrypt as long as we have space for it
+              };
+            };
+            plainSwap = {
+              size = "100%";
+              content = {
+                type = "swap";
+                discardPolicy = "both";
+                resumeDevice = true; # resume from hiberation from this device
               };
             };
           };
@@ -32,3 +47,4 @@
     };
   };
 }
+

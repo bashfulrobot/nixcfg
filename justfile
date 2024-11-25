@@ -45,7 +45,7 @@ dev-rebuild-no-cache:
 dev-rebuild-trace:
     @git add -A
     @just garbage-build-cache
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}} --show-trace > ~/dev/nix/nixos/rebuild-trace.log 2>&1
+    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}} --show-trace > ~/dev/nix/nixcfg/rebuild-trace.log 2>&1
     # @just _sway-reload
 # Test (with Trace) nixos cfg on your current host without git commit. Switches, but does not create a bootloader entry
 dev-test-trace:
@@ -54,7 +54,7 @@ dev-test-trace:
     @sudo nixos-rebuild test --impure --flake .#\{{`hostname`}} --show-trace
 # Export plasma config to nix
 export-plasma:
-    @nix run github:nix-community/plasma-manager > /home/dustin/dev/nix/nixos/modules/desktops/kde/build/plasma-manager.nix
+    @nix run github:nix-community/plasma-manager > /home/dustin/dev/nix/nixcfg/modules/desktops/kde/build/plasma-manager.nix
 # Final build and garbage collect, will reboot
 final-build-reboot:
     @just garbage-build-cache

@@ -76,7 +76,7 @@ in {
 
     system.activationScripts.script.text = ''
       mkdir -p /var/lib/AccountsService/{icons,users}
-      cp ${user-settings.user.home}/dev/nix/nixos/modules/desktops/gnome/.face /var/lib/AccountsService/icons/${user-settings.user.username}
+      cp ${user-settings.user.home}/dev/nix/nixcfg/modules/desktops/gnome/.face /var/lib/AccountsService/icons/${user-settings.user.username}
       echo -e "[User]\nIcon=/var/lib/AccountsService/icons/${user-settings.user.username}\n" > /var/lib/AccountsService/users/${user-settings.user.username}
 
       chown root:root /var/lib/AccountsService/users/${user-settings.user.username}

@@ -7,6 +7,8 @@
     ../../archetype/autoimport.nix
     ../../suites/autoimport.nix
   ];
+  
+  archetype.workstation.enable = true;
 
 
   networking.hostName = "digdug"; # Define your hostname.

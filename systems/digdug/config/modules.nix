@@ -1,9 +1,8 @@
 { config, pkgs, ... }: {
 
-  nixcfg = {
-    nix-settings.enable = true;
-    home-manager.enable = true;
-  };
+  users.default.enable = true;
+
+  
 
   # Enable gnome desktop
   desktops.gnome.enable = true;

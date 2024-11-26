@@ -75,7 +75,7 @@ in {
 
     sys = {
       dconf.enable = true;
-      sys.xdg.enable = true;
+      xdg.enable = true;
     };
 
     desktops.gnome.keybindings.enable = true;
@@ -105,11 +105,11 @@ in {
           night-light-enabled = true;
         };
 
-        #     "org/gnome/Console" = {
-        #       theme = "auto";
-        #       font-scale = 1.5;
-        #       custom-font = "Liga SFMono Nerd Font 13";
-        #     };
+            "org/gnome/Console" = {
+              theme = "auto";
+              font-scale = 1.5;
+              custom-font = "JetBrainsMonoNL Nerd Font Mono 14";
+            };
 
         # #### Visual
 

@@ -14,7 +14,7 @@ in {
     environment.systemPackages = with pkgs;
       [
         git-crypt # repository encryption
-        #gptcommit # git commit message generator
+        gptcommit # git commit message generator
       ];
 
     home-manager.users."${user-settings.user.username}" = {

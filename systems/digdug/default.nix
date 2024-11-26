@@ -5,25 +5,9 @@
     ./config/autoimport.nix
     ../../modules/autoimport.nix
     ../../archetype/autoimport.nix
-    # ../../suites/autoimport.nix
+    ../../suites/autoimport.nix
   ];
 
-  programs = {
-    # Install firefox.
-    firefox.enable = true;
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    # mtr.enable = true;
-    # gnupg.agent = {
-    #   enable = true;
-    #   enableSSHSupport = true;
-    # };
-
-  };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [ git git-crypt neovim ];
 
   networking.hostName = "digdug"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

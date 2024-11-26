@@ -31,7 +31,7 @@ in {
       #   k8s.enable = true;
       offcoms.enable = true;
       #   sysdig.enable = true;
-        terminal.enable = true;
+      terminal.enable = true;
       #   utilities.enable = true;
     };
 
@@ -44,17 +44,20 @@ in {
       fonts.enable = true;
       ssh.enable = true;
       #   gpg.enable = true;
-        scripts = {
-          hw-scan.enable = true;
-          screenshots.enable = true;
-          gmail-url.enable = true;
-          copy_icons.enable = true;
-          init-bootstrap.enable = true;
-          toggle-cursor-size.enable = true;
-        };
+      scripts = {
+        hw-scan.enable = true;
+        screenshots.enable = true;
+        gmail-url.enable = true;
+        copy_icons.enable = true;
+        init-bootstrap.enable = true;
+        toggle-cursor-size.enable = true;
+      };
     };
 
-    hw.audio.enable = true;
+    hw = {
+      audio.enable = true;
+      firmware.enable = true;
+    };
 
   };
 }

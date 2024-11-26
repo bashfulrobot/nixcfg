@@ -14,17 +14,6 @@ set shell := ["bash", "-cu"]
 # "_" hides the recipie from listings
 _default:
     @just --list --unsorted --list-prefix ····
-# _default:
-#     @just --choose
-# _sway-reload:
-#     @case $(hostname) in \
-#         evo|rembot) \
-#             swaymsg reload; \
-#             echo "Sway reloaded...";; \
-#         *) \
-#             echo "Skipping sway reload...";; \
-#     esac
-
 # Test nixos cfg on your current host without git commit. Switches, but does not create a bootloader entry
 dev-test:
     @git add -A
@@ -52,9 +41,6 @@ dev-test-trace:
     @git add -A
     @just garbage-build-cache
     @sudo nixos-rebuild test --impure --flake .#\{{`hostname`}} --show-trace
-# Export plasma config to nix
-export-plasma:
-    @nix run github:nix-community/plasma-manager > /home/dustin/dev/nix/nixcfg/modules/desktops/kde/build/plasma-manager.nix
 # Final build and garbage collect, will reboot
 final-build-reboot:
     @just garbage-build-cache
@@ -71,7 +57,7 @@ garbage-build-cache:
 # check active kernel
 kernel:
     @uname -r
-    @ls /boot/EFI/nixos/
+    @sudo ls /boot/EFI/nixos/
 # lint nix files
 nix-lint:
     fd -e nix --hidden --no-ignore --follow . -x statix check {}

@@ -62,20 +62,6 @@ in {
         '';
       };
 
-      # You can enable Git's SSH singing with Home Manager:
-      # TODO: TEST this
-      # git = {
-      #   enable = true;
-      #   extraConfig = {
-      #     gpg = { format = "ssh"; };
-      #     "gpg \"ssh\"" = {
-      #       program = "${lib.getExe' pkgs._1password-gui "op-ssh-sign"}";
-      #     };
-      #     commit = { gpgsign = true; };
-
-      #     user = { signingKey = "..."; };
-      #   };
-      # };
     };
   };
 }

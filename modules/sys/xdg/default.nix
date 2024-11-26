@@ -24,7 +24,7 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       xdg = {
         # TODO: remeber, forcing the file to be overwritten when home-manager is run
-        configFile."mimeapps.list".force = true;
+        # configFile."mimeapps.list".force = true;
 
         # desktopEntries.librewolf = {
         #   name = "LibreWolf";

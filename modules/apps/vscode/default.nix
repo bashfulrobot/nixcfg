@@ -18,11 +18,11 @@ in {
     home-manager.users."${user-settings.user.username}" = {
 
       # force vscode to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer
-      # home.file.".config/code-flags.conf".text = ''
-      #   --enable-features=UseOzonePlatform
-      #   --ozone-platform=wayland
-      #   --enable-features=WaylandWindowDecorations
-      # '';
+      home.file.".config/code-flags.conf".text = ''
+        --enable-features=UseOzonePlatform
+        --ozone-platform=wayland
+        --enable-features=WaylandWindowDecorations
+      '';
     };
   };
 }

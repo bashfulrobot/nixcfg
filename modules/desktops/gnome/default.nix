@@ -113,7 +113,21 @@ in {
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           accent-color = "slate";
-          };
+
+          # Fonts
+          font-hinting = "full";
+          font-antialiasing = "rgba";
+
+          font-name = "Work Sans 12";
+          document-font-name = "Work Sans 12";
+          monospace-font-name = "Source Code Pro 10";
+
+          # Default Fonts
+          # font-name = "Cantarell 11";
+          # document-font-name = "Cantarell 11";
+          # monospace-font-name = "Source Code Pro 10";
+
+        };
         "org/gnome/desktop/background" = {
           color-shading-type = "solid";
           picture-options = "zoom";

@@ -17,8 +17,9 @@ in {
       isNormalUser = true;
       initialPassword = "changeme";
       description = "${user-settings.user.full-name}";
-      shell = pkgs.fish;
+      # shell = pkgs.fish;
       # shell = pkgs.zsh;
+      shell = pkgs.bash
       extraGroups = [
         "networkmanager"
         "wheel"

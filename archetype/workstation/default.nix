@@ -19,23 +19,21 @@ in {
     };
 
     services = {
-      # Enable the OpenSSH daemon.
-      openssh.enable = true;
       # Enable CUPS to print documents.
       printing.enable = true;
     };
 
-    # suites = {
+    suites = {
     #   content-creation.enable = false;
-    #   dev.enable = true;
+      dev.enable = true;
     #   entertainment.enable = true;
     #   infrastructure.enable = true;
     #   k8s.enable = true;
-    #   offcoms.enable = true;
+      offcoms.enable = true;
     #   sysdig.enable = true;
     #   terminal.enable = true;
     #   utilities.enable = true;
-    # };
+    };
 
     sys = {
       #   plymouth.enable = true;

@@ -24,10 +24,8 @@ in {
           variant = "";
         };
       };
-      
-    };
 
-    
+    };
 
     environment.systemPackages = with pkgs; [ ];
 
@@ -75,47 +73,68 @@ in {
       chmod 0444 /var/lib/AccountsService/icons/${user-settings.user.username}
     '';
 
+    sys.dconf.enable = true;
+
+    desktops.gnome.keybindings.enable = true;
+
     ##### Home Manager Config options #####
-    # home-manager.users."${user-settings.user.username}" = {
-    #   home.sessionVariables = { XDG_CURRENT_DESKTOP = "gnome"; };
+    home-manager.users."${user-settings.user.username}" = {
 
-    #   services.gnome-keyring = {
-    #     enable = true;
-    #     # Ensure all are enabled. Could not find docs
-    #     # stating the defaults.
-    #     components = [ "pkcs11" "secrets" "ssh" ];
-    #   };
+      dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
 
-    #   dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
+        #     "org/gnome/mutter" = {
+        #       center-new-windows = true;
+        #       edge-tiling = false; # for pop-shell
+        #     };
 
-    #     "org/gnome/mutter" = {
-    #       center-new-windows = true;
-    #       edge-tiling = false; # for pop-shell
-    #     };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          two-finger-scrolling-enabled = true;
+          edge-scrolling-enabled = false;
+          tap-to-click = true;
+          natural-scroll = false;
+          disable-while-typing = true;
+          click-method = "fingers";
+        };
 
-    #     "org/gnome/desktop/peripherals/touchpad" = {
-    #       two-finger-scrolling-enabled = true;
-    #       edge-scrolling-enabled = false;
-    #       tap-to-click = true;
-    #       natural-scroll = false;
-    #       disable-while-typing = true;
-    #       click-method = "fingers";
-    #     };
+        "org/gnome/desktop/peripherals/mouse" = { natural-scroll = false; };
 
-    #     "org/gnome/desktop/peripherals/mouse" = { natural-scroll = false; };
+        "org/gnome/settings-daemon/plugins/color" = {
+          night-light-enabled = true;
+        };
 
-    #     "org/gnome/settings-daemon/plugins/color" = {
-    #       night-light-enabled = true;
-    #     };
+        #     "org/gnome/Console" = {
+        #       theme = "auto";
+        #       font-scale = 1.5;
+        #       custom-font = "Liga SFMono Nerd Font 13";
+        #     };
 
-    #     "org/gnome/Console" = {
-    #       theme = "auto";
-    #       font-scale = 1.5;
-    #       custom-font = "Liga SFMono Nerd Font 13";
-    #     };
+        # #### Visual
 
-    #   };
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          accent-color = "slate";
+          };
+        "org/gnome/desktop/background" = {
+          color-shading-type = "solid";
+          picture-options = "zoom";
+          picture-uri =
+            "file:///run/current-system/sw/share/backgrounds/gnome/symbolic-soup-l.jxl";
+          picture-uri-dark =
+            "file:///run/current-system/sw/share/backgrounds/gnome/symbolic-soup-d.jxl";
+          primary-color = "#B9B5AE";
+          secondary-color = "#000000";
+        };
+        "org/gnome/desktop/screensaver" = {
+          color-shading-type = "solid";
+          picture-options = "zoom";
+          picture-uri =
+            "file:///run/current-system/sw/share/backgrounds/gnome/symbolic-soup-l.jxl";
+          primary-color = "#B9B5AE";
+          secondary-color = "#000000";
+        };
 
-    # };
+      };
+
+    };
   };
 }

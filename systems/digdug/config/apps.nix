@@ -15,5 +15,5 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ git git-crypt neovim ];
+  environment.systemPackages = with pkgs; [ git git-crypt neovim just ];
 }

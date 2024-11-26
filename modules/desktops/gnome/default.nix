@@ -73,7 +73,10 @@ in {
       chmod 0444 /var/lib/AccountsService/icons/${user-settings.user.username}
     '';
 
-    sys.dconf.enable = true;
+    sys = {
+      dconf.enable = true;
+      sys.xdg.enable = true;
+    };
 
     desktops.gnome.keybindings.enable = true;
 

@@ -11,12 +11,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # dev = {
+    dev = {
     #   go.enable = true;
     #   npm.enable = true;
     #   python.enable = true;
-    #   nix.enable = true;
-    # };
+      nix.enable = true;
+    };
 
     apps = {
       vscode.enable = true;

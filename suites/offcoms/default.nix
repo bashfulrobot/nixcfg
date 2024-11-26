@@ -54,6 +54,8 @@ in {
 
         # Communications
 
+        zoom-us
+
         # # IM
         # fractal # Matrix Client
         slack # instant messaging

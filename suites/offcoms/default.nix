@@ -25,7 +25,10 @@ in {
 
     };
 
-    apps = { one-password.enable = true; };
+    apps = {
+      one-password.enable = true;
+      zoom-us.enable = true;
+      };
 
     # cli = { espanso.enable = false; };
 
@@ -54,7 +57,7 @@ in {
 
         # Communications
 
-        zoom-us
+        # zoom-us
 
         # # IM
         # fractal # Matrix Client

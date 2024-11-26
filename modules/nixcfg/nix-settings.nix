@@ -15,6 +15,8 @@ in {
     nix = let users = [ "root" "dustin" ];
 
     in {
+      # Disable channels since using flakes.
+      channel.enable = false;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         max-jobs = 4;
@@ -61,8 +63,6 @@ in {
     # };
 
     # Allow unfree packages
-    nixpkgs.config = {
-      allowUnfree = true;
-    };
+    nixpkgs.config = { allowUnfree = true; };
   };
 }

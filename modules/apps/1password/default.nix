@@ -54,13 +54,13 @@ in {
 
       # SSH configuration to use 1Password SSH agent
       # TODO: TEST this
-      programs.ssh = {
-        enable = true;
-        extraConfig = ''
-          Host *
-              IdentityAgent ~/.1password/agent.sock
-        '';
-      };
+      # programs.ssh = {
+      #   enable = true;
+      #   extraConfig = ''
+      #     Host *
+      #         IdentityAgent ~/.1password/agent.sock
+      #   '';
+      # };
 
     };
   };

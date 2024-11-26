@@ -86,8 +86,8 @@
       nixosConfigurations = {
         digdug= makeSystem "digdug" (commonModules
           ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]);
-        # rembot = makeSystem "rembot" (commonModules
-        #   ++ [ ./systems/rembot commonHomeManagerConfig commonNixpkgsConfig ]);
+        qbert = makeSystem "qbert" (commonModules
+          ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]);
         # nixdo = makeSystem "nixdo" [ ./systems/nixdo ];
         # srv = makeSystem "srv" (serverModules
         #   ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]);

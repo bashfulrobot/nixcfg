@@ -27,6 +27,7 @@ in {
 
     apps = {
       one-password.enable = true;
+      obsidian.enable = true;
       };
 
     # cli = { espanso.enable = false; };

@@ -2,7 +2,7 @@
 
   users.default.enable = true;
 
-  apps.desktopFile = {
+  sys.desktop-files = {
     enable = true;
     reboot-windows = true;
   };

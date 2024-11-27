@@ -14,10 +14,15 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      # url = "github:nix-community/nixvim/nixos-24.11";
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager
-    , nix-flatpak, disko, nixos-hardware, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
+    , disko, nixos-hardware, nixvim, ... }:
     let
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {
@@ -27,22 +32,26 @@
         };
       };
 
-      workstationOverlays =
-        [ overlay-unstable ];
+      workstationOverlays = [ overlay-unstable ];
 
       secrets =
         builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
 
-      user-settings = builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
+      user-settings =
+        builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
 
       commonModules = [
         nix-flatpak.nixosModules.nix-flatpak
         home-manager.nixosModules.home-manager
         disko.nixosModules.disko
+        nixvim.nixosModules.nixvim
       ];
 
-      serverModules =
-        [ home-manager.nixosModules.home-manager disko.nixosModules.disko ];
+      serverModules = [
+        home-manager.nixosModules.home-manager
+        nixvim.nixosModules.nixvim
+        disko.nixosModules.disko
+      ];
 
       commonHomeManagerConfig = {
         home-manager = {
@@ -50,9 +59,7 @@
           sharedModules = [ ];
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
-          users."${user-settings.user.username}" = {
-            imports = [ ];
-          };
+          users."${user-settings.user.username}" = { imports = [ ]; };
         };
       };
 
@@ -84,13 +91,12 @@
 
     in {
       nixosConfigurations = {
-        digdug= makeSystem "digdug" (commonModules
+        digdug = makeSystem "digdug" (commonModules
           ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]);
         qbert = makeSystem "qbert" (commonModules
           ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]);
-        # nixdo = makeSystem "nixdo" [ ./systems/nixdo ];
-        # srv = makeSystem "srv" (serverModules
-        #   ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]);
+        srv = makeSystem "srv" (serverModules
+          ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]);
       };
     };
 }

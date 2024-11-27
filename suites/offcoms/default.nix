@@ -27,7 +27,6 @@ in {
 
     apps = {
       one-password.enable = true;
-      zoom-us.enable = true;
       };
 
     # cli = { espanso.enable = false; };

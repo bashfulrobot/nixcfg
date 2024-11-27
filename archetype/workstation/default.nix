@@ -24,26 +24,23 @@ in {
     };
 
     suites = {
-      #   content-creation.enable = false;
+      content-creation.enable = false;
       dev.enable = true;
-      #   entertainment.enable = true;
-      #   infrastructure.enable = true;
-      #   k8s.enable = true;
+      entertainment.enable = true;
+      infrastructure.enable = true;
+      k8s.enable = true;
       offcoms.enable = true;
-      #   sysdig.enable = true;
+      sysdig.enable = true;
       terminal.enable = true;
-      #   utilities.enable = true;
+      utilities.enable = true;
     };
 
     sys = {
-      #   plymouth.enable = true;
+      plymouth.enable = true;
       dconf.enable = true;
-      #   flatpaks.enable = true;
-      #   xdg.enable = true;
-      #   hosts.enable = true;
+      flatpaks.enable = true;
       fonts.enable = true;
       ssh.enable = true;
-      #   gpg.enable = true;
       scripts = {
         hw-scan.enable = true;
         screenshots.enable = true;

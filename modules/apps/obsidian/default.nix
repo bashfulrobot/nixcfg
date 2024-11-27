@@ -1,6 +1,5 @@
 { user-settings, pkgs, config, lib, ... }:
-let
-  cfg = config.apps.obsidian;
+let cfg = config.apps.obsidian;
 
 in {
 
@@ -18,7 +17,7 @@ in {
     environment.systemPackages = with pkgs; [
       obsidian
       obsidian-export
-      theme-obsidian2
-      iconpack-obsidian
       # vimPlugins.obsidian-nvim
     ];
+  };
+}

@@ -23,12 +23,12 @@ dev-test:
 # Rebuild nixos cfg on your current host without git commit.
 dev-rebuild:
     @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#rembot
+    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
     # @just _sway-reload
 # Rebuild nixos cfg without the cache.
 dev-rebuild-no-cache:
     @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#rembot --option binary-caches ''
+    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}  --option binary-caches ''
     # @just _sway-reload
 # Rebuild and trace nixos cfg on your current host without git commit.
 dev-rebuild-trace:

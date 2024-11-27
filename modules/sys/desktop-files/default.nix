@@ -1,95 +1,95 @@
 { user-settings, pkgs, config, lib, inputs, ... }:
 let
-  cfg = config.apps.desktopFile;
+  cfg = config.sys.desktop-files;
 
 in {
   options = {
-    apps.desktopFile.enable = lib.mkOption {
+    sys.desktop-files.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable desktopFile";
+      description = "Enable desktop-files";
     };
-    apps.desktopFile.reboot-firmware = lib.mkOption {
+    sys.desktop-files.reboot-firmware = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable reboot-firmware.desktop";
     };
-    apps.desktopFile.warp = lib.mkOption {
+    sys.desktop-files.warp = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable warp.desktop";
     };
-    apps.desktopFile.seabird = lib.mkOption {
+    sys.desktop-files.seabird = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable seabird.desktop";
     };
-    apps.desktopFile.beeper = lib.mkOption {
+    sys.desktop-files.beeper = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable beeper.desktop";
     };
-    apps.desktopFile.monokle = lib.mkOption {
+    sys.desktop-files.monokle = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable monokle.desktop";
     };
-    apps.desktopFile.cursor = lib.mkOption {
+    sys.desktop-files.cursor = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable cursor.desktop";
     };
-    apps.desktopFile.spacedrive = lib.mkOption {
+    sys.desktop-files.spacedrive = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable spacedrive.desktop";
     };
-    apps.desktopFile._1password = lib.mkOption {
+    sys.desktop-files._1password = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable 1password.desktop";
     };
-    apps.desktopFile.ncspot = lib.mkOption {
+    sys.desktop-files.ncspot = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable ncspot.desktop";
     };
-    apps.desktopFile.spotify = lib.mkOption {
+    sys.desktop-files.spotify = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable spotify.desktop";
     };
-    apps.desktopFile.suspend = lib.mkOption {
+    sys.desktop-files.suspend = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable suspend.desktop";
     };
-    apps.desktopFile.solaar = lib.mkOption {
+    sys.desktop-files.solaar = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable solaar.desktop";
     };
-    apps.desktopFile.shutdown = lib.mkOption {
+    sys.desktop-files.shutdown = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable shutdown.desktop";
     };
-    apps.desktopFile.reboot-tailscale = lib.mkOption {
+    sys.desktop-files.reboot-tailscale = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable reboot-tailscale.desktop";
     };
-    apps.desktopFile.reboot = lib.mkOption {
+    sys.desktop-files.reboot = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable reboot.desktop";
     };
-    apps.desktopFile.reboot-windows = lib.mkOption {
+    sys.desktop-files.reboot-windows = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable reboot-windows.desktop";
     };
-    apps.desktopFile.gitbutler = lib.mkOption {
+    sys.desktop-files.gitbutler = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable gitbutler.desktop";

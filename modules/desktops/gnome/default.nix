@@ -27,7 +27,31 @@ in {
 
     };
 
-    environment.systemPackages = with pkgs; [ ];
+    environment.systemPackages = with pkgs; [
+      gnomeExtensions.wintile-beyond
+      gnomeExtensions.gsconnect
+      gnomeExtensions.window-calls
+      gnomeExtensions.quick-settings-audio-panel
+      gnomeExtensions.bluetooth-quick-connect
+      gnomeExtensions.caffeine
+      pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
+    ];
+
+    environment.gnome.excludePackages = with pkgs; [
+      # for packages that are pkgs.*
+      gnome-tour
+      gnome-connections
+      cheese # photo booth
+      gedit # text editor
+      yelp # help viewer
+      file-roller # archive manager
+      gnome-photos
+      gnome-system-monitor
+      gnome-maps
+      gnome-music
+      gnome-weather
+      epiphany
+    ];
 
     # environment.gnome.excludePackages = (with pkgs; [
     #   # for packages that are pkgs.*
@@ -78,17 +102,63 @@ in {
       xdg.enable = true;
     };
 
-    desktops.gnome.keybindings.enable = true;
+    desktops.gnome = { keybindings.enable = true; };
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
 
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
 
-        #     "org/gnome/mutter" = {
-        #       center-new-windows = true;
-        #       edge-tiling = false; # for pop-shell
-        #     };
+        # "org/gnome/mutter" = {
+        #   center-new-windows = true;
+        #   edge-tiling = false; # for pop-shell
+        # };
+
+        "org/gnome/shell" = {
+          # Enabled extensions
+          enabled-extensions = [
+            "wintile-beyond@GrylledCheez.xyz"
+            "caffeine@patapon.info"
+            "quick-settings-audio-panel@rayzeq.github.io"
+            "bluetooth-quick-connect@bjarosze.gmail.com"
+          ];
+
+          # Disabled extensions
+          disabled-extensions = [
+            "user-theme@gnome-shell-extensions.gcampax.github.com"
+            "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+            "gsconnect@andyholmes.github.io"
+            "window-calls@domandoman.xyz"
+
+          ];
+        };
+
+        "org/gnome/shell/extensions/wintile-beyond" = {
+          cols = 4;
+          gap = 0;
+          non-ultra-cols = 3;
+          non-ultra-rows = 2;
+          rows = 2;
+          ultrawide-only = true;
+          use-maximize = false;
+          use-minimize = false;
+        };
+        "org/gnome/shell/extensions/bluetooth-quick-connect" = {
+          bluetooth-auto-power-on = true;
+          refresh-button-on = true;
+          show-battery-value-on = true;
+        };
+
+        "org/gnome/shell/extensions/caffeine" = {
+          indicator-position-max = 2;
+          nightlight-control = "always";
+          screen-blank = "always";
+        };
+        "org/gnome/shell/extensions/quick-settings-audio-panel" = {
+          always-show-input-slider = true;
+          media-control = "move";
+          merge-panel = true;
+        };
 
         "org/gnome/desktop/peripherals/touchpad" = {
           two-finger-scrolling-enabled = true;
@@ -105,11 +175,11 @@ in {
           night-light-enabled = true;
         };
 
-            "org/gnome/Console" = {
-              theme = "auto";
-              font-scale = 1.5;
-              custom-font = "JetBrainsMonoNL Nerd Font Mono 14";
-            };
+        "org/gnome/Console" = {
+          theme = "auto";
+          font-scale = 1.5;
+          custom-font = "JetBrainsMonoNL Nerd Font Mono 14";
+        };
 
         # #### Visual
 

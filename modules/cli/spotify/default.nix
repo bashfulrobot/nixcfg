@@ -26,19 +26,18 @@ in {
           notify = true;
 
           theme = {
-            background = "#ffffff"; # Light background for light theme
-            # Dark BG - #1f1f1f
+            background = "#1f1f1f";
             primary = "#6f8396"; # Slate accent color
             secondary = "#a9a9a9"; # Dark gray secondary color
             title = "#6f8396"; # Slate accent color for title
-            playing = "#6f8396"; # Slate accent color for playing
-            playing_selected = "#add8e6"; # Light blue for selected playing
+            playing = "#1f1f1f"; # Slate accent color for playing
+            playing_selected = "#6f8396"; # Light blue for selected playing
             playing_bg = "#ffffff"; # Light background for playing
-            highlight = "#6f8396"; # Slate accent color for highlight
-            highlight_bg = "#d3d3d3"; # Light gray background for highlight
-            error = "#e62d42"; # Red for errors
-            error_bg = "#d56199"; # Light red background for errors
-            statusbar = "#6f8396"; # Slate accent color for status bar
+            highlight = "#1f1f1f"; # Slate accent color for highlight
+            highlight_bg = "#d3d3d3";
+            error = "#e62d42";
+            error_bg = "#d56199";
+            statusbar = "#6f8396";
             statusbar_progress = "#2190a4"; # Dark blue for status bar progress
             statusbar_bg = "#ffffff"; # Light background for status bar
             cmdline = "#6f8396"; # Slate accent color for command line

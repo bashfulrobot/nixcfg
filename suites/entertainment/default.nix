@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     cli = {
-      spotify-player.enable = true;
+      spotify.enable = true;
       comics-downloader.enable = true;
     };
 

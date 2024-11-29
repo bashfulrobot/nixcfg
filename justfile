@@ -85,6 +85,12 @@ repo-conflict-nuke:
     @git reset --hard HEAD
     @git clean -fd
     @git pull
+# Show commands to inspect config
+inspect:
+    @echo "to find values to use in config:"
+    @echo 'IE - ${config.users.users.arthur.home}'
+    @echo "==================================="
+    @helpers/nix-repl.sh
 
 # Update Hardware Firmware
 run-fwup:

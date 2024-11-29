@@ -180,6 +180,11 @@ in {
           theme = "auto";
           font-scale = 1.5;
           custom-font = "JetBrainsMonoNL Nerd Font Mono 14";
+          scrollback-lines = mkInt64 100000;
+        };
+
+        "org/gnome/desktop/sound" = {
+          allow-volume-above-100-percent = true;
         };
 
         # #### Visual

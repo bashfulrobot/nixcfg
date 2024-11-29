@@ -11,7 +11,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ spotify-player ];
+    environment.systemPackages = with pkgs; [
+      spotify-player
+      librespot
+      ];
 
     home-manager.users."${user-settings.user.username}" = {
 

@@ -35,6 +35,7 @@ in {
       gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.caffeine
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
+      gnome-tweaks
     ];
 
     environment.gnome.excludePackages = with pkgs; [
@@ -134,7 +135,7 @@ in {
         };
 
         "org/gnome/shell/extensions/wintile-beyond" = {
-          cols = 3;
+          cols = 4;
           rows = 2;
           gap = 0;
           non-ultra-cols = 3;

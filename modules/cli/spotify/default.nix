@@ -1,23 +1,55 @@
 { user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.spotify-player;
+let cfg = config.cli.spotify;
 
 in {
   options = {
-    cli.spotify-player.enable = lib.mkOption {
+    cli.spotify.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable spotify_player.";
+      description = "Enable spotify players.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      spotify-player
-      librespot
-      ];
+    environment.systemPackages = with pkgs; [ spotify-player librespot ];
 
     home-manager.users."${user-settings.user.username}" = {
 
+      # NCSPOT
+      programs.ncspot = {
+        enable = true;
+        package = pkgs.ncspot.override { withMPRIS = true; };
+        settings = {
+          shuffle = true;
+          gapless = true;
+          use_nerdfont = true;
+          notify = true;
+
+          theme = {
+            background = "#ffffff"; # Light background for light theme
+            # Dark BG - #1f1f1f
+            primary = "#6f8396"; # Slate accent color
+            secondary = "#a9a9a9"; # Dark gray secondary color
+            title = "#6f8396"; # Slate accent color for title
+            playing = "#6f8396"; # Slate accent color for playing
+            playing_selected = "#add8e6"; # Light blue for selected playing
+            playing_bg = "#ffffff"; # Light background for playing
+            highlight = "#6f8396"; # Slate accent color for highlight
+            highlight_bg = "#d3d3d3"; # Light gray background for highlight
+            error = "#e62d42"; # Red for errors
+            error_bg = "#d56199"; # Light red background for errors
+            statusbar = "#6f8396"; # Slate accent color for status bar
+            statusbar_progress = "#2190a4"; # Dark blue for status bar progress
+            statusbar_bg = "#ffffff"; # Light background for status bar
+            cmdline = "#6f8396"; # Slate accent color for command line
+            cmdline_bg = "#ffffff"; # Light background for command line
+            search_match = "#c88800"; # Yellow for search match
+          };
+
+        };
+      };
+
+      # spotify-player
       home.file.".config/spotify-player/themes.toml".text = ''
 
         [[themes]]

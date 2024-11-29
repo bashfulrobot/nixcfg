@@ -134,11 +134,11 @@ in {
         };
 
         "org/gnome/shell/extensions/wintile-beyond" = {
-          cols = 4;
+          cols = 3;
+          rows = 2;
           gap = 0;
           non-ultra-cols = 3;
           non-ultra-rows = 2;
-          rows = 2;
           ultrawide-only = true;
           use-maximize = false;
           use-minimize = false;

@@ -35,7 +35,7 @@ in {
             playing_bg = "#ffffff"; # Light background for playing
             highlight = "#1f1f1f"; # Slate accent color for highlight
             highlight_bg = "#d3d3d3";
-            error = "#e62d42";
+            error = "#e06c75";
             error_bg = "#d56199";
             statusbar = "#6f8396";
             statusbar_progress = "#2190a4"; # Dark blue for status bar progress

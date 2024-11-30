@@ -1,6 +1,5 @@
 { user-settings, pkgs, config, lib, inputs, ... }:
-let
-  cfg = config.sys.desktop-files;
+let cfg = config.sys.desktop-files;
 
 in {
   options = {
@@ -14,50 +13,10 @@ in {
       default = false;
       description = "Enable reboot-firmware.desktop";
     };
-    sys.desktop-files.warp = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable warp.desktop";
-    };
-    sys.desktop-files.seabird = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable seabird.desktop";
-    };
-    sys.desktop-files.beeper = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable beeper.desktop";
-    };
-    sys.desktop-files.monokle = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable monokle.desktop";
-    };
-    sys.desktop-files.cursor = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable cursor.desktop";
-    };
-    sys.desktop-files.spacedrive = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable spacedrive.desktop";
-    };
     sys.desktop-files._1password = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable 1password.desktop";
-    };
-    sys.desktop-files.ncspot = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable ncspot.desktop";
-    };
-    sys.desktop-files.spotify = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable spotify.desktop";
     };
     sys.desktop-files.suspend = lib.mkOption {
       type = lib.types.bool;
@@ -89,11 +48,6 @@ in {
       default = false;
       description = "Enable reboot-windows.desktop";
     };
-    sys.desktop-files.gitbutler = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable gitbutler.desktop";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -102,51 +56,15 @@ in {
         source = ./src/reboot-firmware.desktop;
         target = ".local/share/applications/reboot-firmware.desktop";
       };
-      home.file."warp.desktop" = lib.mkIf cfg.warp {
-        source = ./src/warp.desktop;
-        target = ".local/share/applications/warp.desktop";
-      };
-      home.file."seabird.desktop" = lib.mkIf cfg.seabird {
-        source = ./src/seabird.desktop;
-        target = ".local/share/applications/seabird.desktop";
-      };
-      home.file."beeper.desktop" = lib.mkIf cfg.beeper {
-        source = ./src/beeper.desktop;
-        target = ".local/share/applications/beeper.desktop";
-      };
-      home.file."gitbutler.desktop" = lib.mkIf cfg.gitbutler {
-        source = ./src/gitbutler.desktop;
-        target = ".local/share/applications/gitbutler.desktop";
-      };
-      home.file."monokle.desktop" = lib.mkIf cfg.monokle {
-        source = ./src/monokle.desktop;
-        target = ".local/share/applications/monokle.desktop";
-      };
-      home.file."cursor.desktop" = lib.mkIf cfg.cursor {
-        source = ./src/cursor.desktop;
-        target = ".local/share/applications/cursor.desktop";
-      };
-      home.file."spacedrive.desktop" = lib.mkIf cfg.spacedrive {
-        source = ./src/spacedrive.desktop;
-        target = ".local/share/applications/spacedrive.desktop";
-      };
       home.file."1password.desktop" = lib.mkIf cfg._1password {
         source = ./src/1password.desktop;
         target = ".local/share/applications/1password.desktop";
-      };
-      home.file."ncspot.desktop" = lib.mkIf cfg.ncspot {
-        source = ./src/ncspot.desktop;
-        target = ".local/share/applications/ncspot.desktop";
-      };
-      home.file."spotify.desktop" = lib.mkIf cfg.spotify {
-        source = ./src/spotify.desktop;
-        target = ".local/share/applications/spotify.desktop";
       };
       home.file."suspend.desktop" = lib.mkIf cfg.suspend {
         source = ./src/suspend.desktop;
         target = ".local/share/applications/suspend.desktop";
       };
-       home.file."solaar.desktop" = lib.mkIf cfg.solaar {
+      home.file."solaar.desktop" = lib.mkIf cfg.solaar {
         source = ./src/solaar.desktop;
         target = ".local/share/applications/solaar.desktop";
       };

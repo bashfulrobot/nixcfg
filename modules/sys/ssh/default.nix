@@ -21,8 +21,8 @@ in {
         enable = true;
 
         extraConfig = ''
-        #   Host *
-        #     AddKeysToAgent yes
+          Host *
+            AddKeysToAgent yes
           Host github.com
             HostName github.com
             IdentityFile ~/.ssh/id_ed25519
@@ -80,7 +80,7 @@ in {
           Host 192.168.168.1
               HostName 192.168.168.1
               User dustin
-              dKeysToAgent yes
+              AddKeysToAgent yes
               Port 22
               StrictHostKeyChecking no
               UserKnownHostsFile /dev/null

@@ -38,11 +38,13 @@ in {
         };
 
         "org/gnome/desktop/wm/keybindings" = {
+          # Alt-tab behavior
+          switch-applications = [ ];
+          switch-applications-backward = [ ];
+          switch-windows = [ "<Alt>Tab" ];
+          switch-windows-backward = [ "<Shift><Alt>Tab" ];
+
           close = [ "<Super>q" ];
-          switch-applications = [ "<Alt>Tab" ];
-          switch-applications-backward = [ "<Shift><Alt>Tab" ];
-          # switch-windows = [ "<Alt>Tab" ];
-          # switch-windows-backward = [ "<Shift><Alt>Tab" ];
           toggle-fullscreen = [ "<Super>f" ];
           # maximize = [ "<Super>m" ];
           maximize = [ ];
@@ -86,7 +88,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
-"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
           ];
         };
 

@@ -134,6 +134,10 @@ in {
           ];
         };
 
+        # Used for desired alt-tab behavior
+        "org/gnome/shell/app-switcher" = { current-workspace-only = false; };
+        "org/gnome/shell/window-switcher" = { current-workspace-only = false; };
+
         "org/gnome/shell/extensions/wintile-beyond" = {
           cols = 4;
           rows = 2;
@@ -183,9 +187,7 @@ in {
           scrollback-lines = mkInt64 100000;
         };
 
-        "org/gnome/desktop/sound" = {
-          allow-volume-above-100-percent = true;
-        };
+        "org/gnome/desktop/sound" = { allow-volume-above-100-percent = true; };
 
         # #### Visual
 

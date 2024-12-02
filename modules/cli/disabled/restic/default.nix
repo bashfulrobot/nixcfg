@@ -1,3 +1,4 @@
+# TODO: finish module - restic
 { user-settings, pkgs, secrets, config, lib, ... }:
 let
   cfg = config.cli.restic;

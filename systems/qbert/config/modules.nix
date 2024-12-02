@@ -10,5 +10,4 @@
   # Enable gnome desktop
   desktops.gnome.enable = true;
 
-  cli = { git.enable = true; };
 }

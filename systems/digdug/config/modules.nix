@@ -2,10 +2,8 @@
 
   users.default.enable = true;
 
-  
-
   # Enable gnome desktop
   desktops.gnome.enable = true;
 
-  cli = { git.enable = true; };
+  environment.systemPackages = with pkgs; [ mullvad-vpn ];
 }

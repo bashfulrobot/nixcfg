@@ -35,7 +35,7 @@ in {
               family = "JetBrainsMono Nerd Font Mono";
               style = "Regular";
             };
-            size = 24;
+            size = 20;
             # small y offsetting as iosevka-t184256 has custom -25% line spacing
             offset = {
               x = -2;

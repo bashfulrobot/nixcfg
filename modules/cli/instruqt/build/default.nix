@@ -5,7 +5,7 @@ in pkgs.stdenv.mkDerivation {
   src = pkgs.fetchzip {
     url =
       "https://github.com/instruqt/cli/releases/download/${version}/instruqt-linux.zip";
-    sha256 = "sha256-P9HTLlcfNmDhjDOcqvTPoE25D0wJNWBv46G5BlYp3Ak=";
+    sha256 = "sha256-qgED6Y3pkX0zmb0Wz8ICaJB0tavUvg5pAVxbuY67lBk=";
     # stripRoot = false;
   };
   phases = [ "installPhase" "patchPhase" ];

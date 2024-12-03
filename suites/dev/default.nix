@@ -37,6 +37,7 @@ in {
 environment.systemPackages = with pkgs; [
       gnumake
       awscli2
+      ffuf
       just # command runner
       # doppler # secret management tool
       shadowenv # environment variable manager

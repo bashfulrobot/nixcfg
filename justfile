@@ -54,6 +54,10 @@ garbage:
 # Garbage collect all, clear build cache
 garbage-build-cache:
     @sudo nix-collect-garbage -d
+# Version Updates (flake update) - IE sysdig-cli-scanner
+version-update:
+    @sudo nix-collect-garbage -d
+    @sudo nix flake update
 # check active kernel
 kernel:
     @uname -r

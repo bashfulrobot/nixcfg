@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     # environment.systemPackages = with pkgs; [  ];
-    powerManagement.enable = true;
+    # powerManagement.enable = true;
 
     services.tlp.enable = true;
 

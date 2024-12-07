@@ -15,7 +15,7 @@ in {
     apps = { kvm.enable = true; };
     cli = {
       tailscale.enable = true;
-      docker.enable = false;
+      docker.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

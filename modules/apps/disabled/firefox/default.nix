@@ -4,7 +4,6 @@
 let
   cfg = config.apps.firefox;
   # firefoxGnomeTheme = pkgs.callPackage ./build { inherit user-settings; };
-in {
   options = {
     apps.firefox.enable = lib.mkOption {
       type = lib.types.bool;

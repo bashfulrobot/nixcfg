@@ -378,12 +378,8 @@ in {
 
         };
         treesitter-refactor = { enable = true; };
-        nvim-colorizer = {
+        colorizer = {
           enable = true;
-          userDefaultOptions = {
-            css = true;
-            tailwind = "both";
-          };
         };
         cursorline = {
           enable = true;

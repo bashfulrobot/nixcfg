@@ -62,6 +62,7 @@ in {
         # # IM
         # fractal # Matrix Client
         slack # instant messaging
+        unstable.todoist-electron # task manager
         # signal-desktop # instant messaging
         # element-desktop # Matrix Client
         #  # Email

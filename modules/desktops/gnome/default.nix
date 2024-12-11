@@ -29,6 +29,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       gnomeExtensions.wintile-beyond
+      unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel
@@ -118,7 +119,7 @@ in {
         "org/gnome/shell" = {
           # Enabled extensions
           enabled-extensions = [
-            "wintile-beyond@GrylledCheez.xyz"
+            "tilingshell@ferrarodomenico.com"
             "caffeine@patapon.info"
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
@@ -126,6 +127,7 @@ in {
 
           # Disabled extensions
           disabled-extensions = [
+            "wintile-beyond@GrylledCheez.xyz"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "gsconnect@andyholmes.github.io"

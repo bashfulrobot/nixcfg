@@ -142,7 +142,7 @@ in {
           cols = 4;
           rows = 2;
           gap = 0;
-          non-ultra-cols = 3;
+          non-ultra-cols = 4;
           non-ultra-rows = 2;
           ultrawide-only = true;
           use-maximize = false;

@@ -12,13 +12,14 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    apps = {
-      zoom-us.enable = true;
-    };
+    apps = { zoom-us.enable = true; };
 
     cli = {
       sysdig-cli-scanner.enable = true;
       instruqt.enable = true;
     };
+
+    environment.systemPackages = with pkgs; [ rocketchat-desktop ];
+
   };
 }

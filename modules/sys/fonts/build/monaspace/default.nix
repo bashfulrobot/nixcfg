@@ -1,4 +1,5 @@
 { lib, pkgs, ... }:
+# TODO: UPDATE ME
 let version = "1.101";
 in pkgs.stdenvNoCC.mkDerivation {
   name = "monaspace-font";
@@ -8,7 +9,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     url =
       "https://github.com/githubnext/monaspace/releases/download/v${version}/monaspace-v${version}.zip";
     sha256 = "sha256-H8NOS+pVkrY9DofuJhPR2OlzkF4fMdmP2zfDBfrk83A=";
-    stripRoot = true;
+    stripRoot = true; # pass false to fetchzip to assume flat list of files
   };
 
   installPhase = ''

@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation {
   name = "plymouth-icon";
+  # TODO: UPDATE ME
   version = "1.0";
 
   src = ./plymouth.png;

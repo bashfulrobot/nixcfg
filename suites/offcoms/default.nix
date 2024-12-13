@@ -30,7 +30,7 @@ in {
       obsidian.enable = true;
       };
 
-    # cli = { espanso.enable = false; };
+    cli = { note.enable = true; };
 
     environment.systemPackages = with pkgs;
       [

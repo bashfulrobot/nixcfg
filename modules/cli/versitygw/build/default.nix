@@ -1,4 +1,5 @@
 { lib, pkgs, ... }:
+# TODO: UPDATE ME
 let version = "1.0.8";
 in pkgs.stdenv.mkDerivation {
   name = "versitygw";
@@ -8,7 +9,7 @@ in pkgs.stdenv.mkDerivation {
     url =
       "https://github.com/versity/versitygw/releases/download/v${version}/versitygw_v${version}_Linux_x86_64.tar.gz";
     sha256 = "sha256-5LAyeIeNEkdGeJYQ46yx2LiJ+iPhLl8WDA9crWvcwvs=";
-    stripRoot = true;
+    stripRoot = true; # pass false to fetchzip to assume flat list of files
   };
   phases = [ "installPhase" ];
   installPhase = ''

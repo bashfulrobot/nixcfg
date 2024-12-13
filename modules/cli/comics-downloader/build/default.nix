@@ -1,4 +1,5 @@
 { lib, pkgs, ... }:
+# TODO: UPDATE ME
 let version = "0.33.9";
 in pkgs.stdenv.mkDerivation {
   name = "comics-downloader";

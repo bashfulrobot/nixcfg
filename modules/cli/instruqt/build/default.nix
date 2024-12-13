@@ -1,4 +1,5 @@
 { lib, pkgs, ... }:
+# TODO: UPDATE ME
 let version = "2208-3ea4fac";
 in pkgs.stdenv.mkDerivation {
   name = "instruqt";
@@ -6,7 +7,7 @@ in pkgs.stdenv.mkDerivation {
     url =
       "https://github.com/instruqt/cli/releases/download/${version}/instruqt-linux.zip";
     sha256 = "sha256-qgED6Y3pkX0zmb0Wz8ICaJB0tavUvg5pAVxbuY67lBk=";
-    # stripRoot = false;
+    # stripRoot = false; # pass false to fetchzip to assume flat list of files
   };
   phases = [ "installPhase" "patchPhase" ];
   installPhase = ''

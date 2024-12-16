@@ -26,6 +26,10 @@ in {
           env.TERM = "alacritty";
           # env.TERM = "xterm-256color";
 
+
+          # Fix for: https://github.com/alacritty/alacritty/issues/6703
+          env.XCURSOR_THEME = "Adwaita alacritty";
+
           # shell.program = "tmux";
 
           selection.save_to_clipboard = true;

@@ -28,13 +28,13 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
-      gnomeExtensions.wintile-beyond
       unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel
       gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.caffeine
+      gnomeExtensions.media-controls
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
       gnome-tweaks
     ];
@@ -46,9 +46,7 @@ in {
       cheese # photo booth
       gedit # text editor
       yelp # help viewer
-      file-roller # archive manager
       gnome-photos
-      gnome-system-monitor
       gnome-maps
       gnome-music
       gnome-weather
@@ -123,11 +121,11 @@ in {
             "caffeine@patapon.info"
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
+            "mediacontrols@cliffniff.github.com"
           ];
 
           # Disabled extensions
           disabled-extensions = [
-            "wintile-beyond@GrylledCheez.xyz"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "gsconnect@andyholmes.github.io"
@@ -140,6 +138,12 @@ in {
         "org/gnome/shell/app-switcher" = { current-workspace-only = false; };
         "org/gnome/shell/window-switcher" = { current-workspace-only = false; };
 
+        "org/gnome/shell/extensions/mediacontrols" = {
+          extension-position = "Right";
+          label-width = mkUint32 0;
+          mediacontrols-show-popup-menu = [ "<Shift><Control><Alt>m" ];
+        };
+
         "org/gnome/shell/extensions/tilingshell" = {
           enable-blur-selected-tilepreview = true;
           enable-blur-snap-assistant = true;
@@ -149,22 +153,12 @@ in {
           overridden-settings = ''
             {"org.gnome.mutter.keybindings":{"toggle-tiled-right":"['<Super>Right']","toggle-tiled-left":"['<Super>Left']"},"org.gnome.desktop.wm.keybindings":{"maximize":"['<Super>Up']","unmaximize":"['<Super>Down', '<Alt>F5']"},"org.gnome.mutter":{"edge-tiling":"false"}}'';
           quarter-tiling-threshold = mkUint32 41;
-          show-indicator = true;
+          show-indicator = false;
           snap-assistant-threshold = 57;
           tiling-system-activation-key = [ "0" ];
           top-edge-maximize = true;
         };
 
-        "org/gnome/shell/extensions/wintile-beyond" = {
-          cols = 4;
-          rows = 2;
-          gap = 0;
-          non-ultra-cols = 4;
-          non-ultra-rows = 2;
-          ultrawide-only = true;
-          use-maximize = false;
-          use-minimize = false;
-        };
         "org/gnome/shell/extensions/bluetooth-quick-connect" = {
           bluetooth-auto-power-on = true;
           refresh-button-on = true;

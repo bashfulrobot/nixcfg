@@ -149,7 +149,7 @@ in {
           overridden-settings = ''
             {"org.gnome.mutter.keybindings":{"toggle-tiled-right":"['<Super>Right']","toggle-tiled-left":"['<Super>Left']"},"org.gnome.desktop.wm.keybindings":{"maximize":"['<Super>Up']","unmaximize":"['<Super>Down', '<Alt>F5']"},"org.gnome.mutter":{"edge-tiling":"false"}}'';
           quarter-tiling-threshold = mkUint32 41;
-          show-indicator = false;
+          show-indicator = true;
           snap-assistant-threshold = 57;
           tiling-system-activation-key = [ "0" ];
           top-edge-maximize = true;

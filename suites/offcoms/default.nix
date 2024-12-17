@@ -54,6 +54,8 @@ in {
 
         # Organize
         # morgen # AI calendar - testing
+        unstable.todoist-electron # task manager
+        planify
 
         # Communications
 
@@ -62,8 +64,7 @@ in {
         # # IM
         # fractal # Matrix Client
         slack # instant messaging
-        unstable.todoist-electron # task manager
-        # signal-desktop # instant messaging
+        signal-desktop # instant messaging
         # element-desktop # Matrix Client
         #  # Email
         # gmailctl # cli to write gmail filters as code

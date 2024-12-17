@@ -386,7 +386,7 @@ nvim $filename
           vim = "nvim";
           ny = "cd ~/dev/nix/nixcfg/; yazi";
           n = "cd ~/dev/nix/nixcfg/; nvim";
-          nc =
+          ncommit =
             "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
           ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
           # ls = "${pkgs.eza}/bin/eza -al --octal-permissions";

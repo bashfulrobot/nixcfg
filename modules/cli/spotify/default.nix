@@ -48,6 +48,10 @@ in {
         };
       };
 
+      home.sessionVariables = {
+        NCSPOT_SOCK = "/run/user/1000/ncspot/ncspot.sock";
+      };
+
       # spotify-player
       home.file.".config/spotify-player/themes.toml".text = ''
 

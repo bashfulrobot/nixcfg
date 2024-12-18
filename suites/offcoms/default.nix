@@ -69,7 +69,7 @@ in {
         #  # Email
         # gmailctl # cli to write gmail filters as code
         # thunderbird # email client
-        #mailspring # email client
+        mailspring # email client
         #geary # email reader
         # pandoc # document converter
       ];

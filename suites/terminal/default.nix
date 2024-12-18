@@ -34,6 +34,7 @@ in {
       broot # Fuzzy finder
       eza # ls and exa alternative
       btop # top alternative
+      pinentry-all # gpg passphrase prompting
     ];
 
     home-manager.users."${user-settings.user.username}" = {

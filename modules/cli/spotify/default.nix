@@ -1,5 +1,6 @@
 { user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.spotify;
+let
+  cfg = config.cli.spotify;
 
   ncspot-save-playing = pkgs.writeShellApplication {
     name = "ncspot-save-playing";
@@ -10,6 +11,17 @@ let cfg = config.cli.spotify;
       #!/run/current-system/sw/bin/env bash
 
       echo "save" | nc -W 1 -U /run/user/1000/ncspot/ncspot.sock
+      response=$(nc -W 1 -U /run/user/1000/ncspot/ncspot.sock)
+      title=$(echo "$response" | jq -r '.playable.title')
+      artist=$(echo "$response" | jq -r '.playable.artists[0]')
+      cover_url=$(echo "$response" | jq -r '.playable.cover_url')
+
+      # Download the album art
+      cover_path="/tmp/album_cover.jpg"
+      curl -s -o "$cover_path" "$cover_url"
+
+      # Send notification with album art
+      notify-send --app-name="NCSPOT" -i "$cover_path" "Song Saved" "$title - $artist"
 
       exit 0
     '';
@@ -25,7 +37,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ spotify-player librespot ncspot-save-playing ];
+    environment.systemPackages = with pkgs; [
+      spotify-player
+      librespot
+      ncspot-save-playing
+      curl
+    ];
 
     home-manager.users."${user-settings.user.username}" = {
 

@@ -179,7 +179,7 @@ in {
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12" =
           {
             binding = "<Control><Alt><Shift>s";
-            command = "echo 'save' | nc -W 1 -U $NCSPOT_SOCK";
+            command = "ncspot-save-playing";
             name = "Save currently playing song in NCSPOT to library in Spotify";
           };
 

@@ -12,6 +12,10 @@ in {
   config = lib.mkIf cfg.enable {
 
     services = {
+      # As per: https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/4?u=brnix
+      # dbus.packages = [ pkgs.gcr ];
+      # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/2?u=brnix
+      # pcscd.enable = true;
       xserver = {
         # Enable the X11 windowing system.
         enable = true;
@@ -28,6 +32,7 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
+      pinentry-all # gpg passphrase prompting
       unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
       gnomeExtensions.window-calls
@@ -106,6 +111,11 @@ in {
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
+
+      # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/13?u=brnix
+      home.file.".gnupg/gpg-agent.conf".text = ''
+        pinentry-program /run/current-system/sw/bin/pinentry
+      '';
 
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
 

@@ -36,6 +36,10 @@ in {
       unstable.minikube # Local k8s cluster
 
     ];
+
+    services.flatpak.packages = [
+      "io.kinvolk.Headlamp" # K8s GUI
+    ];
     home-manager.users."${user-settings.user.username}" = {
       programs = { k9s = { enable = true; }; };
     };

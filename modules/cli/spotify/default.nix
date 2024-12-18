@@ -1,6 +1,20 @@
 { user-settings, pkgs, secrets, config, lib, ... }:
 let cfg = config.cli.spotify;
 
+  ncspot-save-playing = pkgs.writeShellApplication {
+    name = "ncspot-save-playing";
+
+    # runtimeInputs = [ pkgs.restic pkgs.pass ];
+
+    text = ''
+      #!/run/current-system/sw/bin/env bash
+
+      echo "save" | nc -W 1 -U /run/user/1000/ncspot/ncspot.sock
+
+      exit 0
+    '';
+  };
+
 in {
   options = {
     cli.spotify.enable = lib.mkOption {
@@ -11,7 +25,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ spotify-player librespot ];
+    environment.systemPackages = with pkgs; [ spotify-player librespot ncspot-save-playing ];
 
     home-manager.users."${user-settings.user.username}" = {
 

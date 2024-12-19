@@ -28,50 +28,53 @@ in {
     apps = {
       one-password.enable = true;
       obsidian.enable = true;
-      };
+    };
 
     cli = { note.enable = true; };
 
-    environment.systemPackages = with pkgs;
-      [
-        # projecteur # virtual laser pointer
-        # Browsers
-        #inputs.zen-browser.packages.x86_64-linux.zen-browser
-        #(opera.override { proprietaryCodecs = true; })
-        #brave
-        # google-chrome
-        # tangram
+    environment.systemPackages = with pkgs; [
+      # projecteur # virtual laser pointer
+      # Browsers
+      #inputs.zen-browser.packages.x86_64-linux.zen-browser
+      #(opera.override { proprietaryCodecs = true; })
+      #brave
+      # google-chrome
+      # tangram
 
-        # PDF
-        # xournalpp # note taking/pdf annotator
-        # evince # pdf viewer
-        # texliveSmall # get pdflatex
-        # pdf-sign # pdf signing utility
+      # PDF
+      # xournalpp # note taking/pdf annotator
+      # evince # pdf viewer
+      # texliveSmall # get pdflatex
+      # pdf-sign # pdf signing utility
 
-        # Office
-        # libreoffice # office suite
-        # obsidian # note-taking
+      # Office
+      # libreoffice # office suite
+      # obsidian # note-taking
 
-        # Organize
-        # morgen # AI calendar - testing
-        unstable.todoist-electron # task manager
-        planify
+      # Organize
+      # morgen # AI calendar - testing
+      unstable.todoist-electron # task manager
+      planify
 
-        # Communications
+      # Communications
 
-        # zoom-us
+      # zoom-us
 
-        # # IM
-        # fractal # Matrix Client
-        slack # instant messaging
-        signal-desktop # instant messaging
-        # element-desktop # Matrix Client
-        #  # Email
-        gmailctl # cli to write gmail filters as code
-        # thunderbird # email client
-        # mailspring # email client
-        #geary # email reader
-        # pandoc # document converter
-      ];
+      # # IM
+      # fractal # Matrix Client
+      slack # instant messaging
+      signal-desktop # instant messaging
+      # element-desktop # Matrix Client
+      #  # Email
+      gmailctl # cli to write gmail filters as code
+      # thunderbird # email client
+      # mailspring # email client
+      #geary # email reader
+      # pandoc # document converter
+    ];
+
+    services.flatpak.packages = [
+      "net.xmind.XMind" # Mindmapping
+    ];
   };
 }

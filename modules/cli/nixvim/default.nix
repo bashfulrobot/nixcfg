@@ -301,8 +301,11 @@ in {
         lualine.enable = true;
         barbar.enable = true;
         gitgutter = {
-          enable = true;
-          defaultMaps = false;
+          settings = {
+            enable = true;
+            map_keys = false;
+          };
+
         };
         todo-comments = {
           settings = {

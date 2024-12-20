@@ -89,6 +89,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/"
           ];
         };
 
@@ -173,6 +174,13 @@ in {
             binding = "<Super><Shift>p";
             command = "flatpak run com.onepassword.OnePassword";
             name = "Open 1password flatpak as a workaround";
+          };
+
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12" =
+          {
+            binding = "<Control><Alt><Shift>s";
+            command = "ncspot-save-playing";
+            name = "Save currently playing song in NCSPOT to library in Spotify";
           };
 
       };

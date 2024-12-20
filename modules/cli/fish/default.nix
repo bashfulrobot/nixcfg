@@ -187,7 +187,7 @@ nvim $filename
             nix run nixpkgs#$argv[1] --impure
           '';
           search_nixpkgs = ''
-            nix-env -qaP | grep -i $pattern
+            nix-env -qaP | rg -Hi $argv[1]
           '';
           shutdown_all_local_vms = ''
             set -l domains (sudo virsh list --name --state-running)
@@ -386,7 +386,7 @@ nvim $filename
           vim = "nvim";
           ny = "cd ~/dev/nix/nixcfg/; yazi";
           n = "cd ~/dev/nix/nixcfg/; nvim";
-          nc =
+          ncommit =
             "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
           ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
           # ls = "${pkgs.eza}/bin/eza -al --octal-permissions";

@@ -12,6 +12,10 @@ in {
   config = lib.mkIf cfg.enable {
 
     services = {
+      # As per: https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/4?u=brnix
+      # dbus.packages = [ pkgs.gcr ];
+      # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/2?u=brnix
+      # pcscd.enable = true;
       xserver = {
         # Enable the X11 windowing system.
         enable = true;
@@ -28,13 +32,14 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
-      gnomeExtensions.wintile-beyond
+      pinentry-all # gpg passphrase prompting
       unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel
       gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.caffeine
+      gnomeExtensions.media-controls
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
       gnome-tweaks
     ];
@@ -46,9 +51,7 @@ in {
       cheese # photo booth
       gedit # text editor
       yelp # help viewer
-      file-roller # archive manager
       gnome-photos
-      gnome-system-monitor
       gnome-maps
       gnome-music
       gnome-weather
@@ -109,6 +112,11 @@ in {
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
 
+      # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/13?u=brnix
+      home.file.".gnupg/gpg-agent.conf".text = ''
+        pinentry-program /run/current-system/sw/bin/pinentry
+      '';
+
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
 
         # "org/gnome/mutter" = {
@@ -123,11 +131,11 @@ in {
             "caffeine@patapon.info"
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
+            "mediacontrols@cliffniff.github.com"
           ];
 
           # Disabled extensions
           disabled-extensions = [
-            "wintile-beyond@GrylledCheez.xyz"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "gsconnect@andyholmes.github.io"
@@ -139,6 +147,12 @@ in {
         # Used for desired alt-tab behavior
         "org/gnome/shell/app-switcher" = { current-workspace-only = false; };
         "org/gnome/shell/window-switcher" = { current-workspace-only = false; };
+
+        "org/gnome/shell/extensions/mediacontrols" = {
+          extension-position = "Right";
+          label-width = mkUint32 0;
+          mediacontrols-show-popup-menu = [ "<Shift><Control><Alt>m" ];
+        };
 
         "org/gnome/shell/extensions/tilingshell" = {
           enable-blur-selected-tilepreview = true;
@@ -155,16 +169,6 @@ in {
           top-edge-maximize = true;
         };
 
-        "org/gnome/shell/extensions/wintile-beyond" = {
-          cols = 4;
-          rows = 2;
-          gap = 0;
-          non-ultra-cols = 4;
-          non-ultra-rows = 2;
-          ultrawide-only = true;
-          use-maximize = false;
-          use-minimize = false;
-        };
         "org/gnome/shell/extensions/bluetooth-quick-connect" = {
           bluetooth-auto-power-on = true;
           refresh-button-on = true;

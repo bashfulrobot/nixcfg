@@ -12,7 +12,16 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    apps = { zoom-us.enable = true; };
+    apps = {
+      zoom-us.enable = true;
+      confluence.enable = true;
+      gcal-sysdig.enable = true;
+      gmail-sysdig.enable = true;
+      intercom.enable = true;
+      jira.enable = true;
+      sfdc.enable = true;
+      vitally.enable = true;
+      };
 
     cli = {
       sysdig-cli-scanner.enable = true;

@@ -28,6 +28,7 @@ in {
     apps = {
       one-password.enable = true;
       obsidian.enable = true;
+      chrome-based-browser.enable = true;
       };
 
     cli = { note.enable = true; };

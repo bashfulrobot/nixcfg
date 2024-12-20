@@ -34,7 +34,7 @@ in {
       kubernetes-helm # Kubernetes package manager
       # butane # flatcar/ignition configuration
       unstable.minikube # Local k8s cluster
-
+      kubie # k8s context switcher
     ];
 
     services.flatpak.packages = [

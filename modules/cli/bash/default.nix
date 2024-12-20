@@ -83,8 +83,6 @@ in {
           rustscan =
             "${pkgs.docker}/bin/docker run -it --rm --name rustscan rustscan/rustscan:latest";
           kcfg = "cd ~/.kube && ${pkgs.just}/bin/just && cd -";
-          kns = "${pkgs.kubectx}/bin/kubens";
-          kc = "${pkgs.kubectx}/bin/kubectx";
           vms = "sudo ${pkgs.libvirt}/bin/virsh list --all";
           yless = "${pkgs.jless}/bin/jless --yaml";
           # please = "${pkgs.shell-genie}/bin/shell-genie ask";

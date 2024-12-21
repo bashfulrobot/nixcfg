@@ -95,7 +95,7 @@ in {
         #       HostName 192.168.168.10
         #       User dustin
         #         AddKeysToAgent yes
-        #   Host rembot
+        #   Host qbert
         #     HostName 100.89.186.70
         #     User dustin
         #     AddKeysToAgent yes

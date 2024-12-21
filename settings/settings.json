@@ -3,19 +3,10 @@
         "username": "dustin",
         "home": "/home/dustin",
         "full-name": "Dustin Krysak",
-        "id": "1000",
-        "wallpaper": "/home/dustin/dev/nix/nixcfg/modules/sys/wallpapers/3pio-bender-catppuccin-mocha.png"
+        "id": "1000"
     },
     "nix": {
         "comment": "NOT IN USE YET - WIP",
         "release": "24.11"
-    },
-    "rembot": {
-        "comment": "NOT IN USE YET - WIP",
-        "panelId": "d4f8eb0a-a16d-11ef-af99-2cf05da6ad16"
-    },
-    "evo": {
-        "comment": "NOT IN USE YET - WIP",
-        "panelId": "d86965e4-a15e-11ef-afa7-e02e0b11348d"
     }
 }

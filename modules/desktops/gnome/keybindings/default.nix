@@ -22,7 +22,7 @@ in {
           play = [ "AudioPlay" ];
           volume-down = [ "AudioLowerVolume" ];
           volume-mute = [ "AudioMute" ];
-          volume-up = [ "AudioRaiseVolume" ];
+          volume-up = [ "AudioRaisdigduglume" ];
         };
 
         # "org/gnome/mutter/keybindings" = {

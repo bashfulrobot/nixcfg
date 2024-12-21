@@ -16,7 +16,7 @@ _default:
 #     @just --choose
 # _sway-reload:
 #     @case $(hostname) in \
-#         evo|rembot) \
+#         digdug|qbert) \
 #             swaymsg reload; \
 #             echo "Sway reloaded...";; \
 #         *) \
@@ -55,12 +55,12 @@ nix-lint:
 # Rebuild nixos cfg on your current host without git commit.
 dev-rebuild:
     @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#rembot
+    @sudo nixos-rebuild switch --impure --flake .#qbert
     # @just _sway-reload
 # Rebuild nixos cfg without the cache.
 dev-rebuild-no-cache:
     @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#rembot --option binary-caches ''
+    @sudo nixos-rebuild switch --impure --flake .#qbert --option binary-caches ''
     # @just _sway-reload
 # Final build and garbage collect, will reboot
 final-build-reboot:

@@ -13,7 +13,7 @@ git clone https://github.com/bashfulrobot/nixos
 cd ~/dev/nix/nixos
 code . # edit new machine config
 rm ~/.config/mimeapps.list
-sudo nixos-rebuild switch --impure --flake .#evo
+sudo nixos-rebuild switch --impure --flake .#digdug
 ```
 
 ## cp .gnupg folder into place

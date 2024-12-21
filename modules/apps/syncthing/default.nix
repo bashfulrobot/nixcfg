@@ -76,7 +76,7 @@ in {
               # tailscale only
               addresses = [ "tcp://${secrets.qbert.tailscale_ip}:22000" ];
               id =
-                "ZHSE4N7-IBYDJLI-XZE7VSC-RE7LMKE-JYVTAPT-XIEGEQ4-I64EPDE-AJQRNAJ";
+                "NH3RFAD-W7DMW3Z-MKGLCG3-EGFKYHB-KMG2LEA-MEMF3OS-BPZAN6L-3R7PSQI";
             };
 
           };
@@ -241,7 +241,7 @@ in {
               # tailscale only
               addresses = [ "tcp://${secrets.digdug.tailscale_ip}:22000" ];
               id =
-                "TSGLJ6F-D6A2GHQ-WQFPRJR-XLUWGEJ-OP255QK-UQSBMPR-PS7VLS4-LICQDQO";
+                "AQTX4Z5-OZDSGDV-XGDJD5V-AV3KXCO-UZMIHM3-2MMXYRR-NDD2YDZ-6PGLZAI";
             };
 
           };

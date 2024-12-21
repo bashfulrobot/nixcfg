@@ -34,7 +34,13 @@ in {
           show-screenshot-ui = [ "<Control><Alt>p" ];
           switch-to-application-1 = [ ];
           switch-to-application-2 = [ ];
+          switch-to-application-3 = [ ];
           switch-to-application-4 = [ ];
+          switch-to-application-5 = [ ];
+          switch-to-application-6 = [ ];
+          switch-to-application-7 = [ ];
+          switch-to-application-8 = [ ];
+          switch-to-application-9 = [ ];
         };
 
         "org/gnome/desktop/wm/keybindings" = {
@@ -176,11 +182,12 @@ in {
             name = "Open 1password flatpak as a workaround";
           };
 
-          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12" =
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12" =
           {
             binding = "<Control><Alt><Shift>s";
             command = "ncspot-save-playing";
-            name = "Save currently playing song in NCSPOT to library in Spotify";
+            name =
+              "Save currently playing song in NCSPOT to library in Spotify";
           };
 
       };

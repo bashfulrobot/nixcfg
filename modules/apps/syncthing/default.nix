@@ -75,8 +75,7 @@ in {
             "qbert" = {
               # tailscale only
               addresses = [ "tcp://${secrets.qbert.tailscale_ip}:22000" ];
-              id =
-                ${secrets.qbert.syncthing_id};
+              id = "${secrets.qbert.syncthing_id}";
             };
 
           };
@@ -240,8 +239,7 @@ in {
             "digdug" = {
               # tailscale only
               addresses = [ "tcp://${secrets.digdug.tailscale_ip}:22000" ];
-              id =
-                ${secrets.digdug.syncthing_id}";
+              id = "${secrets.digdug.syncthing_id}";
             };
 
           };

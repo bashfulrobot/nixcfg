@@ -76,7 +76,7 @@ in {
               # tailscale only
               addresses = [ "tcp://${secrets.qbert.tailscale_ip}:22000" ];
               id =
-                "NH3RFAD-W7DMW3Z-MKGLCG3-EGFKYHB-KMG2LEA-MEMF3OS-BPZAN6L-3R7PSQI";
+                ${secrets.qbert.syncthing_id};
             };
 
           };
@@ -241,7 +241,7 @@ in {
               # tailscale only
               addresses = [ "tcp://${secrets.digdug.tailscale_ip}:22000" ];
               id =
-                "AQTX4Z5-OZDSGDV-XGDJD5V-AV3KXCO-UZMIHM3-2MMXYRR-NDD2YDZ-6PGLZAI";
+                ${secrets.digdug.syncthing_id}";
             };
 
           };

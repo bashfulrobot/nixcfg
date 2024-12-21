@@ -16,6 +16,7 @@ in {
     apps = { };
 
     environment.systemPackages = with pkgs; [
+      playonlinux # Wine frontend
       # ephemeral # ephemeral browser
       gnome-disk-utility
       # TODO: COnfirm: ENabled with logitech.solaar, not needed?

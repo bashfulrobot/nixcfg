@@ -55,16 +55,16 @@ in {
     environment.systemPackages = with pkgs;
       [
         # chromiumPackage
-        (pkgs.chromium.override { enableWideVine = true; })
+        (chromium.override { enableWideVine = true; })
       ];
 
     programs.chromium = {
       enable = true;
       extensions = [
 				# pushover
-				"fcmngfmocgakhjghfmgbbhlkenccgpdh"
+        #"fcmngfmocgakhjghfmgbbhlkenccgpdh"
         # bookmark search
-        "cofpegcepiccpobikjoddpmmocficdjj"
+        #"cofpegcepiccpobikjoddpmmocficdjj"
         # kagi search
         # "cdglnehniifkbagbbombnjghhcihifij"
         # 1password
@@ -74,7 +74,7 @@ in {
         # ublock origin
         "cjpalhdlnbpafiamejdnhcphjbkeiagm"
         # tactiq
-        "fggkaccpbmombhnjkjokndojfgagejfb"
+        #"fggkaccpbmombhnjkjokndojfgagejfb"
         # okta
         "glnpjglilkicbckjpbgcfkogebgllemb"
         # grammarly
@@ -84,7 +84,7 @@ in {
         # todoist
         "jldhpllghnbhlbpcmnajkpdmadaolakh"
         # Loom video recording
-        "liecbddmkiiihnedobmlmillhodjkdmb"
+        #"liecbddmkiiihnedobmlmillhodjkdmb"
         # Privacy Badger
         #"pkehgijcmpdhfbdbbnkijodmdjhbjlgp"
         # Checker Plus for Mail
@@ -102,7 +102,7 @@ in {
         # Mail message URL
         "bcelhaineggdgbddincjkdmokbbdhgch"
         # Catppuccin Github icons
-        "lnjaiaapbakfhlbjenjkhffcdpoompki"
+        #"lnjaiaapbakfhlbjenjkhffcdpoompki"
         # Glean browser extension
         # "cfpdompphcacgpjfbonkdokgjhgabpij" # overrides my speed dial extention
         # gnome extention plugin
@@ -116,17 +116,17 @@ in {
         # email tracking for work
         #"pgbdljpkijehgoacbjpolaomhkoffhnl"
         # zoom
-        "kgjfgplpablkjnlkjmjdecgdpfankdle"
+        #"kgjfgplpablkjnlkjmjdecgdpfankdle"
         # Floccus Bookmark Sync
-        "fnaicdffflnofjppbagibeoednhnbjhg"
+        #"fnaicdffflnofjppbagibeoednhnbjhg"
         # Travel Arrow
         #"coplmfnphahpcknbchcehdikbdieognn"
         # xbrowsersync
         # "lcbjdhceifofjlpecfpeimnnphbcjgnc"
         # Catppuccin Mocha theme
-        "bkkmolkhemgaeaeggcmfbghljjjoofoh"
+        #"bkkmolkhemgaeaeggcmfbghljjjoofoh"
         # Perplexity AI
-        "bnaffjbjpgiagpondjlnneblepbdchol"
+        #"bnaffjbjpgiagpondjlnneblepbdchol"
         # Catppuccin Frappe theme
         # "olhelnoplefjdmncknfphenjclimckaf"
         # Catppuccin Macchiato theme

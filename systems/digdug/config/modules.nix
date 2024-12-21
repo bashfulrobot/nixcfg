@@ -10,4 +10,9 @@
   environment.systemPackages = with pkgs; [ mullvad ];
 
   services.mullvad-vpn.enable = true;
+
+  apps.syncthing = {
+    enable = true;
+    host.digdug = true;
+  };
 }

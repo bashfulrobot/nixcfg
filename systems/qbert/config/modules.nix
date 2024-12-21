@@ -10,4 +10,8 @@
   # Enable gnome desktop
   desktops.gnome.enable = true;
 
+  apps.syncthing = {
+    enable = true;
+    host.qbert = true;
+  };
 }

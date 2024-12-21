@@ -28,16 +28,16 @@ let
 
           # Prompt for system name
           echo "Select a system name:"
-          echo "1) rembot"
-          echo "2) evo"
+          echo "1) qbert"
+          echo "2) digdug"
           read -r -p "Enter the number corresponding to your choice: " system_choice
 
           case $system_choice in
             1)
-              SYSTEM_NAME="rembot"
+              SYSTEM_NAME="qbert"
               ;;
             2)
-              SYSTEM_NAME="evo"
+              SYSTEM_NAME="digdug"
               ;;
             *)
               echo "Invalid selection"

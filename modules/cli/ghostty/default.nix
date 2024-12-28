@@ -14,10 +14,16 @@ in {
       inputs.ghostty.packages.x86_64-linux.default
      ];
 
-    # home-manager.users."${user-settings.user.username}" = {
+    home-manager.users."${user-settings.user.username}" = {
     # https://ghostty.org/docs/config
-        # home.file.".config/ghostty/config".text = ''
-        # '';
-    # };
+        home.file.".config/ghostty/config".text = ''
+          font-size = 16
+          cursor-style = block
+          mouse-hide-while-typing = true
+          window-padding-x = 10
+          window-padding-balance = true
+          window-theme = system
+        '';
+    };
   };
 }

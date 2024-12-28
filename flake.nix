@@ -19,10 +19,14 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, ... }:
+    , disko, nixos-hardware, nixvim, ghostty, ... }:
     let
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {

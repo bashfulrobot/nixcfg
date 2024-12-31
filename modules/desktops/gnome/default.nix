@@ -35,6 +35,7 @@ in {
       pinentry-all # gpg passphrase prompting
       unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
+      gnomeExtensions.vscode-search-provider
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel
       gnomeExtensions.bluetooth-quick-connect
@@ -132,6 +133,7 @@ in {
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
             "mediacontrols@cliffniff.github.com"
+            "vscode-search-provider@mrmarble.github.com"
           ];
 
           # Disabled extensions

@@ -36,6 +36,7 @@ in {
       unstable.gnomeExtensions.tiling-shell
       gnomeExtensions.gsconnect
       gnomeExtensions.vscode-search-provider
+      gnomeExtensions.vscode-workspaces-gnome
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel
       gnomeExtensions.bluetooth-quick-connect

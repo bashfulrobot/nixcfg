@@ -170,6 +170,10 @@ in {
           snap-assistant-threshold = 57;
           tiling-system-activation-key = [ "0" ];
           top-edge-maximize = true;
+          span-window-right = [ "<Control><Super>Right" ];
+          span-window-left = [ "<Control><Super>Left" ];
+          span-window-up = [ "<Control><Super>Up" ];
+          span-window-down = [ "<Control><Super>Down" ];
         };
 
         "org/gnome/shell/extensions/bluetooth-quick-connect" = {

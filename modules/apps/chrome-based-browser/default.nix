@@ -135,6 +135,8 @@ in {
         # "jhjnalhegpceacdhbplhnakmkdliaddd"
         # tineye
         # "haebnnbpedcbhciplfhjjkbafijpncjl"
+        # Gainsight Assist
+        "kbiepllbcbandmpckhoejbgcaddcpbno"
 
       ];
       # initialPrefs = {

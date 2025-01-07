@@ -14,7 +14,7 @@ in {
 
     programs = {
       # Install firefox.
-      firefox.enable = true;
+      firefox.enable = false;
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       # mtr.enable = true;

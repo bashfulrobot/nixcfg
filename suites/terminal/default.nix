@@ -37,6 +37,8 @@ in {
       btop # top alternative
     ];
 
+    programs = { pay-respects.enable = true; };
+
     home-manager.users."${user-settings.user.username}" = {
       programs = {
         autojump = {

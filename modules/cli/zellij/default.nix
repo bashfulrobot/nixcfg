@@ -20,7 +20,7 @@ in {
         # enableFishIntegration = true;
         settings = {
           scrollback_editor = "nvim";
-          copy_command = "wl-copy";
+          copy_command = "xclip -selection clipboard";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
           # default_layout = "compact";

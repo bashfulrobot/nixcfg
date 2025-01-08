@@ -67,6 +67,7 @@ in {
       # fractal # Matrix Client
       slack # instant messaging
       signal-desktop # instant messaging
+      zulip
       # element-desktop # Matrix Client
       #  # Email
       gmailctl # cli to write gmail filters as code

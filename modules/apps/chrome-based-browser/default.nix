@@ -31,7 +31,7 @@ let
     srcs = [ chromiumDesktopItem ];
     installPhase = ''
       mkdir -p $out/share/applications
-      cp ${chromiumDesktopItem}/share/applications/chromium-browser.desktop $out/share/applications/chromium.desktop
+      cp ${chromiumDesktopItem}/share/applications/chromium.desktop $out/share/applications/chromium.desktop
       mkdir -p $out/share/icons/hicolor/scalable/apps
       cp ${chromiumIcon} $out/share/icons/hicolor/scalable/apps/chromium.svg
     '';

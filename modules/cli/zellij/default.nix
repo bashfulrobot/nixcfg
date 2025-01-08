@@ -23,7 +23,7 @@ in {
           copy_command = "wl-copy";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
-          default_layout = "compact";
+          # default_layout = "compact";
           ui = {
             pane_frames.rounded_corners = true;
             ane_frames.hide_session_name = true;

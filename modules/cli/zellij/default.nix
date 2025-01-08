@@ -16,8 +16,8 @@ in {
 
       programs.zellij = {
         enable = true;
-        enableBashIntegration = true;
-        enableFishIntegration = true;
+        # enableBashIntegration = true;
+        # enableFishIntegration = true;
         settings = {
           scrollback_editor = "nvim";
           copy_command = "wl-copy";

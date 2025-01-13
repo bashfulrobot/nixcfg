@@ -12,9 +12,8 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    apps = {
-      obs.enable = true;
-    };
+    apps = { obs.enable = true; };
+
     environment.systemPackages = with pkgs; [
       # --- Visuals
       gimp-with-plugins # image editor

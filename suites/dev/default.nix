@@ -1,4 +1,4 @@
-{ config, pkgs, lib, user-settings, inputs, ... }:
+{ config, pkgs, lib, user-settings, ... }:
 let cfg = config.suites.dev;
 in {
 
@@ -12,9 +12,9 @@ in {
 
   config = lib.mkIf cfg.enable {
     dev = {
-    #   go.enable = true;
-    #   npm.enable = true;
-    #   python.enable = true;
+      #   go.enable = true;
+      #   npm.enable = true;
+      #   python.enable = true;
       nix.enable = true;
     };
 
@@ -34,7 +34,7 @@ in {
       nixvim.enable = true;
     };
 
-environment.systemPackages = with pkgs; [
+    environment.systemPackages = with pkgs; [
       gnumake
       awscli2
       ffuf
@@ -44,6 +44,8 @@ environment.systemPackages = with pkgs; [
       shfmt # shell script formatter
       jnv # json filtering with jq
       unstable.zed-editor # text editor
+      unstable.markdown-oxide # Zed support
+      unstable.nil # nix language server for Zed
       # unstable.jetbrains.goland # Go IDE
     ];
     home-manager.users."${user-settings.user.username}" = {

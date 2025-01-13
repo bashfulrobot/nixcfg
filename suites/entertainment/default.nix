@@ -11,18 +11,20 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+
     cli = {
       spotify.enable = true;
       comics-downloader.enable = true;
     };
 
-    environment.systemPackages = with pkgs; [
-      # transmission_4
-      # deluge-gtk
-      vlc # media player
-      # foliate # ebook reader
-      # mplayer # Video player
-      # spotdl # Spotify downloader
-    ];
+    environment.systemPackages = with pkgs;
+      [
+        # transmission_4
+        # deluge-gtk
+        vlc # media player
+        # foliate # ebook reader
+        # mplayer # Video player
+        # spotdl # Spotify downloader
+      ];
   };
 }

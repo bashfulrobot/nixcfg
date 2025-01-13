@@ -43,7 +43,7 @@ environment.systemPackages = with pkgs; [
       shadowenv # environment variable manager
       shfmt # shell script formatter
       jnv # json filtering with jq
-      # unstable.zed-editor # text editor
+      unstable.zed-editor # text editor
       # unstable.jetbrains.goland # Go IDE
     ];
     home-manager.users."${user-settings.user.username}" = {

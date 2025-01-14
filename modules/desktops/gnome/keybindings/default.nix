@@ -103,8 +103,9 @@ in {
           {
             binding = "<Super>t";
             # command = "kgx";
-            command = "alacritty";
+            # command = "alacritty";
             # command = "ghostty";
+            command = "foot";
             name = "Terminal";
           };
 

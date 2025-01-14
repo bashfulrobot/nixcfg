@@ -19,14 +19,18 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
+    # ghostty = {
+    #   url = "github:ghostty-org/ghostty";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    catppuccin = {
+      url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
+      };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, ghostty, ... }:
+    , disko, nixos-hardware, nixvim, catppuccin, ... }:
     let
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {
@@ -49,6 +53,7 @@
         home-manager.nixosModules.home-manager
         disko.nixosModules.disko
         nixvim.nixosModules.nixvim
+        catppuccin.nixosModules.catppuccin
       ];
 
       serverModules = [
@@ -63,7 +68,7 @@
           sharedModules = [ ];
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
-          users."${user-settings.user.username}" = { imports = [ ]; };
+          users."${user-settings.user.username}" = { imports = [ catppuccin.homeManagerModules.catppuccin ]; };
         };
       };
 

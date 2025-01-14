@@ -106,6 +106,7 @@ in {
 
     sys = {
       dconf.enable = true;
+      catppuccin-theme.enable = true;
       xdg.enable = true;
     };
 

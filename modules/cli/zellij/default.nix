@@ -10,7 +10,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # environment.systemPackages = with pkgs; [ zellij ];
+    environment.systemPackages = with pkgs; [ wl-clipboard ];
     # TODO: Update version periodically
 
     home-manager.users."${user-settings.user.username}" = {
@@ -21,15 +21,20 @@ in {
         enableFishIntegration = true;
         settings = {
           scrollback_editor = "nvim";
-          copy_command = "xclip -selection clipboard";
+          copy_on_select = true;
+          copy_command = "wl-copy";
+          copy_clipboard = "primary";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
+          mouse_mode = true;
+          default_mode = "normal";
           # TODO: Until I can figure out: https://github.com/karimould/zellij-forgot/issues/11
           # default_layout = "compact";
+          pane_frames = false;
           ui = {
-            pane_frames.rounded_corners = true;
             pane_frames.hide_session_name = true;
           };
+
           # TODO: Until I can figure out: https://github.com/karimould/zellij-forgot/issues/11
           # keybinds = {
           #   "shared_except \"locked\"" = {

@@ -39,7 +39,7 @@ in {
       awscli2
       ffuf
       just # command runner
-      doppler # secret management tool
+      unstable.doppler # secret management tool
       shadowenv # environment variable manager
       shfmt # shell script formatter
       jnv # json filtering with jq

@@ -32,7 +32,7 @@ in {
               IdentityFile ~/.ssh/id_ed25519
               User git
           Host feral
-              HostName aion.feralhosting.com
+              HostName prometheus.feralhosting.com
               User msgedme
           Host camino
             HostName 64.225.50.102

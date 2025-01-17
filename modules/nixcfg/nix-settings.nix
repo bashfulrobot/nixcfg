@@ -43,13 +43,21 @@ in {
       };
     };
 
-    programs.nix-ld = {
-      enable = true;
-      libraries = with pkgs;
-        [
-          # Add any missing dynamic libraries here for unpackages programs
-          # here, and not in the environment.systemPackages.
-        ];
+    programs = {
+      nix-ld = {
+        enable = true;
+        libraries = with pkgs;
+          [
+            # Add any missing dynamic libraries here for unpackages programs
+            # here, and not in the environment.systemPackages.
+          ];
+      };
+      nh = {
+        enable = true;
+        clean.enable = true;
+        clean.extraArgs = "--keep-since 4d --keep 3";
+        flake = "/home/dustin/dev/nix/nixcfg";
+      };
     };
 
     # TODO: fix this, it's not working

@@ -25,6 +25,7 @@ in {
       statix # nix linting
       nixd # nix language server
       nix-prefetch-github # Get sha256 info for GitHub
+      unstable.nh # nix helper - rebuilds, etc
     ];
     home-manager.users."${user-settings.user.username}" = {
 

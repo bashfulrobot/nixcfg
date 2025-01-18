@@ -61,10 +61,6 @@ in {
         tmux = { enable = true; };
         bat = { enable = true; };
 
-        # zellij = {
-        #   enable = true;
-        #   enableBashIntegration = true;
-        # };
         # navi = {
         #   enable = true;
         #   enableBashIntegration = true;

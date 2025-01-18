@@ -13,7 +13,7 @@ in {
     # environment.systemPackages = with pkgs; [  ];
 
     home-manager.users."${user-settings.user.username}" = {
-
+      # Shortcuts for Yazi: https://yazi-rs.github.io/docs/quick-start/
       programs.yazi = {
         enable = true;
         enableBashIntegration = true;

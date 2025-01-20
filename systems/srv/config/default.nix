@@ -4,6 +4,7 @@
   imports = [ # Include the results of the hardware scan.
     ./kvm-routing.nix
     ./lid-power.nix
+    ./nfs-srv.nix
     ./services.nix
     ./software.nix
     ./users.nix

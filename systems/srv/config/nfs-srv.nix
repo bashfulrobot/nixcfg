@@ -1,6 +1,6 @@
 { config, pkgs, secrets, ... }: {
 
-  # environment.systemPackages = with pkgs; [ syncthing ];
+  environment.systemPackages = with pkgs; [ nfs-utils ];
 
   fileSystems."/exports/darkstar" = {
     device = "/home/dustin/nfs/darkstar";

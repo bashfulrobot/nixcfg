@@ -338,6 +338,7 @@ nvim $filename
           tfs = "terraform state list";
           dc = "docker compose";
           gc = "git pull && git add . && git commit -S && git push";
+          nix-info = "nix-shell -p nix-info --run 'nix-info -m'";
         };
         shellAliases = {
           support-info =

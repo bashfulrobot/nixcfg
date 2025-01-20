@@ -36,11 +36,13 @@ in {
         ];
       };
       # Automatic Garbage Collection
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 5d";
-      };
+      # Disbaled in favour of NH garbage cleaning.
+      # leaving code in case I move away form NH.
+      # gc = {
+      #   automatic = true;
+      #   dates = "weekly";
+      #   options = "--delete-older-than 5d";
+      # };
     };
 
     programs = {

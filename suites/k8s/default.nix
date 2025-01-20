@@ -35,6 +35,7 @@ in {
       # butane # flatcar/ignition configuration
       unstable.minikube # Local k8s cluster
       kubie # k8s context switcher
+      ktop # K8s top command
     ];
 
     services.flatpak.packages = [

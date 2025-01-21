@@ -2,8 +2,8 @@
 
   environment.systemPackages = with pkgs; [ nfs-utils ];
 
-  fileSystems."/exports/darkstar" = {
-    device = "/home/dustin/nfs/darkstar";
+  fileSystems."/exports/spitfire" = {
+    device = "/home/dustin/nfs/spitfire";
     options = [ "bind" ];
   };
 
@@ -12,7 +12,7 @@
       server = {
         enable = true;
         exports = ''
-          /exports/darkstar 172.16.166.10(rw,sync,no_subtree_check,root_squash) \
+          /exports/spitfire 172.16.166.10(rw,sync,no_subtree_check,root_squash) \
                             172.16.166.11(rw,sync,no_subtree_check,root_squash) \
                             172.16.166.12(rw,sync,no_subtree_check,root_squash) \
                             172.16.166.20(rw,sync,no_subtree_check,root_squash) \

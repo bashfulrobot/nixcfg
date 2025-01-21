@@ -3,7 +3,7 @@
   environment.systemPackages = with pkgs; [ nfs-utils ];
 
   fileSystems."/exports/spitfire" = {
-    device = "/home/dustin/nfs/spitfire";
+    device = "/srv/nfs/spitfire";
     options = [ "bind" ];
   };
 

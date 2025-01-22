@@ -245,7 +245,7 @@ in {
 
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          accent-color = "slate";
+          accent-color = "yellow";
 
           # Fonts
           font-hinting = "full";

@@ -44,7 +44,7 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       programs = {
         autojump = {
-          enable = true;
+          enable = false;
           enableFishIntegration = true;
           enableBashIntegration = true;
           enableZshIntegration = true;

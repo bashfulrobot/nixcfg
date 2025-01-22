@@ -451,7 +451,7 @@ nvim $filename
         yazi.enableFishIntegration = true;
         nix-index.enableFishIntegration = true;
         eza.enableFishIntegration = true;
-        autojump.enableFishIntegration = true;
+        autojump.enableFishIntegration = false;
       };
 
       home.packages = with pkgs; [

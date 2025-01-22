@@ -25,6 +25,7 @@ in {
           window-height = mkUint32 734;
           window-width = mkUint32 1215;
           working-directory-mode = mkUint32 2;
+          theme-light = "Tomorrow";
         };
 
       };

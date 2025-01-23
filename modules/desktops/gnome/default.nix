@@ -47,7 +47,6 @@ in {
       gnome-maps
       gnome-music
       gnome-weather
-      epiphany
     ];
 
     system.activationScripts.script.text = ''

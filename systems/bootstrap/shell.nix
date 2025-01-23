@@ -11,16 +11,16 @@ let
           mkdir -p $WORKING_DIR/.ssh
           mkdir -p $WORKING_DIR/.gnupg
           cd $WORKING_DIR
-          git clone https://github.com/bashfulrobot/nixos
-          cd nixos
+          git clone https://github.com/bashfulrobot/nixcfg
+          cd nixcfg
           nohup 1password &
           echo "Please log in to 1Password GUI, and export keys and press Enter to continue..."
           read -r -p ""
-          mv /home/nixos/Downloads/git-crypt-key $WORKING_DIR/.gnupg/git-crypt-key
-          mv /home/nixos/Downloads/id_rsa.pub $WORKING_DIR/.ssh/id_rsa.pub
-          mv /home/nixos/Downloads/id_rsa $WORKING_DIR/.ssh/id_rsa
-          mv /home/nixos/Downloads/id_ed25519.pub $WORKING_DIR/.ssh/id_ed25519.pub
-          mv /home/nixos/Downloads/id_ed25519 $WORKING_DIR/.ssh/id_ed25519
+          mv /home/nixcfg/Downloads/git-crypt-key $WORKING_DIR/.gnupg/git-crypt-key
+          mv /home/nixcfg/Downloads/id_rsa.pub $WORKING_DIR/.ssh/id_rsa.pub
+          mv /home/nixcfg/Downloads/id_rsa $WORKING_DIR/.ssh/id_rsa
+          mv /home/nixcfg/Downloads/id_ed25519.pub $WORKING_DIR/.ssh/id_ed25519.pub
+          mv /home/nixcfg/Downloads/id_ed25519 $WORKING_DIR/.ssh/id_ed25519
           chmod 600 $WORKING_DIR/.ssh/id_* $WORKING_DIR/.gnupg/git-crypt-key
           git-crypt unlock $WORKING_DIR/.gnupg/git-crypt-key
           git-crypt status -f
@@ -45,21 +45,21 @@ let
               ;;
           esac
 
-        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixos/systems/$SYSTEM_NAME/hardware/disko.nix
+        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixcfg/systems/$SYSTEM_NAME/hardware/disko.nix
 
         sudo mount | grep /mnt
 
-        sudo nixos-generate-config --no-filesystems --root /mnt
+        sudo nixcfg-generate-config --no-filesystems --root /mnt
 
-        sudo cp /mnt/etc/nixos/hardware-configuration.nix $WORKING_DIR/nixos/systems/$SYSTEM_NAME/hardware/hardware-configuration.nix
+        sudo cp /mnt/etc/nixcfg/hardware-configuration.nix $WORKING_DIR/nixcfg/systems/$SYSTEM_NAME/hardware/hardware-configuration.nix
 
         sudo mkdir -p /mnt/bootstrapped/$SYSTEM_NAME
 
         sudo cp -r $WORKING_DIR /mnt/bootstrapped/$SYSTEM_NAME/
 
-        # Run nixos-install against an impure flake in $WORKING_DIR/nixos
+        # Run nixcfg-install against an impure flake in $WORKING_DIR/nixcfg
         ulimit -n 4096
-        sudo nixos-install --flake "$WORKING_DIR/nixos#$SYSTEM_NAME" --impure
+        sudo nixcfg-install --flake "$WORKING_DIR/nixcfg#$SYSTEM_NAME" --impure
   '';
 
   # Create the shell application using writeShellApplication

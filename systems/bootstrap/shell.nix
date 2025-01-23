@@ -6,13 +6,20 @@ let
   bootstrapScript = ''
     #!/run/current-system/sw/bin/env bash
 
+          LAUNCH_DIR="/tmp/launch"
           WORKING_DIR="/tmp/Bootstrap"
           BOOTSTRAP_ENC_DIR="/tmp/vaults_enc/Bootstrap"
           BOOTSTRAP_DEC_DIR="/tmp/vaults_dec/Bootstrap"
 
+          mkdir -p $LAUNCH_DIR
           mkdir -p $WORKING_DIR
           mkdir -p $BOOTSTRAP_ENC_DIR
           mkdir -p $BOOTSTRAP_DEC_DIR
+
+          cd $LAUNCH_DIR
+          wget -O Bootstrap.tar.gz http://nixcfg.bashfulrobot.com/systems/bootstrap/Bootstrap.tar.gz
+          tar xvfz Bootstrap.tar.gz
+          mv Bootstrap/* $BOOTSTRAP_ENC_DIR/
 
           nohup vaults &
 

@@ -19,6 +19,7 @@ in {
       initialize = true;
       paths = [ "/srv/nfs" ];
       environmentFile = "/etc/restic/env-srv-restic";
+      repositoryFile = "/etc/restic/env-srv-restic";
       pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 6" ];
       extraBackupArgs = [
         "--exclude=/srv/nfs/spitfire/jellyfin"

@@ -45,19 +45,18 @@ in {
       # tangram
 
       # PDF
-      # xournalpp # note taking/pdf annotator
+      xournalpp # note taking/pdf annotator
       # evince # pdf viewer
       # texliveSmall # get pdflatex
       # pdf-sign # pdf signing utility
 
       # Office
       # libreoffice # office suite
-      # obsidian # note-taking
 
       # Organize
       # morgen # AI calendar - testing
       unstable.todoist-electron # task manager
-      planify
+      # planify
 
       # Communications
 

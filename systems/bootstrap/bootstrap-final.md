@@ -2,6 +2,7 @@
 
 - Boot ISO
 - `mkdir /tmp/launch && cd /tmp/launch`
-- `nix run nixpkgs#wget -- -O shell.nix nixcfg.bashfulrobot.com/shell`
-- `nix-shell`
+- `nix-shell -p wget`
+- `wget -- -O shell.nix nixcfg.bashfulrobot.com/shell`
+- `export NIXPKGS_ALLOW_UNFREE=1; nix-shell --impure`
 - `bootstrap` (follow instructons)

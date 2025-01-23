@@ -12,11 +12,7 @@
       server = {
         enable = true;
         exports = ''
-          /exports/spitfire 172.16.166.10(rw,sync,no_subtree_check) \
-                            172.16.166.11(rw,sync,no_subtree_check) \
-                            172.16.166.12(rw,sync,no_subtree_check) \
-                            172.16.166.20(rw,sync,no_subtree_check) \
-                            172.16.166.21(rw,sync,no_subtree_check)
+          /exports/spitfire 172.16.166.0/24(rw,sync,no_subtree_check,no_root_squash,all_squash,anonuid=1000,anongid=1000)
         '';
       };
     };

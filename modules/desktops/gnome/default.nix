@@ -87,8 +87,6 @@ in {
         "org/gnome/shell/app-switcher" = { current-workspace-only = false; };
         "org/gnome/shell/window-switcher" = { current-workspace-only = false; };
 
-
-
         "org/gnome/desktop/peripherals/touchpad" = {
           two-finger-scrolling-enabled = true;
           edge-scrolling-enabled = false;

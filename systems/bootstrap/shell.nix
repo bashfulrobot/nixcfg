@@ -6,31 +6,29 @@ let
   bootstrapScript = ''
     #!/run/current-system/sw/bin/env bash
 
-          WORKING_DIR="/tmp/bootstrap"
+          WORKING_DIR="/tmp/Bootstrap"
           BOOTSTRAP_ENC_DIR="/tmp/vaults_enc/Bootstrap"
           BOOTSTRAP_DEC_DIR="/tmp/vaults_dec/Bootstrap"
 
-          mkdir -p $WORKING_DIR/.ssh
-          mkdir -p $WORKING_DIR/.gnupg
+          mkdir -p $WORKING_DIR
           mkdir -p $BOOTSTRAP_ENC_DIR
           mkdir -p $BOOTSTRAP_DEC_DIR
 
+          nohup vaults &
+
           cd $WORKING_DIR
-          git clone https://github.com/bashfulrobot/nixcfg
-          cd nixcfg
-          nohup 1password &
-          echo "Please log in to 1Password GUI, and export keys and press Enter to continue..."
+
+          echo
+          echo "Please setup vaults, using $BOOTSTRAP_ENC_DIR and $BOOTSTRAP_DEC_DIR, then press enter"
+          echo
           read -r -p ""
-          mv /home/nixos/Downloads/git-crypt-key $WORKING_DIR/.gnupg/git-crypt-key
-          mv /home/nixos/Downloads/id_rsa.pub $WORKING_DIR/.ssh/id_rsa.pub
-          mv /home/nixos/Downloads/id_rsa $WORKING_DIR/.ssh/id_rsa
-          mv /home/nixos/Downloads/id_ed25519.pub $WORKING_DIR/.ssh/id_ed25519.pub
-          mv /home/nixos/Downloads/id_ed25519 $WORKING_DIR/.ssh/id_ed25519
-          # chmod 600 $WORKING_DIR/.ssh/id_* $WORKING_DIR/.gnupg/git-crypt-key
-          chmod 600 $WORKING_DIR/.ssh/id_*
-          git-crypt unlock $WORKING_DIR/.gnupg/git-crypt-key
-          git-crypt status -f
-          git-crypt status
+
+          cp -r $BOOTSTRAP_DEC_DIR/gnupg $WORKING_DIR/.gnupg
+          cp -r $BOOTSTRAP_DEC_DIR/ssh $WORKING_DIR/.ssh
+          chmod 0600 $WORKING_DIR/.ssh/id_*
+
+          git clone https://github.com/bashfulrobot/nixcfg && cd nixcfg
+          git-crypt unlock $WORKING_DIR/.ssh/git-crypt-key && git-crypt status -f && git-crypt status
 
           # Prompt for system name
           echo "Select a system name:"
@@ -51,7 +49,7 @@ let
               ;;
           esac
 
-        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixos/systems/$SYSTEM_NAME/config/disko.nix
+        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixcfg/systems/$SYSTEM_NAME/config/disko.nix
 
         sudo mount | grep /mnt
 
@@ -63,9 +61,9 @@ let
 
         sudo cp -r $WORKING_DIR /mnt/bootstrapped/$SYSTEM_NAME/
 
-        # Run nixos-install against an impure flake in $WORKING_DIR/nixos
+        # Run nixos-install against an impure flake in $WORKING_DIR/nixcfg
         ulimit -n 4096
-        sudo nixos-install --flake "$WORKING_DIR/nixos#$SYSTEM_NAME" --impure
+        sudo nixos-install --flake "$WORKING_DIR/nixcfg#$SYSTEM_NAME" --impure
   '';
 
   # Create the shell application using writeShellApplication
@@ -89,8 +87,6 @@ in pkgs.mkShell {
     just
     nixfmt
     statix
-    # _1password-gui
-    # _1password-cli
     wget
     unzip
     vaults

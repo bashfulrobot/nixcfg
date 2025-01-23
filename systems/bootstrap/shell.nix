@@ -7,9 +7,14 @@ let
     #!/run/current-system/sw/bin/env bash
 
           WORKING_DIR="/tmp/bootstrap"
+          BOOTSTRAP_ENC_DIR="/tmp/vaults_enc/Bootstrap"
+          BOOTSTRAP_DEC_DIR="/tmp/vaults_dec/Bootstrap"
 
           mkdir -p $WORKING_DIR/.ssh
           mkdir -p $WORKING_DIR/.gnupg
+          mkdir -p $BOOTSTRAP_ENC_DIR
+          mkdir -p $BOOTSTRAP_DEC_DIR
+
           cd $WORKING_DIR
           git clone https://github.com/bashfulrobot/nixcfg
           cd nixcfg
@@ -21,7 +26,8 @@ let
           mv /home/nixos/Downloads/id_rsa $WORKING_DIR/.ssh/id_rsa
           mv /home/nixos/Downloads/id_ed25519.pub $WORKING_DIR/.ssh/id_ed25519.pub
           mv /home/nixos/Downloads/id_ed25519 $WORKING_DIR/.ssh/id_ed25519
-          chmod 600 $WORKING_DIR/.ssh/id_* $WORKING_DIR/.gnupg/git-crypt-key
+          # chmod 600 $WORKING_DIR/.ssh/id_* $WORKING_DIR/.gnupg/git-crypt-key
+          chmod 600 $WORKING_DIR/.ssh/id_*
           git-crypt unlock $WORKING_DIR/.gnupg/git-crypt-key
           git-crypt status -f
           git-crypt status
@@ -45,13 +51,13 @@ let
               ;;
           esac
 
-        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixos/systems/$SYSTEM_NAME/hardware/disko.nix
+        sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko $WORKING_DIR/nixos/systems/$SYSTEM_NAME/config/disko.nix
 
         sudo mount | grep /mnt
 
         sudo nixos-generate-config --no-filesystems --root /mnt
 
-        sudo cp /mnt/etc/nixos/hardware-configuration.nix $WORKING_DIR/nixos/systems/$SYSTEM_NAME/hardware/hardware-configuration.nix
+        sudo cp /mnt/etc/nixos/hardware-configuration.nix $WORKING_DIR/nixcfg/systems/$SYSTEM_NAME/config/hardware-configuration.nix
 
         sudo mkdir -p /mnt/bootstrapped/$SYSTEM_NAME
 
@@ -83,10 +89,11 @@ in pkgs.mkShell {
     just
     nixfmt
     statix
-    _1password-gui
-    _1password-cli
+    # _1password-gui
+    # _1password-cli
     wget
     unzip
+    vaults
     bootstrap
   ];
 }

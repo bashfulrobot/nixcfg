@@ -5,6 +5,7 @@
     ./kvm-routing.nix
     ./lid-power.nix
     ./nfs-srv.nix
+    ./restic.nix
     ./services.nix
     ./software.nix
     ./users.nix

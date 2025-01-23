@@ -60,38 +60,6 @@ in {
       epiphany
     ];
 
-    # environment.gnome.excludePackages = (with pkgs; [
-    #   # for packages that are pkgs.*
-    #   gnome-tour
-    #   gnome-connections
-    #   cheese # photo booth
-    #   gedit # text editor
-    #   yelp # help viewer
-    #   file-roller # archive manager
-    #   gnome-photos
-    #   gnome-system-monitor
-    #   gnome-maps
-    #   gnome-music
-    #   gnome-weather
-    #   epiphany
-    # ]) ++ (with pkgs.gnomeExtensions; [
-    #   # for packages that are pkgs.gnomeExtensions.*
-    #   applications-menu
-    #   auto-move-windows
-    #   gtk4-desktop-icons-ng-ding
-    #   launch-new-instance
-    #   light-style
-    #   native-window-placement
-    #   next-up
-    #   places-status-indicator
-    #   removable-drive-menu
-    #   screenshot-window-sizer
-    #   window-list
-    #   windownavigator
-    #   workspace-indicator
-    #   hide-top-bar
-    # ]);
-
     system.activationScripts.script.text = ''
       mkdir -p /var/lib/AccountsService/{icons,users}
       cp ${user-settings.user.home}/dev/nix/nixcfg/modules/desktops/gnome/.face /var/lib/AccountsService/icons/${user-settings.user.username}
@@ -121,11 +89,6 @@ in {
       '';
 
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
-
-        # "org/gnome/mutter" = {
-        #   center-new-windows = true;
-        #   edge-tiling = false; # for pop-shell
-        # };
 
         "org/gnome/shell" = {
           # Enabled extensions
@@ -181,25 +144,6 @@ in {
           top-edge-maximize = true;
         };
 
-        # {
-        #   enable-blur-selected-tilepreview = true;
-        #   enable-blur-snap-assistant = true;
-        #   last-version-name-installed = "14";
-        #   layouts-json = ''
-        #     [{"id":"Layout 1","tiles":[{"x":0,"y":0,"width":0.22,"height":0.5,"groups":[1,2]},{"x":0,"y":0.5,"width":0.22,"height":0.5,"groups":[1,2]},{"x":0.22,"y":0,"width":0.56,"height":1,"groups":[2,3]},{"x":0.78,"y":0,"width":0.22,"height":0.5,"groups":[3,4]},{"x":0.78,"y":0.5,"width":0.22,"height":0.5,"groups":[3,4]}]},{"id":"Layout 2","tiles":[{"x":0,"y":0,"width":0.22,"height":1,"groups":[1]},{"x":0.22,"y":0,"width":0.56,"height":1,"groups":[1,2]},{"x":0.78,"y":0,"width":0.22,"height":1,"groups":[2]}]},{"id":"Layout 3","tiles":[{"x":0,"y":0,"width":0.33,"height":1,"groups":[1]},{"x":0.33,"y":0,"width":0.67,"height":1,"groups":[1]}]},{"id":"Layout 4","tiles":[{"x":0,"y":0,"width":0.67,"height":1,"groups":[1]},{"x":0.67,"y":0,"width":0.33,"height":1,"groups":[1]}]},{"id":"3722439","tiles":[{"x":0,"y":0,"width":0.35358796296296297,"height":0.49234449760765553,"groups":[1,2]},{"x":0.35358796296296297,"y":0,"width":0.6464120370370365,"height":1,"groups":[1]},{"x":0,"y":0.49234449760765553,"width":0.35358796296296297,"height":0.5076555023923448,"groups":[2,1]}]}]'';
-        #   overridden-settings = ''
-        #     {"org.gnome.mutter.keybindings":{"toggle-tiled-right":"['<Super>Right']","toggle-tiled-left":"['<Super>Left']"},"org.gnome.desktop.wm.keybindings":{"maximize":"['<Super>Up']","unmaximize":"['<Super>Down', '<Alt>F5']"},"org.gnome.mutter":{"edge-tiling":"false"}}'';
-        #   quarter-tiling-threshold = mkUint32 41;
-        #   show-indicator = false;
-        #   snap-assistant-threshold = 57;
-        #   tiling-system-activation-key = [ "0" ];
-        #   top-edge-maximize = true;
-        #   span-window-right = [ "<Control><Super>Right" ];
-        #   span-window-left = [ "<Control><Super>Left" ];
-        #   span-window-up = [ "<Control><Super>Up" ];
-        #   span-window-down = [ "<Control><Super>Down" ];
-        # };
-
         "org/gnome/shell/extensions/bluetooth-quick-connect" = {
           bluetooth-auto-power-on = true;
           refresh-button-on = true;
@@ -254,12 +198,6 @@ in {
           font-name = "Work Sans 12";
           document-font-name = "Work Sans 12";
           monospace-font-name = "Source Code Pro 10";
-
-          # Default Fonts
-          # font-name = "Cantarell 11";
-          # document-font-name = "Cantarell 11";
-          # monospace-font-name = "Source Code Pro 10";
-
         };
         "org/gnome/desktop/background" = {
           color-shading-type = "solid";

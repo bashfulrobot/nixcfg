@@ -29,12 +29,23 @@ let
       $RESTIC_BIN -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
     end
 
+    function show_help
+      echo "Usage: $argv[0] [OPTION]"
+      echo "Options:"
+      echo "  -init           Initialize the repository"
+      echo "  -restore        Restore the latest backup"
+      echo "  -list-backups   List all backups"
+      echo "  -help           Show this help message"
+    end
+
     if test (count $argv) -gt 0 -a "$argv[1]" = "-init"
       init_repo
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-restore"
       restore_backup
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-list-backups"
       list_backups
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-help"
+      show_help
     else
       run_backup
     end

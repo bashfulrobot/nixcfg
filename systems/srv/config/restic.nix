@@ -45,8 +45,8 @@
             forget: prune
             options:
               exclude:
-                - /srv/nfs/lost+found
-                - /srv/nfs/spitfire/jellyfin
+                - '/srv/nfs/lost+found'
+                - '/srv/nfs/spitfire/jellyfin'
 
         backends:
           b2-nfs:

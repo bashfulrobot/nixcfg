@@ -13,7 +13,7 @@ in {
   config = lib.mkIf cfg.enable {
     cli = { };
 
-    apps = { };
+    apps = { perplexity = { enable = true; }; };
 
     environment.systemPackages = with pkgs; [
       playonlinux # Wine frontend

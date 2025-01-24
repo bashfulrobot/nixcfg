@@ -55,12 +55,12 @@ in {
     enable = true;
     serviceConfig = {
       Type = "simple";
-      ExecStart = "/run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+      ExecStart =
+        "/run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
     };
     wantedBy = [ "multi-user.target" ];
-    };
   };
 
-# home-manager.users."${user-settings.user.username}" = {
+  # home-manager.users."${user-settings.user.username}" = {
   # };
 }

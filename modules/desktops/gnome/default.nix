@@ -47,6 +47,7 @@ in {
       gnome-maps
       gnome-music
       gnome-weather
+      gnome-console
     ];
 
     system.activationScripts.script.text = ''

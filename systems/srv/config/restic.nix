@@ -14,6 +14,10 @@ let
       restic -r $RESTIC_REPOSITORY init
     end
 
+    function restore_backup
+      restic -r $RESTIC_REPOSITORY restore latest --target /srv/nfs/restores
+    end
+
     function run_backup
       restic -r $RESTIC_REPOSITORY backup /srv/nfs
       restic -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
@@ -21,6 +25,8 @@ let
 
     if test (count $argv) -gt 0 -a "$argv[1]" = "-init"
       init_repo
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-restore"
+      restore_backup
     else
       run_backup
     end
@@ -32,10 +38,11 @@ in {
     (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
   ];
 
-systemd.services.restic-nfs-backup = {
+  systemd.services.restic-nfs-backup = {
     description = "Restic NFS Backup Service";
     serviceConfig = {
-      ExecStart = "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+      ExecStart =
+        "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
       User = "root";
     };
   };

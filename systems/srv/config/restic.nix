@@ -39,20 +39,25 @@ in {
   ];
 
   systemd.services.restic-nfs-backup = {
-    description = "Restic NFS Backup Service";
+    path = [
+        pkgs.fish
+        pkgs.restic
+        pkgs.restic-nfs-backup.sh
+      ];
     serviceConfig = {
-      ExecStart =
-        "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+      Type = "oneshot";
+      script = ''
+        ${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh
+      '';
       User = "root";
     };
   };
 
   systemd.timers.restic-nfs-backup = {
-    description = "Restic NFS Backup Timer";
     wantedBy = [ "timers.target" ];
+    partOf = [ "restic-nfs-backup.service" ];
     timerConfig = {
-      Persistent = true;
-      OnCalendar = "03:00";
+      OnCalendar = "*-*-* 03:00:00";
     };
   };
 

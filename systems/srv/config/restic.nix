@@ -7,7 +7,7 @@ let
 
     RESTIC_HOST="$(hostname)"
     RESTIC_REPOSITORY="${secrets.restic.srv.restic_repository}"
-    B2_ACCOUNT_ID="${secrets.restic.srv.b2_account_id}"
+    AWS_SECRET_ACCESS_KEY="${secrets.restic.srv.b2_account_id}"
     B2_ACCOUNT_KEY="${secrets.restic.srv.b2_account_key}"
     RESTIC_PASSWORD="${secrets.restic.srv.restic_password}"
 

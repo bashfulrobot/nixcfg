@@ -5,9 +5,9 @@ let
 
     set -x RESTIC_HOST (hostname)
     set -x RESTIC_REPOSITORY "${secrets.restic.srv.restic_repository}"
-    set -x AWS_SECRET_ACCESS_KEY "${secrets.restic.srv.b2_account_id}"
+    set -x AWS_ACCESS_KEY_ID "${secrets.restic.srv.b2_account_id}"
+    set -x AWS_SECRET_ACCESS_KEY "${secrets.restic.srv.b2_account_key}"
     set -x AWS_DEFAULT_REGION "${secrets.restic.srv.region}"
-    set -x B2_ACCOUNT_KEY "${secrets.restic.srv.b2_account_key}"
     set -x RESTIC_PASSWORD "${secrets.restic.srv.restic_password}"
 
     # Debugging output

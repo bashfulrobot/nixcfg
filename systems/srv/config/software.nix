@@ -24,6 +24,7 @@
     just
     nixfmt
     gdu
+    pass
   ];
 
   apps = { kvm.enable = true; };

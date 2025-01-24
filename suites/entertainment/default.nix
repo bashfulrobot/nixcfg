@@ -25,6 +25,7 @@ in {
         # foliate # ebook reader
         # mplayer # Video player
         # spotdl # Spotify downloader
+        unstable.mpv # Video player
       ];
   };
 }

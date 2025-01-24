@@ -46,7 +46,7 @@ in {
       '';
       User = "root";
     };
-    install = { WantedBy = [ "multi-user.target" ]; };
+    WantedBy = [ "multi-user.target" ];
   };
 
   systemd.timers.restic-nfs-backup = {

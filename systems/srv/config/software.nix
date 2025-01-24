@@ -26,6 +26,7 @@
     gdu
     pass
     gnupg
+    pinentry-tty
   ];
 
   apps = { kvm.enable = true; };

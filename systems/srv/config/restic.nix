@@ -10,18 +10,13 @@ let
     set -x AWS_DEFAULT_REGION "${secrets.restic.srv.region}"
     set -x RESTIC_PASSWORD "${secrets.restic.srv.restic_password}"
 
-    # Debugging output
-    echo "RESTIC_REPOSITORY: $RESTIC_REPOSITORY"
-    echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-    echo "B2_ACCOUNT_KEY: $B2_ACCOUNT_KEY"
-    echo "RESTIC_PASSWORD: $RESTIC_PASSWORD"
-
     function init_repo
       restic -r $RESTIC_REPOSITORY init
     end
 
     function run_backup
       restic -r $RESTIC_REPOSITORY backup /srv/nfs
+      restic -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
     end
 
     if test (count $argv) -gt 0 -a "$argv[1]" = "-init"

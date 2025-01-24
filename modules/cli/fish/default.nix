@@ -358,6 +358,7 @@ nvim $filename
           "..." = "cd ../..";
           "...." = "cd ../../..";
           "....." = "cd ../../../..";
+          youtube = "nix run nixpkgs#mpv";
           sysdig-cli-scanner-recent-version =
             "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
           sysdig-cli-scanner-get = ''

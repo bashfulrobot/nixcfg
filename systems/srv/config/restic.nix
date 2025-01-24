@@ -3,8 +3,6 @@ let
   restic-nfs-backup = ''
     #!/run/current-system/sw/bin/env bash
 
-    set -euo pipefail
-
     RESTIC_HOST="$(hostname)"
     RESTIC_REPOSITORY="${secrets.restic.srv.restic_repository}"
     AWS_SECRET_ACCESS_KEY="${secrets.restic.srv.b2_account_id}"
@@ -19,9 +17,6 @@ let
     echo "B2_ACCOUNT_KEY: $B2_ACCOUNT_KEY"
     echo "RESTIC_PASSWORD: $RESTIC_PASSWORD"
 
-    PASSWORD_FILE=$(mktemp)
-    echo "$RESTIC_PASSWORD" > "$PASSWORD_FILE"
-
     init_repo() {
       restic -r $RESTIC_REPOSITORY init
     }
@@ -35,8 +30,6 @@ let
     else
       run_backup
     fi
-
-    rm -f "$PASSWORD_FILE"
   '';
 in {
 

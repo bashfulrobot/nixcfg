@@ -1,63 +1,57 @@
-{ user-settings, config, pkgs, secrets, ... }: {
+{ user-settings, config, pkgs, secrets, ... }:
+let
+  restic-nfs-backup = ''
+    #!/run/current-system/sw/bin/env bash
 
-  environment.systemPackages = with pkgs; [ restic autorestic ];
+    set -euo pipefail
 
-  systemd.services.autorestic = {
-    description = "Autorestic Backup Service";
-    serviceConfig = {
-      ExecStart =
-        "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
-      User = "root";
-    };
-  };
+    RESTIC_HOST="$(hostname)"
+    RESTIC_REPOSITORY="${secrets.restic.srv.restic_repository}"
+    B2_ACCOUNT_ID="${secrets.restic.srv.b2_account_id}"
+    B2_ACCOUNT_KEY="${secrets.restic.srv.b2_account_key}"
+    RESTIC_PASSWORD="${secrets.restic.srv.restic_password}"
 
-  systemd.timers.autorestic = {
-    description = "Autorestic Backup Timer";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*:0/5";
-      Persistent = true;
-    };
-  };
+    export RESTIC_HOST RESTIC_REPOSITORY B2_ACCOUNT_ID B2_ACCOUNT_KEY RESTIC_PASSWORD
 
-  home-manager.users."${user-settings.user.username}" = {
+    init_repo() {
+      restic -r $RESTIC_REPOSITORY:/backups --password "$RESTIC_PASSWORD" init
+    }
 
-    home.file.".autorestic.yaml" = {
-      text = ''
-        version: 2
+    run_backup() {
+      restic -r $RESTIC_REPOSITORY:/backups --password "$RESTIC_PASSWORD" backup /srv/nfs
+    }
 
-        global:
-          forget:
-            keep-last: 5 # always keep at least 5 snapshots
-            keep-hourly: 3 # keep 3 last hourly snapshots
-            keep-daily: 4 # keep 4 last daily snapshots
-            keep-weekly: 1 # keep 1 last weekly snapshots
-            keep-monthly: 12 # keep 12 last monthly snapshots
-            keep-yearly: 2 # keep 7 last yearly snapshots
-            keep-within: '7d' # keep snapshots from the last 14 days
+    if [ "${"1:-"}" = "-init" ]; then
+      init_repo
+    else
+      run_backup
+    fi
+  '';
+in {
 
-        locations:
-          nfs:
-            from:
-              - /srv/nfs
-            to: b2-nfs
-            cron: '0 3 * * *' # Every Day at 3:00 AM
-            forget: prune
-            options:
-              backup:
-                exclude:
-                  - '/srv/nfs/lost+found'
-                  - '/srv/nfs/spitfire/jellyfin'
+  environment.systemPackages = with pkgs; [
+    restic
+    (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
+  ];
 
-        backends:
-          b2-nfs:
-            type: b2
-            path: "${secrets.restic.srv.RESTIC_REPOSITORY}"
-            env:
-              B2_ACCOUNT_ID: "${secrets.restic.srv.B2_ACCOUNT_ID}"
-              B2_ACCOUNT_KEY: "${secrets.restic.srv.B2_ACCOUNT_KEY}"
-      '';
-    };
+  # systemd.services.autorestic = {
+  #   description = "Autorestic Backup Service";
+  #   serviceConfig = {
+  #     ExecStart =
+  #       "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
+  #     User = "root";
+  #   };
+  # };
 
-  };
+  # systemd.timers.autorestic = {
+  #   description = "Autorestic Backup Timer";
+  #   wantedBy = [ "timers.target" ];
+  #   timerConfig = {
+  #     OnCalendar = "*:0/5";
+  #     Persistent = true;
+  #   };
+  # };
+
+  # home-manager.users."${user-settings.user.username}" = {
+  # };
 }

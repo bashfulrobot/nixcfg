@@ -39,20 +39,24 @@ in {
   ];
 
   systemd.services.restic-nfs-backup = {
+    description = "Backup NFS with restic";
+    path = with pkgs; [ restic fish ];
     serviceConfig = {
-      Type = "oneshot";
+      Type = "simple";
       script = ''
         ${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh
       '';
-      User = "root";
     };
-    WantedBy = [ "multi-user.target" ];
   };
 
   systemd.timers.restic-nfs-backup = {
+    description = "Restic-nfs-backup timer";
     wantedBy = [ "timers.target" ];
     partOf = [ "restic-nfs-backup.service" ];
-    timerConfig = { OnCalendar = "*-*-* 03:00:00"; };
+    timerConfig = {
+      Persistent = "true";
+      OnCalendar = "*-*-* 03:00:00";
+    };
   };
 
   # home-manager.users."${user-settings.user.username}" = {

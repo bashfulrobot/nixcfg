@@ -42,6 +42,7 @@ in {
 
   systemd.timers.restic-nfs-backup = {
     description = "Restic-nfs-backup timer";
+    enable = true;
     wantedBy = [ "timers.target" ];
     partOf = [ "restic-nfs-backup.service" ];
     timerConfig = {

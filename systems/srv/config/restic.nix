@@ -40,17 +40,6 @@ in {
     (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
   ];
 
-  systemd.services.restic-nfs-backup = {
-    description = "Backup NFS with restic";
-    enable = true;
-    serviceConfig = {
-      Type = "simple";
-      script = ''
-        /run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh
-      '';
-    };
-  };
-
   systemd.timers.restic-nfs-backup = {
     description = "Restic-nfs-backup timer";
     wantedBy = [ "timers.target" ];
@@ -61,6 +50,17 @@ in {
     };
   };
 
-  # home-manager.users."${user-settings.user.username}" = {
+  systemd.services.restic-nfs-backup = {
+    description = "Backup NFS with restic";
+    enable = true;
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "/run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+    };
+    wantedBy = [ "multi-user.target" ];
+    };
+  };
+
+# home-manager.users."${user-settings.user.username}" = {
   # };
 }

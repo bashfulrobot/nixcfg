@@ -32,11 +32,10 @@ in {
     (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
   ];
 
-  systemd.services.restic-nfs-backup = {
+systemd.services.restic-nfs-backup = {
     description = "Restic NFS Backup Service";
     serviceConfig = {
-      ExecStart =
-        "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+      ExecStart = "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
       User = "root";
     };
   };
@@ -45,7 +44,6 @@ in {
     description = "Restic NFS Backup Timer";
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "daily";
       Persistent = true;
       OnCalendar = "03:00";
     };

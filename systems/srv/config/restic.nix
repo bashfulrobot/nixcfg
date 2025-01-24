@@ -44,9 +44,10 @@
             cron: '0 3 * * *' # Every Day at 3:00 AM
             forget: prune
             options:
-              exclude:
-                - '/srv/nfs/lost+found'
-                - '/srv/nfs/spitfire/jellyfin'
+              backup:
+                exclude:
+                  - '/srv/nfs/lost+found'
+                  - '/srv/nfs/spitfire/jellyfin'
 
         backends:
           b2-nfs:

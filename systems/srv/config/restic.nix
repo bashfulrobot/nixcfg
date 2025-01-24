@@ -47,8 +47,8 @@
             type: b2
             path: 'srv-nfs'
             env:
-              B2_ACCOUNT_ID: ${secrets.restic.B2_ACCOUNT_ID}
-              B2_ACCOUNT_KEY: ${secrets.restic.B2_ACCOUNT_KEY}
+              B2_ACCOUNT_ID: "${secrets.restic.srv.B2_ACCOUNT_ID}"
+              B2_ACCOUNT_KEY: "${secrets.restic.srv.B2_ACCOUNT_KEY}"
       '';
     };
 

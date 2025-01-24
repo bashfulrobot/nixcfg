@@ -20,6 +20,10 @@ let
       $RESTIC_BIN -r $RESTIC_REPOSITORY restore latest --target /srv/nfs/restores
     end
 
+    function list_backups
+      $RESTIC_BIN -r $RESTIC_REPOSITORY snapshots
+    end
+
     function run_backup
       $RESTIC_BIN -r $RESTIC_REPOSITORY backup /srv/nfs
       $RESTIC_BIN -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
@@ -29,6 +33,8 @@ let
       init_repo
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-restore"
       restore_backup
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-list-backups"
+      list_backups
     else
       run_backup
     end

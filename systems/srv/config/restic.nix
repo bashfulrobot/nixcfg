@@ -39,11 +39,6 @@ in {
   ];
 
   systemd.services.restic-nfs-backup = {
-    path = [
-        pkgs.fish
-        pkgs.restic
-        pkgs.restic-nfs-backup.sh
-      ];
     serviceConfig = {
       Type = "oneshot";
       script = ''

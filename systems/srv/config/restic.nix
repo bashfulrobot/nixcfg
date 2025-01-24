@@ -17,11 +17,11 @@ let
     echo "$RESTIC_PASSWORD" > "$PASSWORD_FILE"
 
     init_repo() {
-      restic -r $RESTIC_REPOSITORY:/backups --password-file "$PASSWORD_FILE" init
+      restic -r $RESTIC_REPOSITORY --password-file "$PASSWORD_FILE" init
     }
 
     run_backup() {
-      restic -r $RESTIC_REPOSITORY:/backups --password-file "$PASSWORD_FILE" backup /srv/nfs
+      restic -r $RESTIC_REPOSITORY --password-file "$PASSWORD_FILE" backup /srv/nfs
     }
 
     if [ "${"1:-"}" = "-init" ]; then

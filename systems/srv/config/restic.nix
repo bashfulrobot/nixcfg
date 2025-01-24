@@ -1,16 +1,14 @@
 { user-settings, config, pkgs, secrets, ... }:
 let
   restic-nfs-backup = ''
-    #!/run/current-system/sw/bin/env bash
+    #!/run/current-system/sw/bin/env fish
 
-    RESTIC_HOST="$(hostname)"
-    RESTIC_REPOSITORY="${secrets.restic.srv.restic_repository}"
-    AWS_SECRET_ACCESS_KEY="${secrets.restic.srv.b2_account_id}"
-    AWS_DEFAULT_REGION="${secrets.restic.srv.region}"
-    B2_ACCOUNT_KEY="${secrets.restic.srv.b2_account_key}"
-    RESTIC_PASSWORD="${secrets.restic.srv.restic_password}"
-
-    export RESTIC_HOST RESTIC_REPOSITORY B2_ACCOUNT_ID B2_ACCOUNT_KEY RESTIC_PASSWORD
+    set -x RESTIC_HOST (hostname)
+    set -x RESTIC_REPOSITORY "${secrets.restic.srv.restic_repository}"
+    set -x AWS_SECRET_ACCESS_KEY "${secrets.restic.srv.b2_account_id}"
+    set -x AWS_DEFAULT_REGION "${secrets.restic.srv.region}"
+    set -x B2_ACCOUNT_KEY "${secrets.restic.srv.b2_account_key}"
+    set -x RESTIC_PASSWORD "${secrets.restic.srv.restic_password}"
 
     # Debugging output
     echo "RESTIC_REPOSITORY: $RESTIC_REPOSITORY"
@@ -18,19 +16,19 @@ let
     echo "B2_ACCOUNT_KEY: $B2_ACCOUNT_KEY"
     echo "RESTIC_PASSWORD: $RESTIC_PASSWORD"
 
-    init_repo() {
+    function init_repo
       restic -r $RESTIC_REPOSITORY init
-    }
+    end
 
-    run_backup() {
+    function run_backup
       restic -r $RESTIC_REPOSITORY backup /srv/nfs
-    }
+    end
 
-    if [ "${"1:-"}" = "-init" ]; then
+    if test (count $argv) -gt 0 -a "$argv[1]" = "-init"
       init_repo
     else
       run_backup
-    fi
+    end
   '';
 in {
 

@@ -16,7 +16,7 @@
   };
 
   home-manager.users."${user-settings.user.username}" = {
-    ome.file.".config/restic/srv-nfs-env" = {
+    home.file.".config/restic/srv-nfs-env" = {
       text = ''
         RESTIC_PASSWORD=${secrets.restic.srv.RESTIC_PASSWORD}
         B2_ACCOUNT_ID=${secrets.restic.srv.B2_ACCOUNT_ID}

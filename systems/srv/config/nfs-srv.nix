@@ -21,5 +21,6 @@
   systemd.tmpfiles.rules = [
     "d /exports/spitfire 0755 nobody nogroup -"
     "d /srv/nfs/spitfire 0755 1000 100 -"
+    "d /srv/nfs/restores 0755 1000 100 -"
   ];
 }

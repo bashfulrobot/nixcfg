@@ -109,3 +109,49 @@ upgrade-system:
     @nix flake update
     @sudo nixos-rebuild switch --impure --upgrade --flake .#\{{`hostname`}} --show-trace
     # @just _sway-reload
+# Change Log - 7 Days
+changelog-7d:
+    @echo "==================================="
+    @echo "Total commits in the last 7 days:"
+    @git rev-list --count --since="7 days ago" HEAD
+    @echo "==================================="
+    @git log --since="7 days ago" --pretty=full
+# Change Log - 2 Days
+changelog-2d:
+    @echo "==================================="
+    @echo "Total commits in the last 2 days:"
+    @git rev-list --count --since="2 days ago" HEAD
+    @echo "==================================="
+    @git log --since="2 days ago" --pretty=full
+# Change Log - 10 Commits
+changelog-10:
+    @git log -n 10 --pretty=full
+# Change Log - 7 Day Summary
+changelog-7d-summary:
+    @echo "==================================="
+    @echo "Total commits in the last 7 days:"
+    @git rev-list --count --since="7 days ago" HEAD
+    @echo "==================================="
+    @git log --since="7 days ago" --pretty=format:"%h - %s"
+# Change Log - 2 Day Summary
+changelog-2d-summary:
+    @echo "==================================="
+    @echo "Total commits in the last 2 days:"
+    @git rev-list --count --since="2 days ago" HEAD
+    @echo "==================================="
+    @git log --since="2 days ago" --pretty=format:"%h - %s"
+# Change Log - 10 Commit Summary
+changelog-10-summary:
+    @git log -n 10 --pretty=format:"%h - %s"
+# Change Log - 7 Day Summary
+changelog-7d-count:
+    @echo "==================================="
+    @echo "Total commits in the last 7 days:"
+    @git rev-list --count --since="7 days ago" HEAD
+    @echo "==================================="
+# Change Log - 2 Day Summary
+changelog-2d-count:
+    @echo "==================================="
+    @echo "Total commits in the last 2 days:"
+    @git rev-list --count --since="2 days ago" HEAD
+    @echo "==================================="

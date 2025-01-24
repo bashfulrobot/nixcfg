@@ -46,14 +46,13 @@ in {
       '';
       User = "root";
     };
+    install = { WantedBy = [ "multi-user.target" ]; };
   };
 
   systemd.timers.restic-nfs-backup = {
     wantedBy = [ "timers.target" ];
     partOf = [ "restic-nfs-backup.service" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 03:00:00";
-    };
+    timerConfig = { OnCalendar = "*-*-* 03:00:00"; };
   };
 
   # home-manager.users."${user-settings.user.username}" = {

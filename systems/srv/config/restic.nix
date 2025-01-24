@@ -13,12 +13,15 @@ let
 
     export RESTIC_HOST RESTIC_REPOSITORY B2_ACCOUNT_ID B2_ACCOUNT_KEY RESTIC_PASSWORD
 
+    PASSWORD_FILE=$(mktemp)
+    echo "$RESTIC_PASSWORD" > "$PASSWORD_FILE"
+
     init_repo() {
-      restic -r $RESTIC_REPOSITORY:/backups --password "$RESTIC_PASSWORD" init
+      restic -r $RESTIC_REPOSITORY:/backups --password-file "$PASSWORD_FILE" init
     }
 
     run_backup() {
-      restic -r $RESTIC_REPOSITORY:/backups --password "$RESTIC_PASSWORD" backup /srv/nfs
+      restic -r $RESTIC_REPOSITORY:/backups --password-file "$PASSWORD_FILE" backup /srv/nfs
     }
 
     if [ "${"1:-"}" = "-init" ]; then
@@ -26,6 +29,8 @@ let
     else
       run_backup
     fi
+
+    rm -f "$PASSWORD_FILE"
   '';
 in {
 

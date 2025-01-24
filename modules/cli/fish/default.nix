@@ -339,6 +339,7 @@ nvim $filename
           dc = "docker compose";
           gc = "git pull && git add . && git commit -S && git push";
           nix-info = "nix-shell -p nix-info --run 'nix-info -m'";
+          youtube = "mpv";
         };
         shellAliases = {
           support-info =
@@ -358,7 +359,6 @@ nvim $filename
           "..." = "cd ../..";
           "...." = "cd ../../..";
           "....." = "cd ../../../..";
-          youtube = "mpv";
           sysdig-cli-scanner-recent-version =
             "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
           sysdig-cli-scanner-get = ''

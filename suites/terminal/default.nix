@@ -38,6 +38,8 @@ in {
       broot # Fuzzy finder
       eza # ls and exa alternative
       btop # top alternative
+      pass # password manager
+
     ];
 
     programs = { pay-respects.enable = true; };

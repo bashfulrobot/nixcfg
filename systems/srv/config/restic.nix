@@ -2,16 +2,22 @@
 
   environment.systemPackages = with pkgs; [ restic autorestic ];
 
-  services.cron = {
-    enable = true;
-    systemCronJobs = [
-      {
-        name = "autorestic";
-        schedule = "*/5 * * * *";
-        job = "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
-        user = "root";
-      }
-    ];
+  systemd.services.autorestic = {
+    description = "Autorestic Backup Service";
+    serviceConfig = {
+      ExecStart =
+        "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
+      User = "root";
+    };
+  };
+
+  systemd.timers.autorestic = {
+    description = "Autorestic Backup Timer";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*:0/5";
+      Persistent = true;
+    };
   };
 
   home-manager.users."${user-settings.user.username}" = {
@@ -45,7 +51,7 @@
         backends:
           b2-nfs:
             type: b2
-            path: 'srv-nfs'
+            path: "${secrets.restic.srv.RESTIC_REPOSITORY}"
             env:
               B2_ACCOUNT_ID: "${secrets.restic.srv.B2_ACCOUNT_ID}"
               B2_ACCOUNT_KEY: "${secrets.restic.srv.B2_ACCOUNT_KEY}"

@@ -2,6 +2,7 @@
   services.restic.backups = {
     b2backup = {
       environmentFile = "/home/${user-settings.user.username}/.config/restic/srv-nfs-env";
+      passwordFile = "/home/${user-settings.user.username}/.config/restic/srv-nfs-password";
       initialize = true;
       paths = [ "/srv/nfs" ];
       repository = "${secrets.restic.srv.RESTIC_REPOSITORY}";
@@ -18,10 +19,12 @@
   home-manager.users."${user-settings.user.username}" = {
     home.file.".config/restic/srv-nfs-env" = {
       text = ''
-        RESTIC_PASSWORD=${secrets.restic.srv.RESTIC_PASSWORD}
         B2_ACCOUNT_ID=${secrets.restic.srv.B2_ACCOUNT_ID}
         B2_ACCOUNT_KEY=${secrets.restic.srv.B2_ACCOUNT_KEY}
       '';
+    };
+    home.file.".config/restic/srv-nfs-password" = {
+      text = "${secrets.restic.srv.RESTIC_PASSWORD}";
     };
 
   };

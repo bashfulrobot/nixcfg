@@ -32,23 +32,24 @@ in {
     (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
   ];
 
-  # systemd.services.autorestic = {
-  #   description = "Autorestic Backup Service";
-  #   serviceConfig = {
-  #     ExecStart =
-  #       "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
-  #     User = "root";
-  #   };
-  # };
+  systemd.services.restic-nfs-backup = {
+    description = "Restic NFS Backup Service";
+    serviceConfig = {
+      ExecStart =
+        "${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+      User = "root";
+    };
+  };
 
-  # systemd.timers.autorestic = {
-  #   description = "Autorestic Backup Timer";
-  #   wantedBy = [ "timers.target" ];
-  #   timerConfig = {
-  #     OnCalendar = "*:0/5";
-  #     Persistent = true;
-  #   };
-  # };
+  systemd.timers.restic-nfs-backup = {
+    description = "Restic NFS Backup Timer";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;
+      OnCalendar = "03:00";
+    };
+  };
 
   # home-manager.users."${user-settings.user.username}" = {
   # };

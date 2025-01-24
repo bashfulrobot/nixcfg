@@ -21,7 +21,7 @@ in {
       [
         # transmission_4
         # deluge-gtk
-        vlc # media player
+        unstable.vlc # media player
         # foliate # ebook reader
         # mplayer # Video player
         # spotdl # Spotify downloader

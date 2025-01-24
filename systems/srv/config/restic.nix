@@ -1,6 +1,19 @@
 { user-settings, config, pkgs, secrets, ... }: {
 
   environment.systemPackages = with pkgs; [ restic autorestic ];
+
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      {
+        name = "autorestic";
+        schedule = "*/5 * * * *";
+        job = "autorestic -c /home/${user-settings.user.username}/.autorestic.yaml --ci cron";
+        user = "root";
+      }
+    ];
+  };
+
   home-manager.users."${user-settings.user.username}" = {
 
     home.file.".autorestic.yaml" = {
@@ -22,6 +35,7 @@
             from:
               - /srv/nfs
             to: b2-nfs
+            cron: '0 3 * * *' # Every Day at 3:00 AM
             forget: prune
             options:
               exclude:

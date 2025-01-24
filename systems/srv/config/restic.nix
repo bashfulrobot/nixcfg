@@ -3,6 +3,8 @@ let
   restic-nfs-backup = ''
     #!/run/current-system/sw/bin/env fish
 
+    set -x RESTIC_BIN "/run/current-system/sw/bin/restic"
+
     set -x RESTIC_HOST (hostname)
     set -x RESTIC_REPOSITORY "${secrets.restic.srv.restic_repository}"
     set -x AWS_ACCESS_KEY_ID "${secrets.restic.srv.b2_account_id}"
@@ -11,16 +13,16 @@ let
     set -x RESTIC_PASSWORD "${secrets.restic.srv.restic_password}"
 
     function init_repo
-      restic -r $RESTIC_REPOSITORY init
+      $RESTIC_BIN -r $RESTIC_REPOSITORY init
     end
 
     function restore_backup
-      restic -r $RESTIC_REPOSITORY restore latest --target /srv/nfs/restores
+      $RESTIC_BIN -r $RESTIC_REPOSITORY restore latest --target /srv/nfs/restores
     end
 
     function run_backup
-      restic -r $RESTIC_REPOSITORY backup /srv/nfs
-      restic -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
+      $RESTIC_BIN -r $RESTIC_REPOSITORY backup /srv/nfs
+      $RESTIC_BIN -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
     end
 
     if test (count $argv) -gt 0 -a "$argv[1]" = "-init"
@@ -40,11 +42,11 @@ in {
 
   systemd.services.restic-nfs-backup = {
     description = "Backup NFS with restic";
-    path = with pkgs; [ restic fish ];
+    enable = true;
     serviceConfig = {
       Type = "simple";
       script = ''
-        ${pkgs.fish}/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh
+        /run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh
       '';
     };
   };

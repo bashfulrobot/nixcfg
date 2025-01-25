@@ -29,13 +29,29 @@ let
       $RESTIC_BIN -r $RESTIC_REPOSITORY forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 2
     end
 
+    function check_status
+      systemctl status backup-mgr.timer
+      systemctl status backup-mgr.service
+    end
+
+    function check_service_logs
+      journalctl -u backup-mgr.service
+    end
+
+    function check_timer_logs
+      journalctl -u backup-mgr.timer
+    end
+
     function show_help
       echo "Usage: $argv[1] [OPTION]"
       echo "Options:"
-      echo "  -init           Initialize the repository"
-      echo "  -restore        Restore the latest backup"
-      echo "  -list-backups   List all backups"
       echo "  -help           Show this help message"
+      echo "  -init           Initialize the repository"
+      echo "  -list-backups   List all backups"
+      echo "  -service-logs   Check the logs of the backup service"
+      echo "  -restore        Restore the latest backup"
+      echo "  -status         Check the status of the systemd timer and service"
+      echo "  -timer-logs     Check the logs of the systemd timer"
     end
 
     if test (count $argv) -gt 0 -a "$argv[1]" = "-init"
@@ -44,11 +60,18 @@ let
       restore_backup
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-list-backups"
       list_backups
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-status"
+      check_status
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-logs"
+      check_logs
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-timer-logs"
+      check_timer_logs
+    else if test (count $argv) -gt 0 -a "$argv[1]" = "-service-logs"
+      check_service_logs
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-help"
       show_help
     else
-      run_backup
-    end
+      ru
   '';
 in {
 

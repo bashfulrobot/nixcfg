@@ -1,4 +1,4 @@
-{ user-settings, lib, pkgs, secrets, config, ... }:
+{ user-settings, lib, pkgs, secrets, config, isWorkstation, ... }:
 let
   cfg = config.cli.fish;
   fd-flags = lib.concatStringsSep " " [ "--hidden" "--exclude '.git'" ];
@@ -25,15 +25,17 @@ in {
         #   direnv hook fish | source
         #   source ${user-settings.user.home}/.config/op/plugins.sh
         # '';
-        shellInit = if config.archetype.workstation.enable then ''
+        shellInit = if isWorkstation then ''
           # Shell Init
           direnv hook fish | source
           source ${user-settings.user.home}/.config/op/plugins.sh
         '' else
           "";
-        interactiveShellInit = ''
+        interactiveShellInit = if isWorkstation then ''
           set fish_greeting # Disable greeting
           source ${user-settings.user.home}/.config/op/plugins.sh
+        '' else ''
+          set fish_greeting # Disable greeting
         '';
         # plugins = [
         #   # Enable a plugin (here grc for colorized command output) from nixpkgs

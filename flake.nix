@@ -26,7 +26,7 @@
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      };
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
@@ -68,7 +68,9 @@
           sharedModules = [ ];
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
-          users."${user-settings.user.username}" = { imports = [ catppuccin.homeManagerModules.catppuccin ]; };
+          users."${user-settings.user.username}" = {
+            imports = [ catppuccin.homeManagerModules.catppuccin ];
+          };
         };
       };
 
@@ -89,10 +91,11 @@
         };
       };
 
-      makeSystem = name: modules:
+      # isWorkstation is used to do in module conditional logic for workstation specific settings
+      makeSystem = name: modules: { isWorkstation, ... }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit user-settings inputs secrets nixpkgs-unstable;
+            inherit user-settings inputs secrets nixpkgs-unstable isWorkstation;
           };
           system = "x86_64-linux";
           inherit modules;
@@ -100,12 +103,21 @@
 
     in {
       nixosConfigurations = {
+        # Note: The `true` argument is used to determine if the system is a workstation or not
         digdug = makeSystem "digdug" (commonModules
-          ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]);
+          ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {
+            isWorkstation = true;
+          };
+        # Note: The `true` argument is used to determine if the system is a workstation or not
         qbert = makeSystem "qbert" (commonModules
-          ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]);
+          ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
+            isWorkstation = true;
+          };
+        # Note: The `false` argument is used to determine if the system is a workstation or not
         srv = makeSystem "srv" (serverModules
-          ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]);
+          ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]) {
+            isWorkstation = false;
+          };
       };
     };
 }

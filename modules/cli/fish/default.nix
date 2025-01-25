@@ -3,8 +3,7 @@ let
   cfg = config.cli.fish;
   fd-flags = lib.concatStringsSep " " [ "--hidden" "--exclude '.git'" ];
 
-in
-{
+in {
 
   options = {
     cli.fish.enable = lib.mkOption {
@@ -21,11 +20,17 @@ in
     home-manager.users."${user-settings.user.username}" = {
       programs.fish = {
         enable = true;
-        shellInit = ''
+        # shellInit = ''
+        #   # Shell Init
+        #   direnv hook fish | source
+        #   source ${user-settings.user.home}/.config/op/plugins.sh
+        # '';
+        shellInit = if config.archetype.workstation.enable then ''
           # Shell Init
           direnv hook fish | source
           source ${user-settings.user.home}/.config/op/plugins.sh
-        '';
+        '' else
+          "";
         interactiveShellInit = ''
           set fish_greeting # Disable greeting
           source ${user-settings.user.home}/.config/op/plugins.sh
@@ -106,74 +111,74 @@ in
           '';
 
           scratch-new = ''
-           set date (date "+%Y-%m-%d")
-set note_type (echo -e "External Meeting\nReminder\nInternal Meeting\nProduct Note" | fzf --prompt="Select note type: ")
-cd ~/Documents/Scratch/
-switch $note_type
-    case "External Meeting"
-        set folder ExternalMeeting
-    case Reminder
-        set folder Reminder
-    case "Internal Meeting"
-        set folder InternalMeeting
-    case "Product Note"
-        set folder ProductNote
-end
+                       set date (date "+%Y-%m-%d")
+            set note_type (echo -e "External Meeting\nReminder\nInternal Meeting\nProduct Note" | fzf --prompt="Select note type: ")
+            cd ~/Documents/Scratch/
+            switch $note_type
+                case "External Meeting"
+                    set folder ExternalMeeting
+                case Reminder
+                    set folder Reminder
+                case "Internal Meeting"
+                    set folder InternalMeeting
+                case "Product Note"
+                    set folder ProductNote
+            end
 
-read -P "Enter file name: " filename_suffix
-set filename "$folder/$date-$filename_suffix.md"
+            read -P "Enter file name: " filename_suffix
+            set filename "$folder/$date-$filename_suffix.md"
 
-# Create the folder if it doesn't exist
-mkdir -p $folder
+            # Create the folder if it doesn't exist
+            mkdir -p $folder
 
-touch $filename
-echo "# "$date" "$filename_suffix | tr - ' ' >$filename
+            touch $filename
+            echo "# "$date" "$filename_suffix | tr - ' ' >$filename
 
-switch $note_type
-    case "External Meeting"
-        echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
-        echo >>$filename
-        echo "## Meeting Type" >>$filename
-        echo >>$filename
-        echo "- External Meeting" >>$filename
-        echo >>$filename
-        echo "## Attendees" >>$filename
-        echo >>$filename
-        echo "## Summary" >>$filename
-        echo >>$filename
-        echo "## Action Items" >>$filename
-        echo >>$filename
-    case "Internal Meeting"
-        echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
-        echo >>$filename
-        echo "## Meeting Type" >>$filename
-        echo >>$filename
-        echo "- Internal Meeting" >>$filename
-        echo >>$filename
-        echo "## Attendees" >>$filename
-        echo >>$filename
-        echo "## Summary" >>$filename
-        echo >>$filename
-        echo "## Action Items" >>$filename
-        echo >>$filename
-    case "Product Note"
-        set product_name (echo -e "Secure\nMonitor\nPlatform" | fzf --prompt="Select product name: ")
-        set use_cases (echo -e "CDR\nTD\nVM\nCSPM\nCIEM" | fzf --prompt="Select use cases: " --multi --delimiter="\n")
-        echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
-        echo >>$filename
-        echo "## $product_name" >>$filename
-        echo >>$filename
-        for use_case in $use_cases
-            echo "## $use_case" >>$filename
-            echo >>$filename
-        end
-        echo "## Notes" >>$filename
-        echo >>$filename
-        echo "## Action Items" >>$filename
-        echo >>$filename
-end
+            switch $note_type
+                case "External Meeting"
+                    echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
+                    echo >>$filename
+                    echo "## Meeting Type" >>$filename
+                    echo >>$filename
+                    echo "- External Meeting" >>$filename
+                    echo >>$filename
+                    echo "## Attendees" >>$filename
+                    echo >>$filename
+                    echo "## Summary" >>$filename
+                    echo >>$filename
+                    echo "## Action Items" >>$filename
+                    echo >>$filename
+                case "Internal Meeting"
+                    echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
+                    echo >>$filename
+                    echo "## Meeting Type" >>$filename
+                    echo >>$filename
+                    echo "- Internal Meeting" >>$filename
+                    echo >>$filename
+                    echo "## Attendees" >>$filename
+                    echo >>$filename
+                    echo "## Summary" >>$filename
+                    echo >>$filename
+                    echo "## Action Items" >>$filename
+                    echo >>$filename
+                case "Product Note"
+                    set product_name (echo -e "Secure\nMonitor\nPlatform" | fzf --prompt="Select product name: ")
+                    set use_cases (echo -e "CDR\nTD\nVM\nCSPM\nCIEM" | fzf --prompt="Select use cases: " --multi --delimiter="\n")
+                    echo "# "$date" "$filename_suffix | tr '-' ' ' > $filename
+                    echo >>$filename
+                    echo "## $product_name" >>$filename
+                    echo >>$filename
+                    for use_case in $use_cases
+                        echo "## $use_case" >>$filename
+                        echo >>$filename
+                    end
+                    echo "## Notes" >>$filename
+                    echo >>$filename
+                    echo "## Action Items" >>$filename
+                    echo >>$filename
+            end
 
-nvim $filename
+            nvim $filename
 
           '';
 

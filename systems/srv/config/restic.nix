@@ -71,7 +71,8 @@ let
     else if test (count $argv) -gt 0 -a "$argv[1]" = "-help"
       show_help
     else
-      ru
+      run_backup
+    end
   '';
 in {
 

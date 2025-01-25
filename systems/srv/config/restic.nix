@@ -30,7 +30,7 @@ let
     end
 
     function show_help
-      echo "Usage: $argv[0] [OPTION]"
+      echo "Usage: $argv[1] [OPTION]"
       echo "Options:"
       echo "  -init           Initialize the repository"
       echo "  -restore        Restore the latest backup"

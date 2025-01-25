@@ -1,6 +1,6 @@
 { user-settings, config, pkgs, secrets, ... }:
 let
-  restic-nfs-backup = ''
+  backup-mgr = ''
     #!/run/current-system/sw/bin/env fish
 
     set -x RESTIC_BIN "/run/current-system/sw/bin/restic"
@@ -54,27 +54,27 @@ in {
 
   environment.systemPackages = with pkgs; [
     restic
-    (writeScriptBin "restic-nfs-backup.sh" restic-nfs-backup)
+    (writeScriptBin "backup-mgr" backup-mgr)
   ];
 
-  systemd.timers.restic-nfs-backup = {
-    description = "Restic-nfs-backup timer";
+  systemd.timers.backup-mgr = {
+    description = "backup-mgr timer";
     enable = true;
     wantedBy = [ "timers.target" ];
-    partOf = [ "restic-nfs-backup.service" ];
+    partOf = [ "backup-mgr.service" ];
     timerConfig = {
       Persistent = "true";
       OnCalendar = "*-*-* 03:00:00";
     };
   };
 
-  systemd.services.restic-nfs-backup = {
+  systemd.services.backup-mgr = {
     description = "Backup NFS with restic";
     enable = true;
     serviceConfig = {
       Type = "simple";
       ExecStart =
-        "/run/current-system/sw/bin/fish /run/current-system/sw/bin/restic-nfs-backup.sh";
+        "/run/current-system/sw/bin/fish /run/current-system/sw/bin/backup-mgr";
     };
     wantedBy = [ "multi-user.target" ];
   };

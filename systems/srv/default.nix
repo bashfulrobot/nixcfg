@@ -18,11 +18,6 @@
     # System Specific modules
     ../../modules/cli/docker
     ../../modules/apps/kvm
-    # Allows me to filter out desktop specific config for a server.
-    ../../archetype/workstation
   ];
-
-  # Allows me to filter out desktop specific config for a server.
-  archetype.workstation.enable = false;
 
 }

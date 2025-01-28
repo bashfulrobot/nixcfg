@@ -32,6 +32,7 @@ in {
       direnv.enable = true;
       git.enable = true;
       nixvim.enable = true;
+      opencommit.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -47,6 +48,7 @@ in {
       unstable.markdown-oxide # Zed support
       unstable.nil # nix language server for Zed
       # unstable.jetbrains.goland # Go IDE
+
     ];
     home-manager.users."${user-settings.user.username}" = {
       programs = { jq = { enable = true; }; };

@@ -84,7 +84,7 @@ in {
         # todoist
         "jldhpllghnbhlbpcmnajkpdmadaolakh"
         # Loom video recording
-        #"liecbddmkiiihnedobmlmillhodjkdmb"
+        "liecbddmkiiihnedobmlmillhodjkdmb"
         # Privacy Badger
         #"pkehgijcmpdhfbdbbnkijodmdjhbjlgp"
         # Checker Plus for Mail

@@ -347,6 +347,8 @@ in {
           gc = "git pull && git add . && git commit -S && git push";
           nix-info = "nix-shell -p nix-info --run 'nix-info -m'";
           youtube = "mpv";
+          pq = "pueue";
+          kb = "kubie";
         };
         shellAliases = {
           support-info =

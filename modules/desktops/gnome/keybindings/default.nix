@@ -15,6 +15,10 @@ in {
     # environment.systemPackages = with pkgs; [
     #  ];
 
+    desktops.gnome = {
+      keybindings.display-custom-keybindings.enable = true;
+    };
+
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         #  Set Media Keys
@@ -96,6 +100,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/"
           ];
         };
 
@@ -107,7 +112,7 @@ in {
             # command = "ghostty";
             # command = "foot";
             command = "blackbox";
-            name = "Terminal";
+            name = "Default Terminal";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" =
@@ -122,14 +127,14 @@ in {
           {
             binding = "<Super>b";
             command = "chromium";
-            name = "Browser";
+            name = "Default Browser";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" =
           {
             binding = "<Super>e";
             command = "code";
-            name = "Editor";
+            name = "Default Editor";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" =
@@ -191,6 +196,14 @@ in {
             command = "ncspot-save-playing";
             name =
               "Save currently playing song in NCSPOT to library in Spotify";
+          };
+
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13" =
+          {
+            # ctrl-shift-?
+            binding = "<Control><Shift>slash";
+            command = "display-custom-keybindings";
+            name = "Show current custom keybindings in a terminal";
           };
 
       };

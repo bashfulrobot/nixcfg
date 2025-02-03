@@ -39,6 +39,7 @@ in {
       eza # ls and exa alternative
       btop # top alternative
       pass # password manager
+      pueue # Daemon for managing long running shell commands
 
     ];
 

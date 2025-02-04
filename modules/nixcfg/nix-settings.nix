@@ -15,6 +15,9 @@ in {
     nix = let users = [ "root" "dustin" ];
 
     in {
+      # Means the program will be run via nix-shell. (The grabage collector may remove it on the next GC run.)
+      # Used to run a program in a nix-shell environment when it is not installed just by running the program. ALternative to "comma"
+      environment.variables.NIX_AUTO_RUN = "1";
       # Disable channels since using flakes.
       channel.enable = false;
       settings = {

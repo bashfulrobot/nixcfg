@@ -12,6 +12,8 @@ in {
 
   config = lib.mkIf cfg.enable {
 
+    cli.kubie.enable = true;
+
     environment.systemPackages = with pkgs; [
       # sops # Secrets management
       kubeseal # k8s secrets management
@@ -34,7 +36,6 @@ in {
       kubernetes-helm # Kubernetes package manager
       # butane # flatcar/ignition configuration
       unstable.minikube # Local k8s cluster
-      kubie # k8s context switcher
       ktop # K8s top command
     ];
 

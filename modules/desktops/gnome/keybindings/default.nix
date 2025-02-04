@@ -15,9 +15,9 @@ in {
     # environment.systemPackages = with pkgs; [
     #  ];
 
-    desktops.gnome = {
-      keybindings.display-custom-keybindings.enable = true;
-    };
+    # desktops.gnome = {
+    #   keybindings.display-custom-keybindings.enable = true;
+    # };
 
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {

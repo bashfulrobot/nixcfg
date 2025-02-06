@@ -200,7 +200,7 @@ in {
           {
             # ctrl-shift-?
             binding = "<Control><Shift>slash";
-            command = "display-custom-keybindings";
+            command = "/run/current-system/sw/bin/blackbox -c display-custom-keybindings";
             name = "Show current custom keybindings in a terminal";
           };
 

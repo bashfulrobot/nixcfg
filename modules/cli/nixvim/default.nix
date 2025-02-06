@@ -381,20 +381,20 @@ in {
 
         };
         treesitter-refactor = { enable = true; };
-        colorizer = {
-          enable = true;
-        };
+        colorizer = { enable = true; };
         cursorline = {
           enable = true;
-          cursorline = {
-            enable = true;
-            number = true;
-            timeout = 0;
-          };
-          cursorword = {
-            enable = true;
-            hl = { underline = true; };
-            minLength = 3;
+          settings = {
+            cursorline = {
+              enable = true;
+              number = true;
+              timeout = 0;
+            };
+            cursorword = {
+              enable = true;
+              hl = { underline = true; };
+              minLength = 3;
+            };
           };
         };
         lsp = {

@@ -12,8 +12,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Means the program will be run via nix-shell. (The grabage collector may remove it on the next GC run.)
-    # Used to run a program in a nix-shell environment when it is not installed just by running the program. ALternative to "comma"
-    environment.variables.NIX_AUTO_RUN = "1";
+    # Used to run a program in a nix-shell environment when it is not installed just by running the program. ALternative to "comma".
+    # Also enable command not found to use
+    environment.variables = {
+      NIX_AUTO_RUN = "1";
+      NIX_AUTO_RUN_INTERACTIVE = "1";
+    };
 
     # Enable Nix/Flakes
     nix = let users = [ "root" "dustin" ];
@@ -51,6 +55,7 @@ in {
     };
 
     programs = {
+      command-not-found.enable = true;
       nix-ld = {
         enable = true;
         libraries = with pkgs;

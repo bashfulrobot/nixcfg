@@ -35,6 +35,7 @@ in {
     environment.systemPackages = with pkgs; [
       pinentry-all # gpg passphrase prompting
       gnome-tweaks
+      nautilus-open-any-terminal # open terminal(s) in nautilus
     ];
 
     environment.gnome.excludePackages = with pkgs; [

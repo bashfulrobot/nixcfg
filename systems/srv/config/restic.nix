@@ -1,5 +1,7 @@
 { user-settings, config, pkgs, secrets, ... }:
 let
+# TODO: update to follow pattern like:
+# modules/desktops/gnome/keybindings/display-custom-keybindings/default.nix
   backup-mgr = ''
     #!/run/current-system/sw/bin/env fish
 

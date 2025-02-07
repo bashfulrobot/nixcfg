@@ -360,8 +360,8 @@ in {
           echo-home = "echo ${user-settings.user.home}";
           hm-logs =
             "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
-          tailscale-up-lt =
-            "sudo tailscale up --ssh --accept-routes --operator=$USER";
+          tailscale-up-lt = "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
+          tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
           oc = "~/.npm-packages/bin/opencommit";
           ncdu = "${pkgs.gdu}/bin/gdu";
           ".." = "cd ..";

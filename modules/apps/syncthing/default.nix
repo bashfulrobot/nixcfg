@@ -77,6 +77,11 @@ in {
               addresses = [ "tcp://${secrets.qbert.tailscale_ip}:22000" ];
               id = "${secrets.qbert.syncthing_id}";
             };
+            "maximus" = {
+              # tailscale only
+              addresses = [ "tcp://${secrets.maximus.tailscale_ip}:22000" ];
+              id = "${secrets.maximus.syncthing_id}";
+            };
 
           };
           folders = {
@@ -107,6 +112,14 @@ in {
             "Downloads" = {
               path = "${user-settings.user.home}/Downloads";
               devices = [ "qbert" ];
+              versioning = {
+                type = "simple";
+                params = { keep = "10"; };
+              };
+            };
+            "phone" = {
+              path = "${user-settings.user.home}/Phone";
+              devices = [ "maximus" ];
               versioning = {
                 type = "simple";
                 params = { keep = "10"; };
@@ -241,6 +254,11 @@ in {
               addresses = [ "tcp://${secrets.digdug.tailscale_ip}:22000" ];
               id = "${secrets.digdug.syncthing_id}";
             };
+            "maximus" = {
+              # tailscale only
+              addresses = [ "tcp://${secrets.maximus.tailscale_ip}:22000" ];
+              id = "${secrets.maximus.syncthing_id}";
+            };
 
           };
           folders = {
@@ -271,6 +289,14 @@ in {
             "Downloads" = {
               path = "${user-settings.user.home}/Downloads";
               devices = [ "digdug" ];
+              versioning = {
+                type = "simple";
+                params = { keep = "10"; };
+              };
+            };
+            "phone" = {
+              path = "${user-settings.user.home}/Phone";
+              devices = [ "maximus" ];
               versioning = {
                 type = "simple";
                 params = { keep = "10"; };

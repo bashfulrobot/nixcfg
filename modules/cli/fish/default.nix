@@ -55,6 +55,12 @@ in {
         #   }
         # ];
         functions = {
+          onepass = ''
+            # that's 1password cli tool used with fzf
+            # it's the best to have it in a tmux session because if not it will require
+            # you to reauthenticate for each new terminal that you open
+            op item list | fzf --bind "enter:become( op item get {1} )"
+          '';
           # get_window_class = ''
           #   , hyprctl clients | grep 'class:' | awk '{print $2}' | fzf | wl-copy --trim-newline
           # '';

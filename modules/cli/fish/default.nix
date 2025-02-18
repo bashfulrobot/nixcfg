@@ -108,15 +108,15 @@ in {
           # '';
 
           # GNOME Shell Version
-          # get_wm_class = ''
-          #   gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | grep -Po '"wm_class_instance":"\K[^"]*'
-          #   gtk-update-icon-cache
-          # '';
+          get_wm_class = ''
+            gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | grep -Po '"wm_class_instance":"\K[^"]*'
+            gtk-update-icon-cache
+          '';
 
           # X11 / Budgie Version
-          get_wm_class = ''
-            xprop | grep WM_CLASS | awk -F '"' '{print $2}' | xclip -selection clipboard
-          '';
+          # get_wm_class = ''
+          #   xprop | grep WM_CLASS | awk -F '"' '{print $2}' | xclip -selection clipboard
+          # '';
 
           scratch-new = ''
                        set date (date "+%Y-%m-%d")

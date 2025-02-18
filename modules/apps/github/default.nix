@@ -10,7 +10,7 @@ let
   # I temp create an app in brave to download all the icons, then I place then in the correct folder
   githubApp = makeDesktopApp {
     name = "Github";
-    url = "https://github.com/bashfulrobot/nixos";
+    url = "https://github.com/bashfulrobot/nixcfg";
     binary = "${pkgs.chromium}/bin/chromium";
     myStartupWMClass = "github.com__bashfulrobot_nixos";
     iconSizes = [ "32" "48" "64" "96" "128" "256" ];

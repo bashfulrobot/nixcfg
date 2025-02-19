@@ -23,6 +23,7 @@ in {
       spice-protocol
       win-virtio
       win-spice
+      guestfs-tools # Extra tools for accessing and modifying virtual machine disk images
     ];
 
     # Add user to libvirtd group

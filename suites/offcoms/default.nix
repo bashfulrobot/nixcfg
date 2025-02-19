@@ -65,6 +65,7 @@ in {
       # # IM
       # fractal # Matrix Client
       slack # instant messaging
+      whatsapp-for-linux # instant messaging
       signal-desktop # instant messaging
       zulip
       # element-desktop # Matrix Client

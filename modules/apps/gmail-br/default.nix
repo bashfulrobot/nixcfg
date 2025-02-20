@@ -12,7 +12,7 @@ let
     name = "Bashfulrobot Mail";
     url = "https://mail.google.com/mail/u/0/#inbox";
     binary = "${pkgs.chromium}/bin/chromium";
-    myStartupWMClass = "mail.google.com__mail_u_0";
+    myStartupWMClass = "chrome-mail.google.com__mail_u_0-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

@@ -355,6 +355,9 @@ in {
           youtube = "mpv";
           pq = "pueue";
           kb = "kubie";
+          cam-devs = "v4l2-ctl --list-devices";
+          cam-features = "v4l2-ctl --list-ctrls -d /dev/video0";
+          cam-sat = "v4l2-ctl --set-ctrl=saturation=50 -d /dev/video0";
         };
         shellAliases = {
           support-info =

@@ -296,6 +296,37 @@ in {
             set file_path $argv[1]
             tailscale file cp $file_path maximus:
           '';
+          ek = ''
+            set -l kubeconfig_dir ~/.kube/configs
+            set -l selected_config (fd --type f . $kubeconfig_dir | xargs -n 1 basename | fzf --prompt="Select kubeconfig: ")
+            if test -n "$selected_config"
+              set -gx KUBECONFIG $kubeconfig_dir/$selected_config
+              echo "KUBECONFIG set to $kubeconfig_dir/$selected_config"
+            else
+              echo "No kubeconfig selected."
+            end
+          '';
+          ns = ''
+            set -l namespaces (kubectl get namespaces -o jsonpath="{.items[*].metadata.name}")
+            set -l selected_namespace (echo $namespaces | tr ' ' '\n' | fzf --prompt="Select namespace: ")
+            if test -n "$selected_namespace"
+              kubectl config set-context --current --namespace=$selected_namespace
+              echo "Namespace set to $selected_namespace"
+            else
+              echo "No namespace selected."
+            end
+          '';
+          et = ''
+            set -l talosconfig_dir ~/.talos/configs
+            set -l selected_config (fd --type f . $talosconfig_dir | xargs -n 1 basename | fzf --prompt="Select talosconfig: ")
+            if test -n "$selected_config"
+              set -gx TALOSCONFIG $talosconfig_dir/$selected_config
+              echo "TALOSCONFIG set to $talosconfig_dir/$selected_config"
+            else
+              echo "No talosconfig selected."
+            end
+          '';
+
           delete_all_in_namespace = ''
             if test (count $argv) -ne 1
                 echo "Error: This function requires a namespace as an argument."
@@ -354,7 +385,6 @@ in {
           nix-info = "nix-shell -p nix-info --run 'nix-info -m'";
           youtube = "mpv";
           pq = "pueue";
-          kb = "kubie";
           cam-devs = "v4l2-ctl --list-devices";
           cam-features = "v4l2-ctl --list-ctrls -d /dev/video0";
           cam-sat = "v4l2-ctl --set-ctrl=saturation=50 -d /dev/video0";
@@ -369,8 +399,10 @@ in {
           echo-home = "echo ${user-settings.user.home}";
           hm-logs =
             "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
-          tailscale-up-lt = "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
-          tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
+          tailscale-up-lt =
+            "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
+          tailscale-up-dt =
+            "sudo tailscale up --operator=$USER --ssh --accept-dns";
           oc = "~/.npm-packages/bin/opencommit";
           ncdu = "${pkgs.gdu}/bin/gdu";
           ".." = "cd ..";

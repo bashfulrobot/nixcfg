@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    cli.kubie.enable = true;
+    cli.kubie.enable = false;
 
     environment.systemPackages = with pkgs; [
       # sops # Secrets management

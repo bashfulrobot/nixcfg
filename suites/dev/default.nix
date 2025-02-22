@@ -51,7 +51,7 @@ in {
 
     ];
 
-    programs = { jqp = { enable = true; }; };
+    # programs = { jqp = { enable = true; }; };
 
     home-manager.users."${user-settings.user.username}" = {
       programs = { jq = { enable = true; }; };

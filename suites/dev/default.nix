@@ -50,11 +50,11 @@ in {
       # unstable.jetbrains.goland # Go IDE
 
     ];
+
+    programs = { jqp = { enable = true; }; };
+
     home-manager.users."${user-settings.user.username}" = {
-      programs = {
-        jq = { enable = true; };
-        jqp = { enable = true; };
-      };
+      programs = { jq = { enable = true; }; };
     };
   };
 }

@@ -72,6 +72,7 @@ in {
       #  # Email
       gmailctl # cli to write gmail filters as code
       # thunderbird # email client
+      unstable.evolutionWithPlugins
       # mailspring # email client
       #geary # email reader
       # pandoc # document converter

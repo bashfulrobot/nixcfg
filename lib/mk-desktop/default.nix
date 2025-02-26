@@ -1,22 +1,16 @@
 { pkgs, lib, makeDesktopItem, ... }:
 
 let
-  makeDesktopApp = { name, url, binary, myStartupWMClass, iconSizes, iconPath }:
+  makeDesktopApp = { name, binary, myStartupWMClass, iconSizes, iconPath }:
     let
       desktopName =
         lib.strings.toLower (lib.strings.replaceStrings [ " " ] [ "_" ] name);
-      scriptPath = pkgs.writeShellScriptBin desktopName ''
-        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode --new-window --enable-features=WaylandWindowDecorations --app="${url}"
-      '';
       desktopItem = makeDesktopItem {
         type = "Application";
         name = desktopName;
         desktopName = name;
         startupWMClass = myStartupWMClass;
-        # exec = ''
-        #   ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode --new-window --app="${lib.escapeShellArg url}"
-        # '';
-        exec = "${scriptPath}/bin/${desktopName}"; # use the script to open the app - accounts for url encoding. which breaks due to the desktop file spec.
+        exec = binary;
         icon = desktopName;
         categories = [ "Application" ];
       };
@@ -36,10 +30,6 @@ let
         {
           assertion = name != null;
           message = "name is a required parameter for makeDesktopApp";
-        }
-        {
-          assertion = url != null;
-          message = "url is a required parameter for makeDesktopApp";
         }
         {
           assertion = binary != null;

@@ -19,6 +19,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # ghostty = {
     #   url = "github:ghostty-org/ghostty";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -30,7 +34,7 @@
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, catppuccin, ... }:
+    , disko, nixos-hardware, nixvim, catppuccin, nix-darwin, ... }:
     let
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {
@@ -92,7 +96,8 @@
       };
 
       # isWorkstation is used to do in module conditional logic for workstation specific settings
-      makeSystem = name: modules: { isWorkstation, ... }:
+      makeSystem = name: modules:
+        { isWorkstation, ... }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit user-settings inputs secrets nixpkgs-unstable isWorkstation;
@@ -118,6 +123,15 @@
           ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = false;
           };
+      };
+
+      darwinConfigurations = {
+        digdugdeeper = nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          modules = [
+            # ./darwin-configuration.nix
+          ];
+        };
       };
     };
 }

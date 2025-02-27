@@ -12,7 +12,8 @@ let
     name = "Perplexity";
     url = "https://perplexity.ai";
     binary = "${pkgs.chromium}/bin/chromium";
-    myStartupWMClass = "chrome-perplexity.ai__-Default";
+    # myStartupWMClass = "chrome-perplexity.ai__-Default";
+    myStartupWMClass = "chromium-browser";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

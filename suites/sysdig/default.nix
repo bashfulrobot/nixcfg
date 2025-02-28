@@ -20,7 +20,7 @@ in {
       intercom.enable = true;
       jira.enable = true;
       sfdc.enable = true;
-      # TODO: Enable Gainsight
+      gainsight.enable = true;
       };
 
     cli = {

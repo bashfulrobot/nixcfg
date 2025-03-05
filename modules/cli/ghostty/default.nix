@@ -19,7 +19,6 @@ in {
         font-size = 16
         cursor-style = block
         window-theme = system
-        fullscreen = true
         working-directory = ~/dev
         custom-shader-animation = true
         clipboard-read = allow

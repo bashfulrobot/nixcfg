@@ -20,6 +20,7 @@ in {
       yazi.enable = true;
       foot.enable = false;
       blackbox.enable = true;
+      ghostty.enable = true;
       ntf.enable = true;
       xkill.enable = true;
     };

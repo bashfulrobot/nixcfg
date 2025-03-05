@@ -1,4 +1,4 @@
-{ user-settings, pkgs, config, lib, inputs, ... }:
+{ user-settings, pkgs, config, lib, ... }:
 let cfg = config.cli.ghostty;
 in {
   options = {
@@ -11,7 +11,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs;
-      [ inputs.ghostty.packages.x86_64-linux.default ];
+      [ unstable.ghostty ];
 
     home-manager.users."${user-settings.user.username}" = {
       # https://ghostty.org/docs/config
@@ -28,7 +28,6 @@ in {
         window-padding-y = 10
         window-padding-balance = true
         window-padding-color = extend-always
-        background = #1F1F1F
         cursor-style-blink = true
         mouse-hide-while-typing = true
       '';

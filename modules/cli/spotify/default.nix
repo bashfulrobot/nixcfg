@@ -56,25 +56,25 @@ in {
           use_nerdfont = true;
           notify = true;
 
-          theme = {
-            background = "#1f1f1f";
-            primary = "#6f8396"; # Slate accent color
-            secondary = "#a9a9a9"; # Dark gray secondary color
-            title = "#6f8396"; # Slate accent color for title
-            playing = "#1f1f1f"; # Slate accent color for playing
-            playing_selected = "#6f8396"; # Light blue for selected playing
-            playing_bg = "#ffffff"; # Light background for playing
-            highlight = "#1f1f1f"; # Slate accent color for highlight
-            highlight_bg = "#d3d3d3";
-            error = "#e06c75";
-            error_bg = "#d56199";
-            statusbar = "#6f8396";
-            statusbar_progress = "#2190a4"; # Dark blue for status bar progress
-            statusbar_bg = "#ffffff"; # Light background for status bar
-            cmdline = "#6f8396"; # Slate accent color for command line
-            cmdline_bg = "#ffffff"; # Light background for command line
-            search_match = "#c88800"; # Yellow for search match
-          };
+          # theme = {
+          #   background = "#1f1f1f";
+          #   primary = "#6f8396"; # Slate accent color
+          #   secondary = "#a9a9a9"; # Dark gray secondary color
+          #   title = "#6f8396"; # Slate accent color for title
+          #   playing = "#1f1f1f"; # Slate accent color for playing
+          #   playing_selected = "#6f8396"; # Light blue for selected playing
+          #   playing_bg = "#ffffff"; # Light background for playing
+          #   highlight = "#1f1f1f"; # Slate accent color for highlight
+          #   highlight_bg = "#d3d3d3";
+          #   error = "#e06c75";
+          #   error_bg = "#d56199";
+          #   statusbar = "#6f8396";
+          #   statusbar_progress = "#2190a4"; # Dark blue for status bar progress
+          #   statusbar_bg = "#ffffff"; # Light background for status bar
+          #   cmdline = "#6f8396"; # Slate accent color for command line
+          #   cmdline_bg = "#ffffff"; # Light background for command line
+          #   search_match = "#c88800"; # Yellow for search match
+          # };
 
         };
       };

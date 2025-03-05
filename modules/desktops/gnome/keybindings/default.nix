@@ -107,9 +107,9 @@ in {
             binding = "<Super>t";
             # command = "kgx";
             # command = "alacritty";
-            # command = "ghostty";
+            command = "ghostty";
             # command = "foot";
-            command = "blackbox";
+            # command = "blackbox";
             name = "Default Terminal";
           };
 
@@ -200,7 +200,8 @@ in {
           {
             # ctrl-shift-?
             binding = "<Control><Shift>slash";
-            command = "/run/current-system/sw/bin/blackbox -c display-custom-keybindings";
+            command =
+              "/run/current-system/sw/bin/blackbox -c display-custom-keybindings";
             name = "Show current custom keybindings in a terminal";
           };
 

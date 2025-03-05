@@ -107,9 +107,9 @@ in {
             binding = "<Super>t";
             # command = "kgx";
             # command = "alacritty";
-            # command = "ghostty";
+            command = "ghostty";
             # command = "foot";
-            command = "blackbox";
+            # command = "blackbox";
             name = "Default Terminal";
           };
 

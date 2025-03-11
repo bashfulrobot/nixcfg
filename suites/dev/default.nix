@@ -48,6 +48,7 @@ in {
       unstable.markdown-oxide # Zed support
       unstable.nil # nix language server for Zed
       # unstable.jetbrains.goland # Go IDE
+      unstable.pre-commit # pre-commit hooks
 
     ];
 

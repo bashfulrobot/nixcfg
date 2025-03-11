@@ -28,7 +28,10 @@ in {
       instruqt.enable = true;
     };
 
-    environment.systemPackages = with pkgs; [ rocketchat-desktop ];
+    environment.systemPackages = with pkgs; [
+      unstable.rocketchat-desktop
+      unstable.turbovnc # Access MacOS from Linux
+      ];
 
   };
 }

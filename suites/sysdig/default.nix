@@ -31,6 +31,7 @@ in {
     environment.systemPackages = with pkgs; [
       unstable.rocketchat-desktop
       unstable.turbovnc # Access MacOS from Linux
+      unstalble.terragrunt
       ];
 
   };

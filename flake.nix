@@ -20,7 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
-      url = "github:lnl7/nix-darwin/master";
+      url = "github:lnl7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # ghostty = {
@@ -126,10 +126,11 @@
       };
 
       darwinConfigurations = {
-        digdugdeeper = nix-darwin.lib.darwinSystem {
+        dustinkrysak = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
             # ./darwin-configuration.nix
+            ./systems/dustinkrysak
           ];
         };
       };

@@ -155,3 +155,8 @@ changelog-2d-count:
     @echo "Total commits in the last 2 days:"
     @git rev-list --count --since="2 days ago" HEAD
     @echo "==================================="
+# Rebuild Mac
+mac-rebuild:
+    @nix --extra-experimental-features flakes --extra-experimental-features nix-command run github:LnL7/nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake .#\{{`hostname`}}
+    # # @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
+    # @nix build .#darwinConfigurations.dustinkrysak.system --extra-experimental-features "nix-command flakes"

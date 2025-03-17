@@ -1,0 +1,12 @@
+{
+  "user": {
+    "username": "dustin.krysak",
+    "home": "/Users/dustin.krysak",
+    "full-name": "Dustin Krysak",
+    "id": "1000"
+  },
+  "nix": {
+    "comment": "NOT IN USE YET - WIP",
+    "release": "24.11"
+  }
+}

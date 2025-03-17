@@ -46,15 +46,13 @@
 
       workstationOverlays = [ overlay-unstable ];
 
-      getHostname = builtins.getEnv "HOSTNAME";
-
-      settingsFile = "${self}/settings/${getHostname}.json";
-
       secrets =
         builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
 
-      user-settings =
-        builtins.fromJSON (builtins.readFile settingsFile);
+      # system = "x86_64-linux";  # Define the system variable
+
+      user-settings-linux = builtins.fromJSON (builtins.readFile "${self}/settings/settings-linux.json");
+      user-settings-darwin = builtins.fromJSON (builtins.readFile "${self}/settings/settings-darwin.json");
 
       commonModules = [
         nix-flatpak.nixosModules.nix-flatpak
@@ -70,25 +68,42 @@
         disko.nixosModules.disko
       ];
 
-      commonHomeManagerConfig = {
-        home-manager = {
-          useUserPackages = true;
-          sharedModules = [ ];
-          useGlobalPkgs = true;
-          extraSpecialArgs = { inherit user-settings secrets inputs; };
-          users."${user-settings.user.username}" = {
-            imports = [ catppuccin.homeManagerModules.catppuccin ];
-          };
-        };
-      };
+      commonHomeManagerConfig = settings: {
+  home-manager = {
+    useUserPackages = true;
+    sharedModules = [ ];
+    useGlobalPkgs = true;
+    extraSpecialArgs = { user-settings = settings; inherit secrets inputs; };
+    users."${settings.user.username}" = {
+      imports = [ catppuccin.homeManagerModules.catppuccin ];
+      home.stateVersion = "24.11";
+      # Dynamically build the path based on the platform and username
+      home.homeDirectory = nixpkgs.lib.mkForce (
+        if settings.user ? system && settings.user.system == "Darwin"
+        then "/Users/${settings.user.username}"
+        else "/home/${settings.user.username}"
+      );
+    };
+  };
+};
 
-      serverHomeManagerConfig = {
+      serverHomeManagerConfig = settings: {
         home-manager = {
           useUserPackages = true;
           sharedModules = [ ];
           useGlobalPkgs = true;
-          extraSpecialArgs = { inherit user-settings secrets inputs; };
-          users."${user-settings.user.username}" = { imports = [ ]; };
+          extraSpecialArgs = { user-settings = settings; inherit secrets inputs; };
+          users."${settings.user.username}" = {
+            imports = [ ];
+            home.stateVersion = "24.11";  # Move this inside the user block
+            # Dynamically build the path based on the platform and username
+      home.homeDirectory = nixpkgs.lib.mkForce (
+        if settings.user ? system && settings.user.system == "Darwin"
+        then "/Users/${settings.user.username}"
+        else "/home/${settings.user.username}"
+      );
+
+          };
         };
       };
 
@@ -101,44 +116,59 @@
 
       # isWorkstation is used to do in module conditional logic for workstation specific settings
       makeSystem = name: modules:
-        { isWorkstation, ... }:
-        nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit user-settings inputs secrets nixpkgs-unstable isWorkstation;
-          };
-          system = "x86_64-linux";
-          inherit modules;
+      { isWorkstation, ... }:
+      nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          user-settings = user-settings-linux;
+          inherit inputs secrets nixpkgs-unstable isWorkstation;
         };
+        system = "x86_64-linux";
+        inherit modules;
+      };
+
+    makeDarwinSystem = name: modules:
+      { isWorkstation, ... }:
+      nix-darwin.lib.darwinSystem {
+        specialArgs = {
+          user-settings = user-settings-darwin;
+          inherit inputs secrets nixpkgs-unstable isWorkstation;
+        };
+        system = "aarch64-darwin";
+        inherit modules;
+      };
 
     in {
-      nixosConfigurations = {
-        # Note: The `true` argument is used to determine if the system is a workstation or not
-        digdug = makeSystem "digdug" (commonModules
-          ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {
-            isWorkstation = true;
-          };
-        # Note: The `true` argument is used to determine if the system is a workstation or not
-        qbert = makeSystem "qbert" (commonModules
-          ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
-            isWorkstation = true;
-          };
-        # Note: The `false` argument is used to determine if the system is a workstation or not
-        srv = makeSystem "srv" (serverModules
-          ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]) {
-            isWorkstation = false;
-          };
-      };
+     nixosConfigurations = {
+  # Note: The `true` argument is used to determine if the system is a workstation or not
+  digdug = makeSystem "digdug" (commonModules
+    ++ [ ./systems/digdug
+         (commonHomeManagerConfig user-settings-linux)
+         commonNixpkgsConfig ]) {
+      isWorkstation = true;
+    };
+  # Note: The `true` argument is used to determine if the system is a workstation or not
+  qbert = makeSystem "qbert" (commonModules
+    ++ [ ./systems/qbert
+         (commonHomeManagerConfig user-settings-linux)
+         commonNixpkgsConfig ]) {
+      isWorkstation = true;
+    };
+  # Note: The `false` argument is used to determine if the system is a workstation or not
+  srv = makeSystem "srv" (serverModules
+    ++ [ ./systems/srv
+         (serverHomeManagerConfig user-settings-linux)
+         commonNixpkgsConfig ]) {
+      isWorkstation = false;
+    };
+};
 
-      darwinConfigurations = {
-        dustinkrysak = nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          modules = [
-            home-manager.darwinModules.home-manager
-
-            # ./darwin-configuration.nix
-            ./systems/dustinkrysak
-          ];
-        };
-      };
+darwinConfigurations = {
+  dustinkrysak = makeDarwinSystem "dustinkrysak" ([
+    home-manager.darwinModules.home-manager
+    ./systems/dustinkrysak
+  ]) {
+    isWorkstation = false;
+  };
+};
     };
 }

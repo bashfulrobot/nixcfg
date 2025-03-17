@@ -9,7 +9,9 @@ set ignore-comments
 # Search justfile in parent directory if the first recipe on the command line is not found.
 set fallback
 # Set the shell to bash
-set shell := ["bash", "-cu"]
+#set shell := ["bash", "-cu"]
+# Set the shell to fish
+set shell := ["fish", "-c"]
 
 # "_" hides the recipie from listings
 _default:
@@ -157,6 +159,6 @@ changelog-2d-count:
     @echo "==================================="
 # Rebuild Mac
 mac-rebuild:
-    @nix --extra-experimental-features flakes --extra-experimental-features nix-command run github:LnL7/nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake .#\{{`hostname`}}
+    @darwin-rebuild switch --flake .#dustinkrysak
     # # @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
     # @nix build .#darwinConfigurations.dustinkrysak.system --extra-experimental-features "nix-command flakes"

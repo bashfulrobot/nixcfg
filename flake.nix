@@ -129,6 +129,8 @@
         dustinkrysak = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
+            home-manager.darwinModules.home-manager
+
             # ./darwin-configuration.nix
             ./systems/dustinkrysak
           ];

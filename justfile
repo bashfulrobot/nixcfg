@@ -157,8 +157,6 @@ changelog-2d-count:
     @echo "Total commits in the last 2 days:"
     @git rev-list --count --since="2 days ago" HEAD
     @echo "==================================="
-# Rebuild Mac
-mac-rebuild:
-    @darwin-rebuild switch --flake .#dustinkrysak
-    # # @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
-    # @nix build .#darwinConfigurations.dustinkrysak.system --extra-experimental-features "nix-command flakes"
+# Get system Info for Nix related Issues
+nix-system-info:
+    @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m

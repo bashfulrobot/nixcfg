@@ -105,12 +105,10 @@ run-fwup:
     @sudo fwupdmgr update
 # Update Flake
 upgrade-system:
-    # @nix flake update --commit-lock-file
     ulimit -n 4096
     @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
     @nix flake update
     @sudo nixos-rebuild switch --impure --upgrade --flake .#\{{`hostname`}} --show-trace
-    # @just _sway-reload
 # Change Log - 7 Days
 changelog-7d:
     @echo "==================================="
@@ -160,3 +158,11 @@ changelog-2d-count:
 # Get system Info for Nix related Issues
 nix-system-info:
     @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
+# Rebuild Darwin System(s)
+darwin-rebuild:
+    @darwin-rebuild switch --flake ./nix-darwin#\{{`hostname`}}
+# Update Darwin System(s)
+darwin-upgrade-system:
+    @cp nix-darwin/flake.lock nix-darwin/flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
+    @cd nix-darwin && nix flake update
+    @darwin-rebuild switch --flake ./nix-darwin#$(hostname) --show-trace

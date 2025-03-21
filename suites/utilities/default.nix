@@ -68,6 +68,7 @@ in {
       libnotify # notification library
       # lftp # file transfer program
       unzip # file decompression tool
+      lan-mouse # software KVM
     ];
     programs.wshowkeys.enable = false;
 

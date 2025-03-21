@@ -31,6 +31,7 @@ in {
       chrome-based-browser.enable = true;
       gcal-br.enable = true;
       gmail-br.enable = true;
+      inputleap.enable = true;
       };
 
     cli = { note.enable = true; };

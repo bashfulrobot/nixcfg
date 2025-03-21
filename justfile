@@ -105,7 +105,7 @@ run-fwup:
     @sudo fwupdmgr update
 # Update Flake
 upgrade-system:
-    ulimit -n 4096
+    #ulimit -n 4096
     @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
     @nix flake update
     @sudo nixos-rebuild switch --impure --upgrade --flake .#\{{`hostname`}} --show-trace

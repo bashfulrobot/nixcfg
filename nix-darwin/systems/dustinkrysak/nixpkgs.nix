@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [ fish nixfmt ];
+  environment.systemPackages = with pkgs; [ fish nixfmt raycast ];
 
 }

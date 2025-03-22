@@ -7,14 +7,17 @@
     onActivation.autoUpdate = true;
     # updates homebrew packages on activation,
     # can make darwin-rebuild much slower (otherwise i'd forget to do it ever though)
-    taps = [];
+    taps = [
+      # "deskflow/homebrew-tap"
+    ];
     brews = [
       "neovim"
       "just"
       "gh"
       ];
     casks = [
-      "hammerspoon"
+      # "deskflow"
+      # "hammerspoon"
       "1password-cli"
     ];
   };

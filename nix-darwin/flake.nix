@@ -29,6 +29,7 @@
                 # Add overlay as a module
                 {
                   nixpkgs.overlays = overlays;
+                  nixpkgs.config.allowUnfree = true;
                 }
               ];
               specialArgs = {

@@ -16,7 +16,6 @@
       "gh"
       ];
     casks = [
-      # "deskflow"
       # "hammerspoon"
       "1password-cli"
     ];

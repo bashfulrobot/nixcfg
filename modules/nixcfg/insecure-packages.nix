@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    nixpkgs.config.permittedInsecurePackages = [ "electron-32.3.3" "deskflow-1.19.0" ];
+    nixpkgs.config.permittedInsecurePackages = [ "electron-32.3.3" ];
     # [ "electron-22.3.27" "electron-24.8.6" "openssl-1.1.1v" "openssl-1.1.1w" ];
     # [ "electron-25.9.0" ];
   };

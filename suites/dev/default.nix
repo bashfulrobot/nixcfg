@@ -44,9 +44,9 @@ in {
       shadowenv # environment variable manager
       shfmt # shell script formatter
       jnv # json filtering with jq
-      unstable.zed-editor # text editor
-      unstable.markdown-oxide # Zed support
-      unstable.nil # nix language server for Zed
+      zed-editor # text editor
+      markdown-oxide # Zed support
+      nil # nix language server for Zed
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
 

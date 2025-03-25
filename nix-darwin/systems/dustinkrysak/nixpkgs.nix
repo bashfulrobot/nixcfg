@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [ fd fish nixfmt raycast lan-mouse ];
+  environment.systemPackages = with pkgs; [ fd fish nixfmt raycast ];
 
 }

@@ -77,7 +77,6 @@ in {
       #geary # email reader
       # pandoc # document converter
       # lan-mouse # software kvm
-      unstable.input-leap # software kvm
     ];
 
     services.flatpak.packages = [

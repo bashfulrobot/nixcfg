@@ -76,7 +76,7 @@ in {
       # mailspring # email client
       #geary # email reader
       # pandoc # document converter
-      lan-mouse # software kvm
+      # lan-mouse # software kvm
     ];
 
     services.flatpak.packages = [

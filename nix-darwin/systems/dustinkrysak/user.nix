@@ -15,10 +15,7 @@
     users.users."${user-settings.user.username}" = {
       description = "${user-settings.user.full-name}";
       shell = pkgs.fish;
-      # shell = pkgs.zsh;
-      # shell = pkgs.bash;
       home = "${user-settings.user.home}";
-
     };
 
 }

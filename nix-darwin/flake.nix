@@ -35,10 +35,12 @@
               ];
               specialArgs = {
                 inherit user-settings secrets inputs lib;
+                isWorkstation = true;
               };
       };
       extraSpecialArgs = {
         inherit user-settings secrets inputs lib;
+        isWorkstation = true;
       };
     };
 }

@@ -69,7 +69,7 @@
     # "pdf-expert"
     # "postman"
     # "protonvpn"
-    # "raycast"
+    "raycast"
     # "signal"
     # "sloth"
     # "steam"

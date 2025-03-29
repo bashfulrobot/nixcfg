@@ -114,5 +114,7 @@
     "just"
     "gh"
     "yazi"
+    "direnv"
+    "ncspot"
   ];
 }

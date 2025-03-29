@@ -24,8 +24,6 @@
   };
 
   apps = {
-    mimestream = {
-      enable = true;
-    };
+    mimestream.enable = false;
   };
 }

@@ -11,19 +11,21 @@ in {
 
   config = lib.mkIf cfg.enable {
     homebrew = {
-    enable = true;
-    onActivation.upgrade = true;
-    onActivation.autoUpdate = true;
-    # updates homebrew packages on activation,
-    # can make darwin-rebuild much slower (otherwise i'd forget to do it ever though)
-    taps = [];
-    brews = [
+      enable = true;
+      onActivation.upgrade = true;
+      onActivation.autoUpdate = true;
+      # updates homebrew packages on activation,
+      # can make darwin-rebuild much slower (otherwise i'd forget to do it ever though)
+      taps = [ ];
+      brews = [
 
       ];
-    casks = [
-      "ghostty"
-    ];
-  };
+      casks = [ "ghostty" ];
+    };
+
+    # Hack: https://github.com/ghostty-org/ghostty/discussions/2832
+    environment.variables.XDG_DATA_DIRS =
+      [ "$GHOSTTY_SHELL_INTEGRATION_XDG_DIR" ];
 
     home-manager.users."${user-settings.user.username}" = {
       # https://ghostty.org/docs/config

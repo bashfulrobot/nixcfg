@@ -8,8 +8,9 @@
       darwin.inputs.nixpkgs.follows = "nixpkgs";
       nixpkgs-unstable = { url = "github:NixOS/nixpkgs/nixpkgs-unstable"; };
   };
-  outputs = { self, nixpkgs, home-manager, darwin, nixpkgs-unstable }:
+  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nixpkgs-unstable }:
     let
+      lib = nixpkgs.lib;
       user-settings = builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
       secrets =
         builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
@@ -33,11 +34,11 @@
                 }
               ];
               specialArgs = {
-                inherit user-settings secrets;
+                inherit user-settings secrets inputs lib;
               };
       };
       extraSpecialArgs = {
-        inherit user-settings secrets;
+        inherit user-settings secrets inputs lib;
       };
     };
 }

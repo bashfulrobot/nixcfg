@@ -21,23 +21,8 @@ in {
         enable = true;
 
         extraConfig = ''
-          Host *
-            AddKeysToAgent yes
-          Host github.com
-            HostName github.com
-            IdentityFile ~/.ssh/id_ed25519
-            User git
-          Host bitbucket.org
-              HostName bitbucket.org
-              IdentityFile ~/.ssh/id_ed25519
-              User git
-          Host feral
-              HostName prometheus.feralhosting.com
-              User msgedme
-          Host camino
-            HostName 64.225.50.102
-            User root
-            AddKeysToAgent yes
+
+          ### Home Config
           Host remi
             HostName 72.51.28.133
             User dustin
@@ -46,59 +31,60 @@ in {
             HostName 100.96.21.6
             User dustin
             AddKeysToAgent yes
-        #   Host tower-ts
-        #       HostName 100.89.2.33
-        #       User dustin
-        #         AddKeysToAgent yes
-        #   Host dt
-        #       HostName 192.168.169.2
-        #       User dustin
-        #         AddKeysToAgent yes
+
+          ### Camino Config
+          Host camino
+            HostName 64.225.50.102
+            User root
+            AddKeysToAgent yes
+
+          # Ubuntu Budgie Config
           Host ub-ubuntubudgieorg
-              HostName 157.245.237.69
-              User dustin
-                AddKeysToAgent yes
-        #   Host ub-ubuntubudgieorg-nikola
-        #       HostName 157.245.237.69
-        #       User nikola
+            HostName 157.245.237.69
+            User dustin
+            AddKeysToAgent yes
           Host ub-ubuntubudgieorg-webpub
-              HostName 157.245.237.69
-              User webpub
+            HostName 157.245.237.69
+            User webpub
           Host ub-docker-root
-              HostName 134.209.129.108
-              User dustin
-                AddKeysToAgent yes
+            HostName 134.209.129.108
+            User dustin
+            AddKeysToAgent yes
           Host ub-docker-admin
-              HostName 134.209.129.108
-              User docker-admin
-                AddKeysToAgent yes
-        #   Host srv
-        #       HostName 192.168.168.1
-        #       User dustin
-        #       AddKeysToAgent yes
-        # Used with TF/KVM
+            HostName 134.209.129.108
+            User docker-admin
+            AddKeysToAgent yes
+
+          ### Feral Config
+          Host feral
+            HostName prometheus.feralhosting.com
+            User msgedme
+
+          ### Git Config
+          Host github.com
+            HostName github.com
+            IdentityFile ~/.ssh/id_ed25519
+            User git
+          Host bitbucket.org
+            HostName bitbucket.org
+            IdentityFile ~/.ssh/id_ed25519
+            User git
+
+          ### TF/KVM Config
           Host 192.168.168.1
-              HostName 192.168.168.1
-              User dustin
-              AddKeysToAgent yes
-              Port 22
-              StrictHostKeyChecking no
-              UserKnownHostsFile /dev/null
-        #   Host srv-ts
-        #         HostName 100.64.187.14
-        #         User dustin
-        #         AddKeysToAgent yes
-        #   Host 100.64.187.14
-        #         User dustin
-        #         AddKeysToAgent yes
-        #   Host nixdo
-        #       HostName 192.168.168.10
-        #       User dustin
-        #         AddKeysToAgent yes
-        #   Host qbert
-        #     HostName 100.89.186.70
-        #     User dustin
-        #     AddKeysToAgent yes
+            HostName 192.168.168.1
+            User dustin
+            AddKeysToAgent yes
+            Port 22
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+
+          # Global Config
+          Host *
+            # IgnoreUnknown UseKeychain,AddKeysToAgent
+            IgnoreUnknown UseKeychain
+            AddKeysToAgent yes
+            UseKeychain yes
         '';
       };
     };

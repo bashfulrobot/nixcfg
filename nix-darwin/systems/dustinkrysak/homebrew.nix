@@ -31,6 +31,17 @@
   # Prefer installing application from the Mac App Store
   homebrew.masApps = {
     "Todoist" = 585829637;
+    "Iscreen Shoter" = 1596559494;
+    "Hidden Bar" = 1452453066;
+    "Save to Raindrop" = 1549370672;
+    "1password for Safari" = 1569813296;
+    "Wipr 2" = 1662217862;
+    "Adblock Pro" = 1018301773;
+    "Kagi for Safari" = 1622835804;
+    "Rocketchat" = 1086818840;
+    "Tailscale" = 1475387142;
+    "Darkreader for Safari" = 1438243180;
+    "Unread" = 1363637349;
   };
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has

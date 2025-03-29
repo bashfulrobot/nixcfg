@@ -1,6 +1,7 @@
 {
   description = "NixOS configuration for Dustin Krysak";
 
+  # --- defines external dependencies (inputs)
   inputs = {
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-24.11"; };
     nixpkgs-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
@@ -29,9 +30,13 @@
     };
   };
 
+  # --- outputs function receives all inputs as parameters
+  # inputs@{...} syntax captures all inputs in a variable called inputs
+  # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
     , disko, nixos-hardware, nixvim, catppuccin, ... }:
     let
+      # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {
           inherit (final) system;
@@ -91,6 +96,7 @@
         };
       };
 
+      # --- function to create NixOS system configurations
       # isWorkstation is used to do in module conditional logic for workstation specific settings
       makeSystem = name: modules:
         { isWorkstation, ... }:
@@ -104,6 +110,9 @@
 
     in {
       nixosConfigurations = {
+
+        # --- Create nixos systems using the makeSystem function
+
         # Note: The `true` argument is used to determine if the system is a workstation or not
         digdug = makeSystem "digdug" (commonModules
           ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {

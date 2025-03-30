@@ -8,16 +8,18 @@
     ./user.nix
     ./hm.nix
     ./modules.nix
+    ./nix-settings.nix
   ];
 
-  networking.hostName = "dustinkrysak"; # Define your hostname.
+  networking = {
+    hostName = "dustinkrysak"; # Define your hostname.
+    # https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-networking.computerName
+    computerName = "dustinkrysak";
+    # Enable WOL
+    wakeOnLan.enable = true;
+  };
 
   programs.fish.enable = true;
   # bash is enabled by default
 
-  # Determinate uses its own daemon to manage the Nix installation that conflicts with nix-darwin’s native Nix management.
-
-  nix.enable = false;
-
-  system.stateVersion = 5;
 }

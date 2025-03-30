@@ -16,4 +16,14 @@
   # Add ability to used TouchID for sudo authentication
   security.pam.enableSudoTouchIdAuth = true;
 
+  ### CustomSystemPreferences
+  # https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.CustomSystemPreferences
+  # list set items -  defaults read
+
+  ###  Investigate
+  # - https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-services.khd.i3Keybindings
+  # - https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-services.sketchybar.enable
+  # - https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-services.tailscale.enable
+  # -https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-services.yabai.enable
+
 }

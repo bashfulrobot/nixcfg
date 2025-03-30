@@ -12,8 +12,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable the OpenSSH daemon unless the system is Darwin.
-    services.openssh.enable = lib.mkIf (pkgs.stdenv.isDarwin) false;
+    # # Enable the OpenSSH daemon unless the system is Darwin.
+    # services.openssh.enable = lib.mkIf (pkgs.stdenv.isDarwin) false;
+    services.openssh.enable = true;
 
     home-manager.users."${user-settings.user.username}" = {
 

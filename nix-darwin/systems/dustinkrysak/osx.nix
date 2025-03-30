@@ -10,10 +10,26 @@
       # Default to columns in finder
       FXPreferredViewStyle = "clmv";
     };
+
+    controlcenter.Bluetooth = true;
     screencapture.location = "~/Pictures/screenshots";
+
+    # https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.WindowManager.AppWindowGroupingBehavior
+    WindowManager.AppWindowGroupingBehavior = true;
 
     CustomUserPreferences = {
       NSGlobalDomain = {
+        # Tap to Click
+        "com.apple.mouse.tapBehavior" = 1;
+        # Enable "natural" scrolling
+        "com.apple.swipescrolldirection" = false;
+        AppleShowAllExtensions = true;
+        # Show hidden files in Finder
+        AppleShowAllFiles = false;
+        # light/dark mode automatically
+        AppleInterfaceStyleSwitchesAutomatically = true;
+        # 24 hour clock
+        AppleICUForce24HourTime = true;
         # Add a context menu item for showing the Web Inspector in web views
         WebKitDeveloperExtras = true;
       };

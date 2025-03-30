@@ -12,6 +12,7 @@
     ../../../modules/cli/nixvim
     # Darwin Modules
     ../../modules/apps/mimestream
+    ../../modules/apps/headlamp
     ../../modules/cli/ghostty
   ];
 
@@ -31,5 +32,6 @@
 
   apps = {
     mimestream.enable = true;
+    headlamp.enable = true;
   };
 }

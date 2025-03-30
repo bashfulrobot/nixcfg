@@ -9,6 +9,7 @@
     ../../../modules/sys/fonts
     ../../../modules/cli/starship
     ../../../modules/cli/fish
+    ../../../modules/cli/nixvim
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/cli/ghostty
@@ -25,6 +26,7 @@
     opencommit.enable = true;
     fish.enable = true;
     starship.enable = true;
+    nixvim.enable = true;
   };
 
   apps = {

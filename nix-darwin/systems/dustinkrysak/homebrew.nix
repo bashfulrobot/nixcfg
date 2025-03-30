@@ -50,7 +50,6 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
-    "mimestream"
     "raycast"
     # "anki"
     # "arq"

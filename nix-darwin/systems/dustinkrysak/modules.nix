@@ -30,6 +30,6 @@
   };
 
   apps = {
-    mimestream.enable = false;
+    mimestream.enable = true;
   };
 }

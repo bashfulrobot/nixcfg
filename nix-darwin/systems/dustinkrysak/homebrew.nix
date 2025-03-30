@@ -116,5 +116,6 @@
     "yazi"
     "direnv"
     "ncspot"
+    "shadowenv"
   ];
 }

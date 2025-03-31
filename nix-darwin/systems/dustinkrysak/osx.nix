@@ -14,9 +14,6 @@
     controlcenter.Bluetooth = true;
     screencapture.location = "~/Pictures/screenshots";
 
-    # https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.WindowManager.AppWindowGroupingBehavior
-    WindowManager.AppWindowGroupingBehavior = true;
-
     CustomUserPreferences = {
       NSGlobalDomain = {
         # Tap to Click
@@ -35,7 +32,7 @@
       };
       "com.apple.finder" = {
         ShowExternalHardDrivesOnDesktop = true;
-        ShowHardDrivesOnDesktop = true;
+        ShowHardDrivesOnDesktop = false;
         ShowMountedServersOnDesktop = true;
         ShowRemovableMediaOnDesktop = true;
         _FXSortFoldersFirst = true;

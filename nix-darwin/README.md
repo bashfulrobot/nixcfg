@@ -53,3 +53,28 @@ nix run github:LnL7/nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake
 - can now rebuild with:
 
 darwin-rebuild switch --flake .
+
+## Notes
+
+You can get mac specific settings using the `defaults` command.
+
+### Example
+
+```shell
+ defaults read | grep ghostty
+<SNIP>
+"com.mitchellh.ghostty" =     {
+ defaults read "com.mitchellh.ghostty"
+{
+    NSWindowLastPosition =     (
+        0,
+        0
+    );
+    SUAutomaticallyUpdate = 0;
+    SUEnableAutomaticChecks = 0;
+    SUHasLaunchedBefore = 1;
+    SUSendProfileInfo = 0;
+}
+```
+
+Then you can add these settings via `system.defaults.CustomSystemPreferences` in `nix-darwin`

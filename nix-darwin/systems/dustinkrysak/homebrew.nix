@@ -50,7 +50,7 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
-    "raycast"
+    # "raycast"
     # "anki"
     # "arq"
     # "autodesk-fusion"

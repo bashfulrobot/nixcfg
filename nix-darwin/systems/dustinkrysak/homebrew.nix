@@ -42,6 +42,7 @@
     "Tailscale" = 1475387142;
     "Darkreader for Safari" = 1438243180;
     "Unread" = 1363637349;
+    "Fantastical" = 975937182;
   };
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has
@@ -81,7 +82,7 @@
     # "pdf-expert"
     # "postman"
     # "protonvpn"
-    # "signal"
+    "signal"
     # "sloth"
     # "steam"
     # "superhuman"

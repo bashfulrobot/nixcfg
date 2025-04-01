@@ -115,5 +115,6 @@
     "direnv"
     "ncspot"
     "shadowenv"
+    "npm"
   ];
 }

@@ -42,7 +42,7 @@
     "Tailscale" = 1475387142;
     "Darkreader for Safari" = 1438243180;
     "Unread" = 1363637349;
-    "Grammarly - Writing Support" = 1462114288;
+    "Grammarly - Safari Writing Support" = 1462114288;
   };
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has

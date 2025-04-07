@@ -18,6 +18,8 @@ sudo -i nix upgrade-nix
 
 ## First Time Setup Notes
 
+- Disabling System Integrity Protection (<https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection>)
+
 curl --proto '=https' --tlsv1.2 -sSf -L <https://install.determinate.systems/nix> | sh -s -- install
 
 - I installed the default setting
@@ -53,6 +55,9 @@ nix run github:LnL7/nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake
 - can now rebuild with:
 
 darwin-rebuild switch --flake .
+
+yabai --start-service (to get prompts for the first time)
+skhd --start-service (to get prompts for the first time)
 
 ## Notes
 

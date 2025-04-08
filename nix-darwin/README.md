@@ -61,9 +61,38 @@ skhd --start-service (to get prompts for the first time)
 
 ## Notes
 
+### Sequoia Modifiers
+
+Sequoia now requires that a hotkey registration use at least one modifier that is not shift or option.
+
+This was an intentional change in macOS Sequoia to limit the ability of key-logging malware to observe keys in other applications. The issue of concern was that shift+option can be used to generate alternate characters in passwords, such as Ø (shift-option-O).
+There is no workaround.
+
+This means items like `alt - "something"` will not work in skhd.
+
+### Keycodes
+
+Sometimes you may need a keycode with `skhd`.
+
+To determine the keycode of a key on your keyboard e.g. 0xB2 in hex in the example above:
+
+- run `skhd -o` and press the key you want to capture
+- make a note of the keycode (if any)
+- close skhd with `Ctrl+C`
+- then use the keycode in the configuration file in uppercase - the keycode is case sensitive!
+
+#### Example Keycode Use in skhdrc
+
+```
+# Cmd+F6 - toggle dark mode (F6 is do not disturb mode)
+cmd - 0xB2 : osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to not dark mode'
+```
+
+### Defaults
+
 You can get mac specific settings using the `defaults` command.
 
-### Example
+#### Example
 
 ```shell
  defaults read | grep ghostty

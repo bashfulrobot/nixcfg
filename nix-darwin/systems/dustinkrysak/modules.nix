@@ -14,7 +14,6 @@
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
     ../../modules/cli/ghostty
-    ../../modules/cli/yabai
     ../../modules/cli/aerospace
   ];
 
@@ -30,7 +29,6 @@
     fish.enable = true;
     starship.enable = true;
     nixvim.enable = true;
-    yabai.enable = false;
     aerospace.enable = true;
   };
 

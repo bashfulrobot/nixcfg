@@ -210,3 +210,15 @@ automatically-unhide-macos-hidden-apps = false
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
+
+# https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[workspace-to-monitor-force-assignment]
+    1 = 'g34wqc'
+    2 = 'g34wqc'
+    3 = 'g34wqc'
+    4 = 'g34wqc'
+    5 = 'g34wqc'
+    6 = 'built-in'
+    7 = 'built-in'
+    8 = 'built-in'
+    9 = 'built-in'

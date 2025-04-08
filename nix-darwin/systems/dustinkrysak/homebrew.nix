@@ -38,7 +38,6 @@
     "Wipr 2" = 1662217862;
     "Adblock Pro" = 1018301773;
     "Kagi for Safari" = 1622835804;
-    "Rocketchat" = 1086818840;
     "Tailscale" = 1475387142;
     "Darkreader for Safari" = 1438243180;
     "Unread" = 1363637349;

@@ -14,7 +14,10 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    homebrew = { casks = [ "nikitabobko/tap/aerospace" ]; };
+    homebrew = {
+      taps = [ "nikitabobko/tap" ];
+      casks = [ "nikitabobko/tap/aerospace" ];
+      };
 
     home-manager.users."${user-settings.user.username}" = {
       xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;

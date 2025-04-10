@@ -70,6 +70,10 @@ in {
             HostName bitbucket.org
             IdentityFile ~/.ssh/id_ed25519
             User git
+          Host git.srvrs.co
+            HostName git.srvrs.co
+            IdentityFile ~/.ssh/id_ed25519
+            User git
 
           ### TF/KVM Config
           Host 192.168.168.1

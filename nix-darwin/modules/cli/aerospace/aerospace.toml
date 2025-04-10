@@ -104,8 +104,9 @@ alt-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
 # https://nikitabobko.github.io/AeroSpace/commands#split
 cmd-ctrl-v = 'split vertical'
 cmd-ctrl-h = 'split horizontal'
+cmd-ctrl-d = 'split opposite'
 # Toggle between floating and tiling layouts (order of args doesn’t matter):
-# cmd-backslash = 'layout floating tiling'
+cmd-ctrl-f = 'layout floating tiling'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 # i3 wraps focus by default

@@ -471,8 +471,8 @@ let
     vim = "nvim";
     ny = "cd ~/dev/nix/nixcfg/; yazi";
     n = "cd ~/dev/nix/nixcfg/; nvim";
-    ncommit =
-      "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
+    ncommit = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
+    nps = "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
     ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
     font-cache-refresh = "sudo fc-cache -f -v";
     font-list = "fc-list";

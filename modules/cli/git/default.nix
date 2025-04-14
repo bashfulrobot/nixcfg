@@ -78,7 +78,7 @@ in {
           enable = true;
           gitCredentialHelper.enable = true;
           settings = {
-            editor = "lvim";
+            editor = "hx";
             git_protocol = "ssh";
 
             prompt = "enabled";

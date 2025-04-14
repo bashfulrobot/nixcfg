@@ -20,7 +20,7 @@ in {
         # enableBashIntegration = true;
         # enableFishIntegration = true;
         settings = {
-          scrollback_editor = "nvim";
+          scrollback_editor = "hx";
           copy_on_select = true;
           copy_command = "wl-copy";
           copy_clipboard = "primary";

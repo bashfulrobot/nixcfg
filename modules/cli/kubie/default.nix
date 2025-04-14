@@ -17,7 +17,7 @@ in {
       home.file.".kube/kubie.yaml".text = ''
         # kubie configuration
         shell: fish
-        default_editor: nvim
+        default_editor: hx
         prompt:
           fish_use_rprompt: true
         '';

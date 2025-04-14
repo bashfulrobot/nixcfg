@@ -53,12 +53,12 @@ in {
           ilog =
             "cd ~/dev/sysdig/workshops/instruqt/tracks/monitor/troubleshooting-essentials-with-advisor/; /home/${user-settings.user.username}/dev/sysdig/workshops/bin/instruqt track logs";
           y = "cd ~/; yazi";
-          e = "lvim";
-          nvim = "lvim";
-          vi = "lvim";
-          vim = "lvim";
+          e = "hx";
+          nvim = "hx";
+          vi = "hx";
+          vim = "hx";
           ny = "cd ~/dev/nix/nixos/; yazi";
-          n = "cd ~/dev/nix/nixos/; lvim";
+          n = "cd ~/dev/nix/nixos/; hx";
           nc =
             "cd ~/dev/nix/nixos && git add . && git commit -S && rebuild && git push";
           ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";

@@ -22,7 +22,7 @@ in {
       home.file.".config/note/config.yaml".text = ''
         notes_dir: /home/dustin/Documents/Notes
         archive_dir: /home/dustin/Documents/Notes/Archive
-        default_editor: vim
+        default_editor: hx
         layout:
             sidebar_width: 30
             padding:

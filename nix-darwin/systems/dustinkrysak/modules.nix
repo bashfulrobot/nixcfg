@@ -15,6 +15,8 @@
     ../../modules/apps/headlamp
     ../../modules/cli/ghostty
     ../../modules/cli/aerospace
+    ../../modules/cli/yabai
+    ../../modules/cli/srhd
   ];
 
   sys = {
@@ -28,8 +30,10 @@
     opencommit.enable = true;
     fish.enable = true;
     starship.enable = true;
-    nixvim.enable = true;
-    aerospace.enable = true;
+    nixvim.enable = false;
+    aerospace.enable = false;
+    yabai.enable = true;
+    srhd.enable = true;
   };
 
   apps = {

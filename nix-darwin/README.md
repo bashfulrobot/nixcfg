@@ -73,6 +73,20 @@ com.mitchellh.ghostty
 
 Open the app you want, then run `aerospace list-apps`
 
+### Yabai Notes
+
+#### Configure MacOs Specific Settings
+
+- Disable SIP
+- Open Several Desktops (~7) on Your Machine
+- Go To Keyboard Settings > Shortcuts > Mission Control
+    - Expand Mission Control and Turn On Shortcuts for Switching Spaces 1-7 with “Ctrl + # Of Space”
+- Go to System Settings > Accessibility > Display
+    - Turn On Reduce Motion
+-Go To System Settings > Desktop & Dock > Mission Control
+    - Turn off “Automatically Rearrange Spaces Based On Most Recent Use”
+    - Personally, I only keep “Displays Have Separate Spaces” turned on here, and that’s what I’d recommend
+
 ### Defaults
 
 You can get mac specific settings using the `defaults` command.

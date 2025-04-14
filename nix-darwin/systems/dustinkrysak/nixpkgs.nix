@@ -1,6 +1,26 @@
-{ pkgs, ... }:
+{ user-settings, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [ unstable.helix fd unstable.fish nixfmt nixfmt-rfc-style statix unstable.terraform unstable.pkgs.awscli2 ];
+  environment.systemPackages = with pkgs; [
+    unstable.helix
+    fd
+    unstable.fish
+    nixfmt
+    nixfmt-rfc-style
+    statix
+    unstable.terraform
+    unstable.pkgs.awscli2
+  ];
+
+  # Set editor globally
+  environment.variables = { EDITOR = "hx"; };
+
+  home-manager.users."${user-settings.user.username}" = {
+    home = {
+      # Editor is now set globally
+      sessionVariables = { EDITOR = "hx"; };
+
+    };
+  };
 
 }

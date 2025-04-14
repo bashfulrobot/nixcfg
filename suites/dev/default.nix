@@ -49,6 +49,7 @@ in {
       nil # nix language server for Zed
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
+      unstable.helix # text editor
 
     ];
 

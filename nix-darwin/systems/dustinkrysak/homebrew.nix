@@ -1,6 +1,9 @@
-{ user-settings, config, lib, ... }:
+{ user-settings, pkgs, config, lib, ... }:
 
 {
+  # environment.systemPackages = with pkgs; [
+  #   unstable.mas
+  # ];
   environment.shellInit = ''
     eval "$(${config.homebrew.brewPrefix}/brew shellenv)"
   '';
@@ -52,8 +55,8 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
-    # "raycast"
-    # "anki"
+    # "todoist"
+    # "tailscale"
     # "arq"
     # "autodesk-fusion"
     # "balenaetcher"
@@ -67,22 +70,12 @@
     # "discord"
     # "docker"
     # "element"
-    # "etrecheckpro"
     # "firefox"
     # "github-copilot-for-xcode"
-    # "google-chrome"
-    # "google-drive"
     # "gpg-suite"
-    # # "keybase"
-    # "ledger-live"
-    # "loopback"
+
     # "multiviewer-for-f1"
-    # "notion"
-    # "obsbot-center"
-    # "parallels"
-    # "pdf-expert"
     # "postman"
-    # "protonvpn"
     "signal"
     # "sloth"
     # "steam"

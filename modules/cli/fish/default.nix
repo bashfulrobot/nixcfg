@@ -142,7 +142,7 @@ let
               echo >>$filename
       end
 
-      nvim $filename
+      hx $filename
 
     '';
 
@@ -466,11 +466,11 @@ let
     goagent = "cd ~/dev/sysdig/sysdig-agent-deploy/";
     goscreen = "cd ~/Pictures/Screenshots/";
     y = "cd ~/; yazi";
-    e = "nvim";
-    vi = "nvim";
-    vim = "nvim";
+    e = "hx";
+    vi = "hx";
+    vim = "hx";
     ny = "cd ~/dev/nix/nixcfg/; yazi";
-    n = "cd ~/dev/nix/nixcfg/; nvim";
+    n = "cd ~/dev/nix/nixcfg/; hx";
     ncommit = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
     nps = "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
     ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";

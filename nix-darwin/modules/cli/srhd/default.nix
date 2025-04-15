@@ -35,7 +35,7 @@ in {
           [[bindings]]
           key = "f"
           command = "yabai -m window --toggle zoom-fullscreen"
-          mods = ["control", "option", "command"]œ
+          mods = ["control", "option", "command"]
 
           '';
     };

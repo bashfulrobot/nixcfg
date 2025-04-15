@@ -21,14 +21,22 @@ in {
 
         enable = true;
         defaultEditor = true;
+        package = pkgs.unstable.helix;
 
         settings = {
           theme = "catppuccin_mocha";
 
-          editor.cursor-shape = {
-            normal = "block";
-            insert = "bar";
-            select = "underline";
+          editor = {
+
+            line-number = "relative";
+            lsp.display-messages = true;
+
+            cursor-shape = {
+              normal = "block";
+              insert = "bar";
+              select = "underline";
+            };
+
           };
         };
 

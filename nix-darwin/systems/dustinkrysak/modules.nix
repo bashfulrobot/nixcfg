@@ -10,6 +10,7 @@
     ../../../modules/cli/starship
     ../../../modules/cli/fish
     ../../../modules/cli/nixvim
+    ../../../modules/cli/helix
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
@@ -34,6 +35,7 @@
     aerospace.enable = false;
     yabai.enable = true;
     srhd.enable = true;
+    helix.enable = true;
   };
 
   apps = {

@@ -2,7 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    unstable.helix
     fd
     unstable.fish
     nixfmt
@@ -13,14 +12,14 @@
   ];
 
   # Set editor globally
-  environment.variables = { EDITOR = "hx"; };
+  # environment.variables = { EDITOR = "hx"; };
 
   home-manager.users."${user-settings.user.username}" = {
-    home = {
-      # Editor is now set globally
-      sessionVariables = { EDITOR = "hx"; };
+    # home = {
+    #   # Editor is now set globally
+    #   sessionVariables = { EDITOR = "hx"; };
 
-    };
+    # };
   };
 
 }

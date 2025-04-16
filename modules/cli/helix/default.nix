@@ -10,7 +10,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.helix unstable.nixfmt ];
+    environment.systemPackages = with pkgs; [ unstable.helix ];
 
     # Set editor globally
     environment.variables = { EDITOR = "hx"; };
@@ -22,6 +22,22 @@ in {
         enable = true;
         defaultEditor = true;
         package = pkgs.unstable.helix;
+
+        extraPackages = with pkgs; [
+          # nix
+          unstable.nixfmt
+          unstable.nixd
+          unstable.statix
+          # markdown
+          unstable.marksman
+          # Go
+          unstable.gopls
+          unstable.golangci-lint-langserver
+          unstable.delve
+          #yaml
+          unstable.yaml-language-server
+
+        ];
 
         settings = {
           theme = "catppuccin_mocha";
@@ -45,6 +61,7 @@ in {
             name = "nix";
             auto-format = true;
             formatter.command = "${pkgs.unstable.nixfmt}/bin/nixfmt";
+            language-servers = [ "nixd" "statix" ];
           }];
         };
 

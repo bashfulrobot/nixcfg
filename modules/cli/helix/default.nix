@@ -57,12 +57,31 @@ in {
         };
 
         languages = {
-          language = [{
-            name = "nix";
-            auto-format = true;
-            formatter.command = "${pkgs.unstable.nixfmt}/bin/nixfmt";
-            language-servers = [ "nixd" "statix" ];
-          }];
+          language = [
+            {
+              name = "nix";
+              auto-format = true;
+              formatter.command = "${pkgs.unstable.nixfmt}/bin/nixfmt";
+              language-servers = [ "nixd" "statix" ];
+            }
+            {
+              name = "toml";
+              auto-format = true;
+            }
+            {
+              name = "yaml";
+              language-servers = [ "yaml" "scls" ];
+
+            }
+          ];
+
+          language-server = {
+            yaml = {
+              command = "yaml-language-server";
+              args = [ "--stdio" ];
+              scope = "source.yaml";
+            };
+          };
         };
 
       };

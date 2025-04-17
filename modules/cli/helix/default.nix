@@ -40,7 +40,7 @@ in {
         ];
 
         settings = {
-          theme = "catppuccin_mocha";
+          theme = "catppuccin-mocha";
 
           editor = {
 

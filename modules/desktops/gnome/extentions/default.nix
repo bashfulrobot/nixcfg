@@ -22,6 +22,7 @@ in {
       gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.caffeine
       gnomeExtensions.media-controls
+      gnomeExtensions.rounded-window-corners-reborn
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
     ];
 
@@ -36,6 +37,7 @@ in {
             "bluetooth-quick-connect@bjarosze.gmail.com"
             "mediacontrols@cliffniff.github.com"
             "vscode-search-provider@mrmarble.github.com"
+            "rounded-window-corners@fxgn"
           ];
 
           # Disabled extensions

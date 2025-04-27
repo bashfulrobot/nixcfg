@@ -29,9 +29,10 @@ in {
       one-password.enable = true;
       obsidian.enable = true;
       chrome-based-browser.enable = true;
+      vivaldi.enable = false;
       gcal-br.enable = true;
       gmail-br.enable = true;
-      };
+    };
 
     cli = { note.enable = true; };
 

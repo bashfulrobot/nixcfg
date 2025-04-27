@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ ... }: {
 
   imports = [
     # Universal Modules
@@ -18,6 +17,7 @@
     ../../modules/cli/aerospace
     ../../modules/cli/yabai
     ../../modules/cli/srhd
+    ../../modules/cli/hammerspoon
   ];
 
   sys = {
@@ -33,9 +33,10 @@
     starship.enable = true;
     nixvim.enable = false;
     aerospace.enable = false;
-    yabai.enable = true;
-    srhd.enable = true;
+    yabai.enable = false;
+    srhd.enable = false;
     helix.enable = true;
+    hammerspoon.enable = false;
   };
 
   apps = {

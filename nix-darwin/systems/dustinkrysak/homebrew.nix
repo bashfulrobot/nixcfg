@@ -1,4 +1,4 @@
-{ user-settings, pkgs, config, lib, ... }:
+{ user-settings, config, ... }:
 
 {
   # environment.systemPackages = with pkgs; [
@@ -27,9 +27,7 @@
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
 
-  homebrew.taps = [
-    "nrlquaker/createzap"
-  ];
+  homebrew.taps = [ "nrlquaker/createzap" ];
 
   # Prefer installing application from the Mac App Store
   homebrew.masApps = {
@@ -55,6 +53,7 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
+    # "raycast"
     # "todoist"
     # "tailscale"
     # "arq"
@@ -103,13 +102,5 @@
 
   # For cli packages that aren't currently available for macOS in `nixpkgs`. Packages should be
   # installed in `../home/packages.nix` whenever possible.
-  homebrew.brews = [
-    "just"
-    "gh"
-    "yazi"
-    "direnv"
-    "ncspot"
-    "shadowenv"
-    "npm"
-  ];
+  homebrew.brews = [ "just" "gh" "yazi" "direnv" "ncspot" "shadowenv" "npm" ];
 }

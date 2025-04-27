@@ -342,8 +342,7 @@ let
   ];
 
   allShellAbbrs = {
-    nix-lint =
-      "fd -e nix --hidden --no-ignore --follow . -x statix check {}";
+    nix-lint = "fd -e nix --hidden --no-ignore --follow . -x statix check {}";
     k = "kubectl";
     t = "talosctl";
     tf = "terraform";
@@ -435,15 +434,15 @@ let
       "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
     tailscale-up-lt =
       "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
-    tailscale-up-dt =
-      "sudo tailscale up --operator=$USER --ssh --accept-dns";
+    tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
     oc = "~/.npm-packages/bin/opencommit";
     ncdu = "${pkgs.gdu}/bin/gdu";
     ".." = "cd ..";
     "..." = "cd ../..";
     "...." = "cd ../../..";
     "....." = "cd ../../../..";
-    nix-get-video-id = "nix --experimental-features 'flakes nix-command' run github:eclairevoyant/pcids";
+    nix-get-video-id =
+      "nix --experimental-features 'flakes nix-command' run github:eclairevoyant/pcids";
     sysdig-cli-scanner-recent-version =
       "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
     sysdig-cli-scanner-get = ''
@@ -465,14 +464,16 @@ let
       "gon && git pull && just upgrade-system && git add -A && git commit -S && git push";
     goagent = "cd ~/dev/sysdig/sysdig-agent-deploy/";
     goscreen = "cd ~/Pictures/Screenshots/";
-    y = "cd ~/; yazi";
+    # y = "cd ~/; yazi";
     e = "hx";
     vi = "hx";
     vim = "hx";
     ny = "cd ~/dev/nix/nixcfg/; yazi";
     n = "cd ~/dev/nix/nixcfg/; hx";
-    ncommit = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
-    nps = "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
+    ncommit =
+      "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
+    nps =
+      "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
     ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
     font-cache-refresh = "sudo fc-cache -f -v";
     font-list = "fc-list";
@@ -490,6 +491,8 @@ let
       "sudo chown -R dustin ~/.kube && sudo chmod -R 0700 ~/.kube && cd ~/.kube && ${pkgs.just}/bin/just";
     vms = "sudo ${pkgs.libvirt}/bin/virsh list --all";
     yless = "${pkgs.jless}/bin/jless --yaml";
+    rebuild-mac =
+      "clear && echo;echo '***** UPDATE VERSIONS PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just darwin-rebuild";
     rebuild =
       "clear && echo;echo '***** UPDATE APPIMAGES PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just rebuild";
     upgrade =
@@ -522,9 +525,7 @@ in {
     # You can enable the fish shell and manage fish configuration and plugins with Home Manager, but to enable vendor fish completions provided by Nixpkgs you will also want to enable the fish shell in /etc/nixos/configuration.nix:
     programs.fish.enable = true;
 
-    environment.shells = lib.mkIf isDarwin [
-      pkgs.fish
-    ];
+    environment.shells = lib.mkIf isDarwin [ pkgs.fish ];
 
     home-manager.users."${user-settings.user.username}" = {
       programs.fish = {
@@ -532,12 +533,14 @@ in {
         shellInit = if isWorkstation then ''
           # Shell Init
           direnv hook fish | source
-          ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
+          ${lib.optionalString (!isDarwin)
+          "source ${user-settings.user.home}/.config/op/plugins.sh"}
         '' else
           "";
         interactiveShellInit = if isWorkstation then ''
           set fish_greeting # Disable greeting
-          ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
+          ${lib.optionalString (!isDarwin)
+          "source ${user-settings.user.home}/.config/op/plugins.sh"}
         '' else ''
           set fish_greeting # Disable greeting
         '';

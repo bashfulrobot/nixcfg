@@ -1,3 +1,4 @@
+# Add this - https://medium.com/@CaffeineForCode/helix-setup-for-markdown-b29d9891a812
 { user-settings, pkgs, config, lib, ... }:
 let cfg = config.cli.helix;
 in {

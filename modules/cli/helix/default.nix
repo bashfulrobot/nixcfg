@@ -41,7 +41,7 @@ in {
         ];
 
         settings = {
-          theme = "catppuccin_mocha";
+          theme = "catppuccin-mocha";
 
           editor = {
 
@@ -92,15 +92,6 @@ in {
         sessionVariables = { EDITOR = "hx"; };
 
         # file.".config/helix/helix.toml".text = ''
-        # [[bindings]]
-        # key = "return"
-        # command = "open /Applications/Ghostty.app"
-        # mods = ["option"]
-        # [[bindings]]
-        # key = "f"
-        # command = "yabai -m window --toggle zoom-fullscreen"
-        # mods = ["control", "option", "command"]
-
         # '';
 
       };

@@ -74,7 +74,7 @@
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {
-            imports = [ catppuccin.homeManagerModules.catppuccin ];
+            imports = [ catppuccin.homeModules.catppuccin ];
           };
         };
       };

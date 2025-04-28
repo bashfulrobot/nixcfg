@@ -10,6 +10,7 @@
     ../../../modules/cli/fish
     ../../../modules/cli/nixvim
     ../../../modules/cli/helix
+    ../../../modules/cli/espanso
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
@@ -37,6 +38,7 @@
     srhd.enable = false;
     helix.enable = true;
     hammerspoon.enable = false;
+    espanso.enable = true;
   };
 
   apps = {

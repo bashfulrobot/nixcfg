@@ -26,6 +26,10 @@ in {
                 trigger = ":tflip";
                 replace = "(╯°□°）╯︵ ┻━┻";
               }
+              {
+                trigger = ":atflip";
+                replace = "‎(ﾉಥ益ಥ）ﾉ﻿ ┻━┻";
+              }
 
               {
                 trigger = ":fingerguns";

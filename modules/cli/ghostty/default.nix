@@ -10,8 +10,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      [ unstable.ghostty ];
+    environment.systemPackages = with pkgs; [ unstable.ghostty ];
 
     home-manager.users."${user-settings.user.username}" = {
       # https://ghostty.org/docs/config
@@ -29,6 +28,9 @@ in {
         window-padding-color = extend-always
         cursor-style-blink = true
         mouse-hide-while-typing = true
+        window-save-state = never
+        shell-integration = fish
+        theme = light:catppuccin-latte,dark:catppuccin-mocha
       '';
     };
   };

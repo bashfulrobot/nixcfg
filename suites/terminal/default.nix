@@ -17,7 +17,7 @@ in {
       bash.enable = true;
       fish.enable = true;
       zellij.enable = true;
-      yazi.enable = true;
+      yazi.enable = false;
       foot.enable = false;
       blackbox.enable = true;
       ghostty.enable = true;

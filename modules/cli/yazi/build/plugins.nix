@@ -69,12 +69,12 @@
         hash = "sha256-Hxkvmf6iQysjWHaOjm2Q1WOYWyo2K6woTw1rlnpxCyM=";
       };
 
-      what-size = pkgs.fetchFromGitHub {
-        owner = "Vortriz";
-        repo = "what-size.yazi";
-        rev = "f4b8b5a5e0aea60ef6350c0100763b5c900c82a7";
-        hash = "sha256-sSeXL9/SOuPKIeZR2ntLP0HGSLBobbrzdTgpikA5jMg=";
-      };
+      # what-size = pkgs.fetchFromGitHub {
+      #   owner = "Vortriz";
+      #   repo = "what-size.yazi";
+      #   rev = "f4b8b5a5e0aea60ef6350c0100763b5c900c82a7";
+      #   hash = "sha256-sSeXL9/SOuPKIeZR2ntLP0HGSLBobbrzdTgpikA5jMg=";
+      # };
 
       yamb = pkgs.fetchFromGitHub {
         owner = "h-hg";

@@ -53,6 +53,7 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
+    "alacritty"
     # "raycast"
     # "todoist"
     # "tailscale"

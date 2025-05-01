@@ -11,6 +11,7 @@
     ../../../modules/cli/nixvim
     ../../../modules/cli/helix
     ../../../modules/cli/espanso
+    ../../../modules/cli/alacritty
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
@@ -27,7 +28,8 @@
   };
 
   cli = {
-    ghostty.enable = true;
+    ghostty.enable = false;
+    alacrity.enable = true;
     git.enable = true;
     opencommit.enable = true;
     fish.enable = true;

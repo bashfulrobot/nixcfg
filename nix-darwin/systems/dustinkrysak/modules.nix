@@ -13,6 +13,8 @@
     ../../../modules/cli/espanso
     ../../../modules/cli/sysdig-cli-scanner
     ../../../modules/cli/alacritty
+    ../../../modules/cli/wezterm
+    ../../../modules/cli/kitty
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
@@ -29,8 +31,10 @@
   };
 
   cli = {
-    ghostty.enable = false;
-    alacritty.enable = true;
+    ghostty.enable = true;
+    alacritty.enable = false;
+    wezterm.enable = false;
+    kitty.enable = false;
     git.enable = true;
     opencommit.enable = true;
     fish.enable = true;

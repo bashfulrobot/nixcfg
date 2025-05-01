@@ -26,7 +26,6 @@ in {
           env.TERM = "alacritty";
           # env.TERM = "xterm-256color";
 
-
           # Fix for: https://github.com/alacritty/alacritty/issues/6703
           env.XCURSOR_THEME = "Adwaita alacritty";
 
@@ -36,7 +35,7 @@ in {
 
           font = {
             normal = {
-              family = "JetBrainsMono Nerd Font Mono";
+              family = "Victor Mono";
               style = "Regular";
             };
             size = 20;

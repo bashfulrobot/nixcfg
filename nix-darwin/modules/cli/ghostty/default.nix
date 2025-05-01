@@ -29,8 +29,10 @@ in {
 
     home-manager.users."${user-settings.user.username}" = {
       # https://ghostty.org/docs/config
+      # font-thicken = true - osx only
       home.file.".config/ghostty/config".text = ''
         font-size = 16
+        font-family = "Victor Mono"
         cursor-style = block
         window-theme = system
         working-directory = ~/dev
@@ -43,6 +45,7 @@ in {
         window-padding-color = extend-always
         cursor-style-blink = true
         mouse-hide-while-typing = true
+        font-thicken = true
       '';
     };
   };

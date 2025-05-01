@@ -61,7 +61,7 @@ in {
     programs.chromium = {
       enable = true;
       extensions = [
-				# pushover
+        # pushover
         #"fcmngfmocgakhjghfmgbbhlkenccgpdh"
         # bookmark search
         #"cofpegcepiccpobikjoddpmmocficdjj"
@@ -137,6 +137,12 @@ in {
         # "haebnnbpedcbhciplfhjjkbafijpncjl"
         # Gainsight Assist
         "kbiepllbcbandmpckhoejbgcaddcpbno"
+        # Material Theme Dark (blue-grey)
+        # "paoafodbgcjnmijjepmpgnlhnogaahme"
+        # Material Theme Dark (black)
+        "bokiaeofleahagjcmcodjofilfdnoblk"
+        # Adguard AdBlocker
+        "bgnkhhnnamicmpeenaelnjfhikgbkllg"
 
       ];
       # initialPrefs = {

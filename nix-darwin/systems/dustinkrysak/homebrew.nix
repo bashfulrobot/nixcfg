@@ -54,6 +54,7 @@
     "1password-cli"
     "visual-studio-code"
     "alacritty"
+    "font-victor-mono"
     # "raycast"
     # "todoist"
     # "tailscale"

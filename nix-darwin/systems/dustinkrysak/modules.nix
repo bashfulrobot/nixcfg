@@ -11,6 +11,7 @@
     ../../../modules/cli/nixvim
     ../../../modules/cli/helix
     ../../../modules/cli/espanso
+    ../../../modules/cli/sysdig-cli-scanner
     ../../../modules/cli/alacritty
     # Darwin Modules
     ../../modules/apps/mimestream
@@ -29,7 +30,7 @@
 
   cli = {
     ghostty.enable = false;
-    alacrity.enable = true;
+    alacritty.enable = true;
     git.enable = true;
     opencommit.enable = true;
     fish.enable = true;
@@ -41,6 +42,7 @@
     helix.enable = true;
     hammerspoon.enable = false;
     espanso.enable = true;
+    sysdig-cli-scanner.enable = true;
   };
 
   apps = {

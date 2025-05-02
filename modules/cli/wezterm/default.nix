@@ -38,8 +38,8 @@ in {
     };
 
     # Install wezterm via Homebrew when on Darwin
-    homebrew.casks = lib.mkIf pkgs.stdenv.isDarwin [
-      "wezterm"
-    ];
+    # homebrew.casks = lib.mkIf pkgs.stdenv.isDarwin [
+    #   "wezterm"
+    # ];
   };
 }

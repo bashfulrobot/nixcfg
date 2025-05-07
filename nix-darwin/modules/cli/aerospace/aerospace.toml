@@ -94,14 +94,8 @@ outer.right = 10
 alt-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
 
 # Split commands (i3 style)
-alt-v = 'split vertical'   # i3 split vertical
-alt-shift-h = 'split horizontal'  # Similar to i3's behavior
-
-# Layout commands
-alt-s = 'layout stacking'  # i3 stacking layout
-alt-w = 'layout tiles'     # i3 tabbed layout
-alt-e = 'layout tiles'     # i3 default tiling layout
-alt-f = 'layout floating tiling'  # i3 toggle floating
+ctrl-shift-v = 'split vertical'   # i3 split vertical
+ctrl-shift-h = 'split horizontal'  # Similar to i3's behavior
 
 # Focus windows (i3 uses mod+j/k/l/;)
 alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
@@ -126,10 +120,6 @@ alt-ctrl-up = 'focus-monitor prev'
 alt-ctrl-down = 'focus-monitor next'
 alt-shift-leftSquareBracket = 'move-workspace-to-monitor prev'
 alt-shift-rightSquareBracket = 'move-workspace-to-monitor next'
-alt-ctrl-left = 'move-node-to-monitor prev'
-alt-ctrl-right = 'move-node-to-monitor next'
-alt-ctrl-up = 'move-workspace-to-monitor prev'
-alt-ctrl-down = 'move-workspace-to-monitor next'
 
 # Config reload (i3 uses mod+Shift+c)
 alt-shift-c = 'reload-config'
@@ -171,6 +161,9 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 alt-r = 'mode resize'  # i3 resize mode
 alt-shift-r = 'mode manage'  # Custom management mode
 
+# Add a separate binding for toggling floating mode
+alt-shift-space = 'layout floating tiling'  # i3 style toggle floating
+
 # 'manage' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.manage.binding]
@@ -194,10 +187,10 @@ h = 'resize width -50'  # shrink width (i3 style)
 j = 'resize height +50'  # grow height (i3 style)
 k = 'resize height -50'  # shrink height (i3 style)
 l = 'resize width +50'  # grow width (i3 style)
-Left = 'resize width -50'  # alternative with arrow keys
-Down = 'resize height +50'  # alternative with arrow keys
-Up = 'resize height -50'  # alternative with arrow keys
-Right = 'resize width +50'  # alternative with arrow keys
+left = 'resize width -50'  # Fixed from 'Left' to lowercase 'left'
+down = 'resize height +50'  # Fixed from 'Down' to lowercase 'down'
+up = 'resize height -50'  # Fixed from 'Up' to lowercase 'up'
+right = 'resize width +50'  # Fixed from 'Right' to lowercase 'right'
 enter = 'mode main'
 esc = 'mode main'
 

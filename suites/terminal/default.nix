@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     cli = {
-      alacritty.enable = true;
+      alacritty.enable = false;
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;
@@ -20,7 +20,7 @@ in {
       yazi.enable = false;
       foot.enable = false;
       blackbox.enable = true;
-      ghostty.enable = false;
+      ghostty.enable = true;
       ntf.enable = true;
       xkill.enable = true;
     };

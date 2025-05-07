@@ -37,7 +37,8 @@
     starship.enable = true;
     fish.enable = true;
     yazi.enable = true;
-    nixvim.enable = true;
+    nixvim.enable = false;
+    helix.enable = true;
   };
 
 }

@@ -90,89 +90,86 @@ outer.right = 10
 
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-# You can uncomment the following lines to open up terminal with alt + enter shortcut
-# (like in i3)
-# alt-enter = '''exec-and-forget osascript -e '
-# tell application "Terminal"
-#     do script
-#     activate
-# end tell'
-# '''
+# Terminal (i3 uses mod+Enter)
 alt-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
 
-# https://nikitabobko.github.io/AeroSpace/commands#split
-cmd-ctrl-v = 'split vertical'
-cmd-ctrl-h = 'split horizontal'
-cmd-ctrl-d = 'split opposite'
-# Toggle between floating and tiling layouts (order of args doesn’t matter):
-cmd-ctrl-f = 'layout floating tiling'
+# Split commands (i3 style)
+alt-v = 'split vertical'   # i3 split vertical
+alt-shift-h = 'split horizontal'  # Similar to i3's behavior
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#focus
-# i3 wraps focus by default
-alt-ctrl-cmd-h = 'focus --boundaries-action wrap-around-the-workspace left'
-alt-ctrl-cmd-j = 'focus --boundaries-action wrap-around-the-workspace down'
-alt-ctrl-cmd-k = 'focus --boundaries-action wrap-around-the-workspace up'
-alt-ctrl-cmd-l = 'focus --boundaries-action wrap-around-the-workspace right'
+# Layout commands
+alt-s = 'layout stacking'  # i3 stacking layout
+alt-w = 'layout tiles'     # i3 tabbed layout
+alt-e = 'layout tiles'     # i3 default tiling layout
+alt-f = 'layout floating tiling'  # i3 toggle floating
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move
-alt-ctrl-cmd-shift-h = 'move left'
-alt-ctrl-cmd-shift-j = 'move down'
-alt-ctrl-cmd-shift-k = 'move up'
-alt-ctrl-cmd-shift-l = 'move right'
+# Focus windows (i3 uses mod+j/k/l/;)
+alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
+alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
 
-alt-ctrl-cmd-shift-f = 'macos-native-fullscreen'
-cmd-m = 'fullscreen'
-alt-ctrl-cmd-left = 'workspace --wrap-around prev'
-alt-ctrl-cmd-right = 'workspace --wrap-around next'
-alt-ctrl-cmd-up = 'focus-monitor prev'
-alt-ctrl-cmd-down = 'focus-monitor next'
-alt-ctrl-cmd-shift-leftSquareBracket = 'move-workspace-to-monitor prev'
-alt-ctrl-cmd-shift-rightSquareBracket = 'move-workspace-to-monitor next'
-cmd-ctrl-left = 'move-node-to-monitor prev'
-cmd-ctrl-right = 'move-node-to-monitor next'
-cmd-ctrl-up = 'move-workspace-to-monitor prev'
-cmd-ctrl-down = 'move-workspace-to-monitor next'
-alt-ctrl-cmd-shift-c = 'reload-config'
+# Move windows (i3 uses mod+Shift+j/k/l/;)
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+alt-shift-h = 'move left'
+
+# Fullscreen
+alt-shift-f = 'macos-native-fullscreen'
+alt-f = 'fullscreen'  # i3 uses mod+f
+
+# Workspace/monitor navigation
+alt-ctrl-left = 'workspace --wrap-around prev'
+alt-ctrl-right = 'workspace --wrap-around next'
+alt-ctrl-up = 'focus-monitor prev'
+alt-ctrl-down = 'focus-monitor next'
+alt-shift-leftSquareBracket = 'move-workspace-to-monitor prev'
+alt-shift-rightSquareBracket = 'move-workspace-to-monitor next'
+alt-ctrl-left = 'move-node-to-monitor prev'
+alt-ctrl-right = 'move-node-to-monitor next'
+alt-ctrl-up = 'move-workspace-to-monitor prev'
+alt-ctrl-down = 'move-workspace-to-monitor next'
+
+# Config reload (i3 uses mod+Shift+c)
+alt-shift-c = 'reload-config'
 f11 = 'fullscreen'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#resize
-alt-ctrl-cmd-minus = 'resize smart -50'
-alt-ctrl-cmd-equal = 'resize smart +50'
+# Resize (i3 typically uses mod+r to enter resize mode)
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-ctrl-cmd-1 = 'workspace 1'
-alt-ctrl-cmd-2 = 'workspace 2'
-alt-ctrl-cmd-3 = 'workspace 3'
-alt-ctrl-cmd-4 = 'workspace 4'
-alt-ctrl-cmd-5 = 'workspace 5'
-alt-ctrl-cmd-6 = 'workspace 6'
-alt-ctrl-cmd-7 = 'workspace 7'
-alt-ctrl-cmd-8 = 'workspace 8'
-alt-ctrl-cmd-9 = 'workspace 9'
-alt-ctrl-cmd-0 = 'workspace 10'
+# Workspace switching (identical to i3)
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+# Move to workspace (identical to i3)
+alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
+alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
+alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
+alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
+alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
+alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
+alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
+alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
+alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
+alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
 
-alt-ctrl-cmd-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
-alt-ctrl-cmd-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
-alt-ctrl-cmd-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
-alt-ctrl-cmd-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
-alt-ctrl-cmd-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
-alt-ctrl-cmd-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
-alt-ctrl-cmd-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
-alt-ctrl-cmd-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
-alt-ctrl-cmd-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-alt-ctrl-cmd-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+# Back-and-forth (i3 uses mod+Tab)
 alt-tab = 'workspace-back-and-forth'
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
-cmd-shift-m = 'mode manage'
-cmd-shift-r = 'mode resize'
+# Mode switching (i3 style)
+alt-r = 'mode resize'  # i3 resize mode
+alt-shift-r = 'mode manage'  # Custom management mode
 
 # 'manage' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -181,7 +178,6 @@ esc = 'mode main'
 enter = 'mode main'
 c = ['reload-config', 'mode main'] # reload config
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
-#s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 f = [
     'layout floating tiling',
     'mode main',
@@ -194,10 +190,14 @@ k = ['join-with up', 'mode main']
 l = ['join-with right', 'mode main']
 
 [mode.resize.binding]
-h = 'resize width -50'
-j = 'resize height +50'
-k = 'resize height -50'
-l = 'resize width +50'
+h = 'resize width -50'  # shrink width (i3 style)
+j = 'resize height +50'  # grow height (i3 style)
+k = 'resize height -50'  # shrink height (i3 style)
+l = 'resize width +50'  # grow width (i3 style)
+Left = 'resize width -50'  # alternative with arrow keys
+Down = 'resize height +50'  # alternative with arrow keys
+Up = 'resize height -50'  # alternative with arrow keys
+Right = 'resize width +50'  # alternative with arrow keys
 enter = 'mode main'
 esc = 'mode main'
 

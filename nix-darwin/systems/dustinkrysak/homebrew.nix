@@ -27,7 +27,7 @@
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
 
-  homebrew.taps = [ "nrlquaker/createzap" ];
+  homebrew.taps = [ "nrlquaker/createzap" "siderolabs/tap" ];
 
   # Prefer installing application from the Mac App Store
   homebrew.masApps = {
@@ -104,6 +104,18 @@
 
   # For cli packages that aren't currently available for macOS in `nixpkgs`. Packages should be
   # installed in `../home/packages.nix` whenever possible.
-  homebrew.brews =
-    [ "shellcheck" "just" "gh" "yazi" "direnv" "ncspot" "shadowenv" "npm" ];
+  homebrew.brews = [
+    "shellcheck"
+    "just"
+    "gh"
+    "yazi"
+    "direnv"
+    "ncspot"
+    "shadowenv"
+    "npm"
+    "sequoia-chameleon-gnupg"
+    "sequoia-sq"
+    "siderolabs/tap/talosctl"
+    "kubectl"
+  ];
 }

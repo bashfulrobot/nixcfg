@@ -9,6 +9,7 @@
     statix
     unstable.terraform
     unstable.pkgs.awscli2
+    unstable.colima
   ];
 
   # Set editor globally

@@ -18,6 +18,7 @@
     # System Specific modules
     ../../modules/cli/docker
     ../../modules/apps/kvm
+    ../../modules/cli/helix
   ];
 
 }

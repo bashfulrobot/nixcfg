@@ -20,7 +20,7 @@ let
 # No Trace
   validFiles = dir:
     map (file: ./. + "/${file}") (filter (file:
-      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && file
+      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && !hasInfix "cfg" file && file
       != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
 
 # With Trace

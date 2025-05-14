@@ -436,6 +436,7 @@ let
       "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
     tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
     oc = "~/.npm-packages/bin/opencommit";
+    bless = "sudo xattr -r -d com.apple.quarantine";
     ncdu = "${pkgs.gdu}/bin/gdu";
     ".." = "cd ..";
     "..." = "cd ../..";

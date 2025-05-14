@@ -28,13 +28,17 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprflake = {
+      url = "github:bashfulrobot/hyprflake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, catppuccin, ... }:
+    , disko, nixos-hardware, nixvim, catppuccin, hyprflake, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {
@@ -59,6 +63,7 @@
         disko.nixosModules.disko
         nixvim.nixosModules.nixvim
         catppuccin.nixosModules.catppuccin
+        hyprflake.nixosModules.default
       ];
 
       serverModules = [
@@ -70,7 +75,7 @@
       commonHomeManagerConfig = {
         home-manager = {
           useUserPackages = true;
-          sharedModules = [ ];
+          sharedModules = [ hyprflake.homeManagerModules.default ];
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {

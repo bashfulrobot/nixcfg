@@ -6,18 +6,17 @@ in {
     desktop.hyprland.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable Hyprland..";
+      description = "Enable Hyprland using configurations from hyprflake.";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    # Your hyprflake modules are already loaded at the system level via commonModules
+    # and at the home-manager level via sharedModules in your flake.nix
 
+    # You can add any additional local customizations here if needed
     environment.systemPackages = with pkgs; [
-
+      # Additional packages
     ];
-
-    home-manager.users."${user-settings.user.username}" = {
-
-    };
   };
 }

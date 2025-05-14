@@ -63,7 +63,6 @@
         disko.nixosModules.disko
         nixvim.nixosModules.nixvim
         catppuccin.nixosModules.catppuccin
-        hyprflake.nixosModules.default
       ];
 
       serverModules = [
@@ -75,7 +74,7 @@
       commonHomeManagerConfig = {
         home-manager = {
           useUserPackages = true;
-          sharedModules = [ hyprflake.homeManagerModules.default ];
+          sharedModules = [ ];
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {

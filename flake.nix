@@ -28,6 +28,7 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    opnix.url = "github:brizzbuzz/opnix";
     hyprflake = {
       url = "github:bashfulrobot/hyprflake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +39,7 @@
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, catppuccin, hyprflake, ... }:
+    , disko, nixos-hardware, nixvim, catppuccin, opnix, hyprflake, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {
@@ -63,6 +64,7 @@
         disko.nixosModules.disko
         nixvim.nixosModules.nixvim
         catppuccin.nixosModules.catppuccin
+        opnix.nixosModules.default
       ];
 
       serverModules = [
@@ -78,7 +80,10 @@
           useGlobalPkgs = true;
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {
-            imports = [ catppuccin.homeModules.catppuccin ];
+            imports = [
+              catppuccin.homeModules.catppuccin
+              opnix.homeManagerModules.default
+            ];
           };
         };
       };

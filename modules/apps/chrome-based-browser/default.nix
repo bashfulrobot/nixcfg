@@ -67,6 +67,8 @@ in {
         #"cofpegcepiccpobikjoddpmmocficdjj"
         # kagi search
         # "cdglnehniifkbagbbombnjghhcihifij"
+        # Just Read
+        "dgmanlpmmkibanfdgjocnabmcaclkmod"
         # 1password
         "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
         # dark reader

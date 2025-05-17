@@ -40,7 +40,7 @@
     fish.enable = true;
     starship.enable = true;
     nixvim.enable = false;
-    aerospace.enable = true;
+    aerospace.enable = false;
     yabai.enable = false;
     srhd.enable = false;
     helix.enable = true;

@@ -10,6 +10,8 @@
     unstable.terraform
     unstable.pkgs.awscli2
     unstable.colima
+    unstable.kubelogin-oidc
+    unstable.omnictl
   ];
 
   # Set editor globally

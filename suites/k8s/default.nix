@@ -38,6 +38,8 @@ in {
       unstable.minikube # Local k8s cluster
       ktop # K8s top command
       unstable.krew
+      unstable.kubelogin-oidc # OIDC login for kubectl
+      unstable.omnictl # Omni CLI
     ];
 
     services.flatpak.packages = [

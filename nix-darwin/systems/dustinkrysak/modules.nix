@@ -24,13 +24,11 @@
     ../../modules/cli/yabai
     ../../modules/cli/srhd
     ../../modules/cli/hammerspoon
-    ../../modules/sys/macos-app-fix
   ];
 
   sys = {
     ssh.enable = true;
     fonts.enable = true;
-    macos-app-fix.enable = true;
   };
 
   cli = {

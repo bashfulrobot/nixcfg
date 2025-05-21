@@ -1,4 +1,4 @@
-{ config, lib, pkgs, user-settings, ... }:
+{ config, lib, pkgs, user-settings, inputs, ... }:
 
 {
   home-manager.useGlobalPkgs = true;
@@ -8,6 +8,14 @@
     {
       "dustin.krysak" = { pkgs, ... }: {
         home.stateVersion = "24.11";
+
+        # Import the mac-app-util module
+        imports = [
+          inputs.mac-app-util.homeManagerModules.default
+        ];
+
+        # Now any packages with /Applications/ directories will be available in Spotlight
+        # and the App Launcher without additional configuration
       };
     }
   ];

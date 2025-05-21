@@ -33,7 +33,7 @@
 
   cli = {
     ghostty.enable = true;
-    alacritty.enable = false;
+    alacritty.enable = true;
     wezterm.enable = false;
     kitty.enable = false;
     git.enable = true;

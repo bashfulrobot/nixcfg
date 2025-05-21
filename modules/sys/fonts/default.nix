@@ -58,7 +58,7 @@ in {
         cantarell-fonts
         # cascadia-code
         # comic-mono
-        victor-mono
+        #victor-mono
         # Meslo Nerd Font patched for Powerlevel10k
         # meslo-lgs-nf
         # Helvetica for Camino
@@ -79,6 +79,7 @@ in {
             "UbuntuMono"
             "UbuntuSans"
             "NerdFontsSymbolsOnly"
+            "VictorMono"
 
           ];
         })

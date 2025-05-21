@@ -35,19 +35,28 @@ in {
 
           font = {
             normal = {
-              family = "Victor Mono";
+              family = "VictorMono Nerd Font Mono";
               style = "Regular";
             };
+            bold = {
+              family = "VictorMono Nerd Font Mono";
+              style = "Bold";
+            };
+            italic = {
+              family = "VictorMono Nerd Font Mono";
+              style = "Italic";
+            };
+
             size = 20;
             # small y offsetting as iosevka-t184256 has custom -25% line spacing
-            offset = {
-              x = -2;
-              y = -2;
-            };
-            glyph_offset = {
-              x = -1;
-              y = -1;
-            };
+            # offset = {
+            #   x = -2;
+            #   y = -2;
+            # };
+            # glyph_offset = {
+            #   x = -1;
+            #   y = -1;
+            # };
           };
 
           colors = {

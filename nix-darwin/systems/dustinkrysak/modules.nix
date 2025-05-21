@@ -15,6 +15,7 @@
     ../../../modules/cli/alacritty
     ../../../modules/cli/wezterm
     ../../../modules/cli/kitty
+    ../../../modules/apps/firefox
     # Darwin Modules
     ../../modules/apps/mimestream
     ../../modules/apps/headlamp
@@ -40,7 +41,7 @@
     fish.enable = true;
     starship.enable = true;
     nixvim.enable = false;
-    aerospace.enable = false;
+    aerospace.enable = true;
     yabai.enable = false;
     srhd.enable = false;
     helix.enable = true;
@@ -52,5 +53,6 @@
   apps = {
     mimestream.enable = true;
     headlamp.enable = true;
+    firefox.enable = false;
   };
 }

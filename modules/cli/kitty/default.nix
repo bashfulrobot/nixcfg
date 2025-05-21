@@ -18,7 +18,9 @@ in {
 
       programs.kitty = {
         enable = true;
-        themeFile = "onedark";
+        # https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+        # themeFile is the name of the .conf file without the .conf
+        themeFile = "OneDark";
         package = pkgs.unstable.kitty;
         shellIntegration = {
           enableFishIntegration = true;

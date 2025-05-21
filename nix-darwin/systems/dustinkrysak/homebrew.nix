@@ -38,7 +38,6 @@
     "1password for Safari" = 1569813296;
     "Wipr 2" = 1662217862;
     "Adblock Pro" = 1018301773;
-    "Kagi for Safari" = 1622835804;
     "Tailscale" = 1475387142;
     "Darkreader for Safari" = 1438243180;
     "Unread" = 1363637349;
@@ -53,8 +52,8 @@
     "1password"
     "1password-cli"
     "visual-studio-code"
-    "alacritty"
-    "font-victor-mono"
+    #"alacritty"
+    #"font-victor-mono"
     # "raycast"
     # "todoist"
     # "tailscale"

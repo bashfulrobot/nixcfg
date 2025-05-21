@@ -41,7 +41,7 @@ in {
         ];
 
         settings = {
-          theme = "catppuccin-mocha";
+          theme = "onedark";
 
           editor = {
 

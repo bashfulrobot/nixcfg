@@ -33,9 +33,9 @@
 
   cli = {
     ghostty.enable = true;
-    alacritty.enable = true;
+    alacritty.enable = false;
     wezterm.enable = false;
-    kitty.enable = false;
+    kitty.enable = true;
     git.enable = true;
     opencommit.enable = true;
     fish.enable = true;

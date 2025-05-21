@@ -41,8 +41,8 @@
     fish.enable = true;
     starship.enable = true;
     nixvim.enable = false;
-    aerospace.enable = true;
-    yabai.enable = false;
+    aerospace.enable = false;
+    yabai.enable = true;
     srhd.enable = false;
     helix.enable = true;
     hammerspoon.enable = false;

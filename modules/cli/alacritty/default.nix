@@ -49,14 +49,14 @@ in {
 
             size = 20;
             # small y offsetting as iosevka-t184256 has custom -25% line spacing
-            # offset = {
-            #   x = -2;
-            #   y = -2;
-            # };
-            # glyph_offset = {
-            #   x = -1;
-            #   y = -1;
-            # };
+            offset = {
+              x = 2;
+              y = 1;
+            };
+            glyph_offset = {
+              x = 6;
+              y = 1;
+            };
           };
 
           colors = {

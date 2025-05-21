@@ -18,11 +18,23 @@ in {
 
       programs.kitty = {
         enable = true;
+        themeFile = "onedark";
         package = pkgs.unstable.kitty;
         shellIntegration = {
           enableFishIntegration = true;
           enableZshIntegration = true;
           enableBashIntegration = true;
+        };
+        settings = {
+          confirm_os_window_close = "0";
+          editor = "${pkgs.unstable.helix}/bin/hx";
+          cursor_shape = "block";
+          macos_titlebar_color = "background";
+          clipboard_max_size = 0;
+          window_padding_width = 15;
+          bold_font = "auto";
+          italic_font = "auto";
+          bold_italic_font = "auto";
         };
         environment = {
           # Set the default shell to fish
@@ -32,10 +44,9 @@ in {
           EDITOR = "${pkgs.unstable.helix}/bin/hx";
         };
         font = {
-          name = "Victor Mono";
-          size = 14;
+          name = "VictorMono Nerd Font Mono";
+          size = 18;
         };
-
       };
     };
 

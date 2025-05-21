@@ -11,8 +11,9 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
-  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nixpkgs-unstable, nixvim, }:
+  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nixpkgs-unstable, nixvim, mac-app-util, ... }:
     let
       lib = nixpkgs.lib;
       user-settings =
@@ -32,6 +33,7 @@
         modules = [
           home-manager.darwinModules.home-manager
           nixvim.nixDarwinModules.nixvim
+          mac-app-util.darwinModules.default
           ./systems/dustinkrysak/default.nix
           # Add overlay as a module
           {

@@ -2,7 +2,7 @@
 let
   cfg = config.cli.fish;
   fd-flags = lib.concatStringsSep " " [ "--hidden" "--exclude '.git'" ];
-  isDarwin = pkgs.stdenv.isDarwin;
+  inherit (pkgs.stdenv) isDarwin;
 
   # Define which functions should be excluded on Darwin
   darwinExcludedFunctions = lib.unique [

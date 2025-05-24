@@ -1,0 +1,38 @@
+
+ fc-list : family | grep Victor                      nixcfg on  main 
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM ExtraLight
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF ExtraLight
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM ExtraLight Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Thin
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM SemiBold Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Thin Obl
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Thin
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM SemiBold
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Light
+VictorMono Nerd Font Propo,VictorMono NFP
+VictorMono Nerd Font,VictorMono NF,VictorMono NF SemiBold
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Obl
+VictorMono Nerd Font Mono,VictorMono NFM
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP ExtraLight Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF ExtraLight Obl
+VictorMono Nerd Font,VictorMono NF
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Light
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP SemiBold Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Medium Obl
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Medium Obl
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Thin
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Medium
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP SemiBold
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Medium
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Light Obl
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Medium
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Thin Obl
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Thin Obl
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF SemiBold Obl
+VictorMono Nerd Font,VictorMono NF,VictorMono NF Light Obl
+VictorMono Nerd Font Mono,VictorMono NFM,VictorMono NFM Light Obl
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP ExtraLight
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Light
+VictorMono Nerd Font Propo,VictorMono NFP,VictorMono NFP Medium Obl

@@ -92,7 +92,7 @@ in pkgs.mkShell {
     vscode
     nano
     just
-    nixfmt
+    nixfmt-rfc-style
     statix
     wget
     unzip

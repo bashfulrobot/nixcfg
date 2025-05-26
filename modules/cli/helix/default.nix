@@ -26,7 +26,7 @@ in {
 
         extraPackages = with pkgs; [
           # nix
-          unstable.nixfmt
+          unstable.nixfmt-rfc-style
           unstable.nixd
           unstable.statix
           # markdown
@@ -61,7 +61,8 @@ in {
             {
               name = "nix";
               auto-format = true;
-              formatter.command = "${pkgs.unstable.nixfmt}/bin/nixfmt";
+              formatter.command =
+                "${pkgs.unstable.nixfmt-rfc-style}/bin/nixfmt";
               language-servers = [ "nixd" "statix" ];
             }
             {

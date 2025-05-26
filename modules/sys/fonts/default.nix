@@ -37,53 +37,36 @@ in {
     #   };
     # };
 
+    # fc-list | grep [font name] -> before the ":" is the font name
+    # Case sensitive
+    fonts.packages = with pkgs; [
+      work-sans
+      aharoni-font
+      inter-font
+      # sfpro-font
+      # sf-mono-liga-font
+      font-awesome
+      cantarell-fonts
+      helvetica-neue-lt-std
+      noto-fonts-emoji
+      noto-fonts-monochrome-emoji
+      source-serif
+      ### nerdfonts
+      # if you hover over the download links on the site, the name of the zip file is the font name.
+      # https://github.com/ryanoasis/nerd-fonts/releases
+      nerd-fonts.fira-code
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.sauce-code-pro
+      nerd-fonts.ubuntu
+      nerd-fonts.ubuntu-mono
+      nerd-fonts.ubuntu-sans
+      nerd-fonts.symbols-only
+      nerd-fonts.victor-mono
+    ];
+
     home-manager.users."${user-settings.user.username}" = {
 
       fonts.fontconfig.enable = true;
-      # fc-list | grep [font name] -> before the ":" is the font name
-      # Case sensitive
-      home.packages = with pkgs; [
-        # monaspace-font
-        work-sans
-        aharoni-font
-        inter-font
-        # sfpro-font
-        # sf-mono-liga-font
-        # roboto-slab
-        # fira
-        # fira-code
-        # fira-code-symbols
-        # fira-code-nerdfont
-        font-awesome
-        cantarell-fonts
-        # cascadia-code
-        # comic-mono
-        #victor-mono
-        # Meslo Nerd Font patched for Powerlevel10k
-        # meslo-lgs-nf
-        # Helvetica for Camino
-        helvetica-neue-lt-std
-        noto-fonts-emoji
-        noto-fonts-monochrome-emoji
-        source-serif
-        ### nerdfonts
-        # if you hover over the download links on the site, the name of the zip file is the font name.
-        # https://github.com/ryanoasis/nerd-fonts/releases
-        (nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "CascadiaCode"
-            "JetBrainsMono"
-            "SourceCodePro"
-            "Ubuntu"
-            "UbuntuMono"
-            "UbuntuSans"
-            "NerdFontsSymbolsOnly"
-            "VictorMono"
-
-          ];
-        })
-      ];
     };
   };
 }

@@ -23,7 +23,7 @@ let
   # All functions defined
   allFunctions = {
     envsource = ''
-            
+
       for line in (cat $argv | grep -v '^#')
           set item (string split -m 1 '=' $line)
           set -gx $item[1] $item[2]
@@ -596,7 +596,9 @@ in {
         fishPlugins.grc
         grc
         fishPlugins.github-copilot-cli-fish
-        fishPlugins.fzf-fish
+        # TODO: fishPlugins.fzf-fish is broken on NixOS
+        # fishPlugins.fzf-fish
+
         fishPlugins.colored-man-pages
         fishPlugins.bass
         fishPlugins.autopair

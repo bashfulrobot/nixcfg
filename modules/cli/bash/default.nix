@@ -124,6 +124,7 @@ in {
       programs.fzf = {
         enable = true;
         enableBashIntegration = true;
+        enableFishIntegration = true;
         defaultCommand = "fd --type f ${fd-flags}";
         fileWidgetCommand = "fd --type f ${fd-flags}";
         changeDirWidgetCommand = "fd --type d ${fd-flags}";

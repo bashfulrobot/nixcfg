@@ -6,12 +6,11 @@
     enable = false;
   };
 
-  system.activationScripts.postUserActivation.text = ''
-    # Following line should allow us to avoid a logout/login cycle
-    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-  '';
+  # TODO: find alternative after 25.05 update
+  #system.activationScripts.postUserActivation.text = ''
+  # Following line should allow us to avoid a logout/login cycle
+  # /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+  #'';
 
-  system = {
-    stateVersion = 5;
-  };
+  system = { stateVersion = 5; };
 }

@@ -40,22 +40,21 @@ in {
 
         ];
 
-        settings = {
-          theme = "onedark";
+        settings = lib.mkMerge [
+          {
+            editor = {
+              line-number = "relative";
+              lsp.display-messages = true;
 
-          editor = {
-
-            line-number = "relative";
-            lsp.display-messages = true;
-
-            cursor-shape = {
-              normal = "block";
-              insert = "bar";
-              select = "underline";
+              cursor-shape = {
+                normal = "block";
+                insert = "bar";
+                select = "underline";
+              };
             };
-
-          };
-        };
+          }
+          (lib.mkIf pkgs.stdenv.isDarwin { theme = "onedark"; })
+        ];
 
         languages = {
           language = [

@@ -76,9 +76,7 @@
       #   "com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabledForLocalFiles" = false;
       #   "com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically" = false;
       # };
-      "com.apple.AdLib" = {
-        allowApplePersonalizedAdvertising = false;
-      };
+      "com.apple.AdLib" = { allowApplePersonalizedAdvertising = false; };
       "com.apple.print.PrintingPrefs" = {
         # Automatically quit printer app once the print jobs complete
         "Quit When Finished" = true;
@@ -101,7 +99,7 @@
   };
 
   # Add ability to used TouchID for sudo authentication
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   ### CustomSystemPreferences
   # https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.CustomSystemPreferences

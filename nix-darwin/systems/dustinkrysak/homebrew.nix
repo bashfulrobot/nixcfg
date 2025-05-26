@@ -116,6 +116,6 @@
     "sequoia-sq"
     "siderolabs/tap/talosctl"
     "kubectl"
-    fontconfig
+    "fontconfig"
   ];
 }

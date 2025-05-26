@@ -25,6 +25,8 @@ in {
         package = pkgs.unstable.helix;
 
         extraPackages = with pkgs; [
+          # copilot
+          unstable.helix-gpt
           # nix
           unstable.nixfmt-rfc-style
           unstable.nixd

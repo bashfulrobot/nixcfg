@@ -50,7 +50,7 @@ printf 'run\tprivate/var/run\n' | sudo tee -a /etc/synthetic.conf
 
 git add -A # Ensure all files are committed for proper build
 
-nix run github:LnL7/nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake .#dustinkrysak # Installs nix-darwin
+nix run github:LnL7/nix-darwin/nix-darwin-25.05#darwin-rebuild -- switch --flake .#dustinkrysak # Installs nix-darwin
 
 - can now rebuild with:
 

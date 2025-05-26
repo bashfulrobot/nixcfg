@@ -18,7 +18,6 @@ in {
       # lsp for nix - mayb e for zed
       nix-index # Nix package indexer
       comma # Nix command wrapper
-      nixfmt # Nix code formatter
       nixfmt-rfc-style # Nix code formatter
       nodePackages.node2nix # Node to Nix
       statix # nix linting

@@ -7,9 +7,8 @@
     ../../archetype/autoimport.nix
     ../../suites/autoimport.nix
   ];
-  
-  archetype.workstation.enable = true;
 
+  archetype.workstation.enable = true;
 
   networking.hostName = "digdug"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -27,6 +26,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }

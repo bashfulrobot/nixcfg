@@ -22,7 +22,7 @@
     du-dust
     tree
     just
-    nixfmt
+    nixfmt-rfc-style
     gdu
     pass
     gnupg

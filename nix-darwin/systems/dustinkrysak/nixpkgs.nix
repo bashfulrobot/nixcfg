@@ -4,9 +4,9 @@
   environment.systemPackages = with pkgs; [
     fd
     unstable.fish
-    nixfmt
-    nixfmt-rfc-style
-    statix
+    unstable.nixfmt
+    unstable.nixfmt-rfc-style
+    unstable.statix
     unstable.terraform
     unstable.pkgs.awscli2
     unstable.colima

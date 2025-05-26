@@ -45,20 +45,12 @@ in {
             WINIT_X11_SCALE_FACTOR = "1";
             EDITOR = "${pkgs.unstable.helix}/bin/hx";
           };
-        }
-        (lib.mkIf pkgs.stdenv.isDarwin {
-          themeFile = "OneDark";
           font = {
             name = "VictorMono Nerd Font Mono";
             size = 18;
           };
-        })
-        (lib.mkIf (!pkgs.stdenv.isDarwin) {
-          font = {
-            name = "Victor Mono";
-            size = 18;
-          };
-        })
+        }
+        (lib.mkIf pkgs.stdenv.isDarwin { themeFile = "OneDark"; })
       ];
     };
   };

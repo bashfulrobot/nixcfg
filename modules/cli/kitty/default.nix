@@ -29,6 +29,7 @@ in {
           };
           settings = {
             confirm_os_window_close = "0";
+            hide_window_decorations = "yes";
             editor = "${pkgs.unstable.helix}/bin/hx";
             cursor_shape = "block";
             macos_titlebar_color = "background";

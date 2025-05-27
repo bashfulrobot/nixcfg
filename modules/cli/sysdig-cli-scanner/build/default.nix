@@ -10,7 +10,7 @@ let
     "x86_64-linux" = {
       url =
         "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/linux/amd64/sysdig-cli-scanner";
-      sha256 = "sha256-ruN8eQ0OhdnUR4okMDhZ/352yVLYlEmWfnmdvskjyGU=";
+      sha256 = "sha256-ogQ7NhpU0KZkcZXWSBX4VaTWwXz5WWMXhqZ9abHX6+Y=";
     };
     "aarch64-darwin" = {
       url =

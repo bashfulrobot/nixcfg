@@ -1,14 +1,21 @@
-{ user-settings, config, lib, pkgs, ... }:
+{
+  user-settings,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.sys.catppuccin-theme;
 
-  # Type: one of “latte”, “frappe”, “macchiato”, “mocha”
+  # Type: one of "latte", "frappe", "macchiato", "mocha"
   flavor = "mocha";
 
-  # Type: one of “blue”, “flamingo”, “green”, “lavender”, “maroon”, “mauve”, “peach”, “pink”, “red”, “rosewater”, “sapphire”, “sky”, “teal”, “yellow”
+  # Type: one of "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
   accent = "sky";
 
-in {
+in
+{
 
   options = {
     sys.catppuccin-theme.enable = lib.mkOption {
@@ -24,10 +31,7 @@ in {
       enable = true;
 
       # set above in variables
-      flavor = flavor;
-
-      # set above in variables
-      accent = accent;
+      inherit flavor accent;
     };
 
     home-manager.users."${user-settings.user.username}" = {
@@ -36,10 +40,7 @@ in {
         enable = true;
 
         # set above in variables
-        flavor = flavor;
-
-        # set above in variables
-        accent = accent;
+        inherit flavor accent;
       };
 
     };

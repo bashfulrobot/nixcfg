@@ -1,4 +1,5 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
 
   nix = {
     # Determinate uses its own daemon to manage the Nix installation that conflicts with nix-darwin’s native Nix management.
@@ -7,10 +8,12 @@
   };
 
   # TODO: find alternative after 25.05 update
-  #system.activationScripts.postUserActivation.text = ''
-  # Following line should allow us to avoid a logout/login cycle
-  # /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-  #'';
+  system.userActivationScripts.text = ''
+    Following line should allow us to avoid a logout/login cycle
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+  '';
 
-  system = { stateVersion = 5; };
+  system = {
+    stateVersion = 5;
+  };
 }

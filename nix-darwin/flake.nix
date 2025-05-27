@@ -6,21 +6,30 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:LnL7/nix-darwin/nix-darwin-25.05";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-unstable = { url = "github:NixOS/nixpkgs/nixpkgs-unstable"; };
+    nixpkgs-unstable = {
+      url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
   };
-  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nixpkgs-unstable
-    , nixvim, mac-app-util, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      darwin,
+      nixpkgs-unstable,
+      nixvim,
+      mac-app-util,
+      ...
+    }:
     let
-      lib = nixpkgs.lib;
-      user-settings =
-        builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
-      secrets =
-        builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
+      inherit (nixpkgs) lib;
+      user-settings = builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
+      secrets = builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable {
           inherit (final) system;
@@ -28,7 +37,8 @@
         };
       };
       overlays = [ overlay-unstable ];
-    in {
+    in
+    {
       darwinConfigurations."dustinkrysak" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
@@ -43,12 +53,22 @@
           }
         ];
         specialArgs = {
-          inherit user-settings secrets inputs lib;
+          inherit
+            user-settings
+            secrets
+            inputs
+            lib
+            ;
           isWorkstation = true;
         };
       };
       extraSpecialArgs = {
-        inherit user-settings secrets inputs lib;
+        inherit
+          user-settings
+          secrets
+          inputs
+          lib
+          ;
         isWorkstation = true;
       };
     };

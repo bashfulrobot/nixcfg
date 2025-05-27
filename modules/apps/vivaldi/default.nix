@@ -1,6 +1,14 @@
-{ user-settings, pkgs, config, lib, ... }:
-let cfg = config.apps.vivaldi;
-in {
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.apps.vivaldi;
+in
+{
 
   options = {
     apps.vivaldi = {
@@ -15,21 +23,20 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs;
-      [
-        (unstable.vivaldi.override {
-          proprietaryCodecs = true;
-          vivaldi-ffmpeg-codecs = unstable.vivaldi-ffmpeg-codecs;
-          enableWidevine = true; # Seen some reports that can cause a crash
-          commandLineArgs = [
-            "--ozone-platform=wayland"
-            "--enable-features=WaylandWindowDecorations"
-            "--ozone-platform-hint=auto"
-            "--enable-features=WaylandWindowDecorations"
+    environment.systemPackages = with pkgs; [
+      (unstable.vivaldi.override {
+        proprietaryCodecs = true;
+        inherit (unstable) vivaldi-ffmpeg-codecs;
+        enableWidevine = true; # Seen some reports that can cause a crash
+        commandLineArgs = [
+          "--ozone-platform=wayland"
+          "--enable-features=WaylandWindowDecorations"
+          "--ozone-platform-hint=auto"
+          "--enable-features=WaylandWindowDecorations"
 
-          ];
-        })
-      ];
+        ];
+      })
+    ];
 
     # programs.chromium = {
     #   enable = true;

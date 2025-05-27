@@ -1,7 +1,16 @@
 # oco set hook
-{ user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.opencommit;
-in {
+{
+  user-settings,
+  pkgs,
+  secrets,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.cli.opencommit;
+in
+{
   options = {
     cli.opencommit.enable = lib.mkOption {
       type = lib.types.bool;
@@ -22,7 +31,7 @@ in {
         OCO_AI_PROVIDER=anthropic
         OCO_TOKENS_MAX_INPUT=40960
         OCO_TOKENS_MAX_OUTPUT=4096
-        OCO_DESCRIPTION=true
+        OCO_DESCRIPTION=false
         OCO_EMOJI=true
         OCO_LANGUAGE=en
         OCO_MESSAGE_TEMPLATE_PLACEHOLDER=$msg

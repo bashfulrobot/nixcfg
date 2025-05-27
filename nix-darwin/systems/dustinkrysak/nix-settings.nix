@@ -1,5 +1,4 @@
-{ pkgs, lib, ... }:
-{
+_: {
 
   nix = {
     # Determinate uses its own daemon to manage the Nix installation that conflicts with nix-darwin’s native Nix management.

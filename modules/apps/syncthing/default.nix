@@ -1,26 +1,40 @@
-{ user-settings, pkgs, config, lib, secrets, ... }:
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  secrets,
+  ...
+}:
 
 let
   cfg = config.apps.syncthing;
 
-in {
+in
+{
   options = {
-    apps.syncthing.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Syncthing";
-    };
+    apps = {
+      syncthing = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Enable Syncthing";
+        };
 
-    apps.syncthing.host.digdug = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable host digdug";
-    };
+        host = {
+          digdug = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable host digdug";
+          };
 
-    apps.syncthing.host.qbert = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable host qbert";
+          qbert = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable host qbert";
+          };
+        };
+      };
     };
   };
 
@@ -91,7 +105,9 @@ in {
               # keep just a handful of old versions of the config files. This ensures that I’m not eating up a ton of disk space, while giving me the ability to roll back far enough to resolve issues I create for myself.
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Documents" = {
@@ -114,7 +130,9 @@ in {
               devices = [ "qbert" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "phone" = {
@@ -122,7 +140,9 @@ in {
               devices = [ "maximus" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Music" = {
@@ -130,7 +150,9 @@ in {
               devices = [ "qbert" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Pictures" = {
@@ -138,7 +160,9 @@ in {
               devices = [ "qbert" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Videos" = {
@@ -146,7 +170,9 @@ in {
               devices = [ "qbert" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "dev" = {
@@ -163,8 +189,7 @@ in {
             ".gnupg" = {
               path = "${user-settings.user.home}/.gnupg";
               devices = [ "qbert" ];
-              ignorePerms =
-                false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
+              ignorePerms = false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
               versioning = {
                 type = "staggered";
                 params = {
@@ -268,7 +293,9 @@ in {
               # keep just a handful of old versions of the config files. This ensures that I’m not eating up a ton of disk space, while giving me the ability to roll back far enough to resolve issues I create for myself.
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Documents" = {
@@ -291,7 +318,9 @@ in {
               devices = [ "digdug" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "phone" = {
@@ -299,7 +328,9 @@ in {
               devices = [ "maximus" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Music" = {
@@ -307,7 +338,9 @@ in {
               devices = [ "digdug" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Pictures" = {
@@ -315,7 +348,9 @@ in {
               devices = [ "digdug" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "Videos" = {
@@ -323,7 +358,9 @@ in {
               devices = [ "digdug" ];
               versioning = {
                 type = "simple";
-                params = { keep = "10"; };
+                params = {
+                  keep = "10";
+                };
               };
             };
             "dev" = {
@@ -340,8 +377,7 @@ in {
             ".gnupg" = {
               path = "${user-settings.user.home}/.gnupg";
               devices = [ "digdug" ];
-              ignorePerms =
-                false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
+              ignorePerms = false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
               versioning = {
                 type = "staggered";
                 params = {
@@ -430,8 +466,7 @@ in {
 
         "syncthing.png" = {
           source = ./syncthing.png;
-          target =
-            ".local/share/xdg-desktop-portal/icons/192x192/syncthing.png";
+          target = ".local/share/xdg-desktop-portal/icons/192x192/syncthing.png";
         };
 
         "dev/.stignore" = {

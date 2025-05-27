@@ -4,26 +4,27 @@
 let
   version = "1.22.1";
 
-  system = pkgs.stdenv.hostPlatform.system;
+  inherit (pkgs.stdenv.hostPlatform) system;
 
   sources = {
     "x86_64-linux" = {
-      url =
-        "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/linux/amd64/sysdig-cli-scanner";
+      url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/linux/amd64/sysdig-cli-scanner";
       sha256 = "sha256-ogQ7NhpU0KZkcZXWSBX4VaTWwXz5WWMXhqZ9abHX6+Y=";
     };
     "aarch64-darwin" = {
-      url =
-        "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/darwin/arm64/sysdig-cli-scanner";
-      sha256 =
-        "sha256-FDkqWstWMTtF0QLWk+iadJr7aRHRnpiatqAeoHftVDk="; # TODO: Add sha256 after first build attempt
+      url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/darwin/arm64/sysdig-cli-scanner";
+      sha256 = "sha256-FDkqWstWMTtF0QLWk+iadJr7aRHRnpiatqAeoHftVDk="; # TODO: Add sha256 after first build attempt
     };
   };
-in if sources ? ${system} then
+in
+if sources ? ${system} then
   pkgs.stdenv.mkDerivation {
     name = "sysdig-cli-scanner";
     src = pkgs.fetchurl sources.${system};
-    phases = [ "installPhase" "patchPhase" ];
+    phases = [
+      "installPhase"
+      "patchPhase"
+    ];
     installPhase = ''
       mkdir -p $out/bin
       cp $src $out/bin/sysdig-cli-scanner
@@ -31,10 +32,12 @@ in if sources ? ${system} then
     '';
 
     meta = with lib; {
-      description =
-        "Sysdig CLI Scanner - https://docs.sysdig.com/en/docs/installation/sysdig-secure/install-vulnerability-cli-scanner/.";
+      description = "Sysdig CLI Scanner - https://docs.sysdig.com/en/docs/installation/sysdig-secure/install-vulnerability-cli-scanner/.";
       maintainers = [ bashfulrobot ];
-      platforms = [ "x86_64-linux" "aarch64-darwin" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
     };
   }
 else

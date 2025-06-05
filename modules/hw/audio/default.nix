@@ -19,10 +19,14 @@ in
 
   config = lib.mkIf cfg.enable {
 
+ # Enable sound with pipewire.
+    hardware.pulseaudio.enable = false; # removed in 25.05
+
     security.rtkit.enable = true;
     services = {
       # Enable sound with pipewire.
-      pulseaudio.enable = false;
+      # in 25.05
+      # pulseaudio.enable = false;
       pipewire = {
         enable = true;
         alsa.enable = true;

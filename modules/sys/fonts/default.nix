@@ -1,5 +1,11 @@
 # TODO: Clean up fonts - what am I "actually" using?
-{ user-settings, pkgs, config, lib, ... }:
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.sys.fonts;
@@ -9,7 +15,8 @@ let
   aharoni-font = pkgs.callPackage ./build/aharoni { };
   # monaspace-font = pkgs.callPackage ./build/monaspace { };
 
-in {
+in
+{
 
   options = {
     sys.fonts.enable = lib.mkOption {
@@ -54,14 +61,28 @@ in {
       ### nerdfonts
       # if you hover over the download links on the site, the name of the zip file is the font name.
       # https://github.com/ryanoasis/nerd-fonts/releases
-      nerd-fonts.fira-code
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.sauce-code-pro
-      nerd-fonts.ubuntu
-      nerd-fonts.ubuntu-mono
-      nerd-fonts.ubuntu-sans
-      nerd-fonts.symbols-only
-      nerd-fonts.victor-mono
+      # nerd-fonts.fira-code
+      # nerd-fonts.jetbrains-mono
+      # nerd-fonts.sauce-code-pro
+      # nerd-fonts.ubuntu
+      # nerd-fonts.ubuntu-mono
+      # nerd-fonts.ubuntu-sans
+      # nerd-fonts.symbols-only
+      # nerd-fonts.victor-mono
+      (nerdfonts.override {
+        fonts = [
+          "FiraCode"
+          "CascadiaCode"
+          "JetBrainsMono"
+          "SourceCodePro"
+          "Ubuntu"
+          "UbuntuMono"
+          "UbuntuSans"
+          "NerdFontsSymbolsOnly"
+          "VictorMono"
+
+        ];
+      })
     ];
 
     home-manager.users."${user-settings.user.username}" = {

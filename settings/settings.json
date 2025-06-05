@@ -7,6 +7,6 @@
     },
     "nix": {
         "comment": "NOT IN USE YET - WIP",
-        "release": "25.05"
+        "release": "24.11"
     }
 }

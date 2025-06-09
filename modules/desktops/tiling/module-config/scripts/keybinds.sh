@@ -13,12 +13,11 @@ fi
 # }
 get_nix_value() {
     awk '
-    /settings = {/ {inside_settings=1; next} 
-    inside_settings && /}/ {inside_settings=0} 
+    /settings = {/ {inside_settings=1; next}
+    inside_settings && /}/ {inside_settings=0}
     inside_settings && $0 ~ key {print gensub(/.*"([^"]+)".*/, "\\1", "g", $0)}
     ' key="$1" "$HOME/NixOS/flake.nix"
 }
-
 
 _browser=$(get_nix_value "browser =")
 _terminal=$(get_nix_value "terminal =")
@@ -46,6 +45,8 @@ yad \
   "SUPER F9" "Enable night mode" "hyprsunset --temperature 2500" \
   "SUPER F10" "Disable night mode" "pkill hyprsunset" \
   "SUPER F8" "Toggle autoclicker" "scripts/autoclicker.nix" \
+  "SUPER H" "Split Horizontal" "layoutmsg, preselect d" \
+  "SUPER V" "Split Vertical" "layoutmsg, preselect r" \
   "SUPER CTRL C" "Colour picker" "hyprpicker --autocopy" \
   "SUPER, Left Click" "Move window with mouse" "movewindow" \
   "SUPER, Right Click" "Resize window with mouse" "resizewindow" \
@@ -82,7 +83,7 @@ yad \
   "SUPER U" "Rebuild system" "$_terminal -e scripts/rebuild.sh" \
   "SUPER G" "Game launcher" "scripts/rofi.sh games" \
   "SUPER ALT G" "Enable game mode" "scripts/gamemode.sh" \
-  "SUPER V" "Clipboard manager" "scripts/ClipManager.sh" \
+  "SUPER ALT V" "Clipboard manager" "scripts/ClipManager.sh" \
   "SUPER M" "Online music" "scripts/rofimusic.sh" \
   "SUPER P" "Screenshot (select area)" "scripts/screenshot.sh s" \
   "SUPER CTRL P" "Screenshot (frozen screen)" "scripts/screenshot.sh sf" \

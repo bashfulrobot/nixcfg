@@ -444,7 +444,7 @@ in
               "$mainMod SHIFT, Q, exec, swaync-client -t -sw" # swayNC panel
               "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher
               "$mainMod ALT, G, exec, ${../module-config/scripts/gamemode.sh}" # disable hypr effects for gamemode
-              "$mainMod, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
+              "$mainMod ALT, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
               "$mainMod, M, exec, pkill -x rofi || ${../module-config/scripts/rofimusic.sh}" # online music
 
               # Screenshot/Screencapture

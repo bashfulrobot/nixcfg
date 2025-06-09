@@ -1,6 +1,13 @@
-{ config, pkgs, lib, ... }:
-let cfg = config.suites.sysdig;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.suites.sysdig;
+in
+{
 
   options = {
     suites.sysdig.enable = lib.mkOption {
@@ -13,7 +20,7 @@ in {
   config = lib.mkIf cfg.enable {
 
     apps = {
-      zoom-us.enable = true;
+      zoom-us.enable = false;
       confluence.enable = true;
       gcal-sysdig.enable = true;
       gmail-sysdig.enable = true;
@@ -21,7 +28,7 @@ in {
       jira.enable = true;
       sfdc.enable = true;
       gainsight.enable = true;
-      };
+    };
 
     cli = {
       sysdig-cli-scanner.enable = true;
@@ -31,7 +38,7 @@ in {
     environment.systemPackages = with pkgs; [
       unstable.turbovnc # Access MacOS from Linux
       unstable.terragrunt
-      ];
+    ];
 
   };
 }

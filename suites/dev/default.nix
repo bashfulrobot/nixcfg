@@ -1,6 +1,14 @@
-{ config, pkgs, lib, user-settings, ... }:
-let cfg = config.suites.dev;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  user-settings,
+  ...
+}:
+let
+  cfg = config.suites.dev;
+in
+{
 
   options = {
     suites.dev.enable = lib.mkOption {
@@ -51,13 +59,17 @@ in {
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
       unstable.helix # text editor
-
+      unstable.claude-code
     ];
 
     # programs = { jqp = { enable = true; }; };
 
     home-manager.users."${user-settings.user.username}" = {
-      programs = { jq = { enable = true; }; };
+      programs = {
+        jq = {
+          enable = true;
+        };
+      };
     };
   };
 }

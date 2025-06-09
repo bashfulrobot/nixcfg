@@ -80,6 +80,7 @@ in
       wl-clipboard
       xdotool
       yad
+      bibata-cursors
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
@@ -97,6 +98,14 @@ in
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
+
+      home.pointerCursor = {
+        name = "Bibata-Modern-Classic";
+        package = pkgs.bibata-cursors;
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
+      };
 
       xdg.configFile."hypr/icons" = {
         source = ../module-config/icons;
@@ -137,6 +146,8 @@ in
             "QT_AUTO_SCREEN_SCALE_FACTOR,1"
             "WLR_RENDERER_ALLOW_SOFTWARE,1"
             "NIXPKGS_ALLOW_UNFREE,1"
+            "XCURSOR_THEME,Bibata-Modern-Classic"
+            "XCURSOR_SIZE,24"
           ];
           exec-once = [
             #"[workspace 1 silent] ${terminal}"

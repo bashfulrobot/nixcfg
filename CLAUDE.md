@@ -80,3 +80,6 @@ The repository uses an **auto-import** system (`autoimport.nix`) that recursivel
 3. Add trace flags when debugging module issues
 4. Run `just nix-lint` before committing changes
 5. Use `just garbage` periodically to clean up build artifacts
+
+### Memories
+- `just rebuild` - Standard system rebuild that commits to bootloader

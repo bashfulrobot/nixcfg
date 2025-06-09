@@ -444,7 +444,7 @@ in
               "$mainMod SHIFT, Q, exec, swaync-client -t -sw" # swayNC panel
               "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher
               "$mainMod ALT, G, exec, ${../module-config/scripts/gamemode.sh}" # disable hypr effects for gamemode
-              "$mainMod ALT, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
+              "$mainMod, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
               "$mainMod, M, exec, pkill -x rofi || ${../module-config/scripts/rofimusic.sh}" # online music
 
               # Screenshot/Screencapture
@@ -502,10 +502,10 @@ in
               # Rebuild NixOS with a KeyBind
               "$mainMod, U, exec, $term -e ${../module-config/scripts/rebuild.sh}"
 
-              # Split window horizontal
-              "$mainMod, h, layoutmsg, preselect d"
-              # Split window vertical
-              "$mainMod, v, layoutmsg, preselect r"
+              # Split window horizontal (next window opens to the right)
+              "$mainMod SHIFT, h, layoutmsg, preselect r"
+              # Split window vertical (next window opens below)  
+              "$mainMod SHIFT, v, layoutmsg, preselect d"
 
               # Scroll through existing workspaces with mainMod + scroll
               "$mainMod, mouse_down, workspace, e+1"

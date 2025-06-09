@@ -84,12 +84,16 @@ in
       ranger
       gnome-keyring
       libsecret
+      blueman
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
 
     services.gnome.gnome-keyring.enable = true;
     security.pam.services.lightdm.enableGnomeKeyring = true;
+    
+    services.blueman.enable = true;
+    hardware.bluetooth.enable = true;
 
     sys = {
       dconf.enable = true;
@@ -375,6 +379,9 @@ in
             "float,class:^(nm-applet)$"
             "float,class:^(nm-connection-editor)$"
             "float,class:^(org.kde.polkit-kde-authentication-agent-1)$"
+            
+            # Slack - hide menu bar, show with Alt
+            "suppressevent maximize fullscreen,class:^(Slack)$"
           ];
           binde = [
             # PResize windows
@@ -440,6 +447,7 @@ in
               # "$mainMod, tab, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} window" # switch between desktop applications
               # "$mainMod, R, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} file" # brrwse system files
               "$mainMod ALT, K, exec, ${../module-config/scripts/keyboardswitch.sh}" # change keyboard layout
+              "$mainMod ALT, B, exec, blueman-manager" # bluetooth manager
               "$mainMod SHIFT, N, exec, swaync-client -t -sw" # swayNC panel
               "$mainMod SHIFT, Q, exec, swaync-client -t -sw" # swayNC panel
               "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher

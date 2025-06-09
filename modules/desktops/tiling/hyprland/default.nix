@@ -81,9 +81,15 @@ in
       xdotool
       yad
       bibata-cursors
+      ranger
+      gnome-keyring
+      libsecret
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
+
+    services.gnome.gnome-keyring.enable = true;
+    security.pam.services.lightdm.enableGnomeKeyring = true;
 
     sys = {
       dconf.enable = true;
@@ -148,6 +154,7 @@ in
             "NIXPKGS_ALLOW_UNFREE,1"
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
+            "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
           ];
           exec-once = [
             #"[workspace 1 silent] ${terminal}"
@@ -166,6 +173,7 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
+            "gnome-keyring-daemon --start --components=secrets,ssh,pkcs11"
             "pamixer --set-volume 50"
           ];
           input = {
@@ -273,6 +281,7 @@ in
           dwindle = {
             pseudotile = true;
             preserve_split = true;
+            permanent_direction_override = true;
           };
           master = {
             new_status = "master";
@@ -368,7 +377,7 @@ in
             "float,class:^(org.kde.polkit-kde-authentication-agent-1)$"
           ];
           binde = [
-            # Resize windows
+            # PResize windows
             "$mainMod SHIFT, right, resizeactive, 30 0"
             "$mainMod SHIFT, left, resizeactive, -30 0"
             "$mainMod SHIFT, up, resizeactive, 0 -30"
@@ -492,6 +501,11 @@ in
 
               # Rebuild NixOS with a KeyBind
               "$mainMod, U, exec, $term -e ${../module-config/scripts/rebuild.sh}"
+
+              # Split window horizontal
+              "$mainMod, h, layoutmsg, preselect d"
+              # Split window vertical
+              "$mainMod, v, layoutmsg, preselect r"
 
               # Scroll through existing workspaces with mainMod + scroll
               "$mainMod, mouse_down, workspace, e+1"

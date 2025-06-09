@@ -26,7 +26,7 @@ get_amd_gpu_metrics() {
   local temperature utilization core_clock power_usage
 
   # Find hwmon directory dynamically
-  hwmon_dir=$(find "${card_path}/hwmon" -type d -name 'hwmon*' -print -quit 2>/dev/null)
+  hwmon_dir=$(find "${card_path}/hwmon" -mindepth 1 -type d -name 'hwmon*' -print -quit 2>/dev/null)
 
   # Temperature (in millidegrees Celsius, divide by 1000)
   if [ -f "${hwmon_dir}/temp1_input" ]; then
@@ -45,15 +45,15 @@ get_amd_gpu_metrics() {
 
   # Core Clock (in MHz, extract current clock from pp_dpm_sclk)
   if [ -f "${card_path}/pp_dpm_sclk" ]; then
-    core_clock=$(cat "${card_path}/pp_dpm_sclk" 2>/dev/null | grep -o '[0-9]\+ MHz' | head -n 1 | cut -d' ' -f1)
+    core_clock=$(cat "${card_path}/pp_dpm_sclk" 2>/dev/null | grep '\*' | grep -o '[0-9]\+Mhz' | cut -d'M' -f1)
   else
     core_clock="N/A"
   fi
 
   # Power Usage (in microwatts, divide by 1,000,000 for watts)
   if [ -f "${hwmon_dir}/power1_average" ]; then
-    power_usage=$(cat "${hwmon_dir}/power1_average" 2>/dev/null)
-    power_usage=$(echo "scale=2; $power_usage / 1000000" | bc 2>/dev/null)
+    power_usage_raw=$(cat "${hwmon_dir}/power1_average" 2>/dev/null)
+    power_usage=$((power_usage_raw / 1000000))
   else
     power_usage="N/A"
   fi
@@ -92,7 +92,7 @@ else
   # Check for AMD GPU dynamically by looking for amdgpu driver
   primary_gpu="AMD GPU"
   amd_card=""
-  for card in /sys/class/drm/card*/device; do
+  for card in /sys/class/drm/card[0-9]*/device; do
     if [ -L "$card/driver" ] && basename "$(readlink -f "$card/driver")" | grep -qi "amdgpu" 2>/dev/null; then
       amd_card="$card"
       break

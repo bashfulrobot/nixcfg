@@ -1,15 +1,19 @@
 # Options: https://search.nixos.org/options?channel=unstable&show=programs.chromium.extraOpts&from=0&size=50&sort=relevance&type=packages&query=programs.chromium
-{ user-settings, pkgs, config, lib, ... }:
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.apps.chrome-based-browser;
 
   defaultApplication = "chromium";
 
   chromiumIcon = pkgs.fetchurl {
-    url =
-      "https://upload.wikimedia.org/wikipedia/commons/2/28/Chromium_Logo.svg";
-    sha256 =
-      "sha256-vLAX3+o5ENErSPsabpUNK1JHYw8A9KPo5TaB+OdQRt4="; # Replace with actual hash
+    url = "https://upload.wikimedia.org/wikipedia/commons/2/28/Chromium_Logo.svg";
+    sha256 = "sha256-vLAX3+o5ENErSPsabpUNK1JHYw8A9KPo5TaB+OdQRt4="; # Replace with actual hash
   };
 
   chromiumDesktopItem = pkgs.makeDesktopItem {
@@ -23,7 +27,10 @@ let
     terminal = false;
     icon = chromiumIcon;
     type = "Application";
-    categories = [ "Network" "WebBrowser" ];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
   };
 
   chromiumPackage = pkgs.stdenv.mkDerivation {
@@ -37,7 +44,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   options = {
     apps.chrome-based-browser = {
@@ -52,15 +60,16 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs;
-      [
-        # chromiumPackage
-        (chromium.override { enableWideVine = true; })
-      ];
+    environment.systemPackages = with pkgs; [
+      # chromiumPackage
+      (chromium.override { enableWideVine = true; })
+    ];
 
     programs.chromium = {
       enable = true;
       extensions = [
+        # vimium
+        "dbepggeogbaibhgnhhndojpepiihcmeb"
         # pushover
         #"fcmngfmocgakhjghfmgbbhlkenccgpdh"
         # bookmark search
@@ -236,28 +245,30 @@ in {
       # '';
       #  --force-device-scale-factor=1
 
-      home.file = let
-        flags = ''
-          --enable-features=UseOzonePlatform
-          --ozone-platform=wayland
-          --enable-features=WaylandWindowDecorations
-          --ozone-platform-hint=auto
-          --gtk-version=4
-        '';
-      in {
-        ".config/chromium-flags.conf".text = flags;
-        ".config/electron-flags.conf".text = flags;
-        ".config/electron-flags16.conf".text = flags;
-        ".config/electron-flags17.conf".text = flags;
-        ".config/electron-flags18.conf".text = flags;
-        ".config/electron-flags19.conf".text = flags;
-        ".config/electron-flags20.conf".text = flags;
-        ".config/electron-flags21.conf".text = flags;
-        ".config/electron-flags22.conf".text = flags;
-        ".config/electron-flags23.conf".text = flags;
-        ".config/electron-flags24.conf".text = flags;
-        ".config/electron-flags25.conf".text = flags;
-      };
+      home.file =
+        let
+          flags = ''
+            --enable-features=UseOzonePlatform
+            --ozone-platform=wayland
+            --enable-features=WaylandWindowDecorations
+            --ozone-platform-hint=auto
+            --gtk-version=4
+          '';
+        in
+        {
+          ".config/chromium-flags.conf".text = flags;
+          ".config/electron-flags.conf".text = flags;
+          ".config/electron-flags16.conf".text = flags;
+          ".config/electron-flags17.conf".text = flags;
+          ".config/electron-flags18.conf".text = flags;
+          ".config/electron-flags19.conf".text = flags;
+          ".config/electron-flags20.conf".text = flags;
+          ".config/electron-flags21.conf".text = flags;
+          ".config/electron-flags22.conf".text = flags;
+          ".config/electron-flags23.conf".text = flags;
+          ".config/electron-flags24.conf".text = flags;
+          ".config/electron-flags25.conf".text = flags;
+        };
     };
   };
 }

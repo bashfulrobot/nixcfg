@@ -68,8 +68,6 @@ in
     programs.chromium = {
       enable = true;
       extensions = [
-        # vimium
-        "dbepggeogbaibhgnhhndojpepiihcmeb"
         # pushover
         #"fcmngfmocgakhjghfmgbbhlkenccgpdh"
         # bookmark search

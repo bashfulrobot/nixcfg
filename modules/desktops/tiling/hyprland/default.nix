@@ -434,6 +434,9 @@ in
               "ALT, return, fullscreen" # toggle the window on focus to fullscreen
               "$mainMod ALT, L, exec, hyprlock" # lock screen
               "$mainMod, backspace, exec, pkill -x wlogout || wlogout -b 4" # logout menu
+              "$mainMod ALT, S, exec, systemctl suspend" # suspend system
+              "$mainMod ALT, M, exec, hyprctl dispatch dpms off" # turn off monitors
+              "$mainMod ALT SHIFT, M, exec, hyprctl dispatch dpms on" # turn on monitors
               "$CONTROL, ESCAPE, exec, pkill waybar || waybar" # toggle waybar
 
               # Applications/Programs

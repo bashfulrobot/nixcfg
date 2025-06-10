@@ -16,15 +16,15 @@
               timeout = 300; # 5 Minutes
               on-timeout = "loginctl lock-session";
             }
-            /* {
+            {
               timeout = 360; # 6 Minutes
               on-timeout = "hyprctl dispatch dpms off";
               on-resume = "hyprctl dispatch dpms on";
-            } */
-            /* {
+            }
+            {
               timeout = 600; # 10m
               on-timeout = "systemctl suspend";
-            } */
+            }
           ];
         };
       };

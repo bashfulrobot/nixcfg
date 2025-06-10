@@ -38,6 +38,7 @@ in
     environment.systemPackages = with pkgs; [
       unstable.turbovnc # Access MacOS from Linux
       unstable.terragrunt
+      unstable.slack-term
     ];
 
   };

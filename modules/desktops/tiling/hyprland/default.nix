@@ -159,6 +159,12 @@ in
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
             "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
+            # Additional theming variables for comprehensive dark mode support
+            "GTK_THEME,Catppuccin-Mocha-Standard-Sky-Dark"
+            "QT_STYLE_OVERRIDE,kvantum"
+            "ELECTRON_FORCE_DARK_MODE,1"
+            # Java applications
+            "_JAVA_OPTIONS,-Dswing.aatext=true -Dawt.useSystemAAFontSettings=on"
           ];
           exec-once = [
             #"[workspace 1 silent] ${terminal}"

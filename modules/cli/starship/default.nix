@@ -49,6 +49,7 @@ in {
             format = "$output ";
             when = "test -f /etc/prompt";
             shell = "fish";
+            ignore_timeout = true;
           };
           rust = {
             format = "[$symbol]($style)";

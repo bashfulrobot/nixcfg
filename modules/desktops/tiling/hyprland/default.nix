@@ -534,9 +534,9 @@ in
               "$mainMod, U, exec, $term -e ${../module-config/scripts/rebuild.sh}"
 
               # Split window horizontal (next window opens to the right)
-              "$mainMod SHIFT, h, layoutmsg, preselect r"
+              "$mainMod ALT, h, layoutmsg, preselect r"
               # Split window vertical (next window opens below)
-              "$mainMod SHIFT, v, layoutmsg, preselect d"
+              "$mainMod ALT, v, layoutmsg, preselect d"
 
               # Scroll through existing workspaces with mainMod + scroll
               "$mainMod, mouse_down, workspace, e+1"

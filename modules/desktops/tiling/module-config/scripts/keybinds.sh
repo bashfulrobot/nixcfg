@@ -45,8 +45,8 @@ yad \
   "SUPER F9" "Enable night mode" "hyprsunset --temperature 2500" \
   "SUPER F10" "Disable night mode" "pkill hyprsunset" \
   "SUPER F8" "Toggle autoclicker" "scripts/autoclicker.nix" \
-  "SUPER SHIFT H" "Split Horizontal (next window right)" "layoutmsg, preselect r" \
-  "SUPER SHIFT V" "Split Vertical (next window below)" "layoutmsg, preselect d" \
+  "SUPER ALT H" "Split Horizontal (next window right)" "layoutmsg, preselect r" \
+  "SUPER ALT V" "Split Vertical (next window below)" "layoutmsg, preselect d" \
   "SUPER CTRL C" "Colour picker" "hyprpicker --autocopy" \
   "SUPER, Left Click" "Move window with mouse" "movewindow" \
   "SUPER, Right Click" "Resize window with mouse" "resizewindow" \

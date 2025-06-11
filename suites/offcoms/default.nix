@@ -1,6 +1,14 @@
-{ config, pkgs, lib, inputs, ... }:
-let cfg = config.suites.offcoms;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+let
+  cfg = config.suites.offcoms;
+in
+{
 
   options = {
     suites.offcoms.enable = lib.mkOption {
@@ -34,14 +42,16 @@ in {
       gmail-br.enable = true;
     };
 
-    cli = { note.enable = true; };
+    cli = {
+      note.enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       # projecteur # virtual laser pointer
       # Browsers
       #inputs.zen-browser.packages.x86_64-linux.zen-browser
       #(opera.override { proprietaryCodecs = true; })
-      brave
+      # brave
       # google-chrome
       # tangram
 
@@ -65,15 +75,15 @@ in {
 
       # # IM
       # fractal # Matrix Client
-      slack # instant messaging
+      #unstable.slack # instant messaging
       whatsapp-for-linux # instant messaging
-      signal-desktop # instant messaging
-      zulip
+      unstable.signal-desktop # instant messaging
+      unstable.zulip
       # element-desktop # Matrix Client
       #  # Email
       gmailctl # cli to write gmail filters as code
       # thunderbird # email client
-      unstable.evolutionWithPlugins
+      # unstable.evolutionWithPlugins
       # mailspring # email client
       #geary # email reader
       # pandoc # document converter

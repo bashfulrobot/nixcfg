@@ -1,6 +1,14 @@
-{ config, pkgs, lib, user-settings, ... }:
-let cfg = config.suites.utilities;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  user-settings,
+  ...
+}:
+let
+  cfg = config.suites.utilities;
+in
+{
 
   options = {
     suites.utilities.enable = lib.mkOption {
@@ -13,11 +21,16 @@ in {
   config = lib.mkIf cfg.enable {
     cli = { };
 
-    apps = { perplexity = { enable = true; }; };
+    apps = {
+      perplexity = {
+        enable = true;
+      };
+    };
 
     environment.systemPackages = with pkgs; [
+      spacedrive # File explorer
       playonlinux # Wine frontend
-      # ephemeral # ephemeral browser
+      ephemeral # ephemeral browser
       gnome-disk-utility
       # TODO: COnfirm: ENabled with logitech.solaar, not needed?
       #solaar # Linux manager for many Logitech keyboards, mice
@@ -73,7 +86,11 @@ in {
     programs.wshowkeys.enable = false;
 
     home-manager.users."${user-settings.user.username}" = {
-      programs = { btop = { enable = true; }; };
+      programs = {
+        btop = {
+          enable = true;
+        };
+      };
     };
   };
 }

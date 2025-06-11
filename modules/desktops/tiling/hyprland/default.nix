@@ -308,6 +308,7 @@ in
             pseudotile = true;
             preserve_split = true;
             permanent_direction_override = true;
+            smart_split = true;
           };
           master = {
             new_status = "master";

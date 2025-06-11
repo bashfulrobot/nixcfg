@@ -40,6 +40,8 @@ in
       vivaldi.enable = false;
       gcal-br.enable = true;
       gmail-br.enable = true;
+      sysdig-drive.enable = true;
+      br-drive.enable = true;
     };
 
     cli = {

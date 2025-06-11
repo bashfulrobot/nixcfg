@@ -120,9 +120,7 @@
               all-outputs = true;
               active-only = false;
               on-click = "activate";
-              persistent-workspaces = {
-                "*" = [1 2 3 4 5 6 7 8 9 10];
-              };
+              show-special = false;
             };
 
             "hyprland/window" = {
@@ -528,11 +526,22 @@
           	border-radius: 10px;
           }
 
+          /* Workspaces with windows (occupied) */
+          #workspaces button.occupied {
+          	color: @peach;
+          	border-radius: 10px;
+              padding-left: 6px;
+              padding-right: 6px;
+              transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+          }
+
+          /* Active workspace - same color as occupied but with straight underline */
           #workspaces button.active {
           	color: @peach;
-            	border-radius: 10px;
+            	border-radius: 10px 10px 0px 0px;
               padding-left: 8px;
               padding-right: 8px;
+              border-bottom: 2px solid @peach;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
           }

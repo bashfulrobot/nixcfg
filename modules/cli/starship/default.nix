@@ -22,6 +22,7 @@ in {
         enableZshIntegration = true;
         enableFishIntegration = true;
         settings = {
+          command_timeout = 1000;
           character = {
             success_symbol = "[](bold)";
             error_symbol = "[](bold)";
@@ -47,6 +48,7 @@ in {
             command = "cat /etc/prompt";
             format = "$output ";
             when = "test -f /etc/prompt";
+            shell = "fish";
           };
           rust = {
             format = "[$symbol]($style)";

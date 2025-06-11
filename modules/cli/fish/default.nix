@@ -82,6 +82,11 @@ let
       gtk-update-icon-cache
     '';
 
+    # Hyprland Version
+    get_hypr_class = ''
+      hyprctl clients | grep -A1 class | grep -v "class:" | sed 's/^[[:space:]]*//'
+    '';
+
     scratch-new = ''
       set date (date "+%Y-%m-%d")
       set note_type (echo -e "External Meeting\nReminder\nInternal Meeting\nProduct Note" | fzf --prompt="Select note type: ")

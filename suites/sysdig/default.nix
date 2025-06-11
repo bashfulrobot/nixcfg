@@ -28,6 +28,7 @@ in
       jira.enable = true;
       sfdc.enable = true;
       gainsight.enable = true;
+      slack.enable = true;
     };
 
     cli = {
@@ -38,7 +39,6 @@ in
     environment.systemPackages = with pkgs; [
       unstable.turbovnc # Access MacOS from Linux
       unstable.terragrunt
-      unstable.slack-term
     ];
 
   };

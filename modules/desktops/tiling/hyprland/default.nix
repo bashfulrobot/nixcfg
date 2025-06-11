@@ -85,13 +85,15 @@ in
       gnome-keyring
       libsecret
       blueman
+      catppuccin-papirus-folders
+      papirus-folders
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
 
     services.gnome.gnome-keyring.enable = true;
     security.pam.services.lightdm.enableGnomeKeyring = true;
-    
+
     services.blueman.enable = true;
     hardware.bluetooth.enable = true;
 
@@ -115,6 +117,17 @@ in
         size = 24;
         gtk.enable = true;
         x11.enable = true;
+      };
+
+      gtk = {
+        enable = true;
+        iconTheme = {
+          name = "Papirus-Dark";
+          package = pkgs.papirus-icon-theme;
+        };
+        theme = {
+          name = "Catppuccin-Mocha-Standard-Sky-Dark";
+        };
       };
 
       xdg.configFile."hypr/icons" = {
@@ -163,6 +176,9 @@ in
             "GTK_THEME,Catppuccin-Mocha-Standard-Sky-Dark"
             "QT_STYLE_OVERRIDE,kvantum"
             "ELECTRON_FORCE_DARK_MODE,1"
+            "ELECTRON_ENABLE_DARK_MODE,1"
+            "ELECTRON_USE_SYSTEM_THEME,1"
+            "ELECTRON_DISABLE_DEFAULT_MENU_BAR,1"
             # Java applications
             "_JAVA_OPTIONS,-Dswing.aatext=true -Dawt.useSystemAAFontSettings=on"
           ];
@@ -385,9 +401,7 @@ in
             "float,class:^(nm-applet)$"
             "float,class:^(nm-connection-editor)$"
             "float,class:^(org.kde.polkit-kde-authentication-agent-1)$"
-            
-            # Slack - hide menu bar, show with Alt
-            "suppressevent maximize fullscreen,class:^(Slack)$"
+
           ];
           binde = [
             # PResize windows
@@ -521,7 +535,7 @@ in
 
               # Split window horizontal (next window opens to the right)
               "$mainMod SHIFT, h, layoutmsg, preselect r"
-              # Split window vertical (next window opens below)  
+              # Split window vertical (next window opens below)
               "$mainMod SHIFT, v, layoutmsg, preselect d"
 
               # Scroll through existing workspaces with mainMod + scroll
@@ -615,7 +629,12 @@ in
           workspace=special,monitor:
         '';
       };
-      dconf.settings = with inputs.home-manager.lib.hm.gvariant; { };
+      dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          gtk-theme = "Catppuccin-Mocha-Standard-Sky-Dark";
+        };
+      };
 
     };
   };

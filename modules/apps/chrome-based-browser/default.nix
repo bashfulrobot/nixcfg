@@ -225,6 +225,7 @@ in
 
       home.sessionVariables.BROWSER = "${defaultApplication}";
 
+
       # xdg.mimeApps.defaultApplications = {
       #   "text/html" = "${defaultApplication}.desktop";
       #   "x-scheme-handler/http" = "${defaultApplication}.desktop";
@@ -266,6 +267,8 @@ in
           ".config/electron-flags23.conf".text = flags;
           ".config/electron-flags24.conf".text = flags;
           ".config/electron-flags25.conf".text = flags;
+          # Dark Reader configuration with Catppuccin Mocha theme
+          ".config/darkreader/Dark-Reader-Settings.json".source = ./Dark-Reader-Settings.json;
         };
     };
   };

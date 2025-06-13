@@ -124,17 +124,17 @@
 
         # Note: The `true` argument is used to determine if the system is a workstation or not
         digdug = makeSystem "digdug" (commonModules
-          ++ [ ./systems/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {
+          ++ [ ./hosts/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = true;
           };
         # Note: The `true` argument is used to determine if the system is a workstation or not
         qbert = makeSystem "qbert" (commonModules
-          ++ [ ./systems/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
+          ++ [ ./hosts/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = true;
           };
         # Note: The `false` argument is used to determine if the system is a workstation or not
         srv = makeSystem "srv" (serverModules
-          ++ [ ./systems/srv serverHomeManagerConfig commonNixpkgsConfig ]) {
+          ++ [ ./hosts/srv serverHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = false;
           };
       };

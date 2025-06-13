@@ -56,7 +56,11 @@ in
         TimeoutStopSec = 10;
       };
     };
-    services.displayManager.defaultSession = "hyprland";
+    services = {
+      displayManager.defaultSession = "hyprland";
+      gnome.gnome-keyring.enable = true;
+      blueman.enable = true;
+    };
 
     programs.hyprland = {
       enable = true;
@@ -91,11 +95,9 @@ in
       # jq # for and autowaybar.sh
     ];
 
-    services.gnome.gnome-keyring.enable = true;
     security.pam.services.lightdm.enableGnomeKeyring = true;
 
-    services.blueman.enable = true;
-    hardware.bluetooth.enable = true;
+    hw.bluetooth.enable = true;
 
     sys = {
       dconf.enable = true;

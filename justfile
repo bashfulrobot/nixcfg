@@ -101,8 +101,8 @@ inspect:
 # Update Hardware Firmware
 run-fwup:
     # @sudo fwupdmgr refresh --force?
-    @sudo fwupdmgr get-updates
-    @sudo fwupdmgr update
+    @sudo fwupdmgr get-updates || true
+    @sudo fwupdmgr update || true
 # Update Flake
 upgrade-system:
     #ulimit -n 4096

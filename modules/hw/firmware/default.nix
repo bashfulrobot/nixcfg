@@ -12,14 +12,26 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    hardware.enableRedistributableFirmware = true; # For some unfree drivers
+    hardware = {
+      enableRedistributableFirmware = true; # For some unfree drivers
+      enableAllFirmware = true; # Enable all firmware, including unfree
+    };
     # systemd.services.systemd-udev-settle.enable = false;
-    services.fwupd.enable = true;
-    # services.fstrim.enable = true;
+    services = {
+      # Detect plugged in hardware
+      udev.enable = true;
+      fwupd = {
+        enable = true;
+        uefiCapsuleSettings = {
+          DisableCapsuleUpdateOnDisk = false;
+        };
+      };
+    # fstrim.enable = true;
+    };
 
     environment.systemPackages = with pkgs;
       [
-
+        linux-firmware
       ];
   };
 }

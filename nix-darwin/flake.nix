@@ -45,7 +45,7 @@
           home-manager.darwinModules.home-manager
           nixvim.nixDarwinModules.nixvim
           mac-app-util.darwinModules.default
-          ./systems/dustinkrysak/default.nix
+          ./hosts/dustinkrysak/default.nix
           # Add overlay as a module
           {
             nixpkgs.overlays = overlays;

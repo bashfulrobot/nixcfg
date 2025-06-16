@@ -1,7 +1,18 @@
-{ user-settings, lib, pkgs, secrets, config, isWorkstation, ... }:
+{
+  user-settings,
+  lib,
+  pkgs,
+  secrets,
+  config,
+  isWorkstation,
+  ...
+}:
 let
   cfg = config.cli.fish;
-  fd-flags = lib.concatStringsSep " " [ "--hidden" "--exclude '.git'" ];
+  fd-flags = lib.concatStringsSep " " [
+    "--hidden"
+    "--exclude '.git'"
+  ];
   inherit (pkgs.stdenv) isDarwin;
 
   # Define which functions should be excluded on Darwin
@@ -340,9 +351,9 @@ let
   };
 
   # Create a version of functions with Darwin exclusions
-  filteredFunctions = lib.filterAttrs
-    (name: _: !(isDarwin && builtins.elem name darwinExcludedFunctions))
-    allFunctions;
+  filteredFunctions = lib.filterAttrs (
+    name: _: !(isDarwin && builtins.elem name darwinExcludedFunctions)
+  ) allFunctions;
 
   darwinExcludedShellAbbrs = lib.unique [
     "nix-lint"
@@ -374,9 +385,9 @@ let
     cam-sat = "v4l2-ctl --set-ctrl=saturation=50 -d /dev/video0";
   };
 
-  filteredShellAbbrs = lib.filterAttrs
-    (name: _: !(isDarwin && builtins.elem name darwinExcludedShellAbbrs))
-    allShellAbbrs;
+  filteredShellAbbrs = lib.filterAttrs (
+    name: _: !(isDarwin && builtins.elem name darwinExcludedShellAbbrs)
+  ) allShellAbbrs;
 
   darwinExcludedShellAliases = lib.unique [
     "support-info"
@@ -436,17 +447,13 @@ let
   ];
 
   allShellAliases = {
-    support-info =
-      ", fastfetch --logo none -c ${user-settings.user.home}/dev/nix/nixcfg/modules/cli/fastfetch/support.jsonc | xclip -selection clipboard";
-    support-info-extended =
-      ", fastfetch --logo none -c ${user-settings.user.home}/dev/nix/nixcfg/modules/cli/fastfetch/support-extended.jsonc | xclip -selection clipboard";
+    support-info = ", fastfetch --logo none -c ${user-settings.user.home}/dev/nix/nixcfg/modules/cli/fastfetch/support.jsonc | xclip -selection clipboard";
+    support-info-extended = ", fastfetch --logo none -c ${user-settings.user.home}/dev/nix/nixcfg/modules/cli/fastfetch/support-extended.jsonc | xclip -selection clipboard";
     tshoot-last-boot = "sudo journalctl -b -1 | curl -F 'file=@-' 0x0.st";
     copy-icons = "copy_icons";
     echo-home = "echo ${user-settings.user.home}";
-    hm-logs =
-      "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
-    tailscale-up-lt =
-      "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
+    hm-logs = "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
+    tailscale-up-lt = "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
     tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
     oc = "~/.npm-packages/bin/opencommit";
     bless = "sudo xattr -r -d com.apple.quarantine";
@@ -455,12 +462,9 @@ let
     "..." = "cd ../..";
     "...." = "cd ../../..";
     "....." = "cd ../../../..";
-    nix-get-video-id =
-      "nix --experimental-features 'flakes nix-command' run github:eclairevoyant/pcids";
-    sysdig-cli-scanner-recent-version =
-      "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
-    sysdig-cli-scanner-get = ''
-      curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"'';
+    nix-get-video-id = "nix --experimental-features 'flakes nix-command' run github:eclairevoyant/pcids";
+    sysdig-cli-scanner-recent-version = "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
+    sysdig-cli-scanner-get = ''curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"'';
     kubectl = "${pkgs.kubecolor}/bin/kubecolor";
     ips = "ip -o -4 addr list | awk '{print $2, $4}'";
     ipull = "instruqt track pull";
@@ -474,8 +478,7 @@ let
     gos = "cd ~/Documents/Scratch/";
     gon = "cd ~/dev/nix/nixcfg";
     gon-e = "cd ~/dev/nix/nixcfg && code -r .";
-    do-update =
-      "gon && git pull && just upgrade-system && git add -A && git commit -S && git push";
+    do-update = "gon && git pull && just upgrade-system && git add -A && git commit -S && git push";
     goagent = "cd ~/dev/sysdig/sysdig-agent-deploy/";
     goscreen = "cd ~/Pictures/Screenshots/";
     # y = "cd ~/; yazi";
@@ -484,10 +487,8 @@ let
     vim = "hx";
     ny = "cd ~/dev/nix/nixcfg/; yazi";
     n = "cd ~/dev/nix/nixcfg/; hx";
-    ncommit =
-      "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
-    nps =
-      "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
+    ncommit = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
+    nps = "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
     ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
     font-cache-refresh = "sudo fc-cache -f -v";
     font-list = "fc-list";
@@ -499,33 +500,25 @@ let
     ping = "${pkgs.gping}/bin/gping";
     nixcfg = "${pkgs.man}/bin/man configuration.nix";
     hmcfg = "${pkgs.man}/bin/man home-configuration.nix";
-    rustscan =
-      "${pkgs.docker}/bin/docker run -it --rm --name rustscan rustscan/rustscan:latest";
-    kcfg =
-      "sudo chown -R dustin ~/.kube && sudo chmod -R 0700 ~/.kube && cd ~/.kube && ${pkgs.just}/bin/just";
+    rustscan = "${pkgs.docker}/bin/docker run -it --rm --name rustscan rustscan/rustscan:latest";
+    kcfg = "sudo chown -R dustin ~/.kube && sudo chmod -R 0700 ~/.kube && cd ~/.kube && ${pkgs.just}/bin/just";
     vms = "sudo ${pkgs.libvirt}/bin/virsh list --all";
     yless = "${pkgs.jless}/bin/jless --yaml";
-    rebuild-mac =
-      "clear && echo;echo '***** UPDATE VERSIONS PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just darwin-rebuild";
-    rebuild =
-      "clear && echo;echo '***** UPDATE APPIMAGES PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just rebuild";
-    upgrade =
-      "clear && cd ~/dev/nix/nixcfg/; ${pkgs.just}/bin/just upgrade-system";
-    dev-rebuild =
-      "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-rebuild";
-    test-rebuild =
-      "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-test";
-    kubitect =
-      "${pkgs.steam-run}/bin/steam-run /etc/profiles/per-user/dustin/bin/kubitect";
-    comma-db =
-      "nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'";
+    rebuild-mac = "clear && echo;echo '***** UPDATE VERSIONS PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just darwin-rebuild";
+    rebuild = "clear && echo;echo '***** UPDATE APPIMAGES PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just rebuild";
+    upgrade = "clear && cd ~/dev/nix/nixcfg/; ${pkgs.just}/bin/just upgrade-system";
+    dev-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-rebuild";
+    test-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-test";
+    kubitect = "${pkgs.steam-run}/bin/steam-run /etc/profiles/per-user/dustin/bin/kubitect";
+    comma-db = "nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'";
   };
 
-  filteredShellAliases = lib.filterAttrs
-    (name: _: !(isDarwin && builtins.elem name darwinExcludedShellAliases))
-    allShellAliases;
+  filteredShellAliases = lib.filterAttrs (
+    name: _: !(isDarwin && builtins.elem name darwinExcludedShellAliases)
+  ) allShellAliases;
 
-in {
+in
+{
 
   options = {
     cli.fish.enable = lib.mkOption {
@@ -544,51 +537,54 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       programs.fish = {
         enable = true;
-        shellInit = if isWorkstation then ''
-          # Shell Init
-          direnv hook fish | source
-          ${lib.optionalString (!isDarwin)
-          "source ${user-settings.user.home}/.config/op/plugins.sh"}
+        shellInit =
+          if isWorkstation then
+            ''
+              # Shell Init
+              direnv hook fish | source
+              ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
 
-        '' else
-          "";
-        interactiveShellInit = if isWorkstation then ''
-          set fish_greeting # Disable greeting
-          ${lib.optionalString (!isDarwin)
-          "source ${user-settings.user.home}/.config/op/plugins.sh"}
+            ''
+          else
+            "";
+        interactiveShellInit =
+          if isWorkstation then
+            ''
+              set fish_greeting # Disable greeting
+              ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
 
-          # Auto-load SSH keys if this is an SSH session
-          if set -q SSH_CONNECTION
-            # Start agent if not running
-            if not pgrep -u $USER ssh-agent > /dev/null
-              eval (ssh-agent -c)
-            end
+              # Auto-load SSH keys if this is an SSH session
+              if set -q SSH_CONNECTION
+                # Check if ssh-agent is actually working, not just running
+                if not ssh-add -l >/dev/null 2>&1
+                  echo "🔑 Starting SSH agent..."
+                  eval (ssh-agent -c)
+                  echo "🔑 Loading SSH key for remote session..."
+                  ssh-add ~/.ssh/id_rsa
+                else
+                  echo "🔑 SSH agent already running with keys loaded"
+                end
+              end
 
-            # Auto-add key if no keys loaded
-            if test (ssh-add -l 2>/dev/null; echo $status) -ne 0
-              echo "🔑 Auto-loading SSH key for remote session..."
-              ssh-add ~/.ssh/id_rsa
-            end
-          end
+            ''
+          else
+            ''
+              set fish_greeting # Disable greeting
 
-        '' else ''
-          set fish_greeting # Disable greeting
+              # Auto-load SSH keys if this is an SSH session
+              if set -q SSH_CONNECTION
+                # Check if ssh-agent is actually working, not just running
+                if not ssh-add -l >/dev/null 2>&1
+                  echo "🔑 Starting SSH agent..."
+                  eval (ssh-agent -c)
+                  echo "🔑 Loading SSH key for remote session..."
+                  ssh-add ~/.ssh/id_rsa
+                else
+                  echo "🔑 SSH agent already running with keys loaded"
+                end
+              end
 
-          # Auto-load SSH keys if this is an SSH session
-          if set -q SSH_CONNECTION
-            # Start agent if not running
-            if not pgrep -u $USER ssh-agent > /dev/null
-              eval (ssh-agent -c)
-            end
-
-            # Auto-add key if no keys loaded
-            if test (ssh-add -l 2>/dev/null; echo $status) -ne 0
-              echo "🔑 Auto-loading SSH key for remote session..."
-              ssh-add ~/.ssh/id_rsa
-            end
-          end
-
-        '';
+            '';
 
         # Apply the filtered functions
         functions = filteredFunctions;

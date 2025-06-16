@@ -549,14 +549,45 @@ in {
           direnv hook fish | source
           ${lib.optionalString (!isDarwin)
           "source ${user-settings.user.home}/.config/op/plugins.sh"}
+
         '' else
           "";
         interactiveShellInit = if isWorkstation then ''
           set fish_greeting # Disable greeting
           ${lib.optionalString (!isDarwin)
           "source ${user-settings.user.home}/.config/op/plugins.sh"}
+
+          # Auto-load SSH keys if this is an SSH session
+          if set -q SSH_CONNECTION
+            # Start agent if not running
+            if not pgrep -u $USER ssh-agent > /dev/null
+              eval (ssh-agent -c)
+            end
+
+            # Auto-add key if no keys loaded
+            if test (ssh-add -l 2>/dev/null; echo $status) -ne 0
+              echo "🔑 Auto-loading SSH key for remote session..."
+              ssh-add ~/.ssh/id_rsa
+            end
+          end
+
         '' else ''
           set fish_greeting # Disable greeting
+
+          # Auto-load SSH keys if this is an SSH session
+          if set -q SSH_CONNECTION
+            # Start agent if not running
+            if not pgrep -u $USER ssh-agent > /dev/null
+              eval (ssh-agent -c)
+            end
+
+            # Auto-add key if no keys loaded
+            if test (ssh-add -l 2>/dev/null; echo $status) -ne 0
+              echo "🔑 Auto-loading SSH key for remote session..."
+              ssh-add ~/.ssh/id_rsa
+            end
+          end
+
         '';
 
         # Apply the filtered functions

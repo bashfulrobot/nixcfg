@@ -1,6 +1,14 @@
-{ config, pkgs, lib, user-settings, ... }:
-let cfg = config.suites.k8s;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  user-settings,
+  ...
+}:
+let
+  cfg = config.suites.k8s;
+in
+{
 
   options = {
     suites.k8s.enable = lib.mkOption {
@@ -30,7 +38,7 @@ in {
       unstable.talosctl # Talos OS management tool - diabled until https://github.com/NixOS/nixpkgs/issues/264127 is fixed.
       # kompose # Kubernetes container orchestration
       # vultr-cli # Vultr cloud management
-      kubectl # Kubernetes command-line tool
+      unstable.kubectl # Kubernetes command-line tool
       # kubectx # Kubernetes context switcher TODO: RE-enable
       kubecolor # colorize kubectl output
       kubernetes-helm # Kubernetes package manager
@@ -39,6 +47,7 @@ in {
       ktop # K8s top command
       unstable.krew
       unstable.kubelogin-oidc # OIDC login for kubectl
+      unstable.kubelogin
       unstable.omnictl # Omni CLI
     ];
 
@@ -46,7 +55,11 @@ in {
       "io.kinvolk.Headlamp" # K8s GUI
     ];
     home-manager.users."${user-settings.user.username}" = {
-      programs = { k9s = { enable = true; }; };
+      programs = {
+        k9s = {
+          enable = true;
+        };
+      };
     };
   };
 }

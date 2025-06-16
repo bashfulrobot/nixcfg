@@ -550,16 +550,18 @@ in
         interactiveShellInit =
           if isWorkstation then
             ''
-              set fish_greeting # Disable greeting
-              ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
+                  set fish_greeting # Disable greeting
+                  ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
 
-              # Auto-load SSH keys if this is an SSH session
+                  # Auto-load SSH keys if this is an SSH session
               if set -q SSH_CONNECTION
                 # Check if ssh-agent is actually working, not just running
                 if not ssh-add -l >/dev/null 2>&1
                   echo "🔑 Starting SSH agent..."
                   eval (ssh-agent -c)
-                  echo "🔑 Loading SSH key for remote session..."
+                  echo "🔑 Loading SSH keys for remote session..."
+                  # Load primary keys
+                  ssh-add ~/.ssh/id_ed25519
                   ssh-add ~/.ssh/id_rsa
                 else
                   echo "🔑 SSH agent already running with keys loaded"
@@ -569,15 +571,17 @@ in
             ''
           else
             ''
-              set fish_greeting # Disable greeting
+                  set fish_greeting # Disable greeting
 
-              # Auto-load SSH keys if this is an SSH session
+                  # Auto-load SSH keys if this is an SSH session
               if set -q SSH_CONNECTION
                 # Check if ssh-agent is actually working, not just running
                 if not ssh-add -l >/dev/null 2>&1
                   echo "🔑 Starting SSH agent..."
                   eval (ssh-agent -c)
-                  echo "🔑 Loading SSH key for remote session..."
+                  echo "🔑 Loading SSH keys for remote session..."
+                  # Load primary keys
+                  ssh-add ~/.ssh/id_ed25519
                   ssh-add ~/.ssh/id_rsa
                 else
                   echo "🔑 SSH agent already running with keys loaded"

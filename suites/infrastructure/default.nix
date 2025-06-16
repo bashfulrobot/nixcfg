@@ -47,7 +47,7 @@ in
       # --- Other
       ctop # container process monitoring
       wakeonlan
-      unstalble.lazyjournal # TUI Logging
+      unstable.lazyjournal # TUI Logging
     ];
   };
 }

@@ -1,6 +1,13 @@
-{ config, pkgs, lib, ... }:
-let cfg = config.suites.infrastructure;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.suites.infrastructure;
+in
+{
 
   options = {
     suites.infrastructure.enable = lib.mkOption {
@@ -12,7 +19,9 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    apps = { kvm.enable = true; };
+    apps = {
+      kvm.enable = true;
+    };
     cli = {
       tailscale.enable = true;
       docker.enable = true;
@@ -38,6 +47,7 @@ in {
       # --- Other
       ctop # container process monitoring
       wakeonlan
+      unstalble.lazyjournal # TUI Logging
     ];
   };
 }

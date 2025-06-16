@@ -1,6 +1,14 @@
-{ user-settings, pkgs, config, lib, ... }:
-let cfg = config.sys.xdg;
-in {
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.sys.xdg;
+in
+{
 
   options = {
     sys.xdg.enable = lib.mkOption {
@@ -11,7 +19,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ xdg-utils ];
+    environment.systemPackages = with pkgs; [ unstable.xdg-utils ];
     # Enable xdg
     xdg = {
       mime.enable = true;

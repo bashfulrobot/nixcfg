@@ -71,7 +71,7 @@ in
       dogdns # dig alternative
       xorg.xkill # kill client by X resource
       imagemagick_light # image manipulation library
-      coreutils # basic file, shell, and text manipulation
+      unstable.coreutils # basic file, shell, and text manipulation
       wget # file download utility
       xclip # command line interface to X clipboard
       ripgrep # grep alternative

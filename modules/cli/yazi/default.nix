@@ -1,6 +1,14 @@
-{ user-settings, pkgs, config, lib, ... }:
-let cfg = config.cli.yazi;
-in {
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.cli.yazi;
+in
+{
   options = {
     cli.yazi.enable = lib.mkOption {
       type = lib.types.bool;
@@ -14,7 +22,11 @@ in {
 
     home-manager.users."${user-settings.user.username}" = {
 
-      imports = [ ./build/keymap.nix ./build/plugins.nix ./build/settings.nix ];
+      imports = [
+        ./build/keymap.nix
+        ./build/plugins.nix
+        ./build/settings.nix
+      ];
       # Shortcuts for Yazi: https://yazi-rs.github.io/docs/quick-start/
       programs.yazi = {
         enable = true;
@@ -22,7 +34,7 @@ in {
         enableFishIntegration = true;
         enableZshIntegration = true;
         shellWrapperName = "y";
-        initLua = ./init.lua;
+        initLua = ./build/init.lua;
         # keymap.manager.prepend_keymap = [{
         #   on = [ "!" ];
         #   run = "shell /run/current-system/sw/bin/fish --block";

@@ -1,17 +1,17 @@
 {
   programs.yazi.keymap = {
     manager.prepend_keymap = [
-      # custom-shell
-      {
-        on = [ "'" ";" ];
-        run = "plugin custom-shell -- fish --interactive";
-        desc = "custom-shell as default, interactive";
-      }
-      {
-        on = [ "'" ":" ];
-        run = "plugin custom-shell -- fish --interactive --block";
-        desc = "custom-shell as default, interactive, block";
-      }
+      # custom-shell (disabled due to loading issues)
+      # {
+      #   on = [ "'" ";" ];
+      #   run = "plugin custom-shell -- fish --interactive";
+      #   desc = "custom-shell as default, interactive";
+      # }
+      # {
+      #   on = [ "'" ":" ];
+      #   run = "plugin custom-shell -- fish --interactive --block";
+      #   desc = "custom-shell as default, interactive, block";
+      # }
 
       # drag and drop
       {
@@ -69,34 +69,34 @@
         desc = "Smart filter";
       }
 
-      # what-size
-      {
-        on = "?";
-        run = "plugin what-size";
-        desc = "Calc size of selection or cwd";
-      }
+      # what-size (plugin not installed)
+      # {
+      #   on = "?";
+      #   run = "plugin what-size";
+      #   desc = "Calc size of selection or cwd";
+      # }
 
-      # yamb
-      {
-        on = "j";
-        run = "plugin yamb jump_by_key";
-        desc = "Jump bookmark by key";
-      }
-      {
-        on = [ "b" "a" ];
-        run = "plugin yamb save";
-        desc = "Add bookmark";
-      }
-      {
-        on = [ "b" "d" ];
-        run = "plugin yamb delete_by_key";
-        desc = "Delete bookmark by key";
-      }
-      {
-        on = [ "b" "r" ];
-        run = "plugin yamb rename_by_key";
-        desc = "Rename bookmark by key";
-      }
+      # yamb (disabled due to loading issues)
+      # {
+      #   on = "j";
+      #   run = "plugin yamb jump_by_key";
+      #   desc = "Jump bookmark by key";
+      # }
+      # {
+      #   on = [ "b" "a" ];
+      #   run = "plugin yamb save";
+      #   desc = "Add bookmark";
+      # }
+      # {
+      #   on = [ "b" "d" ];
+      #   run = "plugin yamb delete_by_key";
+      #   desc = "Delete bookmark by key";
+      # }
+      # {
+      #   on = [ "b" "r" ];
+      #   run = "plugin yamb rename_by_key";
+      #   desc = "Rename bookmark by key";
+      # }
     ];
   };
 }

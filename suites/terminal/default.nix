@@ -1,6 +1,14 @@
-{ config, pkgs, lib, user-settings, ... }:
-let cfg = config.suites.terminal;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  user-settings,
+  ...
+}:
+let
+  cfg = config.suites.terminal;
+in
+{
 
   options = {
     suites.terminal.enable = lib.mkOption {
@@ -17,10 +25,10 @@ in {
       bash.enable = true;
       fish.enable = true;
       zellij.enable = true;
-      yazi.enable = false;
+      yazi.enable = true;
       foot.enable = false;
-      blackbox.enable = true;
-      ghostty.enable = true;
+      blackbox.enable = false;
+      ghostty.enable = false;
       ntf.enable = true;
       xkill.enable = true;
       kitty.enable = true;
@@ -46,7 +54,9 @@ in {
 
     ];
 
-    programs = { pay-respects.enable = true; };
+    programs = {
+      pay-respects.enable = true;
+    };
 
     home-manager.users."${user-settings.user.username}" = {
 
@@ -71,7 +81,9 @@ in {
             pause_all_on_failure = false;
             callback_log_lines = 10;
           };
-          shared = { use_unix_socket = true; };
+          shared = {
+            use_unix_socket = true;
+          };
         };
       };
 
@@ -91,8 +103,12 @@ in {
             "--cmd cd" # just to stop me using cd
           ];
         };
-        tmux = { enable = true; };
-        bat = { enable = true; };
+        tmux = {
+          enable = true;
+        };
+        bat = {
+          enable = true;
+        };
 
         # navi = {
         #   enable = true;
@@ -100,7 +116,9 @@ in {
         #   enableFishIntegration = true;
         # };
 
-        carapace = { enable = true; };
+        carapace = {
+          enable = true;
+        };
       };
     };
   };

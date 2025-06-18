@@ -113,7 +113,7 @@
     libreoffice # office
     mediainfo # mediainfo-yazi
     ouch # ouch-yazi
-    poppler-utils # office
+    unstable.poppler-utils # office
     ripdrag # drag and drop
     trash-cli # restore-yazi
     udisks # mount-yazi

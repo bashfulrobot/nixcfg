@@ -13,8 +13,8 @@
   };
 
   # Enable gnome desktop
-  desktops.gnome.enable = false;
-  desktops.tiling.hyprland.enable = true;
+  desktops.gnome.enable = true;
+  desktops.tiling.hyprland.enable = false;
 
   apps.syncthing = {
     enable = true;

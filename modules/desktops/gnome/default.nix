@@ -77,7 +77,7 @@ in {
 
     programs.nautilus-open-any-terminal = {
       enable = true;
-      terminal = "blackbox";
+      terminal = "kitty";
     };
 
     ##### Home Manager Config options #####

@@ -8,5 +8,9 @@
     "nix": {
         "comment": "NOT IN USE YET - WIP",
         "release": "24.11"
+    },
+    "theme": {
+        "name": "adwaita",
+        "variant": "dark"
     }
 }

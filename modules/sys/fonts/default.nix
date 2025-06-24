@@ -58,31 +58,18 @@ in
       noto-fonts-emoji
       noto-fonts-monochrome-emoji
       source-serif
-      ### nerdfonts
+      ### nerd-fonts (25.05+ syntax)
       # if you hover over the download links on the site, the name of the zip file is the font name.
       # https://github.com/ryanoasis/nerd-fonts/releases
-      # nerd-fonts.fira-code
-      # nerd-fonts.jetbrains-mono
-      # nerd-fonts.sauce-code-pro
-      # nerd-fonts.ubuntu
-      # nerd-fonts.ubuntu-mono
-      # nerd-fonts.ubuntu-sans
-      # nerd-fonts.symbols-only
-      # nerd-fonts.victor-mono
-      (nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "CascadiaCode"
-          "JetBrainsMono"
-          "SourceCodePro"
-          "Ubuntu"
-          "UbuntuMono"
-          "UbuntuSans"
-          "NerdFontsSymbolsOnly"
-          "VictorMono"
-
-        ];
-      })
+      nerd-fonts.fira-code
+      # nerd-fonts.cascadia-code  # not available, possibly renamed
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.sauce-code-pro
+      nerd-fonts.ubuntu
+      nerd-fonts.ubuntu-mono
+      nerd-fonts.ubuntu-sans
+      nerd-fonts.symbols-only
+      nerd-fonts.victor-mono
     ];
 
     home-manager.users."${user-settings.user.username}" = {

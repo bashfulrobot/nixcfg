@@ -2,6 +2,8 @@
 
   # Bootloader.
   boot = {
+    # Use latest kernel for newer hardware support
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ "quiet" "splash" ];
     loader = {
       efi.canTouchEfiVariables = true;

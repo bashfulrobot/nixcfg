@@ -30,7 +30,7 @@ in
     environment.systemPackages = with pkgs; [
       spacedrive # File explorer
       playonlinux # Wine frontend
-      ephemeral # ephemeral browser
+      # ephemeral removed in 25.05 - archived upstream
       gnome-disk-utility
       # TODO: COnfirm: ENabled with logitech.solaar, not needed?
       #solaar # Linux manager for many Logitech keyboards, mice

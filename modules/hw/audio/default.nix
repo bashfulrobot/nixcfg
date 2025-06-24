@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
 
  # Enable sound with pipewire.
-    hardware.pulseaudio.enable = false; # removed in 25.05
+    services.pulseaudio.enable = false;
 
     security.rtkit.enable = true;
     services = {

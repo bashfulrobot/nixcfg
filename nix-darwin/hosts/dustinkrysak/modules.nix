@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
 
   imports = [
     # Universal Modules
@@ -31,7 +32,7 @@
   };
 
   cli = {
-    ghostty.enable = true;
+    ghostty.enable = false;
     alacritty.enable = false;
     wezterm.enable = false;
     kitty.enable = true;
@@ -41,7 +42,7 @@
     starship.enable = true;
     nixvim.enable = false;
     aerospace.enable = false;
-    yabai.enable = true;
+    yabai.enable = false;
     srhd.enable = false;
     helix.enable = true;
     hammerspoon.enable = false;

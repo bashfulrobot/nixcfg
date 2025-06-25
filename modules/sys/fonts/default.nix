@@ -62,7 +62,7 @@ in
       # if you hover over the download links on the site, the name of the zip file is the font name.
       # https://github.com/ryanoasis/nerd-fonts/releases
       nerd-fonts.fira-code
-      # nerd-fonts.cascadia-code  # not available, possibly renamed
+      nerd-fonts.caskaydia-cove
       nerd-fonts.jetbrains-mono
       nerd-fonts.sauce-code-pro
       nerd-fonts.ubuntu

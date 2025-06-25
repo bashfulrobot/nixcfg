@@ -90,7 +90,7 @@
       # "tor-browser"
       # "transmission"
       # "transmit"
-
+      "vagrant"
       # "vlc"
       # "yubico-yubikey-manager"
       # "zed"
@@ -99,6 +99,7 @@
     # For cli packages that aren't currently available for macOS in `nixpkgs`. Packages should be
     # installed in `../home/packages.nix` whenever possible.
     brews = [
+      "go"
       "shellcheck"
       "just"
       "gh"

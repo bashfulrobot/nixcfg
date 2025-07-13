@@ -80,7 +80,7 @@ in
 
       # Terminal theming (for applications that support it)
       programs.kitty = {
-        themeFile = "Adwaita_dark";
+        themeFile = "adwaita_dark";
       };
 
       # Configure applications to use dark theme preference

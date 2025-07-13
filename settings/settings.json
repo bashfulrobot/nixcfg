@@ -10,7 +10,7 @@
         "release": "24.11"
     },
     "theme": {
-        "name": "adwaita",
+        "name": "dracula",
         "variant": "dark"
     }
 }

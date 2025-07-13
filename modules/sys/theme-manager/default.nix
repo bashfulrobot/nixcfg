@@ -8,6 +8,8 @@ let
   # Dynamic rofi color import based on theme
   rofiThemeImport = if themeName == "adwaita" 
                    then "~/.config/rofi/colors/adwaita.rasi"
+                   else if themeName == "dracula"
+                   then "~/.config/rofi/colors/dracula.rasi"
                    else "~/.config/rofi/colors/catppuccin.rasi";
 in
 {
@@ -19,11 +21,13 @@ in
     # Enable the appropriate theme based on settings
     sys.catppuccin-theme.enable = lib.mkIf (themeName == "catppuccin") true;
     sys.adwaita-theme.enable = lib.mkIf (themeName == "adwaita") true;
+    sys.dracula-theme.enable = lib.mkIf (themeName == "dracula") true;
 
     # Ensure only one theme is active at a time
     assertions = [
       {
-        assertion = !(config.sys.catppuccin-theme.enable && config.sys.adwaita-theme.enable);
+        assertion = !(config.sys.catppuccin-theme.enable && config.sys.adwaita-theme.enable && config.sys.dracula-theme.enable) &&
+                   (lib.length (lib.filter (x: x) [config.sys.catppuccin-theme.enable config.sys.adwaita-theme.enable config.sys.dracula-theme.enable]) <= 1);
         message = "Only one theme can be enabled at a time. Check your theme settings.";
       }
     ];

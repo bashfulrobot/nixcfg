@@ -53,28 +53,28 @@ in
       gtk = {
         enable = true;
         theme = {
-          name = "Adwaita-dark";
+          name = lib.mkDefault "Adwaita-dark";
           package = pkgs.gnome-themes-extra;
         };
         iconTheme = {
-          name = "Adwaita";
-          package = pkgs.adwaita-icon-theme;
+          name = lib.mkDefault "Adwaita";
+          package = lib.mkDefault pkgs.adwaita-icon-theme;
         };
         cursorTheme = {
-          name = "Adwaita";
-          package = pkgs.adwaita-icon-theme;
+          name = lib.mkDefault "Adwaita";
+          package = lib.mkDefault pkgs.adwaita-icon-theme;
         };
       };
 
       dconf.settings = {
         "org/gnome/desktop/interface" = {
-          gtk-theme = "Adwaita-dark";
-          icon-theme = "Adwaita";
-          cursor-theme = "Adwaita";
-          color-scheme = "prefer-dark";
+          gtk-theme = lib.mkDefault "Adwaita-dark";
+          icon-theme = lib.mkDefault "Adwaita";
+          cursor-theme = lib.mkDefault "Adwaita";
+          color-scheme = lib.mkDefault "prefer-dark";
         };
         "org/gnome/desktop/wm/preferences" = {
-          theme = "Adwaita-dark";
+          theme = lib.mkDefault "Adwaita-dark";
         };
       };
 
@@ -107,20 +107,20 @@ in
       '';
 
       # Hyprland theming integration
-      wayland.windowManager.hyprland = lib.mkIf config.wayland.windowManager.hyprland.enable {
+      wayland.windowManager.hyprland = lib.mkIf config.desktops.tiling.hyprland.enable {
         settings = {
           env = [
             "GTK_THEME,Adwaita-dark"
           ];
           general = {
-            "col.active_border" = "rgba(78aeeeee)"; # Adwaita blue
-            "col.inactive_border" = "rgba(4a4a4aaa)"; # Adwaita gray
+            "col.active_border" = lib.mkDefault "rgba(78aeeeee)"; # Adwaita blue
+            "col.inactive_border" = lib.mkDefault "rgba(4a4a4aaa)"; # Adwaita gray
           };
           group = {
-            "col.border_active" = "rgba(78aeeeee)";
-            "col.border_inactive" = "rgba(4a4a4aaa)";
-            "col.border_locked_active" = "rgba(78aeeeee)";
-            "col.border_locked_inactive" = "rgba(4a4a4aaa)";
+            "col.border_active" = lib.mkDefault "rgba(78aeeeee)";
+            "col.border_inactive" = lib.mkDefault "rgba(4a4a4aaa)";
+            "col.border_locked_active" = lib.mkDefault "rgba(78aeeeee)";
+            "col.border_locked_inactive" = lib.mkDefault "rgba(4a4a4aaa)";
           };
         };
       };

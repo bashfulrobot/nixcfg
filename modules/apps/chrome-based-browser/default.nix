@@ -152,6 +152,8 @@ in
         "bokiaeofleahagjcmcodjofilfdnoblk"
         # Adguard AdBlocker
         "bgnkhhnnamicmpeenaelnjfhikgbkllg"
+        # Dracula theme
+        "gfapcejdoghpoidkfodoiiffaaibpaem"
 
       ];
       # initialPrefs = {

@@ -78,7 +78,7 @@ in
 
       # # IM
       # fractal # Matrix Client
-      #unstable.slack # instant messaging
+      unstable.slack # instant messaging
       whatsapp-for-linux # instant messaging
       unstable.signal-desktop # instant messaging
       unstable.zulip

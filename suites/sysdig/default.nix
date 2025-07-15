@@ -28,7 +28,7 @@ in
       jira.enable = true;
       sfdc.enable = true;
       gainsight.enable = true;
-      slack.enable = true;
+      slack.enable = false;
     };
 
     cli = {

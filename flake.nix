@@ -33,13 +33,17 @@
       url = "github:bashfulrobot/hyprflake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, catppuccin, opnix, hyprflake, ... }:
+    , disko, nixos-hardware, nixvim, catppuccin, opnix, hyprflake, zen-browser, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {
@@ -111,7 +115,7 @@
         { isWorkstation, ... }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit user-settings inputs secrets nixpkgs-unstable isWorkstation;
+            inherit user-settings inputs secrets nixpkgs-unstable isWorkstation zen-browser;
           };
           system = "x86_64-linux";
           inherit modules;

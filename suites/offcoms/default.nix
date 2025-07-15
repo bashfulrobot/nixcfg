@@ -22,7 +22,7 @@ in
 
     programs = {
       # Install firefox.
-      firefox.enable = true;
+      firefox.enable = false;
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       # mtr.enable = true;
@@ -38,6 +38,7 @@ in
       obsidian.enable = true;
       chrome-based-browser.enable = true;
       vivaldi.enable = false;
+      zen-browser.enable = true;
       gcal-br.enable = true;
       gmail-br.enable = true;
       sysdig-drive.enable = true;
@@ -73,7 +74,7 @@ in
 
       # Communications
 
-      # zoom-us
+      unstable.zoom-us
 
       # # IM
       # fractal # Matrix Client

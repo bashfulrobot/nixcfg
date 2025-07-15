@@ -269,8 +269,203 @@ in
           ".config/electron-flags23.conf".text = flags;
           ".config/electron-flags24.conf".text = flags;
           ".config/electron-flags25.conf".text = flags;
-          # Dark Reader configuration with Catppuccin Mocha theme
-          ".config/darkreader/Dark-Reader-Settings.json".source = ./Dark-Reader-Settings.json;
+          # Dark Reader configuration - theme-aware
+          ".config/darkreader/Dark-Reader-Settings.json".text = 
+            let
+              themeName = user-settings.theme.name or "catppuccin";
+              
+              # Catppuccin Mocha colors
+              catppuccin = {
+                darkSchemeBackgroundColor = "#1e1e2e";
+                darkSchemeTextColor = "#cdd6f4";
+                lightSchemeBackgroundColor = "#eff1f5";
+                lightSchemeTextColor = "#4c4f69";
+                scrollbarColor = "#585b70";
+                selectionColor = "#89b4fa";
+              };
+              
+              # Dracula colors
+              dracula = {
+                darkSchemeBackgroundColor = "#282a36";
+                darkSchemeTextColor = "#f8f8f2";
+                lightSchemeBackgroundColor = "#f8f8f2";
+                lightSchemeTextColor = "#282a36";
+                scrollbarColor = "#44475a";
+                selectionColor = "#bd93f9";
+              };
+              
+              # Select colors based on theme
+              colors = if themeName == "dracula" then dracula else catppuccin;
+            in
+            builtins.toJSON {
+              schemeVersion = 2;
+              enabled = true;
+              fetchNews = true;
+              theme = {
+                mode = 1;
+                brightness = 100;
+                contrast = 100;
+                grayscale = 0;
+                sepia = 0;
+                useFont = false;
+                fontFamily = "JetBrainsMono Nerd Font";
+                textStroke = 0;
+                engine = "dynamicTheme";
+                stylesheet = "";
+                darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
+                darkSchemeTextColor = colors.darkSchemeTextColor;
+                lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
+                lightSchemeTextColor = colors.lightSchemeTextColor;
+                scrollbarColor = colors.scrollbarColor;
+                selectionColor = colors.selectionColor;
+                styleSystemControls = true;
+                lightColorScheme = "Default";
+                darkColorScheme = "Default";
+                immediateModify = false;
+              };
+              presets = [];
+              customThemes = [
+                {
+                  builtIn = true;
+                  theme = {
+                    mode = 1;
+                    brightness = 100;
+                    contrast = 100;
+                    grayscale = 0;
+                    sepia = 0;
+                    useFont = false;
+                    fontFamily = "JetBrainsMono Nerd Font";
+                    textStroke = 0;
+                    engine = "cssFilter";
+                    stylesheet = "";
+                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
+                    darkSchemeTextColor = colors.darkSchemeTextColor;
+                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
+                    lightSchemeTextColor = colors.lightSchemeTextColor;
+                    scrollbarColor = colors.scrollbarColor;
+                    selectionColor = colors.selectionColor;
+                    styleSystemControls = true;
+                    lightColorScheme = "Default";
+                    darkColorScheme = "Default";
+                    immediateModify = false;
+                  };
+                  url = [ "*.officeapps.live.com" ];
+                }
+                {
+                  builtIn = true;
+                  theme = {
+                    mode = 1;
+                    brightness = 100;
+                    contrast = 100;
+                    grayscale = 0;
+                    sepia = 0;
+                    useFont = false;
+                    fontFamily = "JetBrainsMono Nerd Font";
+                    textStroke = 0;
+                    engine = "cssFilter";
+                    stylesheet = "";
+                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
+                    darkSchemeTextColor = colors.darkSchemeTextColor;
+                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
+                    lightSchemeTextColor = colors.lightSchemeTextColor;
+                    scrollbarColor = colors.scrollbarColor;
+                    selectionColor = colors.selectionColor;
+                    styleSystemControls = true;
+                    lightColorScheme = "Default";
+                    darkColorScheme = "Default";
+                    immediateModify = false;
+                  };
+                  url = [ "*.sharepoint.com" ];
+                }
+                {
+                  builtIn = true;
+                  theme = {
+                    mode = 1;
+                    brightness = 100;
+                    contrast = 100;
+                    grayscale = 0;
+                    sepia = 0;
+                    useFont = false;
+                    fontFamily = "JetBrainsMono Nerd Font";
+                    textStroke = 0;
+                    engine = "cssFilter";
+                    stylesheet = "";
+                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
+                    darkSchemeTextColor = colors.darkSchemeTextColor;
+                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
+                    lightSchemeTextColor = colors.lightSchemeTextColor;
+                    scrollbarColor = colors.scrollbarColor;
+                    selectionColor = colors.selectionColor;
+                    styleSystemControls = true;
+                    lightColorScheme = "Default";
+                    darkColorScheme = "Default";
+                    immediateModify = false;
+                  };
+                  url = [ "docs.google.com" ];
+                }
+                {
+                  builtIn = true;
+                  theme = {
+                    mode = 1;
+                    brightness = 100;
+                    contrast = 100;
+                    grayscale = 0;
+                    sepia = 0;
+                    useFont = false;
+                    fontFamily = "JetBrainsMono Nerd Font";
+                    textStroke = 0;
+                    engine = "cssFilter";
+                    stylesheet = "";
+                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
+                    darkSchemeTextColor = colors.darkSchemeTextColor;
+                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
+                    lightSchemeTextColor = colors.lightSchemeTextColor;
+                    scrollbarColor = colors.scrollbarColor;
+                    selectionColor = colors.selectionColor;
+                    styleSystemControls = true;
+                    lightColorScheme = "Default";
+                    darkColorScheme = "Default";
+                    immediateModify = false;
+                  };
+                  url = [ "onedrive.live.com" ];
+                }
+              ];
+              enabledByDefault = true;
+              enabledFor = [];
+              disabledFor = [
+                "mail.google.com"
+                "docs.google.com"
+                "www.linkedin.com"
+              ];
+              changeBrowserTheme = false;
+              syncSettings = true;
+              syncSitesFixes = false;
+              automation = {
+                behavior = "OnOff";
+                enabled = false;
+                mode = "";
+              };
+              time = {
+                activation = "18:00";
+                deactivation = "9:00";
+              };
+              location = {
+                latitude = null;
+                longitude = null;
+              };
+              previewNewDesign = false;
+              previewNewestDesign = false;
+              enableForPDF = true;
+              enableForProtectedPages = false;
+              enableContextMenus = false;
+              detectDarkTheme = true;
+              displayedNews = [ "google-docs-bugs" ];
+              installation = {
+                date = 1749434934401;
+                reason = "install";
+                version = "4.9.106";
+              };
+            };
         };
     };
   };

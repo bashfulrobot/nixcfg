@@ -83,3 +83,9 @@ The repository uses an **auto-import** system (`autoimport.nix`) that recursivel
 
 ### Memories
 - `just rebuild` - Standard system rebuild that commits to bootloader
+- there are shell aliases to interact with this repo: `gon` changes to the repo. `rebuild` runs `just rebuild`, and `dev-rebuild` runs `just dev-rebuild`
+- never brand commits with claude.
+- As a DevOps Sr. Professional, follow best practices by:
+  - Using conventional commits with emojis
+  - Being extra careful to write commit messages based strictly on git changes
+  - Ensuring all commits are signed

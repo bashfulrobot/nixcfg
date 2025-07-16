@@ -1,7 +1,26 @@
-{ config, lib, pkgs, user-settings, zen-browser, ... }:
+{ config, lib, pkgs, user-settings, settings, zen-browser, ... }:
 
 let
   cfg = config.apps.zen-browser;
+  
+  # Theme color mappings based on system theme
+  themeColors = {
+    dracula = {
+      accent = "#bd93f9";
+      background = "#282a36";
+    };
+    catppuccin = {
+      accent = "#89b4fa";
+      background = "#1e1e2e";
+    };
+    adwaita = {
+      accent = "#78aeed";
+      background = "#1e1e1e";
+    };
+  };
+  
+  currentTheme = settings.theme.name or "dracula";
+  accentColor = themeColors.${currentTheme}.accent or "#bd93f9";
 in
 {
   options.apps.zen-browser = {
@@ -46,6 +65,21 @@ in
         --enable-features=WaylandWindowDecorations
         --ozone-platform-hint=auto
         --gtk-version=4
+      '';
+
+      # Configure Zen Browser theme integration
+      home.file.".zen/user.js".text = ''
+        // System theme integration
+        user_pref("zen.theme.accent-color", "${accentColor}");
+        user_pref("zen.theme.gradient", true);
+        user_pref("zen.theme.gradient.show-custom-colors", true);
+        user_pref("zen.view.gray-out-inactive-windows", true);
+        user_pref("zen.theme.essentials-favicon-bg", true);
+        
+        // Dark theme preference to match system
+        user_pref("ui.systemUsesDarkTheme", 1);
+        user_pref("browser.theme.content-theme", 0);
+        user_pref("browser.theme.toolbar-theme", 0);
       '';
     };
   };

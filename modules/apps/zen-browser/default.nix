@@ -1,4 +1,4 @@
-{ config, lib, pkgs, user-settings, settings, zen-browser, ... }:
+{ config, lib, pkgs, user-settings, zen-browser, ... }:
 
 let
   cfg = config.apps.zen-browser;
@@ -19,7 +19,7 @@ let
     };
   };
   
-  currentTheme = settings.theme.name or "dracula";
+  currentTheme = user-settings.theme.name or "dracula";
   accentColor = themeColors.${currentTheme}.accent or "#bd93f9";
 in
 {

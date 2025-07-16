@@ -41,7 +41,7 @@ in
 
     # Configure 1Password integration
     environment.etc."1password/custom_allowed_browsers".text = lib.mkAfter ''
-      .zen-wrapped
+      zen
     '';
 
     # Home-manager configuration

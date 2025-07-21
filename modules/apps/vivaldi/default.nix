@@ -81,8 +81,6 @@ in
     # "egiemoacchfofdhhlfhkdcacgaopncmi"
     # Mail message URL
     # "bcelhaineggdgbddincjkdmokbbdhgch"
-    # Catppuccin Github icons
-    #"lnjaiaapbakfhlbjenjkhffcdpoompki"
     # Glean browser extension
     # "cfpdompphcacgpjfbonkdokgjhgabpij" # overrides my speed dial extention
     # gnome extention plugin
@@ -103,16 +101,8 @@ in
     #"coplmfnphahpcknbchcehdikbdieognn"
     # xbrowsersync
     # "lcbjdhceifofjlpecfpeimnnphbcjgnc"
-    # Catppuccin Mocha theme
-    #"bkkmolkhemgaeaeggcmfbghljjjoofoh"
     # Perplexity AI
     #"bnaffjbjpgiagpondjlnneblepbdchol"
-    # Catppuccin Frappe theme
-    # "olhelnoplefjdmncknfphenjclimckaf"
-    # Catppuccin Macchiato theme
-    # "cmpdlhmnmjhihmcfnigoememnffkimlk"
-    # Catppuccin Latte theme
-    # "jhjnalhegpceacdhbplhnakmkdliaddd"
     # tineye
     # "haebnnbpedcbhciplfhjjkbafijpncjl"
     # Gainsight Assist

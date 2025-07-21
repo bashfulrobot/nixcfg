@@ -12,7 +12,6 @@
     ../../../modules/cli/nixvim
     ../../../modules/cli/helix
     ../../../modules/cli/espanso
-    ../../../modules/cli/sysdig-cli-scanner
     ../../../modules/cli/alacritty
     ../../../modules/cli/wezterm
     ../../../modules/cli/kitty
@@ -47,7 +46,6 @@
     helix.enable = true;
     hammerspoon.enable = false;
     espanso.enable = true;
-    sysdig-cli-scanner.enable = true;
   };
 
   apps = {

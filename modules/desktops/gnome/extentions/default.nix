@@ -42,7 +42,6 @@ in {
 
           # Disabled extensions
           disabled-extensions = [
-            "user-theme@gnome-shell-extensions.gcampax.github.com"
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "gsconnect@andyholmes.github.io"
             "window-calls@domandoman.xyz"

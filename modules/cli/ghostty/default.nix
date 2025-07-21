@@ -30,7 +30,7 @@ in {
         mouse-hide-while-typing = true
         window-save-state = never
         shell-integration = fish
-        theme = light:catppuccin-latte,dark:catppuccin-mocha
+        # Theme handled by stylix
       '';
     };
   };

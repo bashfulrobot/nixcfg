@@ -41,7 +41,6 @@ in
       zen-browser.enable = true;
       gcal-br.enable = true;
       gmail-br.enable = true;
-      sysdig-drive.enable = true;
       br-drive.enable = true;
     };
 

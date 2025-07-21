@@ -3,24 +3,10 @@
 let
   cfg = config.apps.zen-browser;
   
-  # Theme color mappings based on system theme
-  themeColors = {
-    dracula = {
-      accent = "#bd93f9";
-      background = "#282a36";
-    };
-    catppuccin = {
-      accent = "#89b4fa";
-      background = "#1e1e2e";
-    };
-    adwaita = {
-      accent = "#78aeed";
-      background = "#1e1e1e";
-    };
-  };
-  
-  currentTheme = user-settings.theme.name or "dracula";
-  accentColor = themeColors.${currentTheme}.accent or "#bd93f9";
+  # Theme colors handled by stylix - access through config.lib.stylix if needed
+  accentColor = if config.stylix.enable 
+                then "#${config.lib.stylix.colors.base0D}" 
+                else "#78aeed"; # fallback
 in
 {
   options.apps.zen-browser = {

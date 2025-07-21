@@ -10,7 +10,6 @@
         "release": "24.11"
     },
     "theme": {
-        "name": "dracula",
-        "variant": "dark"
+        "wallpaper": "banksy-yell.jpg"
     }
 }

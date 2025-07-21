@@ -33,22 +33,9 @@ in {
 
           selection.save_to_clipboard = true;
 
+          # Font and colors handled by stylix
           font = {
-            normal = {
-              family = "VictorMono Nerd Font Mono";
-              style = "Regular";
-            };
-            bold = {
-              family = "VictorMono Nerd Font Mono";
-              style = "Bold";
-            };
-            italic = {
-              family = "VictorMono Nerd Font Mono";
-              style = "Italic";
-            };
-
-            size = 20;
-            # small y offsetting as iosevka-t184256 has custom -25% line spacing
+            # Preserve font offset settings for VictorMono
             offset = {
               x = 2;
               y = 1;
@@ -56,37 +43,6 @@ in {
             glyph_offset = {
               x = 6;
               y = 1;
-            };
-          };
-
-          colors = {
-            primary = {
-              background = "0x1f1f1f";
-              foreground = "0xffffff";
-            };
-            normal = {
-              black = "0x1f1f1f";
-              red = "0xe06c75";
-              green = "0x98c379";
-              yellow = "0xc88800";
-              blue = "0x61afef";
-              magenta = "0xc678dd";
-              cyan = "0x2190a4";
-              white = "0xabb2bf";
-            };
-            bright = {
-              black = "0xa9a9a9";
-              red = "0xe06c75";
-              green = "0x98c379";
-              yellow = "0xc88800";
-              blue = "0x61afef";
-              magenta = "0xc678dd";
-              cyan = "0x2190a4";
-              white = "0xffffff";
-            };
-            cursor = {
-              text = "0x1f1f1f";
-              cursor = "0x6f8396";
             };
           };
 

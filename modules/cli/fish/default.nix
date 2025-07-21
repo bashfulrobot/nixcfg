@@ -401,13 +401,10 @@ let
     "oc"
     "ncdu"
     "nix-get-video-id"
-    "sysdig-cli-scanner-recent-version"
-    "sysdig-cli-scanner-get"
     "ips"
     "ipull"
     "ipush"
     "ilog"
-    "gosysdig"
     "gotf"
     "gotfc"
     "gotfm"
@@ -463,14 +460,11 @@ let
     "...." = "cd ../../..";
     "....." = "cd ../../../..";
     nix-get-video-id = "nix --experimental-features 'flakes nix-command' run github:eclairevoyant/pcids";
-    sysdig-cli-scanner-recent-version = "curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt";
-    sysdig-cli-scanner-get = ''curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"'';
     kubectl = "${pkgs.kubecolor}/bin/kubecolor";
     ips = "ip -o -4 addr list | awk '{print $2, $4}'";
     ipull = "instruqt track pull";
     ipush = "instruqt track push";
     ilog = "instruqt track logs";
-    gosysdig = "cd ~/dev/sysdig/";
     gotf = "cd ~/dev/terraform";
     gotfc = "cd ~/dev/terraform/clusters/";
     gotfm = "cd ~/dev/terraform/modules/";
@@ -479,7 +473,6 @@ let
     gon = "cd ~/dev/nix/nixcfg";
     gon-e = "cd ~/dev/nix/nixcfg && code -r .";
     do-update = "gon && git pull && just upgrade-system && git add -A && git commit -S && git push";
-    goagent = "cd ~/dev/sysdig/sysdig-agent-deploy/";
     goscreen = "cd ~/Pictures/Screenshots/";
     # y = "cd ~/; yazi";
     e = "hx";

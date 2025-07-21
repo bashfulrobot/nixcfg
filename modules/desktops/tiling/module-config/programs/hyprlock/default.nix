@@ -1,9 +1,9 @@
-_: {
+{ lib, ... }: {
   home-manager.sharedModules = [
     (_: {
       programs.hyprlock = {
         enable = true;
-        settings = {
+        settings = lib.mkDefault {
           general = {
             hide_cursor = true;
           };
@@ -11,7 +11,7 @@ _: {
           background = [
             {
               monitor = "";
-              color = "rgb(36, 39, 58)";
+              # color managed by stylix
 
               new_optimizations = true;
               blur_size = 3;
@@ -29,10 +29,7 @@ _: {
               monitor = "";
               size = "250, 50";
               outline_thickness = 3;
-              outer_color = "rgb(198, 160, 246)";
-              inner_color = "rgb(36, 39, 58)";
-              font_color = "rgb(198, 160, 246)";
-              fail_color = "rgb(237, 135, 150)";
+              # colors managed by stylix
               fail_text = "<i>$FAIL <b>($ATTEMPTS)</b></i>";
               fail_transition = 300;
               fade_on_empty = false;
@@ -52,8 +49,7 @@ _: {
               # text = "cmd[update:1000] echo \"<b><big> $(date +\"%H:%M:%S\") </big></b>\"";
               text = "$TIME";
               font_size = 64;
-              font_family = "JetBrains Mono Nerd Font 10";
-              color = "rgb(198, 160, 246)";
+              # font_family and color managed by stylix
               position = "0, 16";
               valign = "center";
               halign = "center";
@@ -61,9 +57,8 @@ _: {
             {
               monitor = "";
               text = "Hello <span text_transform=\"capitalize\" size=\"larger\">$USER!</span>";
-              color = "rgb(198, 160, 246)";
+              # color and font_family managed by stylix
               font_size = 20;
-              font_family = "JetBrains Mono Nerd Font 10";
               position = "0, 100";
               halign = "center";
               valign = "center";
@@ -71,9 +66,8 @@ _: {
             {
               monitor = "";
               text = "Current Layout : $LAYOUT";
-              color = "rgb(198, 160, 246)";
+              # color and font_family managed by stylix
               font_size = 14;
-              font_family = "JetBrains Mono Nerd Font 10";
               position = "0, 20";
               halign = "center";
               valign = "bottom";

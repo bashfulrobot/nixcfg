@@ -8,15 +8,10 @@
     (_: {
       services.dunst = {
         enable = true;
-        iconTheme = {
-          name = "Papirus-Dark";
-          package = pkgs.papirus-icon-theme;
-        };
+        # iconTheme managed by stylix
         settings = {
           global = {
-            frame_color = "#89b4fa";
-            separator_color = "frame";
-            highlight = "#89b4fa";
+            # frame_color, separator_color, and highlight managed by stylix
             rounded = "yes";
             origin = "top-right";
             alignment = "left";
@@ -41,7 +36,7 @@
             always_run_script = true;
             corner_radius = 10;
             follow = "mouse";
-            font = "JetBrainsMono Nerd Font 10";
+            # font managed by stylix
             format = "<b>%s</b>\\n%b"; #format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
             frame_width = 1;
             offset = "15x15";
@@ -65,19 +60,15 @@
           fullscreen_delay_everything = {fullscreen = "delay";};
 
           urgency_critical = {
-            background = "#1e1e2e";
-            foreground = "#cdd6f4";
-            frame_color = "#fab387";
+            # background, foreground, and frame_color managed by stylix
             timeout = "0";
           };
           urgency_low = {
-            background = "#1e1e2e";
-            foreground = "#cdd6f4";
+            # background and foreground managed by stylix
             timeout = "4";
           };
           urgency_normal = {
-            background = "#1e1e2e";
-            foreground = "#cdd6f4";
+            # background and foreground managed by stylix
             timeout = "8";
           };
         };

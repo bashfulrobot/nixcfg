@@ -12,7 +12,7 @@ let
 
   terminal = "kitty";
   terminalFileManager = "ranger";
-  browser = "chromiumm";
+  browser = "chromium";
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
 in
@@ -57,7 +57,13 @@ in
       };
     };
     services = {
-      displayManager.defaultSession = "hyprland";
+      displayManager = {
+        defaultSession = "hyprland";
+        sddm = {
+          enable = true;
+          wayland.enable = true;
+        };
+      };
       gnome.gnome-keyring.enable = true;
       blueman.enable = true;
     };
@@ -89,19 +95,18 @@ in
       gnome-keyring
       libsecret
       blueman
-      catppuccin-papirus-folders
       papirus-folders
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
 
-    security.pam.services.lightdm.enableGnomeKeyring = true;
+    security.pam.services.sddm.enableGnomeKeyring = true;
 
     hw.bluetooth.enable = true;
 
     sys = {
       dconf.enable = true;
-      theme-manager.enable = true;
+      stylix-theme.enable = true;
       xdg.enable = true;
     };
 
@@ -114,21 +119,21 @@ in
     home-manager.users."${user-settings.user.username}" = {
 
       home.pointerCursor = {
-        name = "Bibata-Modern-Classic";
-        package = pkgs.bibata-cursors;
-        size = 24;
-        gtk.enable = true;
-        x11.enable = true;
+        name = lib.mkDefault "Bibata-Modern-Classic";
+        package = lib.mkDefault pkgs.bibata-cursors;
+        size = lib.mkDefault 24;
+        gtk.enable = lib.mkDefault true;
+        x11.enable = lib.mkDefault true;
       };
 
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Papirus-Dark";
-          package = pkgs.papirus-icon-theme;
+          name = lib.mkDefault "Papirus-Dark";
+          package = lib.mkDefault pkgs.papirus-icon-theme;
         };
         theme = {
-          name = "Catppuccin-Mocha-Standard-Sky-Dark";
+          name = lib.mkDefault "Adwaita-dark";
         };
       };
 
@@ -175,7 +180,7 @@ in
             "XCURSOR_SIZE,24"
             "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
             # Additional theming variables for comprehensive dark mode support
-            "GTK_THEME,Catppuccin-Mocha-Standard-Sky-Dark"
+            "GTK_THEME,Adwaita:dark"
             "QT_STYLE_OVERRIDE,kvantum"
             "ELECTRON_FORCE_DARK_MODE,1"
             "ELECTRON_ENABLE_DARK_MODE,1"
@@ -223,8 +228,8 @@ in
             gaps_in = 4;
             gaps_out = 9;
             border_size = 2;
-            "col.active_border" = "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.inactive_border" = "rgba(b4befecc) rgba(6c7086cc) 45deg";
+            "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
+            "col.inactive_border" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
             resize_on_border = true;
             layout = "dwindle"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)
@@ -244,10 +249,10 @@ in
             };
           };
           group = {
-            "col.border_active" = "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.border_inactive" = "rgba(b4befecc) rgba(6c7086cc) 45deg";
-            "col.border_locked_active" = "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.border_locked_inactive" = "rgba(b4befecc) rgba(6c7086cc) 45deg";
+            "col.border_active" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
+            "col.border_inactive" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
+            "col.border_locked_active" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
+            "col.border_locked_inactive" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
           };
           layerrule = [
             "blur, rofi"
@@ -635,7 +640,6 @@ in
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          gtk-theme = "Catppuccin-Mocha-Standard-Sky-Dark";
         };
       };
 

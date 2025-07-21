@@ -132,16 +132,6 @@ in
         #"coplmfnphahpcknbchcehdikbdieognn"
         # xbrowsersync
         # "lcbjdhceifofjlpecfpeimnnphbcjgnc"
-        # Catppuccin Mocha theme
-        #"bkkmolkhemgaeaeggcmfbghljjjoofoh"
-        # Perplexity AI
-        #"bnaffjbjpgiagpondjlnneblepbdchol"
-        # Catppuccin Frappe theme
-        # "olhelnoplefjdmncknfphenjclimckaf"
-        # Catppuccin Macchiato theme
-        # "cmpdlhmnmjhihmcfnigoememnffkimlk"
-        # Catppuccin Latte theme
-        # "jhjnalhegpceacdhbplhnakmkdliaddd"
         # tineye
         # "haebnnbpedcbhciplfhjjkbafijpncjl"
         # Gainsight Assist
@@ -269,55 +259,41 @@ in
           ".config/electron-flags23.conf".text = flags;
           ".config/electron-flags24.conf".text = flags;
           ".config/electron-flags25.conf".text = flags;
-          # Dark Reader configuration - theme-aware
+          # Dark Reader configuration using stylix theme colors
           ".config/darkreader/Dark-Reader-Settings.json".text = 
             let
-              themeName = user-settings.theme.name or "catppuccin";
+              # Access stylix colors when available
+              inherit (config.lib.stylix.colors) base00 base05 base01 base0D base07 base02;
               
-              # Catppuccin Mocha colors
-              catppuccin = {
-                darkSchemeBackgroundColor = "#1e1e2e";
-                darkSchemeTextColor = "#cdd6f4";
-                lightSchemeBackgroundColor = "#eff1f5";
-                lightSchemeTextColor = "#4c4f69";
-                scrollbarColor = "#585b70";
-                selectionColor = "#89b4fa";
-              };
-              
-              # Dracula colors
-              dracula = {
-                darkSchemeBackgroundColor = "#282a36";
-                darkSchemeTextColor = "#f8f8f2";
-                lightSchemeBackgroundColor = "#f8f8f2";
-                lightSchemeTextColor = "#282a36";
-                scrollbarColor = "#44475a";
-                selectionColor = "#bd93f9";
-              };
-              
-              # Select colors based on theme
-              colors = if themeName == "dracula" then dracula else catppuccin;
+              # Fallback colors if stylix is not configured
+              backgroundColor = if config.stylix.enable then "#${base00}" else "#1e1e2e";
+              textColor = if config.stylix.enable then "#${base05}" else "#cdd6f4";
+              surfaceColor = if config.stylix.enable then "#${base01}" else "#313244";
+              accentColor = if config.stylix.enable then "#${base0D}" else "#89b4fa";
+              lightBackgroundColor = if config.stylix.enable then "#${base07}" else "#eff1f5";
+              lightTextColor = if config.stylix.enable then "#${base02}" else "#4c4f69";
             in
             builtins.toJSON {
               schemeVersion = 2;
               enabled = true;
               fetchNews = true;
               theme = {
-                mode = 1;
+                mode = 1; # Dark mode
                 brightness = 100;
                 contrast = 100;
                 grayscale = 0;
                 sepia = 0;
                 useFont = false;
-                fontFamily = "JetBrainsMono Nerd Font";
+                fontFamily = if config.stylix.enable then config.stylix.fonts.monospace.name else "JetBrainsMono Nerd Font";
                 textStroke = 0;
                 engine = "dynamicTheme";
                 stylesheet = "";
-                darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
-                darkSchemeTextColor = colors.darkSchemeTextColor;
-                lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
-                lightSchemeTextColor = colors.lightSchemeTextColor;
-                scrollbarColor = colors.scrollbarColor;
-                selectionColor = colors.selectionColor;
+                darkSchemeBackgroundColor = backgroundColor;
+                darkSchemeTextColor = textColor;
+                lightSchemeBackgroundColor = lightBackgroundColor;
+                lightSchemeTextColor = lightTextColor;
+                scrollbarColor = surfaceColor;
+                selectionColor = accentColor;
                 styleSystemControls = true;
                 lightColorScheme = "Default";
                 darkColorScheme = "Default";
@@ -334,16 +310,16 @@ in
                     grayscale = 0;
                     sepia = 0;
                     useFont = false;
-                    fontFamily = "JetBrainsMono Nerd Font";
+                    fontFamily = if config.stylix.enable then config.stylix.fonts.monospace.name else "JetBrainsMono Nerd Font";
                     textStroke = 0;
                     engine = "cssFilter";
                     stylesheet = "";
-                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
-                    darkSchemeTextColor = colors.darkSchemeTextColor;
-                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
-                    lightSchemeTextColor = colors.lightSchemeTextColor;
-                    scrollbarColor = colors.scrollbarColor;
-                    selectionColor = colors.selectionColor;
+                    darkSchemeBackgroundColor = backgroundColor;
+                    darkSchemeTextColor = textColor;
+                    lightSchemeBackgroundColor = lightBackgroundColor;
+                    lightSchemeTextColor = lightTextColor;
+                    scrollbarColor = surfaceColor;
+                    selectionColor = accentColor;
                     styleSystemControls = true;
                     lightColorScheme = "Default";
                     darkColorScheme = "Default";
@@ -360,16 +336,16 @@ in
                     grayscale = 0;
                     sepia = 0;
                     useFont = false;
-                    fontFamily = "JetBrainsMono Nerd Font";
+                    fontFamily = if config.stylix.enable then config.stylix.fonts.monospace.name else "JetBrainsMono Nerd Font";
                     textStroke = 0;
                     engine = "cssFilter";
                     stylesheet = "";
-                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
-                    darkSchemeTextColor = colors.darkSchemeTextColor;
-                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
-                    lightSchemeTextColor = colors.lightSchemeTextColor;
-                    scrollbarColor = colors.scrollbarColor;
-                    selectionColor = colors.selectionColor;
+                    darkSchemeBackgroundColor = backgroundColor;
+                    darkSchemeTextColor = textColor;
+                    lightSchemeBackgroundColor = lightBackgroundColor;
+                    lightSchemeTextColor = lightTextColor;
+                    scrollbarColor = surfaceColor;
+                    selectionColor = accentColor;
                     styleSystemControls = true;
                     lightColorScheme = "Default";
                     darkColorScheme = "Default";
@@ -386,16 +362,16 @@ in
                     grayscale = 0;
                     sepia = 0;
                     useFont = false;
-                    fontFamily = "JetBrainsMono Nerd Font";
+                    fontFamily = if config.stylix.enable then config.stylix.fonts.monospace.name else "JetBrainsMono Nerd Font";
                     textStroke = 0;
                     engine = "cssFilter";
                     stylesheet = "";
-                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
-                    darkSchemeTextColor = colors.darkSchemeTextColor;
-                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
-                    lightSchemeTextColor = colors.lightSchemeTextColor;
-                    scrollbarColor = colors.scrollbarColor;
-                    selectionColor = colors.selectionColor;
+                    darkSchemeBackgroundColor = backgroundColor;
+                    darkSchemeTextColor = textColor;
+                    lightSchemeBackgroundColor = lightBackgroundColor;
+                    lightSchemeTextColor = lightTextColor;
+                    scrollbarColor = surfaceColor;
+                    selectionColor = accentColor;
                     styleSystemControls = true;
                     lightColorScheme = "Default";
                     darkColorScheme = "Default";
@@ -412,16 +388,16 @@ in
                     grayscale = 0;
                     sepia = 0;
                     useFont = false;
-                    fontFamily = "JetBrainsMono Nerd Font";
+                    fontFamily = if config.stylix.enable then config.stylix.fonts.monospace.name else "JetBrainsMono Nerd Font";
                     textStroke = 0;
                     engine = "cssFilter";
                     stylesheet = "";
-                    darkSchemeBackgroundColor = colors.darkSchemeBackgroundColor;
-                    darkSchemeTextColor = colors.darkSchemeTextColor;
-                    lightSchemeBackgroundColor = colors.lightSchemeBackgroundColor;
-                    lightSchemeTextColor = colors.lightSchemeTextColor;
-                    scrollbarColor = colors.scrollbarColor;
-                    selectionColor = colors.selectionColor;
+                    darkSchemeBackgroundColor = backgroundColor;
+                    darkSchemeTextColor = textColor;
+                    lightSchemeBackgroundColor = lightBackgroundColor;
+                    lightSchemeTextColor = lightTextColor;
+                    scrollbarColor = surfaceColor;
+                    selectionColor = accentColor;
                     styleSystemControls = true;
                     lightColorScheme = "Default";
                     darkColorScheme = "Default";

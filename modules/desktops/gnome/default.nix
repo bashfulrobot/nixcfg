@@ -66,7 +66,7 @@ in {
 
     sys = {
       dconf.enable = true;
-      theme-manager.enable = true;
+      stylix-theme.enable = true;
       xdg.enable = true;
     };
 
@@ -122,25 +122,21 @@ in {
 
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          accent-color = "yellow";
+          # accent-color and fonts managed by stylix
 
-          # Fonts
+          # Font rendering settings
           font-hinting = "full";
           font-antialiasing = "rgba";
-
-          font-name = "Work Sans 12";
-          document-font-name = "Work Sans 12";
-          monospace-font-name = "Source Code Pro 10";
         };
         "org/gnome/desktop/background" = {
-          color-shading-type = "solid";
-          picture-options = "zoom";
-          picture-uri =
+          color-shading-type = lib.mkDefault "solid";
+          picture-options = lib.mkDefault "zoom";
+          picture-uri = lib.mkDefault
             "file:///run/current-system/sw/share/backgrounds/gnome/symbolic-soup-l.jxl";
-          picture-uri-dark =
+          picture-uri-dark = lib.mkDefault
             "file:///run/current-system/sw/share/backgrounds/gnome/symbolic-soup-d.jxl";
-          primary-color = "#B9B5AE";
-          secondary-color = "#000000";
+          primary-color = lib.mkDefault "#B9B5AE";
+          secondary-color = lib.mkDefault "#000000";
         };
         "org/gnome/desktop/screensaver" = {
           color-shading-type = "solid";

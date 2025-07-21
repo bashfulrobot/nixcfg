@@ -41,7 +41,7 @@ in {
             matches = [
               {
                 trigger = ":wem";
-                replace = "dustin.krysak@sysdig.com";
+                replace = "dustin.krysak@konghq.com";
               }
               {
                 trigger = ":pem";

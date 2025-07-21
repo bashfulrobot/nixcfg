@@ -45,13 +45,6 @@ in {
           "...." = "cd ../../..";
           "....." = "cd ../../../..";
           tf = "terraform";
-          instruqt = "/home/${user-settings.user.username}/dev/sysdig/workshops/bin/instruqt";
-          ipull =
-            "cd ~/dev/sysdig/workshops/instruqt/tracks/monitor/troubleshooting-essentials-with-advisor/; /home/${user-settings.user.username}/dev/sysdig/workshops/bin/instruqt track pull";
-          ipush =
-            "cd ~/dev/sysdig/workshops/instruqt/tracks/monitor/troubleshooting-essentials-with-advisor/; /home/${user-settings.user.username}/dev/sysdig/workshops/bin/instruqt track push";
-          ilog =
-            "cd ~/dev/sysdig/workshops/instruqt/tracks/monitor/troubleshooting-essentials-with-advisor/; /home/${user-settings.user.username}/dev/sysdig/workshops/bin/instruqt track logs";
           y = "cd ~/; yazi";
           e = "hx";
           nvim = "hx";

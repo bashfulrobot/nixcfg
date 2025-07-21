@@ -1,60 +1,82 @@
 # Theme Management
 
-This configuration supports two themes that can be easily switched between:
+This configuration now uses **Stylix** for system-wide theming based on wallpaper color extraction.
 
-## Available Themes
+## Current Implementation
 
-### Catppuccin (Default)
-- **Name**: `catppuccin`
-- **Variant**: `mocha`
-- **Description**: Purple/blue accent colors with warm, cozy feel
-- **Features**: Full integration via catppuccin-nix
+### Stylix-Based Theming
+- **Framework**: [Stylix](https://github.com/danth/stylix) - Automatic theming from wallpapers
+- **Method**: Base16 color scheme generation from wallpaper images
+- **Coverage**: System-wide theming for terminals, editors, and applications
+- **GTK Support**: Custom GTK module for GNOME integration
 
-### Adwaita 
-- **Name**: `adwaita`  
-- **Variant**: `dark`
-- **Description**: Standard GNOME dark theme with blue accents
-- **Features**: Native GNOME theming with custom color integration
+### Theme Components
 
-## How to Switch Themes
+#### Core Modules
+- **Stylix Theme**: `modules/sys/stylix-theme/default.nix` - Main theming engine
+- **GTK Theme**: `modules/sys/gtk-theme/default.nix` - GTK/GNOME integration
+- **Theme Manager**: `modules/sys/theme-manager/default.nix` - Coordination module
 
-1. **Edit settings file**: `settings/settings.json`
-2. **Change theme name**:
-   ```json
-   {
-     "theme": {
-       "name": "adwaita",
-       "variant": "dark"
-     }
-   }
-   ```
-3. **Rebuild system**: `just dev-rebuild`
-4. **Apply changes**: Log out and back in
+#### Configuration
+- **Settings**: `settings/settings.json` - Wallpaper path configuration
+- **Fonts**: JetBrainsMono Nerd Font (monospace), Work Sans (UI)
+- **Polarity**: Auto-detection from wallpaper
 
-## Current Theme Integration
+## How to Use
 
-Both themes automatically configure:
-- **GNOME**: GTK theme, window manager, dconf settings
-- **Hyprland**: Window borders, rofi colors, environment variables  
-- **Applications**: Terminal colors, browser preferences
-- **Rofi**: Dynamic color scheme selection
+### 1. Set Your Wallpaper
+Edit `settings/settings.json`:
+```json
+{
+  "theme": {
+    "wallpaper": "/path/to/your/wallpaper.png"
+  }
+}
+```
 
-## Theme Files
+### 2. Enable Theme Manager
+**Currently disabled** due to stylix compatibility issues. To re-enable:
+1. Edit `modules/desktops/gnome/default.nix`
+2. Uncomment: `theme-manager.enable = true;`
 
-- **Theme Manager**: `modules/sys/theme-manager/default.nix`
-- **Catppuccin**: `modules/sys/catppuccin-theme/default.nix`
-- **Adwaita**: `modules/sys/adwaita-theme/default.nix`
-- **Settings**: `settings/settings.json`
-
-## Quick Switch Commands
-
+### 3. Rebuild System
 ```bash
-# Switch to Adwaita
-jq '.theme.name = "adwaita" | .theme.variant = "dark"' settings/settings.json > /tmp/settings.json && mv /tmp/settings.json settings/settings.json
-
-# Switch to Catppuccin  
-jq '.theme.name = "catppuccin" | .theme.variant = "mocha"' settings/settings.json > /tmp/settings.json && mv /tmp/settings.json settings/settings.json
-
-# Rebuild after change
 just dev-rebuild
 ```
+
+## Current Status
+
+⚠️ **Note**: Theme manager is temporarily disabled due to stylix compatibility issues with NixOS 25.05.
+
+### Working Features
+- ✅ Stylix color scheme generation from wallpapers
+- ✅ Font configuration
+- ✅ GTK theming integration
+- ✅ Base16 scheme fallback
+
+### Pending Resolution
+- 🔄 Stylix compatibility with current NixOS version
+- 🔄 Wallpaper-based color extraction
+- 🔄 Automatic application theming
+
+## Migration Summary
+
+### Removed Components
+- Catppuccin theme modules
+- Dracula theme modules  
+- Adwaita theme modules
+- Manual color configurations
+
+### Added Components
+- Stylix integration
+- Wallpaper color extraction
+- Automatic font management
+- GTK theming module
+
+## Future Enhancements
+
+Once stylix compatibility is resolved:
+1. Re-enable wallpaper-based color extraction
+2. Add more application targets
+3. Implement dynamic wallpaper switching
+4. Add theme scheduling (light/dark based on time)

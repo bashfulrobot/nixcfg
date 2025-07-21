@@ -22,9 +22,6 @@ in
     cli = { };
 
     apps = {
-      perplexity = {
-        enable = true;
-      };
     };
 
     environment.systemPackages = with pkgs; [

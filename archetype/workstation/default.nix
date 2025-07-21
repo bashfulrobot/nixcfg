@@ -30,7 +30,6 @@ in {
       infrastructure.enable = true;
       k8s.enable = true;
       offcoms.enable = true;
-      sysdig.enable = true;
       terminal.enable = true;
       utilities.enable = true;
     };

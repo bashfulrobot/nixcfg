@@ -42,6 +42,7 @@ in
       nixvim.enable = false;
       opencommit.enable = true;
       helix.enable = true;
+      claude-code.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -59,7 +60,6 @@ in
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
       unstable.helix # text editor
-      unstable.claude-code
     ];
 
     # programs = { jqp = { enable = true; }; };

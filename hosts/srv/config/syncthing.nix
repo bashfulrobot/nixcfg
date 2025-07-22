@@ -44,7 +44,7 @@
           id =
             "ZHSE4N7-IBYDJLI-XZE7VSC-RE7LMKE-JYVTAPT-XIEGEQ4-I64EPDE-AJQRNAJ";
         };
-        "digdug" = {
+        "donkey-kong" = {
           # tailscale only
           addresses = [ "tcp://100.67.177.44:22000" ];
           id =
@@ -54,7 +54,7 @@
       folders = {
         "srv-docs" = {
           path = "${user-settings.user.home}/Srv-docs";
-          devices = [ "qbert" "digdug" ];
+          devices = [ "qbert" "donkey-kong" ];
           ignorePerms =
             false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
 
@@ -71,7 +71,7 @@
         };
         ".gnupg" = {
           path = "${user-settings.user.home}/.gnupg";
-          devices = [ "qbert" "digdug" ];
+          devices = [ "qbert" "donkey-kong" ];
           ignorePerms =
             false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
           versioning = {
@@ -84,7 +84,7 @@
         };
         ".kube" = {
           path = "${user-settings.user.home}/.kube";
-          devices = [ "qbert" "digdug" ];
+          devices = [ "qbert" "donkey-kong" ];
           versioning = {
             type = "staggered";
             params = {

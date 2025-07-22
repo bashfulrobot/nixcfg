@@ -24,7 +24,7 @@ in {
           play = [ "AudioPlay" ];
           volume-down = [ "AudioLowerVolume" ];
           volume-mute = [ "AudioMute" ];
-          volume-up = [ "AudioRaisdigduglume" ];
+          volume-up = [ "AudioRaisdonkey-konglume" ];
         };
 
         # "org/gnome/mutter/keybindings" = {

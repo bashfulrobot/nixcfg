@@ -16,7 +16,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      # url = "github:nix-community/nixvim/nixos-24.11";
+      # url = "github:nix-community/nixvim/nixos-25.05";
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -126,8 +126,8 @@
         # --- Create nixos systems using the makeSystem function
 
         # Note: The `true` argument is used to determine if the system is a workstation or not
-        digdug = makeSystem "digdug" (commonModules
-          ++ [ ./hosts/digdug commonHomeManagerConfig commonNixpkgsConfig ]) {
+        donkey-kong = makeSystem "donkey-kong" (commonModules
+          ++ [ ./hosts/donkey-kong commonHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = true;
           };
         # Note: The `true` argument is used to determine if the system is a workstation or not

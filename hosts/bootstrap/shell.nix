@@ -40,7 +40,7 @@ let
           # Prompt for system name
           echo "Select a system name:"
           echo "1) qbert"
-          echo "2) digdug"
+          echo "2) donkey-kong"
           read -r -p "Enter the number corresponding to your choice: " system_choice
 
           case $system_choice in
@@ -48,7 +48,7 @@ let
               SYSTEM_NAME="qbert"
               ;;
             2)
-              SYSTEM_NAME="digdug"
+              SYSTEM_NAME="donkey-kong"
               ;;
             *)
               echo "Invalid selection"

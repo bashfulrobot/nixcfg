@@ -323,7 +323,7 @@ let
           end
 
           kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl get --show-kind --ignore-not-found -n $argv[1]
-      end '';
+    '';
     k_force_terminating_ns = ''
       set NS (kubectl get ns | grep Terminating | awk 'NR==1 {print $1}')
       kubectl get namespace $NS -o json | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/" | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -

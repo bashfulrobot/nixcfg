@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a comprehensive NixOS configuration repository for Dustin Krysak, managing multiple systems (digdug, qbert, srv) with a modular, declarative approach. The repository uses Nix flakes for dependency management and includes configurations for both workstations and servers.
+This is a comprehensive NixOS configuration repository for Dustin Krysak, managing multiple systems (donkey-kong, qbert, srv) with a modular, declarative approach. The repository uses Nix flakes for dependency management and includes configurations for both workstations and servers.
 
 ## Essential Commands
 
@@ -32,15 +32,15 @@ This is a comprehensive NixOS configuration repository for Dustin Krysak, managi
 ## Architecture
 
 ### Flake Structure
-- **Inputs**: Multiple channels (stable 24.11, unstable), home-manager, hardware configs, specialized tools
-- **Systems**: Three main configurations (digdug/qbert as workstations, srv as server)
+- **Inputs**: Multiple channels (stable 25.05, unstable), home-manager, hardware configs, specialized tools
+- **Systems**: Three main configurations (donkey-kong/qbert as workstations, srv as server)
 - **Overlays**: Unstable packages available under `pkgs.unstable`
 - **specialArgs**: User settings, secrets, and isWorkstation flag passed to all modules
 
 ### Module System
 The repository uses an **auto-import** system (`autoimport.nix`) that recursively discovers and imports all `.nix` files while excluding:
 - `home-manager` directories
-- `build` directories 
+- `build` directories
 - `disabled` directories
 - `module-config` directories
 - `autoimport.nix` itself

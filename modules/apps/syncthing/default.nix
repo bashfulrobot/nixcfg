@@ -22,10 +22,10 @@ in
         };
 
         host = {
-          digdug = lib.mkOption {
+          donkey-kong = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = "Enable host digdug";
+            description = "Enable host donkey-kong";
           };
 
           qbert = lib.mkOption {
@@ -72,12 +72,12 @@ in
         overrideDevices = true;
         overrideFolders = true;
       }
-      (lib.mkIf cfg.host.digdug {
-        # Configuration when host digdug is enabled
+      (lib.mkIf cfg.host.donkey-kong {
+        # Configuration when host donkey-kong is enabled
         # Sets the Config Directory (important because I sync it as a part of my .config files)
         # Note: if you don’t persist the configDir, the device ID will change after each nixos-rebuild switch.
         # ToDo - add a host variable, then add to sync
-        configDir = "${user-settings.user.home}/.config/syncthing/digdug";
+        configDir = "${user-settings.user.home}/.config/syncthing/donkey-kong";
 
         # Declaring the devices - no automated way to grab the device ID’s.
         # Hop into the web interface of each device and go to Settings -> Show ID,
@@ -274,10 +274,10 @@ in
         settings = {
           devices = {
 
-            "digdug" = {
+            "donkey-kong" = {
               # tailscale only
-              addresses = [ "tcp://${secrets.digdug.tailscale_ip}:22000" ];
-              id = "${secrets.digdug.syncthing_id}";
+              addresses = [ "tcp://${secrets.donkey-kong.tailscale_ip}:22000" ];
+              id = "${secrets.donkey-kong.syncthing_id}";
             };
             "maximus" = {
               # tailscale only
@@ -289,7 +289,7 @@ in
           folders = {
             "Desktop" = {
               path = "${user-settings.user.home}/Desktop";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               # keep just a handful of old versions of the config files. This ensures that I’m not eating up a ton of disk space, while giving me the ability to roll back far enough to resolve issues I create for myself.
               versioning = {
                 type = "simple";
@@ -300,7 +300,7 @@ in
             };
             "Documents" = {
               path = "${user-settings.user.home}/Documents";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
 
               #  The gist of staggered versioning is Syncthing will keep new versions created with an RPO of down to 30 seconds for the first hour, hourly versions for the first day, daily versions for the first month, and weekly versions until the maxAge is reached.
 
@@ -315,7 +315,7 @@ in
             };
             "Downloads" = {
               path = "${user-settings.user.home}/Downloads";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "simple";
                 params = {
@@ -335,7 +335,7 @@ in
             };
             "Music" = {
               path = "${user-settings.user.home}/Music";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "simple";
                 params = {
@@ -345,7 +345,7 @@ in
             };
             "Pictures" = {
               path = "${user-settings.user.home}/Pictures";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "simple";
                 params = {
@@ -355,7 +355,7 @@ in
             };
             "Videos" = {
               path = "${user-settings.user.home}/Videos";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "simple";
                 params = {
@@ -365,7 +365,7 @@ in
             };
             "dev" = {
               path = "${user-settings.user.home}/dev";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {
@@ -376,7 +376,7 @@ in
             };
             ".gnupg" = {
               path = "${user-settings.user.home}/.gnupg";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               ignorePerms = false; # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
               versioning = {
                 type = "staggered";
@@ -388,7 +388,7 @@ in
             };
             ".aws" = {
               path = "${user-settings.user.home}/.aws";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {
@@ -399,7 +399,7 @@ in
             };
             ".kube" = {
               path = "${user-settings.user.home}/.kube";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {
@@ -410,7 +410,7 @@ in
             };
             ".doppler" = {
               path = "${user-settings.user.home}/.doppler";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {
@@ -421,7 +421,7 @@ in
             };
             "virter" = {
               path = "${user-settings.user.home}/.config/virter";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {
@@ -432,7 +432,7 @@ in
             };
             "bin" = {
               path = "${user-settings.user.home}/bin";
-              devices = [ "digdug" ];
+              devices = [ "donkey-kong" ];
               versioning = {
                 type = "staggered";
                 params = {

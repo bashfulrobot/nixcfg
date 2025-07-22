@@ -13,6 +13,6 @@
 
   apps.syncthing = {
     enable = true;
-    host.digdug = true;
+    host.donkey-kong = true;
   };
 }

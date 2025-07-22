@@ -9,6 +9,5 @@
 - `git-crypt unlock KEY`
 - `git-crypt status -f`
 - `git-crypt status`
-- For laptop `sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko/latest#disko-install -- --flake .#digdug --disk main /dev/nvme0n1`
-- For tower `sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko/latest#disko-install -- --flake .#digdug --disk main /dev/nvme0n1p1`
-
+- For laptop `sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko/latest#disko-install -- --flake .#donkey-kong --disk main /dev/nvme0n1`
+- For tower `sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko/latest#disko-install -- --flake .#donkey-kong --disk main /dev/nvme0n1p1`

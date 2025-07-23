@@ -16,52 +16,75 @@ in {
       unstable.vscode
     ];
     home-manager.users."${user-settings.user.username}" = {
-      # VSCode configuration with manual color integration but no font management
-      programs.vscode = lib.mkIf (config.stylix.enable or false) {
-        enable = true;
-        profiles.default.userSettings = {
-          "workbench.colorTheme" = "Default Dark Modern";
-          
-          # Custom color overrides using stylix colors
-          "workbench.colorCustomizations" = {
-            "editor.background" = "#${colors.base00}";
-            "editor.foreground" = "#${colors.base05}";
-            "editor.selectionBackground" = "#${colors.base02}";
-            "editor.lineHighlightBackground" = "#${colors.base01}";
-            "editorCursor.foreground" = "#${colors.base05}";
-            "terminal.background" = "#${colors.base00}";
-            "terminal.foreground" = "#${colors.base05}";
-            "panel.background" = "#${colors.base00}";
-            "sideBar.background" = "#${colors.base01}";
-            "activityBar.background" = "#${colors.base01}";
-            "statusBar.background" = "#${colors.base02}";
-            "titleBar.activeBackground" = "#${colors.base01}";
-            "tab.activeBackground" = "#${colors.base00}";
-            "tab.inactiveBackground" = "#${colors.base01}";
-          };
-          
-          # Terminal color palette using base16
-          "terminal.integrated.ansiBlack" = "#${colors.base00}";
-          "terminal.integrated.ansiRed" = "#${colors.base08}";
-          "terminal.integrated.ansiGreen" = "#${colors.base0B}";
-          "terminal.integrated.ansiYellow" = "#${colors.base0A}";
-          "terminal.integrated.ansiBlue" = "#${colors.base0D}";
-          "terminal.integrated.ansiMagenta" = "#${colors.base0E}";
-          "terminal.integrated.ansiCyan" = "#${colors.base0C}";
-          "terminal.integrated.ansiWhite" = "#${colors.base05}";
-          "terminal.integrated.ansiBrightBlack" = "#${colors.base03}";
-          "terminal.integrated.ansiBrightRed" = "#${colors.base08}";
-          "terminal.integrated.ansiBrightGreen" = "#${colors.base0B}";
-          "terminal.integrated.ansiBrightYellow" = "#${colors.base0A}";
-          "terminal.integrated.ansiBrightBlue" = "#${colors.base0D}";
-          "terminal.integrated.ansiBrightMagenta" = "#${colors.base0E}";
-          "terminal.integrated.ansiBrightCyan" = "#${colors.base0C}";
-          "terminal.integrated.ansiBrightWhite" = "#${colors.base07}";
-        };
+      # Original working approach: no programs.vscode management - let settings sync work
+      
+      # Generate Stylix VSCode theme extension
+      home.file.".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
+        name = "stylix-theme";
+        displayName = "Stylix Theme";
+        description = "Auto-generated theme from Stylix colors";
+        version = "1.0.0";
+        engines.vscode = "^1.0.0";
+        categories = [ "Themes" ];
+        contributes.themes = [{
+          label = "Stylix";
+          uiTheme = "vs-dark";
+          path = "./themes/stylix.json";
+        }];
       };
       
-      # Disable Stylix theming for VS Code to avoid font conflicts
-      stylix.targets.vscode.enable = lib.mkForce false;
+      home.file.".vscode/extensions/stylix-theme/themes/stylix.json".text = lib.mkIf (config.stylix.enable or false) (builtins.toJSON {
+        name = "Stylix";
+        type = "dark";
+        colors = {
+          # Editor colors
+          "editor.background" = "#${colors.base00}";
+          "editor.foreground" = "#${colors.base05}";
+          "editor.selectionBackground" = "#${colors.base02}";
+          "editor.lineHighlightBackground" = "#${colors.base01}";
+          "editorCursor.foreground" = "#${colors.base05}";
+          
+          # Workbench colors
+          "activityBar.background" = "#${colors.base01}";
+          "activityBar.foreground" = "#${colors.base05}";
+          "sideBar.background" = "#${colors.base01}";
+          "sideBar.foreground" = "#${colors.base04}";
+          "statusBar.background" = "#${colors.base02}";
+          "statusBar.foreground" = "#${colors.base04}";
+          "titleBar.activeBackground" = "#${colors.base01}";
+          "titleBar.activeForeground" = "#${colors.base05}";
+          
+          # Panel colors
+          "panel.background" = "#${colors.base00}";
+          "panel.border" = "#${colors.base02}";
+          
+          # Tab colors
+          "tab.activeBackground" = "#${colors.base00}";
+          "tab.activeForeground" = "#${colors.base05}";
+          "tab.inactiveBackground" = "#${colors.base01}";
+          "tab.inactiveForeground" = "#${colors.base04}";
+          
+          # Terminal colors
+          "terminal.background" = "#${colors.base00}";
+          "terminal.foreground" = "#${colors.base05}";
+          "terminal.ansiBlack" = "#${colors.base00}";
+          "terminal.ansiRed" = "#${colors.base08}";
+          "terminal.ansiGreen" = "#${colors.base0B}";
+          "terminal.ansiYellow" = "#${colors.base0A}";
+          "terminal.ansiBlue" = "#${colors.base0D}";
+          "terminal.ansiMagenta" = "#${colors.base0E}";
+          "terminal.ansiCyan" = "#${colors.base0C}";
+          "terminal.ansiWhite" = "#${colors.base05}";
+          "terminal.ansiBrightBlack" = "#${colors.base03}";
+          "terminal.ansiBrightRed" = "#${colors.base08}";
+          "terminal.ansiBrightGreen" = "#${colors.base0B}";
+          "terminal.ansiBrightYellow" = "#${colors.base0A}";
+          "terminal.ansiBrightBlue" = "#${colors.base0D}";
+          "terminal.ansiBrightMagenta" = "#${colors.base0E}";
+          "terminal.ansiBrightCyan" = "#${colors.base0C}";
+          "terminal.ansiBrightWhite" = "#${colors.base07}";
+        };
+      });
 
       # force vscode to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer
       home.file.".config/code-flags.conf".text = ''

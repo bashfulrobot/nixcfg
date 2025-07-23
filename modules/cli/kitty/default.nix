@@ -74,8 +74,8 @@ in {
             EDITOR = "${pkgs.unstable.helix}/bin/hx";
           };
           font = {
-            name = lib.mkDefault "Victor Mono";
-            size = lib.mkDefault 18;
+            name = lib.mkForce "Victor Mono";
+            size = lib.mkForce 18;
           };
         }
       ];

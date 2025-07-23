@@ -158,11 +158,3 @@ changelog-2d-count:
 # Get system Info for Nix related Issues
 nix-system-info:
     @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
-# Rebuild Darwin System(s)
-darwin-rebuild:
-    @sudo darwin-rebuild switch --flake ./nix-darwin/.
-# Update Darwin System(s)
-darwin-upgrade-system:
-    @cp nix-darwin/flake.lock nix-darwin/flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
-    @cd nix-darwin && nix flake update
-    @sudo darwin-rebuild switch --flake ./nix-darwin/. --show-trace --verbose

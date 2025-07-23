@@ -73,8 +73,8 @@ in {
             WINIT_X11_SCALE_FACTOR = "1";
             EDITOR = "${pkgs.unstable.helix}/bin/hx";
           };
-          font = lib.mkForce {
-            name = "JetBrainsMono Nerd Font Mono";
+          font = {
+            name = "Victor Mono";
             size = 18;
           };
         }

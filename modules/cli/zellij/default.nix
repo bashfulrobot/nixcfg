@@ -17,8 +17,8 @@ in {
 
       programs.zellij = {
         enable = true;
-        # enableBashIntegration = true;
-        # enableFishIntegration = true;
+        enableBashIntegration = true;
+        enableFishIntegration = true;
         settings = {
           scrollback_editor = "hx";
           copy_on_select = true;

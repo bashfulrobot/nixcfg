@@ -1,0 +1,98 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          nix
+# Required-Start:    $all
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start SureMDM Nix process
+### END INIT INFO
+
+PIDFILE=/var/run/nix.pid
+
+start() {
+  if [ -f /var/run/$PIDFILE ] && kill -0 $(cat $PIDFILE); then
+    echo 'SureMDM Nix service already running' >&2
+    return 1
+  fi
+  echo 'Starting SureMDM Nix service'
+  cd _WORK_DIR_ && _JAVA_BIN_ -jar _WORK_DIR_/nix.jar "PIDFILE=$PIDFILE" 2>&1 | logger &
+  sleep 1
+  echo 'Starting SureMDM Nix service started'
+}
+
+stop() {
+  if [ ! -f "$PIDFILE" ] || ! kill -0 $(cat "$PIDFILE"); then
+    echo 'SureMDM Nix service not running' >&2
+    return 1
+  fi
+  echo 'Stopping SureMDM Nix service'
+  kill -15 $(cat "$PIDFILE") 
+  # Try to gracefully exit Nix 
+            n=0
+            while true; do
+                # ensure process is stopped
+                kill -0 $(cat "$PIDFILE") &>/dev/null
+                if [ "$?" != "0" ]; then
+                    # Process stopped, break from loop
+                    echo "SureMDM Nix service was stopped gracefully"
+                    rm -f "$PIDFILE"
+                    return 0
+                fi
+
+                # Wait for process to die
+                sleep 1
+                n=$(expr $n + 1)
+                if [ $n -gt 8 ]; then
+                    # After 16 seconds, kill -9
+                    kill -9 $(cat "$PIDFILE")
+                    echo "SureMDM Nix service was stopped forcefully"
+                    rm -f "$PIDFILE"
+                    return 0
+                fi
+            done
+  kill -9 $(cat "$PIDFILE") && rm -f "$PIDFILE"
+  echo 'SureMDM Nix service was stopped'
+}
+
+status() {
+  if [ -f $PIDFILE ];
+  then
+    PID=$(cat $PIDFILE);
+    if [ -e /proc/$PID ]
+    then
+      echo "SureMDM Nix Service is running. pid=$PID"
+    else
+      echo "SureMDM Nix Service is stopped"
+      rm $PID_PATH_NAME
+    fi
+  else
+    echo "SureMDM Nix service is not running"
+  fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+	
+  stop)
+    stop
+    ;;
+
+  status)
+    status
+    ;;
+
+  restart|reload)
+    stop
+    start
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|reload|status}"
+    exit 1
+	;;
+esac
+
+exit 0
+

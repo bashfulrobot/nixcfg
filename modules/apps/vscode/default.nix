@@ -45,10 +45,10 @@ in {
           "editorCursor.foreground" = "#${colors.base05}";
           
           # Workbench colors
-          "activityBar.background" = "#${colors.base01}";
+          "activityBar.background" = "#${colors.base00}";
           "activityBar.foreground" = "#${colors.base05}";
-          "sideBar.background" = "#${colors.base01}";
-          "sideBar.foreground" = "#${colors.base04}";
+          "sideBar.background" = "#${colors.base00}";
+          "sideBar.foreground" = "#${colors.base05}";
           "statusBar.background" = "#${colors.base02}";
           "statusBar.foreground" = "#${colors.base04}";
           "titleBar.activeBackground" = "#${colors.base01}";
@@ -84,6 +84,196 @@ in {
           "terminal.ansiBrightCyan" = "#${colors.base0C}";
           "terminal.ansiBrightWhite" = "#${colors.base07}";
         };
+        tokenColors = [
+          {
+            scope = ["comment" "punctuation.definition.comment"];
+            settings.foreground = "#${colors.base03}";
+          }
+          {
+            scope = ["constant" "entity.name.constant" "variable.other.constant" "variable.language"];
+            settings.foreground = "#${colors.base09}";
+          }
+          {
+            scope = ["entity" "entity.name"];
+            settings.foreground = "#${colors.base0A}";
+          }
+          {
+            scope = "variable.parameter.function";
+            settings.foreground = "#${colors.base05}";
+          }
+          {
+            scope = "entity.name.tag";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "keyword";
+            settings.foreground = "#${colors.base0E}";
+          }
+          {
+            scope = ["storage" "storage.type"];
+            settings.foreground = "#${colors.base0E}";
+          }
+          {
+            scope = ["storage.modifier.package" "storage.modifier.import" "storage.type.java"];
+            settings.foreground = "#${colors.base05}";
+          }
+          {
+            scope = ["string" "punctuation.definition.string" "string punctuation.section.embedded source"];
+            settings.foreground = "#${colors.base0B}";
+          }
+          {
+            scope = "support";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "meta.property-name";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "variable";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "variable.other";
+            settings.foreground = "#${colors.base05}";
+          }
+          {
+            scope = "invalid.broken";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "invalid.deprecated";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "invalid.illegal";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "invalid.unimplemented";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "carriage-return";
+            settings = {
+              foreground = "#${colors.base00}";
+              background = "#${colors.base08}";
+            };
+          }
+          {
+            scope = "message.error";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = "string source";
+            settings.foreground = "#${colors.base05}";
+          }
+          {
+            scope = "string variable";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = ["source.regexp" "string.regexp"];
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = ["string.regexp.character-class" "string.regexp constant.character.escape" "string.regexp source.ruby.embedded" "string.regexp string.regexp.arbitrary-repitition"];
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "string.regexp constant.character.escape";
+            settings.foreground = "#${colors.base0A}";
+          }
+          {
+            scope = "support.constant";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "support.variable";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "meta.module-reference";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "punctuation.definition.list.begin.markdown";
+            settings.foreground = "#${colors.base09}";
+          }
+          {
+            scope = ["markup.heading" "markup.heading entity.name"];
+            settings = {
+              fontStyle = "bold";
+              foreground = "#${colors.base0C}";
+            };
+          }
+          {
+            scope = "markup.quote";
+            settings.foreground = "#${colors.base0A}";
+          }
+          {
+            scope = "markup.italic";
+            settings = {
+              fontStyle = "italic";
+              foreground = "#${colors.base05}";
+            };
+          }
+          {
+            scope = "markup.bold";
+            settings = {
+              fontStyle = "bold";
+              foreground = "#${colors.base05}";
+            };
+          }
+          {
+            scope = "markup.raw";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = ["markup.deleted" "meta.diff.header.from-file" "punctuation.definition.deleted"];
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = ["markup.inserted" "meta.diff.header.to-file" "punctuation.definition.inserted"];
+            settings.foreground = "#${colors.base0B}";
+          }
+          {
+            scope = ["markup.changed" "punctuation.definition.changed"];
+            settings.foreground = "#${colors.base09}";
+          }
+          {
+            scope = ["markup.ignored" "markup.untracked"];
+            settings.foreground = "#${colors.base01}";
+          }
+          {
+            scope = "meta.diff.range";
+            settings.foreground = "#${colors.base0E}";
+          }
+          {
+            scope = "meta.diff.header";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "meta.separator";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = "meta.output";
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = ["brackethighlighter.tag" "brackethighlighter.curly" "brackethighlighter.round" "brackethighlighter.square" "brackethighlighter.angle" "brackethighlighter.quote"];
+            settings.foreground = "#${colors.base03}";
+          }
+          {
+            scope = "brackethighlighter.unmatched";
+            settings.foreground = "#${colors.base08}";
+          }
+          {
+            scope = ["constant.other.reference.link" "string.other.link"];
+            settings.foreground = "#${colors.base0C}";
+          }
+        ];
       });
 
       # force vscode to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer

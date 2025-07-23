@@ -22,7 +22,7 @@ in
     cli = { };
 
     apps = {
-      crowdstrike.enable = true;
+      # crowdstrike.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

@@ -37,22 +37,71 @@ in {
         name = "Stylix";
         type = "dark";
         colors = {
-          # Editor colors
+          # Editor colors - Enhanced visual hierarchy
           "editor.background" = "#${colors.base00}";
           "editor.foreground" = "#${colors.base05}";
-          "editor.selectionBackground" = "#${colors.base02}";
+          "editorCursor.foreground" = "#${colors.base0D}";  # Consistent accent
+          
+          # Sophisticated selection colors with transparency
+          "editor.selectionBackground" = "#${colors.base02}80";
+          "editor.inactiveSelectionBackground" = "#${colors.base02}40";
+          "editor.selectionForeground" = "#${colors.base07}";
+          "editor.wordHighlightBackground" = "#${colors.base03}60";
+          "editor.wordHighlightStrongBackground" = "#${colors.base0D}40";
           "editor.lineHighlightBackground" = "#${colors.base01}";
-          "editorCursor.foreground" = "#${colors.base05}";
+          "editor.lineHighlightBorder" = "#${colors.base02}";
+          
+          # Enhanced comment visibility
+          "editorCodeLens.foreground" = "#${colors.base04}";
+          "editorInlayHint.foreground" = "#${colors.base04}";
+          "editorInlayHint.background" = "#${colors.base01}";
+          
+          # Enhanced editor features
+          "editorBracketMatch.background" = "#${colors.base02}";
+          "editorBracketMatch.border" = "#${colors.base0C}";
+          "editorIndentGuide.background" = "#${colors.base01}";
+          "editorIndentGuide.activeBackground" = "#${colors.base03}";
+          "editorWhitespace.foreground" = "#${colors.base02}";
+          "editorRuler.foreground" = "#${colors.base02}";
+          
+          # Search and find
+          "editor.findMatchBackground" = "#${colors.base0A}40";
+          "editor.findMatchHighlightBackground" = "#${colors.base0A}20";
+          "editor.findRangeHighlightBackground" = "#${colors.base02}";
+          
+          # Error and warning squiggles
+          "editorError.foreground" = "#${colors.base08}";
+          "editorWarning.foreground" = "#${colors.base0A}";
+          "editorInfo.foreground" = "#${colors.base0D}";
+          "editorHint.foreground" = "#${colors.base0C}";
           
           # Workbench colors
           "activityBar.background" = "#${colors.base00}";
           "activityBar.foreground" = "#${colors.base05}";
+          "activityBar.inactiveForeground" = "#${colors.base03}";
+          "activityBarBadge.background" = "#${colors.base0D}";
+          "activityBarBadge.foreground" = "#${colors.base00}";
+          "activityBar.activeBorder" = "#${colors.base0D}";
+          "activityBar.activeBackground" = "#${colors.base01}";
+          
           "sideBar.background" = "#${colors.base00}";
           "sideBar.foreground" = "#${colors.base05}";
+          "sideBar.border" = "#${colors.base01}";
+          "sideBarTitle.foreground" = "#${colors.base05}";
+          "sideBarSectionHeader.background" = "#${colors.base01}";
+          "sideBarSectionHeader.foreground" = "#${colors.base05}";
+          
           "statusBar.background" = "#${colors.base02}";
           "statusBar.foreground" = "#${colors.base04}";
+          "statusBar.debuggingBackground" = "#${colors.base08}";
+          "statusBar.debuggingForeground" = "#${colors.base00}";
+          "statusBar.noFolderBackground" = "#${colors.base0E}";
+          "statusBar.noFolderForeground" = "#${colors.base00}";
+          
           "titleBar.activeBackground" = "#${colors.base01}";
           "titleBar.activeForeground" = "#${colors.base05}";
+          "titleBar.inactiveBackground" = "#${colors.base00}";
+          "titleBar.inactiveForeground" = "#${colors.base03}";
           
           # Panel colors
           "panel.background" = "#${colors.base00}";
@@ -63,10 +112,43 @@ in {
           "tab.activeForeground" = "#${colors.base05}";
           "tab.inactiveBackground" = "#${colors.base01}";
           "tab.inactiveForeground" = "#${colors.base04}";
+          "tab.border" = "#${colors.base01}";
+          "tab.activeBorder" = "#${colors.base0D}";
+          "tab.unfocusedActiveBorder" = "#${colors.base03}";
           
-          # Terminal colors
+          # Button and input colors - Consistent accent system
+          "button.background" = "#${colors.base0D}";
+          "button.foreground" = "#${colors.base00}";
+          "button.hoverBackground" = "#${colors.base0D}CC";
+          "button.secondaryBackground" = "#${colors.base02}";
+          "button.secondaryForeground" = "#${colors.base05}";
+          "button.secondaryHoverBackground" = "#${colors.base03}";
+          "input.background" = "#${colors.base01}";
+          "input.foreground" = "#${colors.base05}";
+          "input.border" = "#${colors.base02}";
+          "inputOption.activeBorder" = "#${colors.base0D}";
+          "dropdown.background" = "#${colors.base01}";
+          "dropdown.foreground" = "#${colors.base05}";
+          "dropdown.border" = "#${colors.base02}";
+          
+          # List and tree colors with accent highlights
+          "list.activeSelectionBackground" = "#${colors.base0D}40";
+          "list.activeSelectionForeground" = "#${colors.base07}";
+          "list.inactiveSelectionBackground" = "#${colors.base02}";
+          "list.inactiveSelectionForeground" = "#${colors.base05}";
+          "list.hoverBackground" = "#${colors.base01}";
+          "list.focusBackground" = "#${colors.base0D}20";
+          "list.focusForeground" = "#${colors.base05}";
+          "list.focusOutline" = "#${colors.base0D}";
+          "list.highlightForeground" = "#${colors.base0D}";
+          
+          # Advanced terminal colors with enhanced contrast
           "terminal.background" = "#${colors.base00}";
           "terminal.foreground" = "#${colors.base05}";
+          "terminal.selectionBackground" = "#${colors.base02}80";
+          "terminal.border" = "#${colors.base02}";
+          
+          # Standard ANSI colors
           "terminal.ansiBlack" = "#${colors.base00}";
           "terminal.ansiRed" = "#${colors.base08}";
           "terminal.ansiGreen" = "#${colors.base0B}";
@@ -75,6 +157,8 @@ in {
           "terminal.ansiMagenta" = "#${colors.base0E}";
           "terminal.ansiCyan" = "#${colors.base0C}";
           "terminal.ansiWhite" = "#${colors.base05}";
+          
+          # Bright ANSI colors with enhanced visibility
           "terminal.ansiBrightBlack" = "#${colors.base03}";
           "terminal.ansiBrightRed" = "#${colors.base08}";
           "terminal.ansiBrightGreen" = "#${colors.base0B}";
@@ -83,11 +167,54 @@ in {
           "terminal.ansiBrightMagenta" = "#${colors.base0E}";
           "terminal.ansiBrightCyan" = "#${colors.base0C}";
           "terminal.ansiBrightWhite" = "#${colors.base07}";
+          
+          # Terminal cursor with accent color
+          "terminalCursor.background" = "#${colors.base00}";
+          "terminalCursor.foreground" = "#${colors.base0D}";
         };
         tokenColors = [
           {
-            scope = ["comment" "punctuation.definition.comment"];
-            settings.foreground = "#${colors.base03}";
+            scope = [
+              "comment"
+              "punctuation.definition.comment"
+              "comment.line"
+              "comment.block"
+              "comment.line.double-slash"
+              "comment.line.number-sign"
+              "comment.block.documentation"
+              "comment.block.html"
+              "comment.block.xml"
+              "comment.line.triple-slash"
+              "punctuation.definition.comment.begin"
+              "punctuation.definition.comment.end"
+            ];
+            settings = {
+              foreground = "#${colors.base04}";
+              fontStyle = "italic";
+            };
+          }
+          {
+            scope = [
+              "comment.block.documentation"
+              "comment.line.documentation"
+              "string.quoted.docstring"
+            ];
+            settings = {
+              foreground = "#${colors.base0C}";
+              fontStyle = "italic";
+            };
+          }
+          {
+            scope = [
+              "comment.line.todo"
+              "comment.line.fixme"
+              "comment.line.hack"
+              "comment.line.bug"
+            ];
+            settings = {
+              foreground = "#${colors.base0A}";
+              fontStyle = "italic bold";
+            };
           }
           {
             scope = ["constant" "entity.name.constant" "variable.other.constant" "variable.language"];
@@ -128,6 +255,28 @@ in {
           {
             scope = "meta.property-name";
             settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = [
+              "meta.object-literal.key"
+              "meta.property-name.json"
+              "support.type.property-name.json"
+            ];
+            settings.foreground = "#${colors.base0D}";
+          }
+          {
+            scope = [
+              "meta.object-literal.key meta.object-literal.key"
+              "meta.property-name.json meta.property-name.json"
+            ];
+            settings.foreground = "#${colors.base0C}";
+          }
+          {
+            scope = [
+              "meta.object-literal.key meta.object-literal.key meta.object-literal.key"
+              "meta.property-name.json meta.property-name.json meta.property-name.json"
+            ];
+            settings.foreground = "#${colors.base0A}";
           }
           {
             scope = "variable";
@@ -274,6 +423,11 @@ in {
             settings.foreground = "#${colors.base0C}";
           }
         ];
+        semanticHighlighting = true;
+        semanticTokenColors = {
+          "comment" = "#${colors.base04}";
+          "comment.documentation" = "#${colors.base0C}";
+        };
       });
 
       # force vscode to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer

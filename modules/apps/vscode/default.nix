@@ -16,9 +16,6 @@ in {
       unstable.vscode
     ];
     home-manager.users."${user-settings.user.username}" = {
-      # Original working approach: no programs.vscode management - let settings sync work
-      
-      # Generate Stylix VSCode theme extension
       home.file.".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
         name = "stylix-theme";
         displayName = "Stylix Theme";
@@ -37,12 +34,10 @@ in {
         name = "Stylix";
         type = "dark";
         colors = {
-          # Editor colors - Enhanced visual hierarchy
+          # Editor colors
           "editor.background" = "#${colors.base00}";
           "editor.foreground" = "#${colors.base05}";
-          "editorCursor.foreground" = "#${colors.base0D}";  # Consistent accent
-          
-          # Sophisticated selection colors with transparency
+          "editorCursor.foreground" = "#${colors.base0D}";
           "editor.selectionBackground" = "#${colors.base02}80";
           "editor.inactiveSelectionBackground" = "#${colors.base02}40";
           "editor.selectionForeground" = "#${colors.base07}";
@@ -50,26 +45,18 @@ in {
           "editor.wordHighlightStrongBackground" = "#${colors.base0D}40";
           "editor.lineHighlightBackground" = "#${colors.base01}";
           "editor.lineHighlightBorder" = "#${colors.base02}";
-          
-          # Enhanced comment visibility
           "editorCodeLens.foreground" = "#${colors.base04}";
           "editorInlayHint.foreground" = "#${colors.base04}";
           "editorInlayHint.background" = "#${colors.base01}";
-          
-          # Enhanced editor features
           "editorBracketMatch.background" = "#${colors.base02}";
           "editorBracketMatch.border" = "#${colors.base0C}";
           "editorIndentGuide.background" = "#${colors.base01}";
           "editorIndentGuide.activeBackground" = "#${colors.base03}";
           "editorWhitespace.foreground" = "#${colors.base02}";
           "editorRuler.foreground" = "#${colors.base02}";
-          
-          # Search and find
           "editor.findMatchBackground" = "#${colors.base0A}40";
           "editor.findMatchHighlightBackground" = "#${colors.base0A}20";
           "editor.findRangeHighlightBackground" = "#${colors.base02}";
-          
-          # Error and warning squiggles
           "editorError.foreground" = "#${colors.base08}";
           "editorWarning.foreground" = "#${colors.base0A}";
           "editorInfo.foreground" = "#${colors.base0D}";
@@ -115,8 +102,6 @@ in {
           "tab.border" = "#${colors.base01}";
           "tab.activeBorder" = "#${colors.base0D}";
           "tab.unfocusedActiveBorder" = "#${colors.base03}";
-          
-          # Button and input colors - Consistent accent system
           "button.background" = "#${colors.base0D}";
           "button.foreground" = "#${colors.base00}";
           "button.hoverBackground" = "#${colors.base0D}CC";
@@ -131,7 +116,7 @@ in {
           "dropdown.foreground" = "#${colors.base05}";
           "dropdown.border" = "#${colors.base02}";
           
-          # List and tree colors with accent highlights
+          # List and tree colors
           "list.activeSelectionBackground" = "#${colors.base0D}40";
           "list.activeSelectionForeground" = "#${colors.base07}";
           "list.inactiveSelectionBackground" = "#${colors.base02}";
@@ -142,13 +127,13 @@ in {
           "list.focusOutline" = "#${colors.base0D}";
           "list.highlightForeground" = "#${colors.base0D}";
           
-          # Advanced terminal colors with enhanced contrast
+          # Terminal colors
           "terminal.background" = "#${colors.base00}";
           "terminal.foreground" = "#${colors.base05}";
           "terminal.selectionBackground" = "#${colors.base02}80";
           "terminal.border" = "#${colors.base02}";
           
-          # Standard ANSI colors
+          # ANSI colors
           "terminal.ansiBlack" = "#${colors.base00}";
           "terminal.ansiRed" = "#${colors.base08}";
           "terminal.ansiGreen" = "#${colors.base0B}";
@@ -158,7 +143,7 @@ in {
           "terminal.ansiCyan" = "#${colors.base0C}";
           "terminal.ansiWhite" = "#${colors.base05}";
           
-          # Bright ANSI colors with enhanced visibility
+          # Bright ANSI colors
           "terminal.ansiBrightBlack" = "#${colors.base03}";
           "terminal.ansiBrightRed" = "#${colors.base08}";
           "terminal.ansiBrightGreen" = "#${colors.base0B}";
@@ -167,8 +152,6 @@ in {
           "terminal.ansiBrightMagenta" = "#${colors.base0E}";
           "terminal.ansiBrightCyan" = "#${colors.base0C}";
           "terminal.ansiBrightWhite" = "#${colors.base07}";
-          
-          # Terminal cursor with accent color
           "terminalCursor.background" = "#${colors.base00}";
           "terminalCursor.foreground" = "#${colors.base0D}";
         };
@@ -430,7 +413,7 @@ in {
         };
       });
 
-      # force vscode to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer
+      # Force VSCode to use Wayland
       home.file.".config/code-flags.conf".text = ''
         --enable-features=UseOzonePlatform
         --ozone-platform=wayland

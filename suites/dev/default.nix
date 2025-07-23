@@ -20,7 +20,7 @@ in
 
   config = lib.mkIf cfg.enable {
     dev = {
-      #   go.enable = true;
+        go.enable = true;
       #   npm.enable = true;
       #   python.enable = true;
       nix.enable = true;

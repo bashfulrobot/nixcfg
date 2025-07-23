@@ -64,8 +64,8 @@ in
         size = 24;
       };
 
-      # Qt platform configuration - use adwaita for native GNOME integration
-      targets.qt.platform = lib.mkDefault "adwaita";
+      # Qt platform configuration - use gnome for native GNOME integration
+      targets.qt.platform = lib.mkForce "gnome";
     };
 
     # Install necessary packages for stylix functionality

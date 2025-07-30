@@ -1,15 +1,20 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
 
   users.default.enable = true;
 
-  # Enable hyprland desktop
-  desktops.hyprland.enable = true;
+  sys = {
+    desktop-files = {
+      enable = true;
+      reboot-windows = true;
 
-  # Enable power management
+    };
+    disable-stub-dns.enable = true;
+  };
 
-  #environment.systemPackages = with pkgs; [ mullvad ];
-
-  services.mullvad-vpn.enable = false;
+  # Enable gnome desktop
+  desktops.gnome.enable = true;
+  desktops.tiling.hyprland.enable = false;
 
   apps.syncthing = {
     enable = true;

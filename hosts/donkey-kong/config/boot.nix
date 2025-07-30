@@ -16,6 +16,9 @@
       };
     };
     kernelModules = [ "usb" "xhci_hcd" "btusb" "bluetooth" ];
+    
+    # LUKS configuration for encrypted root
+    initrd.luks.devices."luks-26e903d2-e23f-4620-8860-b4ad3057b07a".device = "/dev/disk/by-uuid/26e903d2-e23f-4620-8860-b4ad3057b07a";
   };
 
 }

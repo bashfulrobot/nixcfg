@@ -15,6 +15,7 @@
         configurationLimit = 5;
       };
     };
+    kernelModules = [ "usb" "xhci_hcd" "btusb" "bluetooth" ];
   };
 
 }

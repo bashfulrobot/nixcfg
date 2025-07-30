@@ -1,8 +1,15 @@
-{ user-settings, config, pkgs, lib, ... }:
-let 
+{
+  user-settings,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
   cfg = config.cli.kitty;
   inherit (config.lib.stylix) colors;
-in {
+in
+{
 
   options = {
     cli.kitty.enable = lib.mkOption {
@@ -30,7 +37,7 @@ in {
           };
           settings = {
             confirm_os_window_close = "0";
-            hide_window_decorations = "yes";
+            # hide_window_decorations = "yes";
             editor = "${pkgs.unstable.helix}/bin/hx";
             cursor_shape = "block";
             macos_titlebar_color = "background";
@@ -39,7 +46,7 @@ in {
             bold_font = "auto";
             italic_font = "auto";
             bold_italic_font = "auto";
-            
+
             # Stylix color integration
             foreground = lib.mkIf (config.stylix.enable or false) "#${colors.base05}";
             background = lib.mkIf (config.stylix.enable or false) "#${colors.base00}";
@@ -47,7 +54,7 @@ in {
             selection_background = lib.mkIf (config.stylix.enable or false) "#${colors.base05}";
             cursor = lib.mkIf (config.stylix.enable or false) "#${colors.base05}";
             cursor_text_color = lib.mkIf (config.stylix.enable or false) "#${colors.base00}";
-            
+
             # Terminal colors (base16)
             color0 = lib.mkIf (config.stylix.enable or false) "#${colors.base00}";
             color1 = lib.mkIf (config.stylix.enable or false) "#${colors.base08}";

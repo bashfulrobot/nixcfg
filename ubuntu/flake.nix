@@ -40,9 +40,9 @@
         overlays = [ overlay-unstable ];
       };
 
-    in {
-      homeConfigurations = {
-        "${user-settings.user.username}@donkey-kong" = home-manager.lib.homeManagerConfiguration {
+      # Helper function to create home-manager configurations for different hosts
+      mkHomeConfig = hostname: {
+        "${user-settings.user.username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
 
           extraSpecialArgs = {
@@ -53,10 +53,17 @@
           modules = [
             stylix.homeManagerModules.stylix
             ./autoimport.nix
-            ./hosts/donkey-kong
+            ./hosts/${hostname}
           ];
         };
       };
+
+    in {
+      homeConfigurations = 
+        (mkHomeConfig "donkey-kong") //
+        # Add other Ubuntu systems here as needed
+        # (mkHomeConfig "other-ubuntu-system") //
+        {};
 
       # Expose packages for development
       packages.${system} = {

@@ -165,7 +165,7 @@ ubuntu-bootstrap:
     @git add -A
     @echo "Running home-manager bootstrap with environment variables..."
     @echo "Note: Nix settings will be managed by home-manager after bootstrap"
-    @cd ubuntu && NIX_CONFIG="experimental-features = nix-command flakes\nwarn-dirty = false" nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @cd ubuntu && NIX_CONFIG="experimental-features = nix-command flakes" nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Test home-manager config without switching
 ubuntu-test:
     @git add -A

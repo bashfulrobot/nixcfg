@@ -25,76 +25,72 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (
-    let
-      # Shared stylix configuration variables
-      stylixFonts = {
-        monospace = {
-          package = pkgs.nerd-fonts.jetbrains-mono;
-          name = "JetBrainsMono Nerd Font Mono";
-        };
-        sansSerif = {
-          package = pkgs.work-sans;
-          name = "Work Sans";
-        };
-        serif = {
-          package = pkgs.work-sans;
-          name = "Work Sans";
-        };
-        emoji = {
-          package = pkgs.noto-fonts-emoji;
-          name = "Noto Color Emoji";
-        };
-        sizes = {
-          applications = 12;
-          terminal = 14;
-          desktop = 12;
-          popups = 12;
-        };
+  config = let
+    # Shared stylix configuration variables (used in both code paths)
+    stylixFonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.jetbrains-mono;
+        name = "JetBrainsMono Nerd Font Mono";
       };
-
-      stylixCursor = {
-        package = pkgs.adwaita-icon-theme;
-        name = "Adwaita";
-        size = 24;
+      sansSerif = {
+        package = pkgs.work-sans;
+        name = "Work Sans";
       };
+      serif = {
+        package = pkgs.work-sans;
+        name = "Work Sans";
+      };
+      emoji = {
+        package = pkgs.noto-fonts-emoji;
+        name = "Noto Color Emoji";
+      };
+      sizes = {
+        applications = 12;
+        terminal = 14;
+        desktop = 12;
+        popups = 12;
+      };
+    };
 
-      stylixPackages = with pkgs; [
-        imagemagick  # For color extraction from images
-        base16-schemes  # Base16 color schemes (fallback)
-      ];
-    in
-    (lib.mkMerge [
-      # NixOS system-level configuration (only when not hm-only)
-      (lib.mkIf (!cfg.hm-only) {
-        stylix = {
-          enable = true;
-          autoEnable = true;
-          image = wallpaperPath;
-          polarity = "dark";
-          fonts = stylixFonts;
-          cursor = stylixCursor;
-          targets.qt.platform = lib.mkForce "gnome";
-        };
-        
-        environment.systemPackages = stylixPackages;
-      })
-      
-      # Home-manager configuration (always present)
-      {
-        home-manager.users."${user-settings.user.username}" = {
-          stylix = {
-            enable = true;
-            autoEnable = true;
-            image = wallpaperPath;
-            polarity = "dark";
-            fonts = stylixFonts;
-            cursor = stylixCursor;
-            targets.qt.platform = lib.mkForce "gnome";
-          };
-          home.packages = lib.mkIf cfg.hm-only stylixPackages;
-        };
-      }
-    ])
-  );
+    stylixCursor = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+      size = 24;
+    };
+
+    stylixPackages = with pkgs; [
+      imagemagick  # For color extraction from images
+      base16-schemes  # Base16 color schemes (fallback)
+    ];
+
+    stylixConfig = {
+      enable = true;
+      autoEnable = true;
+      image = wallpaperPath;
+      polarity = "dark";
+      fonts = stylixFonts;
+      cursor = stylixCursor;
+      targets.qt.platform = lib.mkForce "gnome";
+    };
+  in lib.mkMerge [
+    # Always enable basic configuration when enabled
+    (lib.mkIf cfg.enable {
+      home-manager.users."${user-settings.user.username}" = {
+        stylix = stylixConfig;
+      };
+    })
+    
+    # NixOS system-level configuration (only when enabled and not hm-only)
+    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+      stylix = stylixConfig;
+      environment.systemPackages = stylixPackages;
+    })
+    
+    # Home-manager packages (only when enabled and hm-only)
+    (lib.mkIf (cfg.enable && cfg.hm-only) {
+      home-manager.users."${user-settings.user.username}" = {
+        home.packages = stylixPackages;
+      };
+    })
+  ];
 }

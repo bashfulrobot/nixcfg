@@ -2,13 +2,7 @@
 
 let
   cfg = config.sys.fonts;
-  
-  # Load custom font packages from parent directory
-  sfpro-font = pkgs.callPackage ../../../modules/sys/fonts/build/sfpro { };
-  sf-mono-liga-font = pkgs.callPackage ../../../modules/sys/fonts/build/sfpro/liga { };
-  inter-font = pkgs.callPackage ../../../modules/sys/fonts/build/inter { };
-  aharoni-font = pkgs.callPackage ../../../modules/sys/fonts/build/aharoni { };
-  # monaspace-font = pkgs.callPackage ../../../modules/sys/fonts/build/monaspace { };
+
 in
 {
   options.sys.fonts = {
@@ -19,10 +13,6 @@ in
     # Install fonts via home-manager packages
     home.packages = with pkgs; [
       work-sans
-      aharoni-font
-      inter-font
-      # sfpro-font
-      # sf-mono-liga-font
       font-awesome
       cantarell-fonts
       helvetica-neue-lt-std

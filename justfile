@@ -160,6 +160,10 @@ nix-system-info:
     @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
 
 # === Ubuntu/Home Manager Commands ===
+# Bootstrap home-manager on Ubuntu - run this first on a new Ubuntu system
+ubuntu-bootstrap:
+    @git add -A
+    @nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Test home-manager config without switching
 ubuntu-test:
     @git add -A

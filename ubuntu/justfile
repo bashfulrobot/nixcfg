@@ -1,0 +1,71 @@
+# Home Manager configuration commands for Ubuntu
+# Set the shell to fish
+set shell := ["fish", "-c"]
+# Load environment variables if .env file exists
+set dotenv-load
+# Ignore recipe lines beginning with #
+set ignore-comments
+# Search justfile in parent directory if recipe not found
+set fallback
+
+# Default recipe - show available commands
+_default:
+    @just --list --unsorted --list-prefix ····
+
+# Quick test build without applying changes
+home-test:
+    @git add -A
+    @home-manager build --flake .#dustin@donkey-kong
+
+# Switch to new configuration (applies changes)
+home-rebuild:
+    @git add -A 
+    @home-manager switch --flake .#dustin@donkey-kong
+
+# Rebuild with trace output for debugging
+home-rebuild-trace:
+    @git add -A
+    @home-manager switch --flake .#dustin@donkey-kong --show-trace
+
+# Update flake inputs
+home-update:
+    @nix flake update
+    @just home-rebuild
+
+# Show current home-manager generation
+home-generations:
+    @home-manager generations
+
+# Rollback to previous generation
+home-rollback:
+    @home-manager rollback
+
+# Remove old generations (cleanup)
+home-cleanup:
+    @home-manager expire-generations "-7 days"
+
+# Show what packages would be installed/updated
+home-diff:
+    @git add -A
+    @home-manager build --flake .#dustin@donkey-kong
+    @nix store diff-closures $(home-manager build --flake .#dustin@donkey-kong --print-out-paths | head -1) ~/.local/state/nix/profiles/home-manager || true
+
+# Lint nix files in this directory
+home-lint:
+    fd -e nix --hidden --no-ignore --follow . -x statix check {}
+
+# Initialize home-manager on new system
+home-init:
+    @echo "Installing Nix with flakes support if not already installed..."
+    @echo "Then run: nix run github:nix-community/home-manager/release-25.05 -- switch --flake .#dustin@donkey-kong"
+
+# Quick rebuild for development iteration
+dev-rebuild: home-rebuild
+
+# Show flake info
+flake-info:
+    @nix flake show
+
+# Check flake for issues
+flake-check:
+    @nix flake check

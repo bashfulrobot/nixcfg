@@ -141,5 +141,27 @@
             isWorkstation = false;
           };
       };
+
+      # --- Home Manager configurations for Ubuntu/non-NixOS systems
+      homeConfigurations = {
+        "${user-settings.user.username}@donkey-kong" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+            overlays = workstationOverlays;
+          };
+          
+          extraSpecialArgs = {
+            inherit user-settings secrets inputs;
+            inherit (inputs) zen-browser;
+          };
+
+          modules = [
+            stylix.homeManagerModules.stylix
+            ./archetype/ubuntu-workstation
+            ./hosts/donkey-kong
+          ];
+        };
+      };
     };
 }

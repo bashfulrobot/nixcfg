@@ -158,3 +158,22 @@ changelog-2d-count:
 # Get system Info for Nix related Issues
 nix-system-info:
     @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
+
+# === Ubuntu/Home Manager Commands ===
+# Test home-manager config without switching
+ubuntu-test:
+    @git add -A
+    @home-manager build --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+# Switch to new home-manager configuration
+ubuntu-rebuild:
+    @git add -A
+    @home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+# Switch to new home-manager configuration with trace
+ubuntu-rebuild-trace:
+    @git add -A
+    @home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
+# Update flake and switch home-manager
+ubuntu-upgrade-system:
+    @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
+    @nix flake update
+    @home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace

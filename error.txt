@@ -1,1 +1,31 @@
+$ just ubuntu-rebuild
+warning: ignoring the client-specified setting 'auto-optimise-store', because it is a restricted setting and you are not a trusted user
+warning: ignoring the client-specified setting 'auto-optimise-store', because it is a restricted setting and you are not a trusted user
+warning: updating lock file "/home/dustin/dev/nix/nixcfg/ubuntu/flake.lock":
+• Added input 'declarative-flatpak':
+    'github:in-a-dil-emma/declarative-flatpak/51d40719037c9ae15a51c58ca01d49c0cfb58c52?narHash=sha256-e/45Vj8FnlZWngbFThinQ5vNPAeEvtF6YTqDhsUtJhA%3D' (2025-07-31)
+evaluation warning: stylix: flake output `homeManagerModules` has been renamed to `homeModules` and will be removed after 26.05.
+error:
+       … while evaluating a branch condition
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:142:18:
+          141|       len = length list;
+          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
+             |                  ^
+          143|     in
 
+       … while calling the 'length' builtin
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:141:13:
+          140|     let
+          141|       len = length list;
+             |             ^
+          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
+
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: attribute 'homeManagerModules' missing
+       at /nix/store/wrzpdjl38y133nn6da43fimxzxihncv4-source/ubuntu/flake.nix:58:13:
+           57|             stylix.homeManagerModules.stylix
+           58|             declarative-flatpak.homeManagerModules.declarative-flatpak
+             |             ^
+           59|             ./autoimport.nix
+error: Recipe `ubuntu-rebuild` failed on line 176 with exit code 1

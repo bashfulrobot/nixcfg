@@ -27,7 +27,7 @@ let
   # Shared stylix configuration values
   stylixAutoEnable = true;
   stylixPolarity = "dark";
-  
+
   # Font packages and names
   monospacePackage = pkgs.nerd-fonts.jetbrains-mono;
   monospaceName = "JetBrainsMono Nerd Font Mono";
@@ -37,18 +37,18 @@ let
   serifName = "Work Sans";
   emojiPackage = pkgs.noto-fonts-emoji;
   emojiName = "Noto Color Emoji";
-  
+
   # Font sizes
   fontSizeApplications = 12;
   fontSizeTerminal = 14;
   fontSizeDesktop = 12;
   fontSizePopups = 12;
-  
+
   # Cursor configuration
   cursorPackage = pkgs.adwaita-icon-theme;
   cursorName = "Adwaita";
   cursorSize = 24;
-  
+
   # Qt platform
   qtPlatform = "gnome";
 in
@@ -126,13 +126,13 @@ in
       stylix = {
         enable = true;
         autoEnable = stylixAutoEnable;  # Let stylix auto-detect available applications
-        
+
         # Extract colors from wallpaper
         image = wallpaperPath;
-        
+
         # Force dark theme to match desktop
         polarity = stylixPolarity;
-        
+
         # Font configuration
         fonts = {
           monospace = {
@@ -169,6 +169,12 @@ in
         # Qt platform configuration - use gnome for native GNOME integration
         targets.qt.platform = lib.mkForce qtPlatform;
       };
+
+      # Install necessary packages for stylix functionality (home-manager)
+      home.packages = with pkgs; [
+        imagemagick # For color extraction from images
+        base16-schemes # Base16 color schemes (fallback)
+      ];
     };
   };
 }

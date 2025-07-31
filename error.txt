@@ -2,6 +2,7 @@ $ just ubuntu-bootstrap
 Setting up nix configuration...
 Backing up existing nix.conf...
 Restarting nix daemon to apply configuration...
+[sudo] password for dustin: 
 Running home-manager bootstrap...
 warning: ignoring the client-specified setting 'auto-optimise-store', because it is a restricted setting and you are not a trusted user
 warning: ignoring the client-specified setting 'auto-optimise-store', because it is a restricted setting and you are not a trusted user
@@ -26,12 +27,12 @@ error:
        (stack trace truncated; use '--show-trace' to show the full, detailed trace)
 
        error: The option `environment' does not exist. Definition values:
-       - In `/nix/store/ms1ws78dgj50hsbll0fh3sfcvff5kxsy-source/modules/sys/stylix-theme':
+       - In `/nix/store/szv3havrxsdrj3nc5h0mnfhshnwxw0xm-source/modules/sys/stylix-theme':
            {
              _type = "if";
              condition = false;
              content = {
-               systemPackages = [
+               systemPackages = {
            ...
 error: Recipe `ubuntu-bootstrap` failed on line 184 with exit code 1
 

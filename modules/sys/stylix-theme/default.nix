@@ -26,7 +26,13 @@ in
   };
 
   config = let
-    # Shared stylix configuration variables (used in both code paths)
+    # Shared values (actual data used in both NixOS and home-manager contexts)
+    stylixEnable = true;
+    stylixAutoEnable = true;
+    stylixImage = wallpaperPath;
+    stylixPolarity = "dark";
+    stylixQtPlatform = "gnome";
+    
     stylixFonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
@@ -62,27 +68,34 @@ in
       imagemagick  # For color extraction from images
       base16-schemes  # Base16 color schemes (fallback)
     ];
-
-    stylixConfig = {
-      enable = true;
-      autoEnable = true;
-      image = wallpaperPath;
-      polarity = "dark";
-      fonts = stylixFonts;
-      cursor = stylixCursor;
-      targets.qt.platform = lib.mkForce "gnome";
-    };
-  in lib.mkIf cfg.enable {
-    # Home-manager configuration (always present)
-    home-manager.users."${user-settings.user.username}" = {
-      stylix = stylixConfig;
-      home.packages = lib.mkIf cfg.hm-only stylixPackages;
-    };
+  in lib.mkMerge [
+    # Home-manager configuration (always when enabled)
+    (lib.mkIf cfg.enable {
+      home-manager.users."${user-settings.user.username}" = {
+        stylix = {
+          enable = stylixEnable;
+          autoEnable = stylixAutoEnable;
+          image = stylixImage;
+          polarity = stylixPolarity;
+          fonts = stylixFonts;
+          cursor = stylixCursor;
+          targets.qt.platform = stylixQtPlatform;
+        };
+        home.packages = lib.mkIf cfg.hm-only stylixPackages;
+      };
+    })
     
-    # NixOS system-level configuration (only when not hm-only)
-    stylix = lib.mkIf (!cfg.hm-only) stylixConfig;
-    environment = lib.mkIf (!cfg.hm-only) {
-      systemPackages = stylixPackages;
-    };
-  };
+    # NixOS system-level configuration (only when enabled and not hm-only)
+    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+      stylix = {
+        enable = stylixEnable;
+        autoEnable = stylixAutoEnable;
+        image = stylixImage;
+        polarity = stylixPolarity;
+        fonts = stylixFonts;
+        cursor = stylixCursor;
+      };
+      environment.systemPackages = stylixPackages;
+    })
+  ];
 }

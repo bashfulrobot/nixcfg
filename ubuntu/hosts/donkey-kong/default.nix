@@ -29,6 +29,26 @@
     gtk-theme = {
       enable = true;
     };
+    fonts = {
+      enable = true;
+    };
+    dconf = {
+      enable = true;
+    };
+  };
+
+  # Declarative Flatpak applications
+  apps.flatpak = {
+    enable = true;
+    packages = [
+      "flathub:app/com.todoist.Todoist//stable"
+    ];
+    
+    # Keep packages up to date
+    update = true;
+    
+    # Remove packages not managed by this config
+    uninstallUnmanagedPackages = false; # Set to true for strict management
   };
 
   # Basic system packages that are useful on Ubuntu

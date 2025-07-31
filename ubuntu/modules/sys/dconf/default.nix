@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let 
+let
   cfg = config.sys.dconf;
 in
 {
@@ -14,8 +14,5 @@ in
       dconf-editor
       dconf2nix
     ];
-    
-    # Enable dconf for settings management
-    dconf.enable = true;
   };
 }

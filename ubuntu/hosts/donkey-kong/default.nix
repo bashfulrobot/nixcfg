@@ -1,6 +1,10 @@
 { config, pkgs, user-settings, secrets, inputs, ... }:
 
 {
+  imports = [
+    ./modules.nix
+  ];
+
   # Basic home-manager configuration
   home = {
     username = user-settings.user.username;

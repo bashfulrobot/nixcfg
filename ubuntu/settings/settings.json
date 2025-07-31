@@ -1,0 +1,15 @@
+{
+    "user": {
+        "username": "dustin",
+        "home": "/home/dustin",
+        "full-name": "Dustin Krysak",
+        "id": "1000"
+    },
+    "nix": {
+        "comment": "NOT IN USE YET - WIP",
+        "release": "25.05"
+    },
+    "theme": {
+        "wallpaper": "urban.jpg"
+    }
+}

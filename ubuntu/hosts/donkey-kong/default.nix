@@ -17,18 +17,12 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
-      auto-optimise-store = true;
     };
   };
 
-  # Enable theming modules
+  users.enable = true;
+
   sys = {
-    stylix-theme = {
-      enable = true;
-    };
-    gtk-theme = {
-      enable = true;
-    };
     fonts = {
       enable = true;
     };
@@ -37,40 +31,20 @@
     };
   };
 
-  # Declarative Flatpak applications
-  apps.flatpak = {
-    enable = true;
-    packages = [
-      "flathub:app/com.todoist.Todoist//stable"
-    ];
-    
-    # Keep packages up to date
-    update = true;
-    
-    # Remove packages not managed by this config
-    uninstallUnmanagedPackages = false; # Set to true for strict management
-  };
-
   # Basic system packages that are useful on Ubuntu
   home.packages = with pkgs; [
     # System utilities
-    htop
-    tree
-    wget
-    curl
-    unzip
-    zip
-    
+    # htop
+    # tree
+    # wget
+    # curl
+    # unzip
+    # zip
+
     # Development tools
-    git
-    gh
-    
-    # Nix tools
-    nix-tree
-    nix-du
-    comma
+    # git
+    # gh
+
   ];
 
-  # Enable XDG directories
-  xdg.enable = true;
 }

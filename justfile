@@ -178,6 +178,8 @@ ubuntu-bootstrap:
     @if ! grep -q "warn-dirty" ~/.config/nix/nix.conf 2>/dev/null; then \
         echo "warn-dirty = false" >> ~/.config/nix/nix.conf; \
     fi
+    @echo "Restarting nix daemon to apply configuration..."
+    @sudo systemctl restart nix-daemon
     @echo "Running home-manager bootstrap..."
     @nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Test home-manager config without switching

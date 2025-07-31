@@ -1,9 +1,6 @@
 { config, pkgs, user-settings, secrets, inputs, ... }:
 
 {
-  # Enable the Ubuntu workstation archetype
-  archetype.ubuntu-workstation.enable = true;
-
   # Basic home-manager configuration
   home = {
     username = user-settings.user.username;
@@ -21,6 +18,13 @@
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
       auto-optimise-store = true;
+    };
+  };
+
+  # Enable stylix theming
+  sys = {
+    stylix-theme = {
+      enable = true;
     };
   };
 

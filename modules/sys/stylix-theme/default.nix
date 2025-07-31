@@ -64,22 +64,9 @@ in
         base16-schemes  # Base16 color schemes (fallback)
       ];
     in
-    {
+    (lib.mkMerge [
       # NixOS system-level configuration (only when not hm-only)
-      stylix = lib.mkIf (!cfg.hm-only) {
-        enable = true;
-        autoEnable = true;
-        image = wallpaperPath;
-        polarity = "dark";
-        fonts = stylixFonts;
-        cursor = stylixCursor;
-        targets.qt.platform = lib.mkForce "gnome";
-      };
-      
-      environment.systemPackages = lib.mkIf (!cfg.hm-only) stylixPackages;
-      
-      # Home-manager configuration (always present)
-      home-manager.users."${user-settings.user.username}" = {
+      (lib.mkIf (!cfg.hm-only) {
         stylix = {
           enable = true;
           autoEnable = true;
@@ -89,8 +76,25 @@ in
           cursor = stylixCursor;
           targets.qt.platform = lib.mkForce "gnome";
         };
-        home.packages = lib.mkIf cfg.hm-only stylixPackages;
-      };
-    }
+        
+        environment.systemPackages = stylixPackages;
+      })
+      
+      # Home-manager configuration (always present)
+      {
+        home-manager.users."${user-settings.user.username}" = {
+          stylix = {
+            enable = true;
+            autoEnable = true;
+            image = wallpaperPath;
+            polarity = "dark";
+            fonts = stylixFonts;
+            cursor = stylixCursor;
+            targets.qt.platform = lib.mkForce "gnome";
+          };
+          home.packages = lib.mkIf cfg.hm-only stylixPackages;
+        };
+      }
+    ])
   );
 }

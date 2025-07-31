@@ -18,21 +18,17 @@ in
 {
   options.sys.stylix-theme = {
     enable = lib.mkEnableOption "Stylix system-wide theming";
+    hm-only = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Use home-manager only mode (for Ubuntu/non-NixOS systems)";
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    stylix = {
-      enable = true;
-      autoEnable = true;  # Let stylix auto-detect available applications
-      
-      # Extract colors from wallpaper
-      image = wallpaperPath;
-      
-      # Force dark theme to match desktop
-      polarity = "dark";
-      
-      # Font configuration
-      fonts = {
+  config = lib.mkIf cfg.enable (
+    let
+      # Shared stylix configuration variables
+      stylixFonts = {
         monospace = {
           package = pkgs.nerd-fonts.jetbrains-mono;
           name = "JetBrainsMono Nerd Font Mono";
@@ -57,21 +53,44 @@ in
         };
       };
 
-      # Cursor configuration
-      cursor = {
+      stylixCursor = {
         package = pkgs.adwaita-icon-theme;
         name = "Adwaita";
         size = 24;
       };
 
-      # Qt platform configuration - use gnome for native GNOME integration
-      targets.qt.platform = lib.mkForce "gnome";
-    };
-
-    # Install necessary packages for stylix functionality
-    environment.systemPackages = with pkgs; [
-      imagemagick  # For color extraction from images
-      base16-schemes  # Base16 color schemes (fallback)
-    ];
-  };
+      stylixPackages = with pkgs; [
+        imagemagick  # For color extraction from images
+        base16-schemes  # Base16 color schemes (fallback)
+      ];
+    in
+    {
+      # NixOS system-level configuration (only when not hm-only)
+      stylix = lib.mkIf (!cfg.hm-only) {
+        enable = true;
+        autoEnable = true;
+        image = wallpaperPath;
+        polarity = "dark";
+        fonts = stylixFonts;
+        cursor = stylixCursor;
+        targets.qt.platform = lib.mkForce "gnome";
+      };
+      
+      environment.systemPackages = lib.mkIf (!cfg.hm-only) stylixPackages;
+      
+      # Home-manager configuration (always present)
+      home-manager.users."${user-settings.user.username}" = {
+        stylix = {
+          enable = true;
+          autoEnable = true;
+          image = wallpaperPath;
+          polarity = "dark";
+          fonts = stylixFonts;
+          cursor = stylixCursor;
+          targets.qt.platform = lib.mkForce "gnome";
+        };
+        home.packages = lib.mkIf cfg.hm-only stylixPackages;
+      };
+    }
+  );
 }

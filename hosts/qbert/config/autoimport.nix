@@ -20,14 +20,14 @@ let
 # No Trace
   validFiles = dir:
     map (file: ./. + "/${file}") (filter (file:
-      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && !hasInfix "module-config" file && file
+      !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && !hasInfix "module-config" file && !hasInfix "ubuntu" file && file
       != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
 
 # With Trace
 # validFiles = dir:
 #     map (file: let absFile = ./. + "/${file}"; in builtins.trace "Importing ${absFile} from ${builtins.dirOf absFile}" absFile)
 #     (filter (file:
-#       !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && file
+#       !hasInfix "home-manager" file && !hasInfix "build" file && !hasInfix "disabled" file && !hasInfix "module-config" file && !hasInfix "ubuntu" file && file
 #       != "autoimport.nix" && hasSuffix ".nix" file) (files dir));
 
 in { imports = validFiles ./.; }

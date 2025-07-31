@@ -16,9 +16,12 @@
       url = "github:danth/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    declarative-flatpak = {
+      url = "github:in-a-dil-emma/declarative-flatpak/stable-v3";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, ... }:
     let
       system = "x86_64-linux";
 
@@ -52,6 +55,7 @@
 
           modules = [
             stylix.homeManagerModules.stylix
+            declarative-flatpak.homeManagerModules.declarative-flatpak
             ./autoimport.nix
             ./hosts/${hostname}
           ];

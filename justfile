@@ -163,7 +163,23 @@ nix-system-info:
 # Bootstrap home-manager on Ubuntu - run this first on a new Ubuntu system
 ubuntu-bootstrap:
     @git add -A
-    @nix --extra-experimental-features "nix-command flakes" run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @echo "Setting up nix configuration..."
+    @mkdir -p ~/.config/nix
+    @if [ -f ~/.config/nix/nix.conf ]; then \
+        echo "Backing up existing nix.conf..."; \
+        cp ~/.config/nix/nix.conf ~/.config/nix/nix.conf.backup-$(date +%Y-%m-%d_%H-%M-%S); \
+    fi
+    @if ! grep -q "experimental-features.*nix-command" ~/.config/nix/nix.conf 2>/dev/null; then \
+        echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf; \
+    fi
+    @if ! grep -q "auto-optimise-store" ~/.config/nix/nix.conf 2>/dev/null; then \
+        echo "auto-optimise-store = true" >> ~/.config/nix/nix.conf; \
+    fi
+    @if ! grep -q "warn-dirty" ~/.config/nix/nix.conf 2>/dev/null; then \
+        echo "warn-dirty = false" >> ~/.config/nix/nix.conf; \
+    fi
+    @echo "Running home-manager bootstrap..."
+    @nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Test home-manager config without switching
 ubuntu-test:
     @git add -A

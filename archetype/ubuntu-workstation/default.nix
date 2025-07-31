@@ -18,8 +18,7 @@ in {
     # System theming - currently the only supported module
     sys = {
       stylix-theme = {
-        enable = true;
-        hm-only = true;  # Use home-manager mode for Ubuntu systems
+        enable = true;  # Auto-detects home-manager context
       };
     };
 

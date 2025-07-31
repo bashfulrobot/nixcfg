@@ -54,8 +54,8 @@
           };
 
           modules = [
-            stylix.homeManagerModules.stylix
-            declarative-flatpak.homeManagerModules.declarative-flatpak
+            stylix.homeModules.stylix
+            declarative-flatpak.homeModule
             ./autoimport.nix
             ./hosts/${hostname}
           ];

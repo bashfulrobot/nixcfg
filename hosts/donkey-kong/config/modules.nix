@@ -20,4 +20,6 @@
     enable = true;
     host.donkey-kong = true;
   };
+
+  apps.distrobox.enable = true;
 }

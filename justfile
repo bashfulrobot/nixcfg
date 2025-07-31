@@ -9,9 +9,9 @@ set ignore-comments
 # Search justfile in parent directory if the first recipe on the command line is not found.
 set fallback
 # Set the shell to bash
-#set shell := ["bash", "-cu"]
+set shell := ["bash", "-cu"]
 # Set the shell to fish
-set shell := ["fish", "-c"]
+#set shell := ["fish", "-c"]
 
 # "_" hides the recipie from listings
 _default:

@@ -1,23 +1,64 @@
-{ config, lib, pkgs, user-settings, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  user-settings,
+  ...
+}:
 
 let
   cfg = config.sys.stylix-theme;
 
   # Import custom wallpaper into Nix store if it exists
-  wallpaperSetting = if (user-settings.theme ? wallpaper) then user-settings.theme.wallpaper else "adwaita-d.jpg";
+  wallpaperSetting =
+    if (user-settings.theme ? wallpaper) then user-settings.theme.wallpaper else "adwaita-d.jpg";
   customWallpaperPath = "${user-settings.user.home}/Pictures/Wallpapers/${builtins.baseNameOf wallpaperSetting}";
 
   # Determine wallpaper path: custom wallpapers first, then gnome-backgrounds
-  wallpaperPath = if builtins.pathExists customWallpaperPath
-                  then builtins.path {
-                    path = customWallpaperPath;
-                    name = builtins.baseNameOf wallpaperSetting;
-                  }
-                  else "${pkgs.gnome-backgrounds}/share/backgrounds/gnome/${builtins.baseNameOf wallpaperSetting}";
+  wallpaperPath =
+    if builtins.pathExists customWallpaperPath then
+      builtins.path {
+        path = customWallpaperPath;
+        name = builtins.baseNameOf wallpaperSetting;
+      }
+    else
+      "${pkgs.gnome-backgrounds}/share/backgrounds/gnome/${builtins.baseNameOf wallpaperSetting}";
+
+  # Shared stylix configuration values
+  stylixAutoEnable = true;
+  stylixPolarity = "dark";
+  
+  # Font packages and names
+  monospacePackage = pkgs.nerd-fonts.jetbrains-mono;
+  monospaceName = "JetBrainsMono Nerd Font Mono";
+  sansSerifPackage = pkgs.work-sans;
+  sansSerifName = "Work Sans";
+  serifPackage = pkgs.work-sans;
+  serifName = "Work Sans";
+  emojiPackage = pkgs.noto-fonts-emoji;
+  emojiName = "Noto Color Emoji";
+  
+  # Font sizes
+  fontSizeApplications = 12;
+  fontSizeTerminal = 14;
+  fontSizeDesktop = 12;
+  fontSizePopups = 12;
+  
+  # Cursor configuration
+  cursorPackage = pkgs.adwaita-icon-theme;
+  cursorName = "Adwaita";
+  cursorSize = 24;
+  
+  # Qt platform
+  qtPlatform = "gnome";
 in
 {
   options.sys.stylix-theme = {
-    enable = lib.mkEnableOption "Stylix system-wide theming";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable Stylix system-wide theming";
+    };
     hm-only = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -25,77 +66,109 @@ in
     };
   };
 
-  config = let
-    # Shared values (actual data used in both NixOS and home-manager contexts)
-    stylixEnable = true;
-    stylixAutoEnable = true;
-    stylixImage = wallpaperPath;
-    stylixPolarity = "dark";
-    stylixQtPlatform = "gnome";
-    
-    stylixFonts = {
-      monospace = {
-        package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrainsMono Nerd Font Mono";
-      };
-      sansSerif = {
-        package = pkgs.work-sans;
-        name = "Work Sans";
-      };
-      serif = {
-        package = pkgs.work-sans;
-        name = "Work Sans";
-      };
-      emoji = {
-        package = pkgs.noto-fonts-emoji;
-        name = "Noto Color Emoji";
-      };
-      sizes = {
-        applications = 12;
-        terminal = 14;
-        desktop = 12;
-        popups = 12;
-      };
-    };
+  config = lib.mkIf cfg.enable {
+    # NixOS system-wide configuration (when hm-only = false)
+    stylix = lib.mkIf (!cfg.hm-only) {
+      enable = true;
+      autoEnable = stylixAutoEnable; # Let stylix auto-detect available applications
 
-    stylixCursor = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
-      size = 24;
-    };
+      # Extract colors from wallpaper
+      image = wallpaperPath;
 
-    stylixPackages = with pkgs; [
-      imagemagick  # For color extraction from images
-      base16-schemes  # Base16 color schemes (fallback)
-    ];
-  in lib.mkMerge [
-    # Home-manager configuration (always when enabled)
-    (lib.mkIf cfg.enable {
-      home-manager.users."${user-settings.user.username}" = {
-        stylix = {
-          enable = stylixEnable;
-          autoEnable = stylixAutoEnable;
-          image = stylixImage;
-          polarity = stylixPolarity;
-          fonts = stylixFonts;
-          cursor = stylixCursor;
-          targets.qt.platform = stylixQtPlatform;
+      # Force dark theme to match desktop
+      polarity = stylixPolarity;
+
+      # Font configuration
+      fonts = {
+        monospace = {
+          package = monospacePackage;
+          name = monospaceName;
         };
-        home.packages = lib.mkIf cfg.hm-only stylixPackages;
+        sansSerif = {
+          package = sansSerifPackage;
+          name = sansSerifName;
+        };
+        serif = {
+          package = sansSerifPackage;
+          name = sansSerifName;
+        };
+        emoji = {
+          package = emojiPackage;
+          name = emojiName;
+        };
+        sizes = {
+          applications = fontSizeApplications;
+          terminal = fontSizeTerminal;
+          desktop = fontSizeDesktop;
+          popups = fontSizePopups;
+        };
       };
-    })
-    
-    # NixOS system-level configuration (only when enabled and not hm-only)
-    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+
+      # Cursor configuration
+      cursor = {
+        package = cursorPackage;
+        name = cursorName;
+        size = cursorSize;
+      };
+
+      # Qt platform configuration - use gnome for native GNOME integration
+      targets.qt.platform = lib.mkForce qtPlatform;
+    };
+
+    # Install necessary packages for stylix functionality (NixOS only)
+    environment.systemPackages = lib.mkIf (!cfg.hm-only) (with pkgs; [
+      imagemagick # For color extraction from images
+      base16-schemes # Base16 color schemes (fallback)
+    ]);
+
+    # Home-manager configuration (when hm-only = true)
+    home-manager.users."${user-settings.user.username}" = lib.mkIf cfg.hm-only {
       stylix = {
-        enable = stylixEnable;
-        autoEnable = stylixAutoEnable;
-        image = stylixImage;
+        enable = true;
+        autoEnable = stylixAutoEnable;  # Let stylix auto-detect available applications
+        
+        # Extract colors from wallpaper
+        image = wallpaperPath;
+        
+        # Force dark theme to match desktop
         polarity = stylixPolarity;
-        fonts = stylixFonts;
-        cursor = stylixCursor;
+        
+        # Font configuration
+        fonts = {
+          monospace = {
+            package = monospacePackage;
+            name = monospaceName;
+          };
+          sansSerif = {
+            package = sansSerifPackage;
+            name = sansSerifName;
+          };
+          serif = {
+            package = serifPackage;
+            name = serifName;
+          };
+          emoji = {
+            package = emojiPackage;
+            name = emojiName;
+          };
+          sizes = {
+            applications = fontSizeApplications;
+            terminal = fontSizeTerminal;
+            desktop = fontSizeDesktop;
+            popups = fontSizePopups;
+          };
+        };
+
+        # Cursor configuration
+        cursor = {
+          package = cursorPackage;
+          name = cursorName;
+          size = cursorSize;
+        };
+
+        # Qt platform configuration - use gnome for native GNOME integration
+        targets.qt.platform = lib.mkForce qtPlatform;
       };
-      environment.systemPackages = stylixPackages;
-    })
-  ];
+    };
+  };
 }

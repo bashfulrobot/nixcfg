@@ -1,6 +1,9 @@
 { config, lib, ... }:
 let cfg = config.archetype.ubuntu-workstation;
 in {
+  imports = [
+    ../../modules/sys/stylix-theme
+  ];
 
   options = {
     archetype.ubuntu-workstation.enable = lib.mkOption {

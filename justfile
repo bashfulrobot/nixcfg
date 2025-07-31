@@ -199,3 +199,19 @@ ubuntu-upgrade-system:
     @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
     @nix flake update
     @home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
+# Garbage collect home-manager generations and clear nix cache
+ubuntu-garbage:
+    @echo "Garbage collecting home-manager generations older than 5 days..."
+    @home-manager expire-generations "-5 days"
+    @echo "Garbage collecting nix store..."
+    @nix-collect-garbage --delete-older-than 5d
+    @echo "Optimizing nix store..."
+    @nix-store --optimise
+# Full garbage collection - remove all old generations and clear all caches
+ubuntu-garbage-full:
+    @echo "Removing all old home-manager generations..."
+    @home-manager expire-generations "-0 days"
+    @echo "Full garbage collection of nix store..."
+    @nix-collect-garbage -d
+    @echo "Optimizing nix store..."
+    @nix-store --optimise

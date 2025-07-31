@@ -17,7 +17,7 @@ let
 in
 {
   options.sys.stylix-theme = {
-    enable = lib.mkEnableOption "Stylix system-wide theming";
+    enable = lib.mkEnableOption "Stylix home-manager theming for Ubuntu systems";
   };
 
   config = lib.mkIf cfg.enable {
@@ -68,8 +68,8 @@ in
       targets.qt.platform = lib.mkForce "gnome";
     };
 
-    # Install necessary packages for stylix functionality
-    environment.systemPackages = with pkgs; [
+    # Install necessary packages for stylix functionality (home-manager)
+    home.packages = with pkgs; [
       imagemagick  # For color extraction from images
       base16-schemes  # Base16 color schemes (fallback)
     ];

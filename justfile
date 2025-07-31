@@ -181,24 +181,24 @@ ubuntu-bootstrap:
     @echo "Restarting nix daemon to apply configuration..."
     @sudo systemctl restart nix-daemon
     @echo "Running home-manager bootstrap..."
-    @nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @cd ubuntu && nix run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Test home-manager config without switching
 ubuntu-test:
     @git add -A
-    @home-manager build --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @cd ubuntu && home-manager build --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Switch to new home-manager configuration
 ubuntu-rebuild:
     @git add -A
-    @home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
 # Switch to new home-manager configuration with trace
 ubuntu-rebuild-trace:
     @git add -A
-    @home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
+    @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
 # Update flake and switch home-manager
 ubuntu-upgrade-system:
-    @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
-    @nix flake update
-    @home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
+    @cd ubuntu && cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
+    @cd ubuntu && nix flake update
+    @cd ubuntu && home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
 # Garbage collect home-manager generations and clear nix cache
 ubuntu-garbage:
     @echo "Garbage collecting home-manager generations older than 5 days..."

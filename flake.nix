@@ -138,25 +138,9 @@
       };
 
       # --- Home Manager configurations for Ubuntu/non-NixOS systems
+      # NOTE: Ubuntu configurations moved to ubuntu/ subfolder with separate flake
       homeConfigurations = {
-        "${user-settings.user.username}@donkey-kong" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-            overlays = workstationOverlays;
-          };
-          
-          extraSpecialArgs = {
-            inherit user-settings secrets inputs;
-            inherit (inputs) zen-browser;
-          };
-
-          modules = [
-            stylix.homeManagerModules.stylix
-            ./archetype/ubuntu-workstation
-            ./hosts/donkey-kong
-          ];
-        };
+        # Ubuntu configurations now managed by ubuntu/flake.nix
       };
     };
 }

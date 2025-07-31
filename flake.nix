@@ -126,11 +126,6 @@
         # --- Create nixos systems using the makeSystem function
 
         # Note: The `true` argument is used to determine if the system is a workstation or not
-        donkey-kong = makeSystem "donkey-kong" (commonModules
-          ++ [ ./hosts/donkey-kong commonHomeManagerConfig commonNixpkgsConfig ]) {
-            isWorkstation = true;
-          };
-        # Note: The `true` argument is used to determine if the system is a workstation or not
         qbert = makeSystem "qbert" (commonModules
           ++ [ ./hosts/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = true;

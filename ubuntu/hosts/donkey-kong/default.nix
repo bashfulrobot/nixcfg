@@ -21,9 +21,12 @@
     };
   };
 
-  # Enable stylix theming
+  # Enable theming modules
   sys = {
     stylix-theme = {
+      enable = true;
+    };
+    gtk-theme = {
       enable = true;
     };
   };

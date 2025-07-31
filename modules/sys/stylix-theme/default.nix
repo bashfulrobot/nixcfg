@@ -8,6 +8,9 @@
 
 let
   cfg = config.sys.stylix-theme;
+  
+  # Auto-detect if we're in a home-manager context
+  isHomeManagerOnly = !(config ? environment);
 
   # Import custom wallpaper into Nix store if it exists
   wallpaperSetting =
@@ -59,16 +62,11 @@ in
       default = false;
       description = "Enable Stylix system-wide theming";
     };
-    hm-only = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Use home-manager only mode (for Ubuntu/non-NixOS systems)";
-    };
   };
 
   config = lib.mkMerge [
     # NixOS-only configuration
-    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+    (lib.mkIf (cfg.enable && !isHomeManagerOnly) {
       stylix = {
       enable = true;
       autoEnable = stylixAutoEnable; # Let stylix auto-detect available applications
@@ -124,7 +122,7 @@ in
     })
 
     # Home-manager-only configuration
-    (lib.mkIf (cfg.enable && cfg.hm-only) {
+    (lib.mkIf (cfg.enable && isHomeManagerOnly) {
       home-manager.users."${user-settings.user.username}" = {
       stylix = {
         enable = true;

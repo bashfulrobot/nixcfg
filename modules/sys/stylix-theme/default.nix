@@ -2,11 +2,11 @@
 
 let
   cfg = config.sys.stylix-theme;
-  
+
   # Import custom wallpaper into Nix store if it exists
   wallpaperSetting = if (user-settings.theme ? wallpaper) then user-settings.theme.wallpaper else "adwaita-d.jpg";
   customWallpaperPath = "${user-settings.user.home}/Pictures/Wallpapers/${builtins.baseNameOf wallpaperSetting}";
-  
+
   # Determine wallpaper path: custom wallpapers first, then gnome-backgrounds
   wallpaperPath = if builtins.pathExists customWallpaperPath
                   then builtins.path {
@@ -72,25 +72,17 @@ in
       cursor = stylixCursor;
       targets.qt.platform = lib.mkForce "gnome";
     };
-  in lib.mkMerge [
-    # Always enable basic configuration when enabled
-    (lib.mkIf cfg.enable {
-      home-manager.users."${user-settings.user.username}" = {
-        stylix = stylixConfig;
-      };
-    })
-    
-    # NixOS system-level configuration (only when enabled and not hm-only)
-    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+  in lib.mkIf cfg.enable {
+    # Home-manager configuration (always present)
+    home-manager.users."${user-settings.user.username}" = {
       stylix = stylixConfig;
-      environment.systemPackages = stylixPackages;
-    })
+      home.packages = lib.mkIf cfg.hm-only stylixPackages;
+    };
     
-    # Home-manager packages (only when enabled and hm-only)
-    (lib.mkIf (cfg.enable && cfg.hm-only) {
-      home-manager.users."${user-settings.user.username}" = {
-        home.packages = stylixPackages;
-      };
-    })
-  ];
+    # NixOS system-level configuration (only when not hm-only)
+    stylix = lib.mkIf (!cfg.hm-only) stylixConfig;
+    environment = lib.mkIf (!cfg.hm-only) {
+      systemPackages = stylixPackages;
+    };
+  };
 }

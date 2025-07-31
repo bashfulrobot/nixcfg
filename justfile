@@ -215,3 +215,19 @@ ubuntu-garbage-full:
     @nix-collect-garbage -d
     @echo "Optimizing nix store..."
     @nix-store --optimise
+# Clean slate - remove all home-manager traces for fresh bootstrap (troubleshooting)
+ubuntu-clean-slate:
+    @echo "WARNING: This will remove ALL home-manager configurations and generations!"
+    @echo "Press Ctrl+C within 10 seconds to cancel..."
+    @sleep 10
+    @echo "Removing home-manager state directory..."
+    @rm -rf ~/.local/state/home-manager || true
+    @echo "Removing home-manager generations..."
+    @nix run home-manager/release-25.05 -- expire-generations "-0 days" || true
+    @echo "Full garbage collection of nix store..."
+    @nix-collect-garbage -d
+    @echo "Optimizing nix store..."
+    @nix-store --optimise
+    @echo "Cleaning up any remaining home-manager links..."
+    @find ~ -type l -name ".*" -exec sh -c 'readlink "$1" | grep -q "/nix/store" && rm -f "$1"' _ {} \; 2>/dev/null || true
+    @echo "Clean slate complete! Run 'just ubuntu-bootstrap' to start fresh."

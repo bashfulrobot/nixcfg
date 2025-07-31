@@ -66,9 +66,10 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    # NixOS system-wide configuration (when hm-only = false)
-    stylix = lib.mkIf (!cfg.hm-only) {
+  config = lib.mkMerge [
+    # NixOS-only configuration
+    (lib.mkIf (cfg.enable && !cfg.hm-only) {
+      stylix = {
       enable = true;
       autoEnable = stylixAutoEnable; # Let stylix auto-detect available applications
 
@@ -115,8 +116,16 @@ in
       targets.qt.platform = lib.mkForce qtPlatform;
     };
 
-    # Home-manager configuration (when hm-only = true)
-    home-manager.users."${user-settings.user.username}" = lib.mkIf cfg.hm-only {
+      # Install necessary packages for stylix functionality (NixOS only)
+      environment.systemPackages = with pkgs; [
+        imagemagick # For color extraction from images
+        base16-schemes # Base16 color schemes (fallback)
+      ];
+    })
+
+    # Home-manager-only configuration
+    (lib.mkIf (cfg.enable && cfg.hm-only) {
+      home-manager.users."${user-settings.user.username}" = {
       stylix = {
         enable = true;
         autoEnable = stylixAutoEnable;  # Let stylix auto-detect available applications
@@ -168,14 +177,8 @@ in
       home.packages = with pkgs; [
         imagemagick # For color extraction from images
         base16-schemes # Base16 color schemes (fallback)
-      ];
-    };
-    # Install necessary packages for stylix functionality (NixOS only)
-    environment = lib.mkIf (!cfg.hm-only) {
-      systemPackages = with pkgs; [
-        imagemagick # For color extraction from images
-        base16-schemes # Base16 color schemes (fallback)
-      ];
-    };
-  };
+        ];
+      };
+    })
+  ];
 }

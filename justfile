@@ -163,9 +163,12 @@ nix-system-info:
 # Bootstrap home-manager and system-manager on Ubuntu - run this first on a new Ubuntu system
 ubuntu-bootstrap:
     @git add -A
-    @echo "Running home-manager bootstrap with environment variables..."
-    @echo "Note: Nix settings will be managed by home-manager after bootstrap"
-    @cd ubuntu && NIX_CONFIG="experimental-features = nix-command flakes" nix --extra-experimental-features nix-command --extra-experimental-features flakes --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @echo "Creating /etc/nix/nix.conf for system-wide Nix configuration..."
+    @sudo mkdir -p /etc/nix
+    @echo -e "experimental-features = nix-command flakes\nsandbox = relaxed\nextra-sandbox-paths = /usr/bin/env" | sudo tee /etc/nix/nix.conf
+    @echo "Running home-manager bootstrap..."
+    @echo "Note: Nix settings are now managed by /etc/nix/nix.conf"
+    @cd ubuntu && nix --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
     @echo "Bootstrapping system-manager configuration..."
     @cd ubuntu && sudo nix --option download-buffer-size 134217728 run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
 # Test home-manager and system-manager config without switching
@@ -177,12 +180,12 @@ ubuntu-test:
 ubuntu-rebuild:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
+    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
 # Switch to new home-manager and system-manager configuration with trace
 ubuntu-rebuild-trace:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
+    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
 # Update flake and switch home-manager and system-manager
 ubuntu-upgrade-system:
     @cd ubuntu && cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)

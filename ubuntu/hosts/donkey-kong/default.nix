@@ -20,8 +20,6 @@
     };
   };
 
-  users.enable = true;
-
   sys = {
     fonts = {
       enable = true;

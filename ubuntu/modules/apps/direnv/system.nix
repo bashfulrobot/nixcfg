@@ -2,14 +2,13 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.programs.direnv;
+  cfg = config.cli.direnv;
 in {
-  # Only apply when in system-manager context
-  config = lib.mkIf (cfg.enable && (config ? environment)) {
-    # System-level packages for direnv support
-    environment.systemPackages = with pkgs; [ 
-      envsubst  # Required for envsubst functionality
-      direnv    # Make direnv available system-wide
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      direnv
     ];
+
+    # Optionally configure any system-wide direnv settings here
   };
 }

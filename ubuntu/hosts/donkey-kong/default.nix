@@ -24,6 +24,10 @@
     chromium.enable = true;
     onepassword.enable = true;
   };
+
+  cli = {
+    direnv.enable = true;
+  };
   sys = {
     fonts = {
       enable = true;

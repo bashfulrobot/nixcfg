@@ -1,32 +1,23 @@
 { config, pkgs, lib, ... }:
 
 {
-  # App modules are auto-imported via autoimport.nix
-
   # Host-specific system configuration for donkey-kong
   config = {
-    # Enable applications at system level
-    apps.onepassword.enable = true;
-    
-    # Configure /etc files
-    environment.etc = {
-      # Host-specific configuration files
-      # "donkey-kong-specific.conf".text = ''
-      #   hostname = "donkey-kong"
-      # '';
+    # Enable applications at system level (AppArmor profiles, system services, etc.)
+    apps = {
+      chromium.enable = true;   # Enable AppArmor profile for Chromium
+      onepassword.enable = true; # Enable AppArmor profile for 1Password
     };
 
-    # System packages available system-wide (host-specific)
+    # Host-specific system packages
     environment.systemPackages = with pkgs; [
       # Add host-specific system packages here
-      # curl
-      # wget
-      # htop
+      apparmor-utils  # Required for AppArmor profile management
     ];
 
-    # Systemd services (host-specific)
+    # Host-specific systemd services
     systemd.services = {
-      # Host-specific services
+      # Example host-specific service
       # "donkey-kong-service" = {
       #   description = "Host-specific service";
       #   wantedBy = [ "multi-user.target" ];

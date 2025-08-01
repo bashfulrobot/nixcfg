@@ -10,7 +10,7 @@ let
     "--enable-features=WaylandWindowDecorations"
     "--ozone-platform-hint=auto"
     "--gtk-version=4"
-    "--no-sandbox"  # Fix SUID sandbox permission issues on NixOS/Ubuntu
+    # Note: --no-sandbox removed - using AppArmor profile for proper sandboxing instead
   ];
 
 in {

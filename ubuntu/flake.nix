@@ -74,8 +74,8 @@
           };
           modules = [
             ./modules/system/autoimport.nix
-            ./modules/mixed
-            # ./modules/system/${hostname}
+            ./modules/mixed/autoimport.nix
+            ./modules/system/${hostname}
           ];
         };
       };

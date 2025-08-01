@@ -1,8 +1,18 @@
 { config, pkgs, lib, ... }:
+# VSCode configuration with Stylix theme integration
+#
+# This module provides:
+# - VSCode installation from unstable channel for latest features
+# - Wayland optimization flags for better Linux desktop integration
+# - Dynamic Stylix theme generation when Stylix is available
+#
+# The Stylix integration automatically generates a VSCode theme based on
+# your system's color scheme, providing consistent theming across applications.
 
 let
   cfg = config.apps.vscode;
-  inherit (config.lib.stylix) colors;
+  # Safe access to stylix colors with fallback
+  colors = config.lib.stylix.colors or null;
 in {
   options.apps.vscode = {
     enable = lib.mkOption {
@@ -31,8 +41,8 @@ in {
         '';
       }
 
-      # Stylix theme extension (only created when stylix is enabled)
-      (lib.mkIf (config.stylix.enable or false) {
+      # Stylix theme extension (only created when stylix is enabled and colors are available)
+      (lib.mkIf ((config.stylix.enable or false) && (colors != null)) {
         ".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
           name = "stylix-theme";
           displayName = "Stylix Theme";

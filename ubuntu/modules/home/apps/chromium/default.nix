@@ -1,9 +1,19 @@
 { config, pkgs, lib, ... }:
+# Chromium user configuration with Wayland optimization
+#
+# This module configures Chromium for the user with:
+# - Wayland-optimized flags for better performance on modern Linux desktops
+# - Curated extension set for productivity and security
+# - WideVine support for media playback
+# - Electron app optimization via shared flag files
+#
+# The Wayland flags improve performance and compatibility on Wayland-based
+# desktop environments like GNOME and sway.
 
 let
   cfg = config.apps.chromium;
 
-  # Wayland flags for better performance
+  # Wayland flags for better performance and compatibility
   waylandFlags = [
     "--enable-features=UseOzonePlatform"
     "--ozone-platform=wayland"
@@ -15,7 +25,7 @@ let
 
 in {
   options.apps.chromium = {
-    enable = lib.mkEnableOption "Enable Chromium browser (via Home Manager)";
+    enable = lib.mkEnableOption "Enable Chromium browser with Wayland optimization and curated extensions";
   };
 
   config = lib.mkIf cfg.enable {
@@ -80,20 +90,16 @@ in {
     home.file =
       let
         flags = lib.concatStringsSep "\n" waylandFlags;
+        # Generate electron config files for common versions (16-30)
+        electronVersions = lib.range 16 30;
+        electronConfigs = lib.listToAttrs (map (version: {
+          name = ".config/electron${toString version}-flags.conf";
+          value = { text = flags; };
+        }) electronVersions);
       in
       {
         ".config/chromium-flags.conf".text = flags;
         ".config/electron-flags.conf".text = flags;
-        ".config/electron16-flags.conf".text = flags;
-        ".config/electron17-flags.conf".text = flags;
-        ".config/electron18-flags.conf".text = flags;
-        ".config/electron19-flags.conf".text = flags;
-        ".config/electron20-flags.conf".text = flags;
-        ".config/electron21-flags.conf".text = flags;
-        ".config/electron22-flags.conf".text = flags;
-        ".config/electron23-flags.conf".text = flags;
-        ".config/electron24-flags.conf".text = flags;
-        ".config/electron25-flags.conf".text = flags;
-      };
+      } // electronConfigs;
   };
 }

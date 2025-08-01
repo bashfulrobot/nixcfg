@@ -6,7 +6,7 @@ let
 in
 {
   options.sys.fonts = {
-    enable = lib.mkEnableOption "System fonts (home-manager only)";
+    enable = lib.mkEnableOption "Enable curated font collection including Nerd Fonts and productivity fonts";
   };
 
   config = lib.mkIf cfg.enable {

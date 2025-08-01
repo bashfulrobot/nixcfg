@@ -4,7 +4,7 @@ let
   cfg = config.apps.onepassword;
 in {
   options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password with desktop app, CLI and browser integration";
+    enable = lib.mkEnableOption "Enable 1Password desktop application with CLI tools and browser native messaging integration";
   };
 
   config = lib.mkIf cfg.enable {

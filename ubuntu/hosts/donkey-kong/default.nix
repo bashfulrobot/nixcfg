@@ -32,20 +32,4 @@
     };
   };
 
-  # Basic system packages that are useful on Ubuntu
-  home.packages = with pkgs; [
-    # System utilities
-    # htop
-    # tree
-    # wget
-    # curl
-    # unzip
-    # zip
-
-    # Development tools
-    # git
-    # gh
-
-  ];
-
 }

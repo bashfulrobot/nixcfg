@@ -19,9 +19,13 @@
     declarative-flatpak = {
       url = "github:in-a-dil-emma/declarative-flatpak/stable-v3";
     };
+    system-manager = {
+      url = "github:numtide/system-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, system-manager, ... }:
     let
       system = "x86_64-linux";
 
@@ -56,17 +60,33 @@
           modules = [
             stylix.homeModules.stylix
             declarative-flatpak.homeModule
-            ./autoimport.nix
+            ./modules/home/autoimport.nix
             ./hosts/${hostname}
           ];
         };
       };
 
+      # Helper function to create system-manager configurations for different hosts
+      mkSystemConfig = hostname: {
+        "${hostname}" = system-manager.lib.makeSystemConfig {
+          modules = [
+            ./modules/system/autoimport.nix
+            # ./modules/system/${hostname}
+          ];
+        };
+      };
+
     in {
-      homeConfigurations = 
+      homeConfigurations =
         (mkHomeConfig "donkey-kong") //
         # Add other Ubuntu systems here as needed
         # (mkHomeConfig "other-ubuntu-system") //
+        {};
+
+      systemConfigs =
+        (mkSystemConfig "donkey-kong") //
+        # Add other Ubuntu systems here as needed
+        # (mkSystemConfig "other-ubuntu-system") //
         {};
 
       # Expose packages for development

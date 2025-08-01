@@ -74,7 +74,6 @@
           };
           modules = [
             ./modules/system/autoimport.nix
-            ./modules/system/${hostname}
           ];
         };
       };

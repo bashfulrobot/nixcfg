@@ -73,6 +73,11 @@
             inherit user-settings;
           };
           modules = [
+            {
+              # Required system-manager configuration
+              nixpkgs.hostPlatform = system;
+              nixpkgs.pkgs = pkgs;
+            }
             ./modules/system/autoimport.nix
           ];
         };

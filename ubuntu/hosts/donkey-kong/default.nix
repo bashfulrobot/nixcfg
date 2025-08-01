@@ -23,7 +23,12 @@
   apps = {
     chromium.enable = true;
     onepassword.enable = true;
-    direnv.enable = true;
+  };
+
+  cli = {
+    direnv = {
+      enable = true;
+    };
   };
 
   sys = {

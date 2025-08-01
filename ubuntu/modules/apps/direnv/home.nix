@@ -1,8 +1,8 @@
 # Home-manager implementation for direnv
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
-  cfg = config.programs.direnv;
+  cfg = config.cli.direnv;
 in {
   # Only apply when in home-manager context and our custom option is enabled
   config = lib.mkIf (cfg.enable && (config ? home)) {

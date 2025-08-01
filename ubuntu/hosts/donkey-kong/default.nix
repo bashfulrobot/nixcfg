@@ -23,12 +23,9 @@
   apps = {
     chromium.enable = true;
     onepassword.enable = true;
-  };
-
-  programs = {
     direnv.enable = true;
   };
-  
+
   sys = {
     fonts = {
       enable = true;

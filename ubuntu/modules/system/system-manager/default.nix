@@ -12,11 +12,6 @@
   # Make user-settings available to all system modules via extraSpecialArgs
   # This allows modules to access user configuration like username, paths, etc.
   
-  # System-wide nix configuration for sandbox compatibility
-  nix.settings = {
-    sandbox = "relaxed";
-    extra-sandbox-paths = [
-      "/usr/bin/env"
-    ];
-  };
+  # Basic system configuration can go here if needed
+  # For now, this serves as the base configuration entry point
 }

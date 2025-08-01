@@ -11,14 +11,8 @@
   # Let home-manager manage itself
   programs.home-manager.enable = true;
 
-  # Enable experimental nix features
-  nix = {
-    package = pkgs.nix;
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      warn-dirty = false;
-    };
-  };
+  # Note: Nix settings are managed via /etc/nix/nix.conf on Ubuntu
+  # Use the ubuntu-update-nix-conf helper script to modify settings
 
   apps = {
     chromium.enable = true;

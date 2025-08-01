@@ -20,7 +20,7 @@ in {
         # https://github.com/nix-community/nix-direnv
         nix-direnv.enable = true;
         enableBashIntegration = true;
-        enableFishIntegration = true;
+        # enableFishIntegration is automatically handled by home-manager when fish is enabled
         config.global = {
           load_dotenv = true;
           strict_env = true;

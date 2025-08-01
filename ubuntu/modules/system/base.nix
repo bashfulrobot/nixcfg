@@ -1,17 +1,8 @@
-{ config, lib, pkgs, user-settings, ... }:
-# Base system-manager configuration
-#
-# This module provides the fundamental system-manager configuration required
-# for all Ubuntu systems. It sets the host platform and provides access to
-# user settings for other modules.
+# Base system-manager configuration for Ubuntu systems
+# This module provides the required minimal configuration for system-manager
+{ config, pkgs, lib, ... }:
 
 {
   # Required system-manager configuration
   nixpkgs.hostPlatform = "x86_64-linux";
-  
-  # Make user-settings available to all system modules via extraSpecialArgs
-  # This allows modules to access user configuration like username, paths, etc.
-  
-  # Basic system configuration can go here if needed
-  # For now, this serves as the base configuration entry point
 }

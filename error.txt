@@ -1,25 +1,46 @@
 [nix-shell:~/dev/nix/nixcfg]$ just ubuntu-rebuild
+Starting Home Manager activation
+Activating checkFilesChanged
+Activating checkLinkTargets
+Activating writeBoundary
+No change so reusing latest profile generation
+Activating installPackages
+replacing old 'home-manager-path'
+installing 'home-manager-path'
+Activating linkGeneration
+Cleaning up orphan links from /home/dustin
+Creating home file links in /home/dustin
+Activating onFilesChange
+Activating reloadSystemd
+
+There are 200 unread and relevant news items.
+Read them by running the command "home-manager news".
+
+[2025-08-01T20:47:37Z INFO  system_manager::register] Trying flake URI: .#systemConfigs.x86_64-linux.donkey-kong...
+[2025-08-01T20:47:37Z INFO  system_manager::register] Attribute .#systemConfigs.x86_64-linux.donkey-kong not found in flake.
+[2025-08-01T20:47:37Z INFO  system_manager::register] Trying flake URI: .#systemConfigs.donkey-kong...
+[2025-08-01T20:47:37Z INFO  system_manager::register] Success, using .#systemConfigs.donkey-kong
+[2025-08-01T20:47:37Z INFO  system_manager::register] Building new system-manager generation...
+[2025-08-01T20:47:37Z INFO  system_manager::register] Running nix build...
 error:
-       … while evaluating a branch condition
-         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:142:18:
-          141|       len = length list;
-          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
-             |                  ^
-          143|     in
+       … while evaluating the attribute 'value'
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/modules.nix:1083:7:
+         1082|     // {
+         1083|       value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+             |       ^
+         1084|       inherit (res.defsFinal') highestPrio;
 
-       … while calling the 'length' builtin
-         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:141:13:
-          140|     let
-          141|       len = length list;
-             |             ^
-          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
+       … while evaluating the option `nixpkgs.pkgs':
 
-       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+       … while calling the 'throw' builtin
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/modules.nix:1068:11:
+         1067|           in
+         1068|           throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
+             |           ^
+         1069|         else
 
-       error: The option `apps.direnv' does not exist. Definition values:
-       - In `/nix/store/m6kfhp1zd2albpi5n1xcy9zjdmang0z9-source/ubuntu/hosts/donkey-kong':
-           {
-             enable = true;
-           }
-error: Recipe `ubuntu-rebuild` failed on line 179 with exit code 1
-
+       error: The option `nixpkgs.pkgs' is read-only, but it's set multiple times. Definition values:
+       - In `/nix/store/0jy0qld8gdi3wn76n00yjs0rqz6scjpr-source/nix/modules'
+       - In `<unknown-file>'
+[2025-08-01T20:47:37Z ERROR system_manager] Nix build failed, see console output for details.
+error: Recipe `ubuntu-rebuild` failed on line 180 with exit code 1

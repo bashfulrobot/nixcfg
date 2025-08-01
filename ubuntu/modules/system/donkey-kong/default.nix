@@ -10,7 +10,7 @@
     };
 
     # Enable CLI tools at system level
-    cli = {
+    programs = {
       direnv.enable = true;  # System-level direnv support
     };
 

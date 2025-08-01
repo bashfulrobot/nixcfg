@@ -25,9 +25,10 @@
     onepassword.enable = true;
   };
 
-  cli = {
+  programs = {
     direnv.enable = true;
   };
+  
   sys = {
     fonts = {
       enable = true;

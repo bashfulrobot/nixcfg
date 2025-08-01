@@ -61,6 +61,7 @@
             stylix.homeModules.stylix
             declarative-flatpak.homeModule
             ./modules/home/autoimport.nix
+            ./modules/mixed/autoimport.nix
             ./hosts/${hostname}
           ];
         };
@@ -74,7 +75,6 @@
           };
           modules = [
             ./modules/system/autoimport.nix
-            ./modules/mixed/autoimport.nix
             ./modules/system/${hostname}
           ];
         };

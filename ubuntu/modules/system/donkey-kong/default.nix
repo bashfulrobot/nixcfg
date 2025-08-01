@@ -9,6 +9,11 @@
       onepassword.enable = true; # Enable AppArmor profile for 1Password
     };
 
+    # Enable CLI tools at system level
+    cli = {
+      direnv.enable = true;  # System-level direnv support
+    };
+
     # Host-specific system packages
     environment.systemPackages = with pkgs; [
       # Add host-specific system packages here

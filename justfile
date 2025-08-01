@@ -165,9 +165,9 @@ ubuntu-bootstrap:
     @git add -A
     @echo "Running home-manager bootstrap with environment variables..."
     @echo "Note: Nix settings will be managed by home-manager after bootstrap"
-    @cd ubuntu && NIX_CONFIG="experimental-features = nix-command flakes" nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
+    @cd ubuntu && NIX_CONFIG="experimental-features = nix-command flakes" nix --extra-experimental-features nix-command --extra-experimental-features flakes --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
     @echo "Bootstrapping system-manager configuration..."
-    @cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
+    @cd ubuntu && sudo nix --option download-buffer-size 134217728 run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
 # Test home-manager and system-manager config without switching
 ubuntu-test:
     @git add -A

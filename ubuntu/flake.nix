@@ -67,20 +67,15 @@
       };
 
       # Helper function to create system-manager configurations for different hosts
-      mkSystemConfig = hostname: {
-        "${hostname}" = system-manager.lib.makeSystemConfig {
+      mkSystemConfig = hostname: 
+        system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
             inherit user-settings;
           };
           modules = [
-            {
-              # Required system-manager configuration
-              nixpkgs.hostPlatform = system;
-            }
             ./modules/system/autoimport.nix
           ];
         };
-      };
 
     in {
       homeConfigurations =
@@ -89,11 +84,11 @@
         # (mkHomeConfig "other-ubuntu-system") //
         {};
 
-      systemConfigs =
-        (mkSystemConfig "donkey-kong") //
+      systemConfigs = {
+        "donkey-kong" = mkSystemConfig "donkey-kong";
         # Add other Ubuntu systems here as needed
-        # (mkSystemConfig "other-ubuntu-system") //
-        {};
+        # "other-ubuntu-system" = mkSystemConfig "other-ubuntu-system";
+      };
 
       # Expose packages for development
       packages.${system} = {

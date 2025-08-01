@@ -1,5 +1,7 @@
-dustin@donkey-kong:~$ chromium
-[3843:3843:0731/214431.980115:FATAL:sandbox/linux/suid/client/setuid_sandbox_host.cc:169] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /nix/store/5pjas6iq3kjb3x7y941lgca4xsm6gl4x-chromium-138.0.7204.168-sandbox/bin/__chromium-suid-sandbox is owned by root and has mode 4755.
-[0731/214431.986612:ERROR:third_party/crashpad/crashpad/util/process/process_memory_range.cc:75] read out of range
+I feel like many apps on my ubuntu may run into this. What is the proper fix? Remember, I am not writing this on ubuntu. Skip tests.
+
+
+$ 1password 
+[4735:0801/090935.720914:FATAL:setuid_sandbox_host.cc(163)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /nix/store/dhcwgvajgmm21h56wsqd4qhr0kbsvqm5-1password-8.10.76/share/1password/chrome-sandbox is owned by root and has mode 4755.
 Trace/breakpoint trap (core dumped)
 

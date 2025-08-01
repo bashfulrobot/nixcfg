@@ -20,6 +20,7 @@ in {
         # https://github.com/nix-community/nix-direnv
         nix-direnv.enable = true;
         enableBashIntegration = true;
+        enableFishIntegration = true;
         config.global = {
           load_dotenv = true;
           strict_env = true;

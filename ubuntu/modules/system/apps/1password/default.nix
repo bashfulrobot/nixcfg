@@ -4,13 +4,14 @@ let
   cfg = config.apps.onepassword;
 in {
   options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password with CLI and browser integration";
+    enable = lib.mkEnableOption "Enable 1Password with desktop app, CLI and browser integration";
   };
 
   config = lib.mkIf cfg.enable {
-    # System-wide packages (always install CLI)
+    # System-wide packages (install everything)
     environment.systemPackages = with pkgs; [
-      _1password-cli
+      _1password-gui  # Desktop app
+      _1password-cli  # CLI
     ];
 
     # Polkit rules for 1Password browser integration (always enabled)

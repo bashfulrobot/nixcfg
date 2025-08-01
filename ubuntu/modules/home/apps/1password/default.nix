@@ -4,20 +4,14 @@ let
   cfg = config.apps.onepassword;
 in {
   options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password with CLI and browser integration";
-    
-    enableDesktopApp = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Install 1Password desktop application";
-    };
+    enable = lib.mkEnableOption "Enable 1Password with desktop app, CLI and browser integration";
   };
 
   config = lib.mkIf cfg.enable {
-    # Home Manager configuration (user-level)
+    # Home Manager configuration (user-level) - Install everything
     home.packages = with pkgs; [
-      (lib.mkIf cfg.enableDesktopApp _1password-gui)
-      _1password-cli  # Always install CLI
+      _1password-gui  # Desktop app
+      _1password-cli  # CLI
     ];
 
     # Browser native messaging integration (always enabled)

@@ -10,9 +10,9 @@ let
     "--enable-features=WaylandWindowDecorations"
     "--ozone-platform-hint=auto"
     "--gtk-version=4"
-    "--no-sandbox"  # Fix SUID sandbox permission issues on NixOS/Ubuntu
-  ];
 
+  ];
+  # "--no-sandbox"  # Fix SUID sandbox permission issues on NixOS/Ubuntu
 in {
   options.apps.chromium = {
     enable = lib.mkEnableOption "Enable Chromium browser (via Home Manager)";
@@ -77,7 +77,7 @@ in {
     home.sessionVariables.BROWSER = "chromium";
 
     # Create Wayland configuration files for Chromium and Electron apps
-    home.file = 
+    home.file =
       let
         flags = lib.concatStringsSep "\n" waylandFlags;
       in

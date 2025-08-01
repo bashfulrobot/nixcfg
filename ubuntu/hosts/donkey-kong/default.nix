@@ -22,6 +22,7 @@
 
   apps = {
     chromium.enable = true;
+    onepassword.enable = true;
   };
   sys = {
     fonts = {

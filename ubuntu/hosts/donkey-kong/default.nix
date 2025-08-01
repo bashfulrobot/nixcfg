@@ -17,6 +17,10 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
+      sandbox = "relaxed";
+      extra-sandbox-paths = [
+        "/usr/bin/env"
+      ];
     };
   };
 

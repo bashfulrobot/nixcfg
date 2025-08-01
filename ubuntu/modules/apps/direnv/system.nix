@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.cli.direnv;
+  cfg = config.programs.direnv;
 in {
   # Only apply when in system-manager context
   config = lib.mkIf (cfg.enable && (config ? environment)) {

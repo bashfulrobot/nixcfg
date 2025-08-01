@@ -1,10 +1,20 @@
 { config, pkgs, lib, ... }:
+# 1Password system-level configuration for Ubuntu
+# 
+# This module configures 1Password at the system level with Ubuntu 24.04+ compatibility.
+# Key features:
+# - AppArmor profile to allow user namespace creation (required for Ubuntu 24.04+)
+# - System-wide package installation
+# - Browser integration files
+# 
+# Note: This module handles system-level concerns. User-level configuration
+# should be done via the corresponding home-manager module.
 
 let
   cfg = config.apps.onepassword;
 in {
   options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password with desktop app, CLI and browser integration";
+    enable = lib.mkEnableOption "Enable 1Password system-level configuration with AppArmor profile for Ubuntu 24.04+ compatibility";
   };
 
   config = lib.mkIf cfg.enable {
@@ -36,28 +46,37 @@ in {
       '';
     };
 
-    # System-level polkit rules for 1Password authentication (always enabled)
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-          if (action.id == "com.1password.1Password.unlock" &&
-              subject.local == true &&
-              subject.active == true &&
-              subject.isInGroup("users")) {
-              return polkit.Result.YES;
-          }
-      });
-    '';
+    # Note: polkit configuration not supported in system-manager
+    # Manual polkit setup may be required for browser integration
 
     # Load AppArmor profile on system activation
     systemd.services."apparmor-1password" = {
       description = "Load 1Password AppArmor profile";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "system-manager.target" ];
       after = [ "apparmor.service" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.apparmor-utils}/bin/apparmor_parser -r /etc/apparmor.d/1password";
-        ExecReload = "${pkgs.apparmor-utils}/bin/apparmor_parser -r /etc/apparmor.d/1password";
+        # Use bash wrapper for better error handling
+        ExecStart = pkgs.writeShellScript "load-1password-apparmor" ''
+          set -euo pipefail
+          if [[ ! -x "${pkgs.apparmor-utils}/bin/apparmor_parser" ]]; then
+            echo "AppArmor utils not available, skipping profile load"
+            exit 0
+          fi
+          if [[ ! -f "/etc/apparmor.d/1password" ]]; then
+            echo "1Password AppArmor profile not found, skipping"
+            exit 0
+          fi
+          echo "Loading 1Password AppArmor profile..."
+          "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password
+        '';
+        ExecReload = pkgs.writeShellScript "reload-1password-apparmor" ''
+          set -euo pipefail
+          if [[ -x "${pkgs.apparmor-utils}/bin/apparmor_parser" && -f "/etc/apparmor.d/1password" ]]; then
+            "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password
+          fi
+        '';
       };
       # Only run if AppArmor 4.0 is available (Ubuntu 24.04+)
       unitConfig.ConditionPathExists = "/etc/apparmor.d/abi/4.0";

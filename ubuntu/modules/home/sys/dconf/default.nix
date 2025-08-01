@@ -5,7 +5,7 @@ let
 in
 {
   options.sys.dconf = {
-    enable = lib.mkEnableOption "dconf tools (home-manager only)";
+    enable = lib.mkEnableOption "Enable dconf editor and dconf2nix conversion tools";
   };
 
   config = lib.mkIf cfg.enable {

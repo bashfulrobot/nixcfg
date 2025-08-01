@@ -73,6 +73,7 @@
             inherit user-settings;
           };
           modules = [
+            ./modules/system/base.nix
             ./modules/system/autoimport.nix
           ];
         };

@@ -8,7 +8,8 @@ This is a comprehensive NixOS configuration repository for Dustin Krysak, managi
 
 ## Documentation References
 
-- **Support Manager** - <https://deepwiki.com/numtide/system-manager/4.2.3-configuration-modules>
+- **System Manager Install/Architecture** - <https://deepwiki.com/numtide/system-manager/4.2.3-configuration-modules> and <https://deepwiki.com/numtide/system-manager/4.2.3-configuration-modules>.
+- **System Manager Options** - <https://deepwiki.com/numtide/system-manager/4.2.3-configuration-modules>
 - **Home Manager Options** - <https://home-manager.dev/manual/25.05/options.xhtml>
 
 ## Essential Commands

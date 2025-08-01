@@ -2,12 +2,12 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.cli.direnv;
+  cfg = config.programs.direnv;
 in {
-  # Only apply when in home-manager context
+  # Only apply when in home-manager context and our custom option is enabled
   config = lib.mkIf (cfg.enable && (config ? home)) {
-    # Home Manager direnv configuration
-    programs.direnv = {
+    # Home Manager direnv configuration - override the built-in one
+    programs.direnv = lib.mkForce {
       enable = true;
       # caching builds
       # https://github.com/nix-community/nix-direnv

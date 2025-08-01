@@ -1,17 +1,11 @@
+# System-manager implementation for direnv
 { config, pkgs, lib, ... }:
 
 let
   cfg = config.cli.direnv;
 in {
-  options.cli.direnv = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable direnv system-level support (envsubst package)";
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  # Only apply when in system-manager context
+  config = lib.mkIf (cfg.enable && (config ? environment)) {
     # System-level packages for direnv support
     environment.systemPackages = with pkgs; [ 
       envsubst  # Required for envsubst functionality

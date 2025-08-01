@@ -20,6 +20,9 @@
     };
   };
 
+  apps = {
+    chromium.enable = true;
+  };
   sys = {
     fonts = {
       enable = true;

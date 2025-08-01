@@ -69,8 +69,12 @@
       # Helper function to create system-manager configurations for different hosts
       mkSystemConfig = hostname: {
         "${hostname}" = system-manager.lib.makeSystemConfig {
+          extraSpecialArgs = {
+            inherit user-settings;
+          };
           modules = [
             ./modules/system/autoimport.nix
+            ./modules/mixed
             # ./modules/system/${hostname}
           ];
         };

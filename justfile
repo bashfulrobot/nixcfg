@@ -177,12 +177,12 @@ ubuntu-test:
 ubuntu-rebuild:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
+    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
 # Switch to new home-manager and system-manager configuration with trace
 ubuntu-rebuild-trace:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
+    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
 # Update flake and switch home-manager and system-manager
 ubuntu-upgrade-system:
     @cd ubuntu && cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)

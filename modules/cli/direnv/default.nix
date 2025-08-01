@@ -1,7 +1,16 @@
-{ user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.direnv;
+{
+  user-settings,
+  pkgs,
+  secrets,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.cli.direnv;
 
-in {
+in
+{
   options = {
     cli.direnv.enable = lib.mkOption {
       type = lib.types.bool;

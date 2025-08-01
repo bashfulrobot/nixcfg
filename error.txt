@@ -1,7 +1,25 @@
-I feel like many apps on my ubuntu may run into this. What is the proper fix? Remember, I am not writing this on ubuntu. Skip tests.
+[nix-shell:~/dev/nix/nixcfg]$ just ubuntu-rebuild
+error:
+       … while evaluating a branch condition
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:142:18:
+          141|       len = length list;
+          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
+             |                  ^
+          143|     in
 
+       … while calling the 'length' builtin
+         at /nix/store/1l18ynbd52x2xq8asyqbdhdngwvhvich-source/lib/lists.nix:141:13:
+          140|     let
+          141|       len = length list;
+             |             ^
+          142|       fold' = n: if n == len then nul else op (elemAt list n) (fold' (n + 1));
 
-$ 1password 
-[4735:0801/090935.720914:FATAL:setuid_sandbox_host.cc(163)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /nix/store/dhcwgvajgmm21h56wsqd4qhr0kbsvqm5-1password-8.10.76/share/1password/chrome-sandbox is owned by root and has mode 4755.
-Trace/breakpoint trap (core dumped)
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: The option `apps.direnv' does not exist. Definition values:
+       - In `/nix/store/m6kfhp1zd2albpi5n1xcy9zjdmang0z9-source/ubuntu/hosts/donkey-kong':
+           {
+             enable = true;
+           }
+error: Recipe `ubuntu-rebuild` failed on line 179 with exit code 1
 

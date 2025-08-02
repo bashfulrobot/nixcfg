@@ -3,15 +3,13 @@
 let
   cfg = config.cli.fish;
 in {
-  options.cli.fish = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable fish shell system-wide installation and shell registration";
-    };
+  options.cli.fish.system = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Enable fish shell system-wide installation and shell registration";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.system {
     # Install fish system-wide
     environment.systemPackages = with pkgs; [
       fish

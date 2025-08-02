@@ -168,9 +168,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Automatically enable system-wide fish installation
-    cli.fish.system = true;
-
     programs.fish = {
       enable = true;
       shellInit = ''

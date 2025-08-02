@@ -8,6 +8,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # Enable system-wide direnv installation
+    system.cli.direnv.enable = true;
+
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;

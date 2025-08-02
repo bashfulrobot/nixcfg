@@ -171,6 +171,8 @@ ubuntu-bootstrap:
     @cd ubuntu && nix --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
     @echo "Bootstrapping system-manager configuration..."
     @cd ubuntu && sudo nix --option download-buffer-size 134217728 run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
+    @echo "Fixing SUID sandbox permissions..."
+    @sudo ubuntu/helpers/fix-suid-permissions.sh
 # Test home-manager and system-manager config without switching
 ubuntu-test:
     @git add -A
@@ -181,17 +183,23 @@ ubuntu-rebuild:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
     @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
+    @echo "Fixing SUID sandbox permissions..."
+    @sudo ubuntu/helpers/fix-suid-permissions.sh
 # Switch to new home-manager and system-manager configuration with trace
 ubuntu-rebuild-trace:
     @git add -A
     @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
     @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
+    @echo "Fixing SUID sandbox permissions..."
+    @sudo ubuntu/helpers/fix-suid-permissions.sh
 # Update flake and switch home-manager and system-manager
 ubuntu-upgrade-system:
     @cd ubuntu && cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
     @cd ubuntu && nix flake update
     @cd ubuntu && home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
     @cd ubuntu && nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
+    @echo "Fixing SUID sandbox permissions..."
+    @sudo ubuntu/helpers/fix-suid-permissions.sh
 # Garbage collect home-manager generations and clear nix cache
 ubuntu-garbage:
     @echo "Garbage collecting home-manager generations older than 5 days..."

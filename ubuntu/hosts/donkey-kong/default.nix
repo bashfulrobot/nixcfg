@@ -20,15 +20,9 @@
   };
 
   cli = {
-    direnv = {
-      enable = true;
-    };
-    fish = {
-      enable = true;
-    };
-    starship = {
-      enable = true;
-    };
+    direnv.enable = true;
+    fish.enable = true;
+    starship.enable = true;
   };
 
   sys = {

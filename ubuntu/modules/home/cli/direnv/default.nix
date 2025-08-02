@@ -8,8 +8,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable system-wide direnv installation
-    system.cli.direnv.enable = true;
+    # Automatically enable system-wide direnv installation
+    cli.direnv.system = true;
 
     programs.direnv = {
       enable = true;

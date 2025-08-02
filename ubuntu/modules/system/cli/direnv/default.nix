@@ -3,11 +3,13 @@
 let
   cfg = config.cli.direnv;
 in {
-  options.cli.direnv = {
-    enable = lib.mkEnableOption "Enable direnv system-wide package installation";
+  options.cli.direnv.system = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Enable direnv system-wide package installation";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.system {
     environment.systemPackages = with pkgs; [
       direnv
     ];

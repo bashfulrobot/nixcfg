@@ -23,6 +23,12 @@
     direnv = {
       enable = true;
     };
+    fish = {
+      enable = true;
+    };
+    starship = {
+      enable = true;
+    };
   };
 
   sys = {

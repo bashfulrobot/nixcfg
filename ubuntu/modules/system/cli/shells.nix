@@ -11,6 +11,7 @@
         serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
+            User = "root";
         };
         script = ''
             # Ensure /etc/shells exists with standard Ubuntu shells if not present

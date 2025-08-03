@@ -14,14 +14,8 @@
 # User-level Chromium configuration (extensions, settings, etc.) should be
 # done via the corresponding home-manager module.
 
-let
-  cfg = config.apps.chromium;
-in {
-  options.apps.chromium = {
-    enable = lib.mkEnableOption "Enable Chromium system-level configuration with AppArmor profile for Ubuntu 24.04+ user namespace support";
-  };
-
-  config = lib.mkIf cfg.enable {
+{
+  # Chromium system-level configuration - AppArmor profiles
     # AppArmor profile for Chromium to fix Ubuntu 24.04 user namespace restrictions
     environment.etc."apparmor.d/chromium".text = ''
       # This profile allows Chromium to create user namespaces for sandboxing
@@ -70,5 +64,4 @@ in {
       # Only run if AppArmor 4.0 is available (Ubuntu 24.04+)
       unitConfig.ConditionPathExists = "/etc/apparmor.d/abi/4.0";
     };
-  };
 }

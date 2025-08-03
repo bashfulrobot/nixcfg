@@ -1,4 +1,7 @@
 { config, pkgs, user-settings, secrets, inputs, ... }:
+# Donkey-Kong workstation configuration
+# Ubuntu configuration using auto-import architecture
+# All modules are automatically enabled - no manual configuration needed
 
 {
   # Basic home-manager configuration
@@ -13,35 +16,5 @@
 
   # Note: Nix settings are managed via /etc/nix/nix.conf on Ubuntu
   # Use the ubuntu-update-nix-conf helper script to modify settings
-
-  apps = {
-    chromium.enable = true;
-    onepassword.enable = true;
-  };
-
-  cli = {
-    direnv = {
-      enable = true;
-      system = true;
-    };
-    fish = {
-      enable = true; 
-      system = true;
-    };
-    starship.enable = true;
-  };
-
-  sys = {
-    fonts = {
-      enable = true;
-    };
-    dconf = {
-      enable = true;
-    };
-  };
-
-  test = {
-    syshome.enable = true;
-  };
 
 }

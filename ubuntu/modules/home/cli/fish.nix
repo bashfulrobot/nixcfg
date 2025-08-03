@@ -163,11 +163,7 @@ let
   };
 
 in {
-  options.cli.fish = {
-    enable = lib.mkEnableOption "Enable fish shell configuration with custom functions, aliases, and integrations";
-  };
-
-  config = lib.mkIf cfg.enable {
+  # Fish shell user configuration with custom functions, aliases, and integrations
     programs.fish = {
       enable = true;
       shellInit = ''
@@ -240,5 +236,4 @@ in {
       fishPlugins.sponge
       gum
     ];
-  };
 }

@@ -1,15 +1,7 @@
 { config, pkgs, lib, ... }:
+# Fish shell system-wide installation and shell registration
 
-let
-  cfg = config.cli.fish;
-in {
-  options.cli.fish.system = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = "Enable fish shell system-wide installation and shell registration";
-  };
-
-  config = lib.mkIf cfg.system {
+{
     # Install fish system-wide
     environment.systemPackages = with pkgs; [
       fish
@@ -22,5 +14,4 @@ in {
       "/usr/bin/bash"
       "${pkgs.fish}/bin/fish"
     ];
-  };
 }

@@ -69,7 +69,6 @@
       # Helper function to create system-manager configurations for different hosts
       mkSystemConfig = hostname: 
         system-manager.lib.makeSystemConfig {
-          inherit pkgs;
           extraSpecialArgs = {
             inherit user-settings;
           };

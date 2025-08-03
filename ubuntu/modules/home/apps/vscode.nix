@@ -10,19 +10,10 @@
 # your system's color scheme, providing consistent theming across applications.
 
 let
-  cfg = config.apps.vscode;
   # Safe access to stylix colors with fallback
   colors = config.lib.stylix.colors or null;
 in {
-  options.apps.vscode = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable VSCode editor (via Home Manager)";
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  # VSCode user configuration with Stylix theme integration
     programs.vscode = {
       enable = true;
 
@@ -444,5 +435,4 @@ in {
 
     # Set VSCode as the default editor if desired
     # home.sessionVariables.EDITOR = "code";
-  };
 }

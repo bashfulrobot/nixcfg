@@ -1,13 +1,7 @@
 { config, pkgs, lib, ... }:
+# 1Password user configuration with browser integration
 
-let
-  cfg = config.apps.onepassword;
-in {
-  options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password desktop application with CLI tools and browser native messaging integration";
-  };
-
-  config = lib.mkIf cfg.enable {
+{
     # Home Manager configuration (user-level) - Install everything
     home.packages = with pkgs; [
       _1password-gui  # Desktop app
@@ -25,5 +19,4 @@ in {
       ".config/chromium/NativeMessagingHosts/com.1password.1password-chrome.json".source = 
         "${pkgs._1password-gui}/share/1password/resources/custom_allowed_browsers/chrome/com.1password.1password-chrome.json";
     };
-  };
 }

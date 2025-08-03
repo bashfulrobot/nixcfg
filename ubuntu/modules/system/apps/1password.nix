@@ -10,14 +10,8 @@
 # Note: This module handles system-level concerns. User-level configuration
 # should be done via the corresponding home-manager module.
 
-let
-  cfg = config.apps.onepassword;
-in {
-  options.apps.onepassword = {
-    enable = lib.mkEnableOption "Enable 1Password system-level configuration with AppArmor profile for Ubuntu 24.04+ compatibility";
-  };
-
-  config = lib.mkIf cfg.enable {
+{
+  # 1Password system-level configuration - AppArmor and packages
     # System-wide packages (install everything)
     environment.systemPackages = with pkgs; [
       _1password-gui  # Desktop app
@@ -81,5 +75,4 @@ in {
       # Only run if AppArmor 4.0 is available (Ubuntu 24.04+)
       unitConfig.ConditionPathExists = "/etc/apparmor.d/abi/4.0";
     };
-  };
 }

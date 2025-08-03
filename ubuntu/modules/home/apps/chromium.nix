@@ -11,8 +11,6 @@
 # desktop environments like GNOME and sway.
 
 let
-  cfg = config.apps.chromium;
-
   # Wayland flags for better performance and compatibility
   waylandFlags = [
     "--enable-features=UseOzonePlatform"
@@ -24,11 +22,7 @@ let
   ];
 
 in {
-  options.apps.chromium = {
-    enable = lib.mkEnableOption "Enable Chromium browser with Wayland optimization and curated extensions";
-  };
-
-  config = lib.mkIf cfg.enable {
+  # Chromium user configuration with Wayland optimization
     programs.chromium = {
       enable = true;
 
@@ -101,5 +95,4 @@ in {
         ".config/chromium-flags.conf".text = flags;
         ".config/electron-flags.conf".text = flags;
       } // electronConfigs;
-  };
 }

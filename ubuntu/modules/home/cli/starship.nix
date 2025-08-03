@@ -1,13 +1,7 @@
 { config, pkgs, lib, ... }:
+# Starship prompt user configuration
 
-let
-  cfg = config.cli.starship;
-in {
-  options.cli.starship = {
-    enable = lib.mkEnableOption "Enable starship prompt with custom configuration";
-  };
-
-  config = lib.mkIf cfg.enable {
+{
     programs.starship = {
       enable = true;
       enableZshIntegration = true;
@@ -86,5 +80,4 @@ in {
         aws.disabled = true;
       };
     };
-  };
 }

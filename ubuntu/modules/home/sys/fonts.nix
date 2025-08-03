@@ -1,15 +1,7 @@
 { config, lib, pkgs, user-settings, ... }:
+# Curated font collection including Nerd Fonts and productivity fonts
 
-let
-  cfg = config.sys.fonts;
-
-in
 {
-  options.sys.fonts = {
-    enable = lib.mkEnableOption "Enable curated font collection including Nerd Fonts and productivity fonts";
-  };
-
-  config = lib.mkIf cfg.enable {
     # Install fonts via home-manager packages
     home.packages = with pkgs; [
       work-sans
@@ -35,5 +27,4 @@ in
 
     # Enable fontconfig for proper font handling
     fonts.fontconfig.enable = true;
-  };
 }

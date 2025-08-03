@@ -9,6 +9,9 @@
   # Required system-manager configuration
   nixpkgs.hostPlatform = "x86_64-linux";
   
+  # Allow unfree packages in system-manager
+  nixpkgs.config.allowUnfree = true;
+  
   # Make user-settings available to all system modules via extraSpecialArgs
   # This allows modules to access user configuration like username, paths, etc.
   

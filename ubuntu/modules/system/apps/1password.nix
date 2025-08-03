@@ -45,7 +45,7 @@
       '';
 
       # AppArmor profile for 1Password to fix Ubuntu 24.04 user namespace restrictions
-      "apparmor.d/1password".text = ''
+      "apparmor.d/1password-nix".text = ''
         # This profile allows 1Password to create user namespaces for sandboxing
         # Fixes Ubuntu 24.04+ restriction: kernel.apparmor_restrict_unprivileged_userns=1
 
@@ -65,7 +65,7 @@
     # Manual polkit setup may be required for browser integration
 
     # Load AppArmor profile on system activation
-    systemd.services."apparmor-1password" = {
+    systemd.services."apparmor-1password-nix" = {
       description = "Load 1Password AppArmor profile";
       wantedBy = [ "system-manager.target" ];
       after = [ "apparmor.service" ];
@@ -73,23 +73,23 @@
         Type = "oneshot";
         RemainAfterExit = true;
         # Use bash wrapper for better error handling
-        ExecStart = pkgs.writeShellScript "load-1password-apparmor" ''
+        ExecStart = pkgs.writeShellScript "load-1password-nix-apparmor" ''
           set -euo pipefail
           if [[ ! -x "${pkgs.apparmor-utils}/bin/apparmor_parser" ]]; then
             echo "AppArmor utils not available, skipping profile load"
             exit 0
           fi
-          if [[ ! -f "/etc/apparmor.d/1password" ]]; then
+          if [[ ! -f "/etc/apparmor.d/1password-nix" ]]; then
             echo "1Password AppArmor profile not found, skipping"
             exit 0
           fi
           echo "Loading 1Password AppArmor profile..."
-          "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password
+          "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password-nix
         '';
-        ExecReload = pkgs.writeShellScript "reload-1password-apparmor" ''
+        ExecReload = pkgs.writeShellScript "reload-1password-nix-apparmor" ''
           set -euo pipefail
-          if [[ -x "${pkgs.apparmor-utils}/bin/apparmor_parser" && -f "/etc/apparmor.d/1password" ]]; then
-            "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password
+          if [[ -x "${pkgs.apparmor-utils}/bin/apparmor_parser" && -f "/etc/apparmor.d/1password-nix" ]]; then
+            "${pkgs.apparmor-utils}/bin/apparmor_parser" -r /etc/apparmor.d/1password-nix
           fi
         '';
       };

@@ -40,4 +40,8 @@
     };
   };
 
+  test = {
+    syshome.enable = true;
+  };
+
 }

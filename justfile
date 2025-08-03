@@ -163,11 +163,9 @@ nix-system-info:
 # Bootstrap home-manager and system-manager on Ubuntu - run this first on a new Ubuntu system
 ubuntu-bootstrap:
     @git add -A
-    @echo "Creating /etc/nix/nix.conf for system-wide Nix configuration..."
-    @sudo mkdir -p /etc/nix
-    @echo -e "experimental-features = nix-command flakes\nsandbox = relaxed\nextra-sandbox-paths = /usr/bin/env" | sudo tee /etc/nix/nix.conf
+    @echo "Setting up Nix configuration with helper script..."
+    @ubuntu/helpers/ubuntu-update-nix-conf.sh
     @echo "Running home-manager bootstrap..."
-    @echo "Note: Nix settings are now managed by /etc/nix/nix.conf"
     @cd ubuntu && nix --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
     @echo "Bootstrapping system-manager configuration..."
     @cd ubuntu && sudo nix --option download-buffer-size 134217728 run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}

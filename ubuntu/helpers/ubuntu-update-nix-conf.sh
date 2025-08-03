@@ -11,6 +11,9 @@ NIX_CONF_CONTENT='# Nix configuration for Ubuntu system
 # Enable experimental features
 experimental-features = nix-command flakes
 
+# Allow unfree packages
+allow-unfree = true
+
 # Sandbox configuration for Chromium/1Password compatibility
 sandbox = relaxed
 extra-sandbox-paths = /usr/bin/env
@@ -42,5 +45,8 @@ echo "Current configuration:"
 echo "====================="
 sudo cat /etc/nix/nix.conf
 echo ""
-echo "Note: You may need to restart any running nix processes for changes to take effect"
-echo "      Run 'sudo systemctl restart nix-daemon' if nix-daemon is running"
+echo "Restarting nix-daemon to apply changes..."
+sudo systemctl restart nix-daemon.service
+echo "Checking nix-daemon status..."
+sudo systemctl status nix-daemon.service
+echo "✓ Configuration applied successfully"

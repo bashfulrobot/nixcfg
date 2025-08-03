@@ -51,7 +51,7 @@ in
       eza # ls and exa alternative
       btop # top alternative
       pass # password manager
-
+			wcurl #curl wget wrapper
     ];
 
     programs = {

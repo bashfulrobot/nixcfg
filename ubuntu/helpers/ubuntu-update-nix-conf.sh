@@ -11,8 +11,7 @@ NIX_CONF_CONTENT='# Nix configuration for Ubuntu system
 # Enable experimental features
 experimental-features = nix-command flakes
 
-# Allow unfree packages
-allow-unfree = true
+# Allow unfree packages (handled by nixpkgs.config.allowUnfree in configuration)
 
 # Sandbox configuration for Chromium/1Password compatibility
 sandbox = relaxed

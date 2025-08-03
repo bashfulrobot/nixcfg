@@ -20,8 +20,29 @@
 
     # Polkit rules for 1Password browser integration (always enabled)
     environment.etc = {
-      "1password/custom_allowed_browsers".source =
-        "${pkgs._1password-gui}/share/1password/resources/custom_allowed_browsers";
+      # Custom allowed browsers file with zen browser support
+      "1password/custom_allowed_browsers".text = ''
+        firefox
+        firefox-esr
+        firefox-beta
+        firefox-dev
+        firefox-nightly
+        google-chrome
+        google-chrome-beta
+        google-chrome-dev
+        google-chrome-unstable
+        chromium
+        chromium-browser
+        microsoft-edge
+        microsoft-edge-beta
+        microsoft-edge-dev
+        brave
+        brave-browser
+        vivaldi
+        opera
+        zen
+        zen-browser
+      '';
 
       # AppArmor profile for 1Password to fix Ubuntu 24.04 user namespace restrictions
       "apparmor.d/1password".text = ''

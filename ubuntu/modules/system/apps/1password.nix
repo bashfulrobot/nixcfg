@@ -11,7 +11,7 @@
 # should be done via the corresponding home-manager module.
 
 {
-  # 1Password system-level configuration - AppArmor and packages
+  config = {
     # System-wide packages (install everything)
     environment.systemPackages = with pkgs; [
       _1password-gui  # Desktop app
@@ -96,4 +96,5 @@
       # Only run if AppArmor 4.0 is available (Ubuntu 24.04+)
       unitConfig.ConditionPathExists = "/etc/apparmor.d/abi/4.0";
     };
+  };
 }

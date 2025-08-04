@@ -2,7 +2,9 @@
 # Direnv system-wide package installation
 
 {
-  environment.systemPackages = with pkgs; [
-    direnv
-  ];
+  config = {
+    environment.systemPackages = with pkgs; [
+      direnv
+    ];
+  };
 }

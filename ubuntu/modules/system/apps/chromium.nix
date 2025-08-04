@@ -15,7 +15,7 @@
 # done via the corresponding home-manager module.
 
 {
-  # Chromium system-level configuration - AppArmor profiles
+  config = {
     # AppArmor profile for Chromium to fix Ubuntu 24.04 user namespace restrictions
     environment.etc."apparmor.d/chromium".text = ''
       # This profile allows Chromium to create user namespaces for sandboxing
@@ -64,4 +64,5 @@
       # Only run if AppArmor 4.0 is available (Ubuntu 24.04+)
       unitConfig.ConditionPathExists = "/etc/apparmor.d/abi/4.0";
     };
+  };
 }

@@ -6,6 +6,7 @@
     environment.systemPackages = with pkgs; [
       wcurl
       atuin
+      systemd  # Provides systemd-tmpfiles needed by system-manager
     ];
   };
 }

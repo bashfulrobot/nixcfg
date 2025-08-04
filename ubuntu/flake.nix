@@ -70,9 +70,14 @@
       mkSystemConfig = hostname: 
         system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
-            inherit user-settings;
+            inherit user-settings pkgs;
           };
           modules = [
+            {
+              # Required system-manager configuration
+              nixpkgs.hostPlatform = system;
+              nixpkgs.config.allowUnfree = true;
+            }
             ./modules/system/autoimport.nix
           ];
         };

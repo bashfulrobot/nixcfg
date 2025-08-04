@@ -5,3 +5,5 @@
     - disable secure boot (actually for NixOS, but need to allow 3rd party sigs dor ubuntu)
     - disable the security chip if yiu want hybernate to wake properly (bug)
 - After fingerprintys are setup run `sudo pam-aut-update`  and add fingerprints.
+- After 1Password is installed and signed in, initialize CLI shell integration:
+    - Run `op plugin init fish` to create the plugins.sh file for fish shell integration

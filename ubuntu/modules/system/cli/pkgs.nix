@@ -2,8 +2,10 @@
 # system-wide package installation
 
 {
-  environment.systemPackages = with pkgs; [
-    wcurl
-    atuin
-  ];
+  config = {
+    environment.systemPackages = with pkgs; [
+      wcurl
+      atuin
+    ];
+  };
 }

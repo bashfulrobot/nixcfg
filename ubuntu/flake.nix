@@ -25,74 +25,44 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, system-manager, ... }:
-    let
-      system = "x86_64-linux";
-
-      # Create overlay for unstable packages
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable {
-          inherit (final) system;
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, system-manager, ... }: {
+    homeConfigurations = {
+      "dustin@donkey-kong" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
           config.allowUnfree = true;
-        };
-      };
-
-      # Load settings and secrets from parent directory
-      user-settings = builtins.fromJSON (builtins.readFile "${self}/../settings/settings.json");
-      secrets = builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
-
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        overlays = [ overlay-unstable ];
-      };
-
-      # Helper function to create home-manager configurations for different hosts
-      mkHomeConfig = hostname: {
-        "${user-settings.user.username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-
-          extraSpecialArgs = {
-            inherit user-settings secrets inputs system;
-            inherit (inputs) zen-browser;
-          };
-
-          modules = [
-            stylix.homeModules.stylix
-            declarative-flatpak.homeModule
-            ./modules/home/autoimport.nix
-            ./hosts/${hostname}
-          ];
-        };
-      };
-
-      # Helper function to create system-manager configurations for different hosts
-      mkSystemConfig = hostname: 
-        system-manager.lib.makeSystemConfig {
-          extraSpecialArgs = {
-            inherit user-settings pkgs;
-          };
-          modules = [
-            ./modules/system/autoimport.nix
+          overlays = [
+            (final: prev: {
+              unstable = import nixpkgs-unstable {
+                system = "x86_64-linux";
+                config.allowUnfree = true;
+              };
+            })
           ];
         };
 
-    in {
-      homeConfigurations =
-        (mkHomeConfig "donkey-kong") //
-        # Add other Ubuntu systems here as needed
-        # (mkHomeConfig "other-ubuntu-system") //
-        {};
+        extraSpecialArgs = {
+          user-settings = builtins.fromJSON (builtins.readFile "${self}/../settings/settings.json");
+          secrets = builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
+          inherit zen-browser;
+          system = "x86_64-linux";
+        };
 
-      systemConfigs = {
-        "donkey-kong" = mkSystemConfig "donkey-kong";
-        # Add other Ubuntu systems here as needed
-        # "other-ubuntu-system" = mkSystemConfig "other-ubuntu-system";
-      };
-
-      # Expose packages for development
-      packages.${system} = {
-        inherit (pkgs) home-manager;
+        modules = [
+          stylix.homeModules.stylix
+          declarative-flatpak.homeModule
+          ./modules/home/autoimport.nix
+          ./hosts/donkey-kong
+        ];
       };
     };
+
+    systemConfigs = {
+      donkey-kong = inputs.system-manager.lib.makeSystemConfig {
+        modules = [
+          ./modules/system/autoimport.nix
+        ];
+      };
+    };
+  };
 }

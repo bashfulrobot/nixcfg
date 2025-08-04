@@ -1,4 +1,4 @@
-{ config, lib, pkgs, user-settings, ... }:
+{ config, lib, pkgs, ... }:
 # Base system-manager configuration
 #
 # This module provides the fundamental system-manager configuration required

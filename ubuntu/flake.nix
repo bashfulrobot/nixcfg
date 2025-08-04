@@ -73,11 +73,6 @@
             inherit user-settings pkgs;
           };
           modules = [
-            {
-              # Required system-manager configuration
-              nixpkgs.hostPlatform = system;
-              nixpkgs.config.allowUnfree = true;
-            }
             ./modules/system/autoimport.nix
           ];
         };

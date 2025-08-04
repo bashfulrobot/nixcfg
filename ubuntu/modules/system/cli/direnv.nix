@@ -3,8 +3,7 @@
 
 {
   config = {
-    environment.systemPackages = with pkgs; [
-      direnv
-    ];
+    # Note: direnv package now installed via home-manager
+    # This module handles system-level direnv configuration only
   };
 }

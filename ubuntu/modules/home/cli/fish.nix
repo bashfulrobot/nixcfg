@@ -224,6 +224,7 @@ in {
     };
 
     home.packages = with pkgs; [
+      # Fish plugins and related tools
       fishPlugins.tide
       fishPlugins.grc
       grc

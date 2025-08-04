@@ -3,9 +3,7 @@
 
 {
   config = {
-    # Install fish system-wide
-    environment.systemPackages = with pkgs; [
-      fish
-    ];
+    # Note: fish package now installed via home-manager
+    # This module handles system-level shell configuration only
   };
 }

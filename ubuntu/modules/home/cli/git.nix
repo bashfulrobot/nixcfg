@@ -64,8 +64,8 @@
     };
   };
 
-  programs.gitui = { 
-    enable = true; 
+  programs.gitui = {
+    enable = true;
   };
 
   home.file.".config/git/allowed_signers".text = ''
@@ -74,5 +74,6 @@
 
   home.packages = with pkgs; [
     git-crypt
+    git
   ];
 }

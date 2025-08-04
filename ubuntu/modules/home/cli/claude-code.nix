@@ -4,7 +4,7 @@
   # Claude Code CLI configuration for home-manager in Ubuntu environment
 
   home.packages = with pkgs; [
-    unstable.claude-code
+    claude-code
   ];
 
   xdg.configFile."claude/CLAUDE.md".source = ../../../../modules/cli/claude-code/CLAUDE.md;

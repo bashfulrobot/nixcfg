@@ -27,7 +27,7 @@ in {
       enable = true;
 
       # Optional: override package with WideVine support
-      package = pkgs.unstable.chromium.override { enableWideVine = true; };
+      package = pkgs.chromium.override { enableWideVine = true; };
 
       # Optional command-line flags - Wayland optimization
       commandLineArgs = waylandFlags;

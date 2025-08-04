@@ -13,13 +13,6 @@
     # Allow unfree packages in system-manager
     nixpkgs.config.allowUnfree = true;
     
-    # Add system-manager packages to system PATH
-    environment.etc."profile.d/system-manager-path.sh" = {
-      text = ''
-        # Add system-manager packages to PATH for all users
-        export PATH="/run/system-manager/sw/bin:$PATH"
-      '';
-      mode = "0644";
-    };
+    # Note: PATH configuration handled automatically by system-manager
   };
 }

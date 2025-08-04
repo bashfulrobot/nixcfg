@@ -2,10 +2,9 @@
   description = "Home Manager configuration for Ubuntu systems - Dustin Krysak";
 
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-25.05"; };
-    nixpkgs-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {
@@ -13,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:danth/stylix/release-25.05";
+      url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     declarative-flatpak = {
@@ -25,20 +24,12 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, zen-browser, stylix, declarative-flatpak, system-manager, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, zen-browser, stylix, declarative-flatpak, system-manager, ... }: {
     homeConfigurations = {
       "dustin@donkey-kong" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           system = "x86_64-linux";
           config.allowUnfree = true;
-          overlays = [
-            (final: prev: {
-              unstable = import nixpkgs-unstable {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              };
-            })
-          ];
         };
 
         extraSpecialArgs = {

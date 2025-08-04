@@ -2,7 +2,7 @@
 # VSCode configuration with Stylix theme integration
 #
 # This module provides:
-# - VSCode installation from unstable channel for latest features
+# - VSCode installation for latest features
 # - Wayland optimization flags for better Linux desktop integration
 # - Dynamic Stylix theme generation when Stylix is available
 #
@@ -17,8 +17,8 @@ in {
     programs.vscode = {
       enable = true;
 
-      # Use unstable channel for latest VSCode
-      package = pkgs.unstable.vscode;
+      # VSCode package
+      package = pkgs.vscode;
     };
 
     # Create a Stylix theme extension if Stylix is enabled

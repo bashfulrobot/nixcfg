@@ -7,7 +7,7 @@
     unstable.claude-code
   ];
 
-  xdg.configFile."claude/CLAUDE.md".source = ../../../modules/cli/claude-code/CLAUDE.md;
+  xdg.configFile."claude/CLAUDE.md".source = ../../../../modules/cli/claude-code/CLAUDE.md;
 
   programs.fish.shellAbbrs = {
     cc = {

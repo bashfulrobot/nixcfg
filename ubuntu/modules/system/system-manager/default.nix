@@ -13,9 +13,6 @@
     # Allow unfree packages in system-manager
     nixpkgs.config.allowUnfree = true;
     
-    # Allow system-manager to run on non-NixOS distributions (Ubuntu)
-    system-manager.allowAnyDistro = true;
-    
     # Make user-settings available to all system modules via extraSpecialArgs
     # This allows modules to access user configuration like username, paths, etc.
     

@@ -1,8 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, user-settings, ... }:
 
-let
-  user-settings = builtins.fromJSON (builtins.readFile ../../../settings/settings.json);
-in {
+{
   # Claude Code CLI configuration for home-manager in Ubuntu environment
   
   home.packages = with pkgs; [

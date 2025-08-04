@@ -1,9 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, user-settings, secrets, ... }:
 
-let
-  secrets = builtins.fromJSON (builtins.readFile ../../../secrets/secrets.json);
-  user-settings = builtins.fromJSON (builtins.readFile ../../../settings/settings.json);
-in {
+{
   # Git configuration for home-manager in Ubuntu environment
   programs.git = {
     enable = true;

@@ -3,10 +3,7 @@
 
 {
   config = {
-    environment.systemPackages = with pkgs; [
-      wcurl
-      atuin
-      # systemd already provided by Ubuntu system, don't install via Nix
-    ];
+    # Note: All packages now installed via home-manager for proper user integration
+    # This module can be used for system-level package configuration if needed
   };
 }

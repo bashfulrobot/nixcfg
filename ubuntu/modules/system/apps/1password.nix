@@ -12,11 +12,8 @@
 
 {
   config = {
-    # System-wide packages (install everything)
-    environment.systemPackages = with pkgs; [
-      _1password-gui  # Desktop app
-      _1password-cli  # CLI
-    ];
+    # Note: 1Password packages now installed via home-manager for proper desktop integration
+    # This module only handles system-level configuration (AppArmor, etc.)
 
     # Polkit rules for 1Password browser integration (always enabled)
     environment.etc = {

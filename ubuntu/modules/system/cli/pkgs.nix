@@ -6,7 +6,7 @@
     environment.systemPackages = with pkgs; [
       wcurl
       atuin
-      systemd  # Provides systemd-tmpfiles needed by system-manager
+      # systemd already provided by Ubuntu system, don't install via Nix
     ];
   };
 }

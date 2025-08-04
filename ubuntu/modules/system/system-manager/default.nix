@@ -13,10 +13,13 @@
     # Allow unfree packages in system-manager
     nixpkgs.config.allowUnfree = true;
     
-    # Make user-settings available to all system modules via extraSpecialArgs
-    # This allows modules to access user configuration like username, paths, etc.
-    
-    # Basic system configuration can go here if needed
-    # For now, this serves as the base configuration entry point
+    # Add system-manager packages to system PATH
+    environment.etc."profile.d/system-manager-path.sh" = {
+      text = ''
+        # Add system-manager packages to PATH for all users
+        export PATH="/run/system-manager/sw/bin:$PATH"
+      '';
+      mode = "0644";
+    };
   };
 }

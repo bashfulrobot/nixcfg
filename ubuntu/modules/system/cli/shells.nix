@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, user-settings, ... }:
 # System shell registration for /etc/shells
 
 {
@@ -29,7 +29,7 @@
             fi
             
             # Add Nix-managed shells if not already present
-            FISH_SHELL="${pkgs.fish}/bin/fish"
+            FISH_SHELL="${user-settings.user.home}/.nix-profile/bin/fish"
             if ! grep -Fxq "$FISH_SHELL" /etc/shells; then
                 echo "$FISH_SHELL" >> /etc/shells
             fi

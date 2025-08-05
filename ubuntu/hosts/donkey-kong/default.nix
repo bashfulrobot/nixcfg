@@ -11,6 +11,9 @@
     stateVersion = "25.05";
   };
 
+  # XDG settings
+  xdg.enable = true;
+
   # Let home-manager manage itself
   programs.home-manager.enable = true;
 

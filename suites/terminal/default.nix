@@ -88,6 +88,12 @@ in
       };
 
       programs = {
+        # nix-search-tv = {
+        #   enable = true;
+        #   enableBashIntegration = true;
+        #   enableFishIntegration = true;
+        #   enableZshIntegration = true;
+        # };
         autojump = {
           enable = false;
           enableFishIntegration = true;

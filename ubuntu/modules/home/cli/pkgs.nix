@@ -9,5 +9,6 @@
 {
   home.packages = with pkgs; [
     # Note: atuin handled by programs.atuin.enable in fish.nix
+    gemini-cli
   ];
 }

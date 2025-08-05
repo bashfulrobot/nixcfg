@@ -167,7 +167,8 @@ in {
     programs.fish = {
       enable = true;
       shellInit = ''
-        # Shell Init
+        # Shell Init - ensure nix profile is in PATH early
+        fish_add_path ~/.nix-profile/bin
         source ~/.config/op/plugins.sh
       '';
       interactiveShellInit = ''

@@ -9,11 +9,13 @@
 {
   home.packages = with pkgs; [
     # Note: atuin handled by programs.atuin.enable in fish.nix
-    # Note: fzf handled by programs.fzf.enable in fish.nix
+    # Note: fzf handled by programs.fzf.enable in fish.nix  
+    # Note: starship handled by programs.starship.enable in starship.nix
     # Add explicit packages to ensure they're in PATH
     fd
     fzf
     atuin
+    starship
     gemini-cli
     eza
     yazi

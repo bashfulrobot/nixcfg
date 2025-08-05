@@ -11,11 +11,15 @@
     # Note: atuin handled by programs.atuin.enable in fish.nix
     # Note: fzf handled by programs.fzf.enable in fish.nix  
     # Note: starship handled by programs.starship.enable in starship.nix
+    # Note: ripgrep, btop, tealdeer also configured via programs.*
     # Add explicit packages to ensure they're in PATH
     fd
     fzf
     atuin
     starship
+    ripgrep
+    btop
+    tealdeer
     gemini-cli
     eza
     yazi

@@ -60,6 +60,7 @@ in
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
       unstable.helix # text editor
+      unstable.gemini-cli # Gemini CLI client
     ];
 
     # programs = { jqp = { enable = true; }; };

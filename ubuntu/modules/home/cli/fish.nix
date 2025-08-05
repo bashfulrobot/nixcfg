@@ -174,6 +174,11 @@ in {
       interactiveShellInit = ''
         set fish_greeting # Disable greeting
         source ~/.config/op/plugins.sh
+        
+        # Force starship initialization regardless of TERM
+        if command -q starship
+          starship init fish | source
+        end
 
         # Auto-load SSH keys if this is an SSH session
         if set -q SSH_CONNECTION

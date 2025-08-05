@@ -53,6 +53,10 @@
         modules = [
           ./modules/system/autoimport.nix
         ];
+        specialArgs = {
+          user-settings = builtins.fromJSON (builtins.readFile "${self}/../settings/settings.json");
+          secrets = builtins.fromJSON (builtins.readFile "${self}/../secrets/secrets.json");
+        };
       };
     };
   };

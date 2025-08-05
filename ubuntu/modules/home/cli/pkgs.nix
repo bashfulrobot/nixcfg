@@ -9,6 +9,8 @@
 {
   home.packages = with pkgs; [
     # Note: atuin handled by programs.atuin.enable in fish.nix
+    # Note: fzf requires fd for file searching
+    fd
     gemini-cli
     eza
     yazi

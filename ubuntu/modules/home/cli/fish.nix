@@ -168,7 +168,6 @@ in {
       enable = true;
       shellInit = ''
         # Shell Init
-        direnv hook fish | source
         source ~/.config/op/plugins.sh
       '';
       interactiveShellInit = ''

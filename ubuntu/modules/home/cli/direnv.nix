@@ -6,7 +6,6 @@
       enable = true;
       nix-direnv.enable = true;
       enableBashIntegration = true;
-      enableFishIntegration = true;
 
       config.global = {
         load_dotenv = true;

@@ -235,6 +235,71 @@ nix-shell -p git git-crypt wget curl --run "
         echo
     done
     
+    # Handle wallpapers (OPTIONAL for theme support)
+    echo
+    echo -e '${BLUE}Wallpaper fetching (for theme support):${NC}'
+    echo '1) Fetch from 192.168.169.2 (dustin@192.168.169.2:Pictures/Wallpapers/)'
+    echo '2) Fetch from 192.168.168.1 (dustin@192.168.168.1:Pictures/Wallpapers/)'
+    echo '3) Provide custom SSH location'
+    echo '4) Skip wallpapers (will cause theme build errors)'
+    echo
+    
+    while true; do
+        read -p 'Select wallpaper option (1-4): ' wallpaper_choice
+        
+        case \"\$wallpaper_choice\" in
+            1)
+                echo -e '${BLUE}Fetching wallpapers from 192.168.169.2...${NC}'
+                if scp -r dustin@192.168.169.2:Pictures/Wallpapers ./wallpapers 2>/dev/null; then
+                    mkdir -p /mnt/home/dustin/Pictures
+                    cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                    echo -e '${GREEN}Wallpapers copied successfully${NC}'
+                    break
+                else
+                    echo -e '${RED}Failed to fetch wallpapers from 192.168.169.2${NC}'
+                fi
+                ;;
+            2)
+                echo -e '${BLUE}Fetching wallpapers from 192.168.168.1...${NC}'
+                if scp -r dustin@192.168.168.1:Pictures/Wallpapers ./wallpapers 2>/dev/null; then
+                    mkdir -p /mnt/home/dustin/Pictures
+                    cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                    echo -e '${GREEN}Wallpapers copied successfully${NC}'
+                    break
+                else
+                    echo -e '${RED}Failed to fetch wallpapers from 192.168.168.1${NC}'
+                fi
+                ;;
+            3)
+                echo -e '${BLUE}Enter SSH location for wallpapers:${NC}'
+                echo '(Format: user@host:path/to/Pictures/Wallpapers/)'
+                read -p 'SSH location: ' ssh_location
+                
+                if [[ -n \"\$ssh_location\" ]]; then
+                    echo -e '${BLUE}Fetching wallpapers from \$ssh_location...${NC}'
+                    if scp -r \"\$ssh_location\" ./wallpapers 2>/dev/null; then
+                        mkdir -p /mnt/home/dustin/Pictures
+                        cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                        echo -e '${GREEN}Wallpapers copied successfully${NC}'
+                        break
+                    else
+                        echo -e '${RED}Failed to fetch wallpapers from \$ssh_location${NC}'
+                    fi
+                else
+                    echo -e '${RED}No SSH location provided${NC}'
+                fi
+                ;;
+            4)
+                echo -e '${YELLOW}Skipping wallpapers - theme may fail to build${NC}'
+                break
+                ;;
+            *)
+                echo -e '${RED}Invalid selection. Please enter 1, 2, 3, or 4.${NC}'
+                ;;
+        esac
+        echo
+    done
+    
     # Copy repo with updated hardware config to new system
     mkdir -p /mnt/home
     cp -r \"\$PWD\" /mnt/home/nixcfg

@@ -110,10 +110,10 @@ in
       xdg.enable = true;
     };
 
-    # programs.nautilus-open-any-terminal = {
-    #   enable = true;
-    #   terminal = "blackbox";
-    # };
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "blackbox";
+    };
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {

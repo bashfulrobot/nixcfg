@@ -344,7 +344,7 @@ nix-shell -p git git-crypt wget curl --run "
 
     # Define the flake path for installation
     INSTALL_FLAKE_PATH=\"/mnt/tmp/nixcfg-source#\$SYSTEM_NAME\"
-    echo -e \"${BLUE}Installation will proceed using the flake at: ${INSTALL_FLAKE_PATH}${NC}\"
+    echo -e \"${BLUE}Installation will proceed using the flake at: \${INSTALL_FLAKE_PATH}${NC}\"
     
     # Deployment options
     echo

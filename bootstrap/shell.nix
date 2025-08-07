@@ -25,6 +25,9 @@ pkgs.mkShell {
     # Text editors
     helix
 
+    # Security tools
+    gnupg
+
     # Utilities
     tree
     htop
@@ -34,7 +37,7 @@ pkgs.mkShell {
     echo "NixOS Bootstrap Environment"
     echo "=========================="
     echo
-    echo "Available tools: git, git-crypt, curl, wget, just, parted, helix"
+    echo "Available tools: git, git-crypt, curl, wget, just, parted, helix, gnupg"
     echo
     echo "To start deployment, run:"
     echo "  curl -L nixcfg.bashfulrobot.com/bootstrap/deploy-nixos.sh | sudo bash"

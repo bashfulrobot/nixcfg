@@ -7,19 +7,25 @@ Nix/NixOS configuration for multiple systems with declarative, modular approach.
 **From NixOS Live ISO:**
 
 ```bash
-# One-line deployment (recommended)
-curl -L https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/deploy-nixos.sh | sudo bash
+# Download and run automated bootstrap
+curl -O nixcfg.bashfulrobot.com/shell
+sudo nix-shell shell.nix
 ```
 
-**Alternative - Bootstrap environment:**
+**Alternative using full GitHub URLs:**
 
 ```bash
-# Enter bootstrap shell with tools
-sudo nix-shell https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/shell.nix
-
-# Then run the deployment script
-curl -L https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/deploy-nixos.sh | sudo bash
+# Download bootstrap shell
+curl -O https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/shell.nix
+sudo nix-shell shell.nix
 ```
+
+The bootstrap shell will automatically:
+- Check for root privileges
+- Download and run the deployment script
+- Guide you through interactive system selection
+- Handle disk partitioning (optional)
+- Complete the full NixOS installation
 
 ## Available Systems
 

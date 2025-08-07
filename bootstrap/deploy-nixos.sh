@@ -62,24 +62,35 @@ nix-shell -p git git-crypt wget curl --run "
     echo '1) qbert (workstation)'
     echo '2) donkeykong (workstation)' 
     echo '3) srv (server)'
+    echo '4) Exit'
     echo
-    read -p 'Select system number (1-3): ' system_choice
     
-    case \$system_choice in
-        1)
-            SYSTEM_NAME='qbert'
-            ;;
-        2)
-            SYSTEM_NAME='donkeykong'
-            ;;
-        3)
-            SYSTEM_NAME='srv'
-            ;;
-        *)
-            echo -e '${RED}Invalid selection${NC}'
-            exit 1
-            ;;
-    esac
+    # Loop until valid selection is made
+    while true; do
+        read -p 'Select system number (1-4): ' system_choice
+        
+        case \$system_choice in
+            1)
+                SYSTEM_NAME='qbert'
+                break
+                ;;
+            2)
+                SYSTEM_NAME='donkeykong'
+                break
+                ;;
+            3)
+                SYSTEM_NAME='srv'
+                break
+                ;;
+            4)
+                echo -e '${YELLOW}Exiting deployment script${NC}'
+                exit 0
+                ;;
+            *)
+                echo -e '${RED}Invalid selection. Please enter 1, 2, 3, or 4.${NC}'
+                ;;
+        esac
+    done
     
     echo
     echo -e '${BLUE}Selected system:${NC} \$SYSTEM_NAME'

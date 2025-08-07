@@ -14,7 +14,7 @@ pkgs.mkShell {
     curl
     wget
     just
-    password-gui
+    _1password-gui
 
     # System tools
     parted

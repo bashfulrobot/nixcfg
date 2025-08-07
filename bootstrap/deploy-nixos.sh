@@ -354,7 +354,7 @@ nix-shell -p git git-crypt wget curl --run "
         cp settings/settings.json settings/settings.json.backup
         
         # Replace urban.jpg with available adwaita-l.jpg temporarily
-        sed -i 's/"wallpaper": "urban.jpg"/"wallpaper": "adwaita-l.jpg"/' settings/settings.json
+        sed -i 's/\\\"urban.jpg\\\"/\\\"adwaita-l.jpg\\\"/' settings/settings.json
         echo -e '${GREEN}Wallpaper setting temporarily updated for build${NC}'
     else
         echo -e '${YELLOW}Settings file not found - skipping wallpaper fix${NC}'
@@ -386,6 +386,8 @@ nix-shell -p git git-crypt wget curl --run "
         case \$deploy_choice in
             1)
                 echo -e '${BLUE}Running automatic installation...${NC}'
+                echo -e '${YELLOW}Command:${NC} ulimit -n 4096 && nixos-install --flake .#\$SYSTEM_NAME --impure --no-root-passwd'
+                echo
                 ulimit -n 4096
                 if nixos-install --flake \".#\$SYSTEM_NAME\" --impure --no-root-passwd; then
                     echo -e '${GREEN}Installation completed successfully!${NC}'

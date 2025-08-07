@@ -157,26 +157,89 @@ nix-shell -p git git-crypt wget curl --run "
     
     echo -e '${BLUE}Hardware configuration saved to hosts/\$SYSTEM_NAME/config/hardware-configuration.nix${NC}'
     
-    # Handle secrets/git-crypt if available
+    # Handle secrets/git-crypt (ESSENTIAL - cannot skip)
     echo
-    read -p 'Do you have git-crypt key available? (y/N): ' has_gitcrypt
+    echo -e '${BLUE}Git-crypt key is REQUIRED for deployment${NC}'
+    echo -e '${BLUE}Git-crypt key options:${NC}'
+    echo '1) Fetch from 192.168.169.2 (dustin@192.168.169.2:~/.ssh/git-crypt)'
+    echo '2) Fetch from 192.168.168.1 (dustin@192.168.168.1:~/.ssh/git-crypt)'
+    echo '3) Provide custom SSH location'
+    echo '4) Provide local file path'
+    echo
     
-    if [[ \"\$has_gitcrypt\" =~ ^[Yy]$ ]]; then
-        echo -e '${BLUE}Please provide the git-crypt key file path:${NC}'
-        read -p 'Key file path: ' key_path
+    while true; do
+        read -p 'Select git-crypt option (1-4): ' gitcrypt_choice
         
-        if [[ -f \"\$key_path\" ]]; then
-            git-crypt unlock \"\$key_path\"
-            git-crypt status
-            echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
-        else
-            echo -e '${YELLOW}Key file not found, proceeding without secrets${NC}'
-        fi
-    else
-        echo -e '${YELLOW}Proceeding without git-crypt (secrets will not be available)${NC}'
-    fi
+        case \"\$gitcrypt_choice\" in
+            1)
+                echo -e '${BLUE}Fetching git-crypt key from 192.168.169.2...${NC}'
+                if scp dustin@192.168.169.2:~/.ssh/git-crypt ./git-crypt-key; then
+                    git-crypt unlock ./git-crypt-key
+                    rm -f ./git-crypt-key
+                    git-crypt status
+                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    break
+                else
+                    echo -e '${RED}Failed to fetch key from 192.168.169.2${NC}'
+                fi
+                ;;
+            2)
+                echo -e '${BLUE}Fetching git-crypt key from 192.168.168.1...${NC}'
+                if scp dustin@192.168.168.1:~/.ssh/git-crypt ./git-crypt-key; then
+                    git-crypt unlock ./git-crypt-key
+                    rm -f ./git-crypt-key
+                    git-crypt status
+                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    break
+                else
+                    echo -e '${RED}Failed to fetch key from 192.168.168.1${NC}'
+                fi
+                ;;
+            3)
+                echo -e '${BLUE}Enter SSH location for git-crypt key:${NC}'
+                echo '(Format: user@host:path/to/git-crypt)'
+                read -p 'SSH location: ' ssh_location
+                
+                if [[ -n \"\$ssh_location\" ]]; then
+                    echo -e '${BLUE}Fetching git-crypt key from \$ssh_location...${NC}'
+                    if scp \"\$ssh_location\" ./git-crypt-key; then
+                        git-crypt unlock ./git-crypt-key
+                        rm -f ./git-crypt-key
+                        git-crypt status
+                        echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                        break
+                    else
+                        echo -e '${RED}Failed to fetch key from \$ssh_location${NC}'
+                    fi
+                else
+                    echo -e '${RED}No SSH location provided${NC}'
+                fi
+                ;;
+            4)
+                echo -e '${BLUE}Please provide the git-crypt key file path:${NC}'
+                read -p 'Key file path: ' key_path
+                
+                if [[ -f \"\$key_path\" ]]; then
+                    git-crypt unlock \"\$key_path\"
+                    git-crypt status
+                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    break
+                else
+                    echo -e '${RED}Key file not found: \$key_path${NC}'
+                fi
+                ;;
+            *)
+                echo -e '${RED}Invalid selection. Please enter 1, 2, 3, or 4.${NC}'
+                ;;
+        esac
+        echo
+    done
     
-    # Ensure working directory is preserved for installation
+    # Copy repo with updated hardware config to new system
+    mkdir -p /mnt/home
+    cp -r \"\$PWD\" /mnt/home/nixcfg
+    
+    # Also keep backup in /tmp for safety
     mkdir -p /mnt/tmp/nixcfg-deploy
     cp -r \"\$PWD\" /mnt/tmp/nixcfg-deploy/
     
@@ -192,10 +255,12 @@ nix-shell -p git git-crypt wget curl --run "
     echo -e '${BLUE}Post-installation steps:${NC}'
     echo '1. Reboot into the new system'
     echo '2. Set up user password: sudo passwd $(whoami)'
-    echo '3. Copy any additional files (SSH keys, etc.)'
-    echo '4. Run: just rebuild (to apply any updates)'
+    echo '3. Move repo: mv /home/nixcfg ~/dev/nix/nixcfg && mkdir -p ~/dev/nix'
+    echo '4. Update remote: cd ~/dev/nix/nixcfg && git remote set-url origin git@github.com:bashfulrobot/nixcfg.git'
+    echo '5. Commit hardware config: git add . && git commit && git push'
+    echo '6. Run: just rebuild (to apply any updates)'
     echo
-    echo -e '${YELLOW}The nixcfg repository has been copied to /tmp/nixcfg-deploy/ on the new system${NC}'
+    echo -e '${YELLOW}The nixcfg repository (with updated hardware config) is available at /home/nixcfg${NC}'
     echo
     read -p 'Reboot now? (y/N): ' reboot_now
     

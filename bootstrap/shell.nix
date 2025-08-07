@@ -34,17 +34,10 @@ pkgs.mkShell {
     echo "NixOS Bootstrap Environment"
     echo "=========================="
     echo
-    echo "Starting automated NixOS deployment..."
+    echo "Available tools: git, git-crypt, curl, wget, just, parted, helix"
     echo
-    
-    # Check if running as root
-    if [[ $EUID -ne 0 ]]; then
-      echo "ERROR: This bootstrap must be run as root"
-      echo "Please run: sudo nix-shell shell.nix"
-      exit 1
-    fi
-    
-    # Automatically run the deployment script
-    curl -L https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/deploy-nixos.sh | bash
+    echo "To start deployment, run:"
+    echo "  curl -L nixcfg.bashfulrobot.com/bootstrap/deploy-nixos.sh | sudo bash"
+    echo
   '';
 }

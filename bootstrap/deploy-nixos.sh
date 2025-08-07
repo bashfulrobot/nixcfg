@@ -93,7 +93,7 @@ nix-shell -p git git-crypt wget curl --run "
     done
     
     echo
-    echo -e '${BLUE}Selected system:${NC} \$SYSTEM_NAME'
+    echo -e '${BLUE}Selected system:${NC} '\$SYSTEM_NAME
     echo
     
     # Check if system has disko config

@@ -157,59 +157,105 @@ nix-shell -p git git-crypt wget curl --run "
     
     echo -e '${BLUE}Hardware configuration saved to hosts/\$SYSTEM_NAME/config/hardware-configuration.nix${NC}'
     
-    # Handle secrets/git-crypt (ESSENTIAL - cannot skip)
+    # Handle secrets and SSH keys (ESSENTIAL - git-crypt required, SSH keys optional)
     echo
     echo -e '${BLUE}Git-crypt key is REQUIRED for deployment${NC}'
-    echo -e '${BLUE}Git-crypt key options:${NC}'
-    echo '1) Fetch from 192.168.169.2 (dustin@192.168.169.2:~/.ssh/git-crypt)'
-    echo '2) Fetch from 192.168.168.1 (dustin@192.168.168.1:~/.ssh/git-crypt)'
-    echo '3) Provide custom SSH location'
-    echo '4) Provide local file path'
+    echo -e '${BLUE}SSH keys are OPTIONAL for development access${NC}'
+    echo -e '${BLUE}Secrets and SSH key options:${NC}'
+    echo '1) Fetch from 192.168.169.2 (git-crypt + SSH keys)'
+    echo '2) Fetch from 192.168.168.1 (git-crypt + SSH keys)'
+    echo '3) Provide custom SSH location (git-crypt + SSH keys)'
+    echo '4) Git-crypt only (provide local file path)'
     echo
     
     while true; do
-        read -p 'Select git-crypt option (1-4): ' gitcrypt_choice
+        read -p 'Select secrets option (1-4): ' secrets_choice
         
-        case \"\$gitcrypt_choice\" in
+        case \"\$secrets_choice\" in
             1)
-                echo -e '${BLUE}Fetching git-crypt key from 192.168.169.2...${NC}'
+                echo -e '${BLUE}Fetching git-crypt key and SSH keys from 192.168.169.2...${NC}'
+                
+                # Fetch git-crypt key (required)
                 if scp dustin@192.168.169.2:~/.ssh/git-crypt ./git-crypt-key; then
                     git-crypt unlock ./git-crypt-key
                     rm -f ./git-crypt-key
                     git-crypt status
                     echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    
+                    # Fetch SSH keys (optional)
+                    mkdir -p ./ssh-keys
+                    if scp dustin@192.168.169.2:~/.ssh/id* ./ssh-keys/ 2>/dev/null; then
+                        mkdir -p /mnt/home/dustin/.ssh
+                        cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                        chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
+                        chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                        chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                        echo -e '${GREEN}SSH keys copied successfully${NC}'
+                    else
+                        echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
+                    fi
                     break
                 else
-                    echo -e '${RED}Failed to fetch key from 192.168.169.2${NC}'
+                    echo -e '${RED}Failed to fetch git-crypt key from 192.168.169.2${NC}'
                 fi
                 ;;
             2)
-                echo -e '${BLUE}Fetching git-crypt key from 192.168.168.1...${NC}'
+                echo -e '${BLUE}Fetching git-crypt key and SSH keys from 192.168.168.1...${NC}'
+                
+                # Fetch git-crypt key (required)
                 if scp dustin@192.168.168.1:~/.ssh/git-crypt ./git-crypt-key; then
                     git-crypt unlock ./git-crypt-key
                     rm -f ./git-crypt-key
                     git-crypt status
                     echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    
+                    # Fetch SSH keys (optional)
+                    mkdir -p ./ssh-keys
+                    if scp dustin@192.168.168.1:~/.ssh/id* ./ssh-keys/ 2>/dev/null; then
+                        mkdir -p /mnt/home/dustin/.ssh
+                        cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                        chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
+                        chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                        chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                        echo -e '${GREEN}SSH keys copied successfully${NC}'
+                    else
+                        echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
+                    fi
                     break
                 else
-                    echo -e '${RED}Failed to fetch key from 192.168.168.1${NC}'
+                    echo -e '${RED}Failed to fetch git-crypt key from 192.168.168.1${NC}'
                 fi
                 ;;
             3)
                 echo -e '${BLUE}Enter SSH location for git-crypt key:${NC}'
-                echo '(Format: user@host:path/to/git-crypt)'
-                read -p 'SSH location: ' ssh_location
+                echo '(Format: user@host - will fetch ~/.ssh/git-crypt and ~/.ssh/id*)'
+                read -p 'SSH location (user@host): ' ssh_location
                 
                 if [[ -n \"\$ssh_location\" ]]; then
-                    echo -e '${BLUE}Fetching git-crypt key from \$ssh_location...${NC}'
-                    if scp \"\$ssh_location\" ./git-crypt-key; then
+                    echo -e '${BLUE}Fetching git-crypt key and SSH keys from \$ssh_location...${NC}'
+                    
+                    # Fetch git-crypt key (required)
+                    if scp \"\$ssh_location:~/.ssh/git-crypt\" ./git-crypt-key; then
                         git-crypt unlock ./git-crypt-key
                         rm -f ./git-crypt-key
                         git-crypt status
                         echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                        
+                        # Fetch SSH keys (optional)
+                        mkdir -p ./ssh-keys
+                        if scp \"\$ssh_location:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
+                            mkdir -p /mnt/home/dustin/.ssh
+                            cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                            chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
+                            chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                            chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                            echo -e '${GREEN}SSH keys copied successfully${NC}'
+                        else
+                            echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
+                        fi
                         break
                     else
-                        echo -e '${RED}Failed to fetch key from \$ssh_location${NC}'
+                        echo -e '${RED}Failed to fetch git-crypt key from \$ssh_location${NC}'
                     fi
                 else
                     echo -e '${RED}No SSH location provided${NC}'
@@ -223,6 +269,7 @@ nix-shell -p git git-crypt wget curl --run "
                     git-crypt unlock \"\$key_path\"
                     git-crypt status
                     echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
+                    echo -e '${YELLOW}SSH keys not fetched - manual setup required later${NC}'
                     break
                 else
                     echo -e '${RED}Key file not found: \$key_path${NC}'

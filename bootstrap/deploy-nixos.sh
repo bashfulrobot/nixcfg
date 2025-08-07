@@ -101,7 +101,28 @@ nix-shell -p git git-crypt wget curl --run "
     if [[ -f \"\$DISKO_CONFIG\" ]]; then
         echo -e '${YELLOW}DISKO PARTITIONING WILL ERASE ALL DATA ON THE TARGET DISK${NC}'
         echo
-        read -p 'Do you want to partition with disko? (y/N): ' use_disko
+        echo 'Disko partitioning options:'
+        echo '1) Run disko partitioning (DESTRUCTIVE - will erase disk)'
+        echo '2) Skip disko (disk already partitioned/mounted)'
+        echo
+        
+        while true; do
+            read -p 'Select disko option (1-2): ' disko_choice
+            
+            case \"\$disko_choice\" in
+                1)
+                    use_disko=\"y\"
+                    break
+                    ;;
+                2)
+                    use_disko=\"n\"
+                    break
+                    ;;
+                *)
+                    echo -e '${RED}Invalid selection. Please enter 1 or 2.${NC}'
+                    ;;
+            esac
+        done
         
         if [[ \"\$use_disko\" =~ ^[Yy]$ ]]; then
             echo

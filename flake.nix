@@ -130,6 +130,10 @@
           ++ [ ./hosts/qbert commonHomeManagerConfig commonNixpkgsConfig ]) {
             isWorkstation = true;
           };
+        donkeykong = makeSystem "donkeykong" (commonModules
+          ++ [ ./hosts/donkeykong commonHomeManagerConfig commonNixpkgsConfig ]) {
+            isWorkstation = true;
+          };
         # Note: The `false` argument is used to determine if the system is a workstation or not
         srv = makeSystem "srv" (serverModules
           ++ [ ./hosts/srv serverHomeManagerConfig commonNixpkgsConfig ]) {

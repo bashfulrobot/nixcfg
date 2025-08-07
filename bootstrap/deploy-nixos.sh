@@ -178,7 +178,6 @@ nix-shell -p git git-crypt wget curl --run "
                 # Fetch git-crypt key (required)
                 if scp dustin@192.168.169.2:~/.ssh/git-crypt ./git-crypt-key; then
                     git-crypt unlock ./git-crypt-key
-                    rm -f ./git-crypt-key
                     git-crypt status
                     echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
                     
@@ -205,7 +204,6 @@ nix-shell -p git git-crypt wget curl --run "
                 # Fetch git-crypt key (required)
                 if scp dustin@192.168.168.1:~/.ssh/git-crypt ./git-crypt-key; then
                     git-crypt unlock ./git-crypt-key
-                    rm -f ./git-crypt-key
                     git-crypt status
                     echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
                     
@@ -237,7 +235,6 @@ nix-shell -p git git-crypt wget curl --run "
                     # Fetch git-crypt key (required)
                     if scp \"\$ssh_location:~/.ssh/git-crypt\" ./git-crypt-key; then
                         git-crypt unlock ./git-crypt-key
-                        rm -f ./git-crypt-key
                         git-crypt status
                         echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
                         

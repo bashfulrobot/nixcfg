@@ -3,7 +3,9 @@
 # nix-shell https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/shell.nix
 
 {
-  pkgs ? import <nixpkgs> { },
+  pkgs ? import <nixpkgs> { 
+    config.allowUnfree = true;
+  },
 }:
 
 pkgs.mkShell {
@@ -22,6 +24,8 @@ pkgs.mkShell {
 
     # Nix tools
     nixos-install-tools
+    nix
+    nixFlakes
 
     # Text editors
     helix
@@ -30,6 +34,9 @@ pkgs.mkShell {
     tree
     htop
   ];
+
+  # Enable nix command and flakes
+  NIX_CONFIG = "experimental-features = nix-command flakes";
 
   shellHook = ''
     echo "NixOS Bootstrap Environment"

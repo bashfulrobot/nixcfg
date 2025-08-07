@@ -157,123 +157,92 @@ nix-shell -p git git-crypt wget curl --run "
     
     echo -e '${BLUE}Hardware configuration saved to hosts/\$SYSTEM_NAME/config/hardware-configuration.nix${NC}'
     
-    # Handle secrets and SSH keys (ESSENTIAL - git-crypt required, SSH keys optional)
+    # Handle secrets (git-crypt) and SSH keys
+    GIT_CRYPT_KEY_PATH=\"\"
+    
     echo
-    echo -e '${BLUE}Git-crypt key is REQUIRED for deployment${NC}'
-    echo -e '${BLUE}SSH keys are OPTIONAL for development access${NC}'
-    echo -e '${BLUE}Secrets and SSH key options:${NC}'
-    echo '1) Fetch from 192.168.169.2 (git-crypt + SSH keys)'
-    echo '2) Fetch from 192.168.168.1 (git-crypt + SSH keys)'
-    echo '3) Provide custom SSH location (git-crypt + SSH keys)'
-    echo '4) Git-crypt only (provide local file path)'
+    echo -e '${BLUE}Secrets (git-crypt) & SSH Key Options${NC}'
+    echo -e '${YELLOW}This repository uses git-crypt to manage secrets. To unlock them, you need a symmetric key file.${NC}'
+    echo
+    echo '1) Fetch symmetric key via SSH (e.g., from user@host:~/.ssh/git-crypt)'
+    echo '2) Provide local path to symmetric key file'
+    echo '3) Exit'
     echo
     
     while true; do
-        read -p 'Select secrets option (1-4): ' secrets_choice
+        read -p 'Select an option (1-3): ' secrets_choice
         
         case \"\$secrets_choice\" in
             1)
-                echo -e '${BLUE}Fetching git-crypt key and SSH keys from 192.168.169.2...${NC}'
-                
-                # Fetch git-crypt key (required)
-                if scp dustin@192.168.169.2:~/.ssh/git-crypt ./git-crypt-key; then
-                    git-crypt unlock ./git-crypt-key
-                    git-crypt status
-                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
-                    
-                    # Fetch SSH keys (optional)
-                    mkdir -p ./ssh-keys
-                    if scp dustin@192.168.169.2:~/.ssh/id* ./ssh-keys/ 2>/dev/null; then
-                        mkdir -p /mnt/home/dustin/.ssh
-                        cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
-                        chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
-                        chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
-                        chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
-                        echo -e '${GREEN}SSH keys copied successfully${NC}'
-                    else
-                        echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
-                    fi
-                    break
-                else
-                    echo -e '${RED}Failed to fetch git-crypt key from 192.168.169.2${NC}'
-                fi
-                ;;
-            2)
-                echo -e '${BLUE}Fetching git-crypt key and SSH keys from 192.168.168.1...${NC}'
-                
-                # Fetch git-crypt key (required)
-                if scp dustin@192.168.168.1:~/.ssh/git-crypt ./git-crypt-key; then
-                    git-crypt unlock ./git-crypt-key
-                    git-crypt status
-                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
-                    
-                    # Fetch SSH keys (optional)
-                    mkdir -p ./ssh-keys
-                    if scp dustin@192.168.168.1:~/.ssh/id* ./ssh-keys/ 2>/dev/null; then
-                        mkdir -p /mnt/home/dustin/.ssh
-                        cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
-                        chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
-                        chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
-                        chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
-                        echo -e '${GREEN}SSH keys copied successfully${NC}'
-                    else
-                        echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
-                    fi
-                    break
-                else
-                    echo -e '${RED}Failed to fetch git-crypt key from 192.168.168.1${NC}'
-                fi
-                ;;
-            3)
-                echo -e '${BLUE}Enter SSH location for git-crypt key:${NC}'
-                echo '(Format: user@host - will fetch ~/.ssh/git-crypt and ~/.ssh/id*)'
-                read -p 'SSH location (user@host): ' ssh_location
+                echo -e '${BLUE}Enter SSH location to fetch the symmetric git-crypt key:${NC}'
+                echo '(Example: user@host:~/.ssh/git-crypt)'
+                read -p 'SSH location (user@host:path): ' ssh_location
                 
                 if [[ -n \"\$ssh_location\" ]]; then
-                    echo -e '${BLUE}Fetching git-crypt key and SSH keys from \$ssh_location...${NC}'
+                    echo -e \"${BLUE}Fetching git-crypt key from \$ssh_location...${NC}\"
                     
-                    # Fetch git-crypt key (required)
-                    if scp \"\$ssh_location:~/.ssh/git-crypt\" ./git-crypt-key; then
-                        git-crypt unlock ./git-crypt-key
-                        git-crypt status
-                        echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
-                        
-                        # Fetch SSH keys (optional)
-                        mkdir -p ./ssh-keys
-                        if scp \"\$ssh_location:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
-                            mkdir -p /mnt/home/dustin/.ssh
-                            cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
-                            chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
-                            chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
-                            chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
-                            echo -e '${GREEN}SSH keys copied successfully${NC}'
+                    if scp \"\$ssh_location\" ./git-crypt-key; then
+                        GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
+                        echo -e '${BLUE}Attempting to unlock with fetched key...${NC}'
+                        if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
+                            echo -e '${GREEN}Git-crypt unlocked successfully with symmetric key.${NC}'
+                            echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
+                            # CRITICAL: Force a re-checkout of all files to apply the decryption filter.
+                            git checkout .
+                            git-crypt status
+                            # Also try to fetch SSH keys from the same host
+                            ssh_host=\$(echo \"\$ssh_location\" | cut -d':' -f1)
+                            echo -e \"${BLUE}Attempting to fetch SSH keys from \$ssh_host (optional)...${NC}\"
+                            mkdir -p ./ssh-keys
+                            if scp \"\$ssh_host:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
+                                mkdir -p /mnt/home/dustin/.ssh
+                                cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                                chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
+                                chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                                chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                                echo -e '${GREEN}SSH keys copied successfully.${NC}'
+                            else
+                                echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
+                            fi
+                            break
                         else
-                            echo -e '${YELLOW}SSH keys not found or failed to copy (not critical)${NC}'
+                            echo -e '${RED}Failed to unlock git-crypt with the provided key.${NC}'
                         fi
-                        break
                     else
-                        echo -e '${RED}Failed to fetch git-crypt key from \$ssh_location${NC}'
+                        echo -e \"${RED}Failed to fetch git-crypt key from \$ssh_location.${NC}\"
                     fi
                 else
                     echo -e '${RED}No SSH location provided${NC}'
                 fi
                 ;;
-            4)
-                echo -e '${BLUE}Please provide the git-crypt key file path:${NC}'
+            2)
+                echo -e '${BLUE}Please provide the local file path for the symmetric git-crypt key:${NC}'
                 read -p 'Key file path: ' key_path
                 
                 if [[ -f \"\$key_path\" ]]; then
-                    git-crypt unlock \"\$key_path\"
-                    git-crypt status
-                    echo -e '${GREEN}Git-crypt unlocked successfully${NC}'
-                    echo -e '${YELLOW}SSH keys not fetched - manual setup required later${NC}'
-                    break
+                    GIT_CRYPT_KEY_PATH=\$(readlink -f \"\$key_path\") # Make it absolute
+                    echo -e '${BLUE}Attempting to unlock with provided key file...${NC}'
+                    if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
+                        echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
+                        echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
+                        # CRITICAL: Force a re-checkout of all files to apply the decryption filter.
+                        git checkout .
+                        git-crypt status
+                        echo -e '${YELLOW}SSH keys were not handled by this option. Manual setup may be required later.${NC}'
+                        break
+                    else
+                        echo -e \"${RED}Failed to unlock git-crypt with key: \$key_path${NC}\"
+                    fi
                 else
-                    echo -e '${RED}Key file not found: \$key_path${NC}'
+                    echo -e \"${RED}Key file not found: \$key_path${NC}\"
                 fi
                 ;;
+            3)
+                echo -e '${YELLOW}Exiting deployment script.${NC}'
+                exit 0
+                ;;
             *)
-                echo -e '${RED}Invalid selection. Please enter 1, 2, 3, or 4.${NC}'
+                echo -e '${RED}Invalid selection. Please enter 1, 2, or 3.${NC}'
                 ;;
         esac
         echo
@@ -320,14 +289,14 @@ nix-shell -p git git-crypt wget curl --run "
                 read -p 'SSH location: ' ssh_location
                 
                 if [[ -n \"\$ssh_location\" ]]; then
-                    echo -e '${BLUE}Fetching wallpapers from \$ssh_location...${NC}'
+                    echo -e \"${BLUE}Fetching wallpapers from \$ssh_location...${NC}\"
                     if scp -r \"\$ssh_location\" ./wallpapers 2>/dev/null; then
                         mkdir -p /mnt/home/dustin/Pictures
                         cp -r ./wallpapers /mnt/home/dustin/Pictures/
                         echo -e '${GREEN}Wallpapers copied successfully${NC}'
                         break
                     else
-                        echo -e '${RED}Failed to fetch wallpapers from \$ssh_location${NC}'
+                        echo -e \"${RED}Failed to fetch wallpapers from \$ssh_location${NC}\"
                     fi
                 else
                     echo -e '${RED}No SSH location provided${NC}'
@@ -357,36 +326,27 @@ nix-shell -p git git-crypt wget curl --run "
         echo -e '${YELLOW}Settings file not found - skipping wallpaper fix${NC}'
     fi
     
-    # Copy repo with updated hardware config to new system
+    # CRITICAL: Copy the unlocked repository to the target system before installation
+    echo -e '${BLUE}Copying unlocked repository to /mnt/tmp/nixcfg-source for the installation...${NC}'
+    mkdir -p /mnt/tmp
+    cp -r . /mnt/tmp/nixcfg-source
+    
+    # Copy the pristine (still locked) repo to the final user destination
     mkdir -p /mnt/home
-    cp -r \"\$PWD\" /mnt/home/nixcfg
+    cp -r . /mnt/home/nixcfg
     
-    # Also keep backup in /tmp for safety
-    mkdir -p /mnt/tmp/nixcfg-deploy
-    cp -r \"\$PWD\" /mnt/tmp/nixcfg-deploy/
-    
-    # Unlock git-crypt in both copied repos
-    if [[ -f ./git-crypt-key ]]; then
-        echo -e '${BLUE}Unlocking git-crypt in copied repositories...${NC}'
-        
-        # Unlock in main target repo
-        cd /mnt/home/nixcfg
-        git-crypt unlock \"\$OLDPWD/git-crypt-key\"
+    # Unlock the final user repo if a key was provided
+    if [[ -n \"\$GIT_CRYPT_KEY_PATH\" ]]; then
+        echo -e '${BLUE}Unlocking git-crypt in final user repository at /mnt/home/nixcfg...${NC}'
+        (cd /mnt/home/nixcfg && git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\")
         echo -e '${GREEN}Git-crypt unlocked in /mnt/home/nixcfg${NC}'
-        
-        # Unlock in backup repo  
-        cd /mnt/tmp/nixcfg-deploy/nixcfg
-        git-crypt unlock \"\$OLDPWD/git-crypt-key\"
-        echo -e '${GREEN}Git-crypt unlocked in /mnt/tmp/nixcfg-deploy${NC}'
-        
-        cd - > /dev/null
     fi
+
+    # Define the flake path for installation
+    INSTALL_FLAKE_PATH=\"/mnt/tmp/nixcfg-source#\$SYSTEM_NAME\"
+    echo -e \"${BLUE}Installation will proceed using the flake at: ${INSTALL_FLAKE_PATH}${NC}\"
     
     # Deployment options
-    echo
-    echo -e '${BLUE}Selected system: '\$SYSTEM_NAME'${NC}'
-    echo -e '${BLUE}Current directory: '\$(pwd)'${NC}'
-    ls -la flake.nix || echo -e '${RED}ERROR: flake.nix not found - wrong directory!${NC}'
     echo
     echo -e '${BLUE}Deployment options:${NC}'
     echo '1) Auto-install (run nixos-install automatically)'
@@ -400,10 +360,10 @@ nix-shell -p git git-crypt wget curl --run "
         case \$deploy_choice in
             1)
                 echo -e '${BLUE}Running automatic installation...${NC}'
-                echo -e '${YELLOW}Command:${NC} ulimit -n 4096 && nixos-install --flake .#\$SYSTEM_NAME --impure --no-root-passwd'
+                echo -e \"${YELLOW}Command:${NC} ulimit -n 4096 && nixos-install --flake \$INSTALL_FLAKE_PATH --impure --no-root-passwd\"
                 echo
                 ulimit -n 4096
-                if nixos-install --flake \".#\$SYSTEM_NAME\" --impure --no-root-passwd; then
+                if nixos-install --flake \"\$INSTALL_FLAKE_PATH\" --impure --no-root-passwd; then
                     echo -e '${GREEN}Installation completed successfully!${NC}'
                 else
                     echo -e '${RED}Installation failed. Check the error messages above.${NC}'
@@ -413,7 +373,7 @@ nix-shell -p git git-crypt wget curl --run "
             2)
                 echo
                 echo -e '${YELLOW}Run the following command to install:${NC}'
-                echo \"ulimit -n 4096 && nixos-install --flake .#\$SYSTEM_NAME --impure --no-root-passwd\"
+                echo \"ulimit -n 4096 && nixos-install --flake \$INSTALL_FLAKE_PATH --impure --no-root-passwd\"
                 echo
                 echo -e '${BLUE}Press Enter when installation is complete...${NC}'
                 read -p '' install_done
@@ -430,9 +390,9 @@ nix-shell -p git git-crypt wget curl --run "
     done
     
     # Restore original wallpaper setting
-    if [[ -f settings/settings.json.backup ]]; then
+    if [[ -f /mnt/tmp/nixcfg-source/settings/settings.json.backup ]]; then
         echo -e '${BLUE}Restoring original wallpaper setting...${NC}'
-        mv settings/settings.json.backup settings/settings.json
+        mv /mnt/tmp/nixcfg-source/settings/settings.json.backup /mnt/tmp/nixcfg-source/settings/settings.json
         echo -e '${GREEN}Original settings restored${NC}'
     fi
     
@@ -441,7 +401,7 @@ nix-shell -p git git-crypt wget curl --run "
     echo
     echo -e '${BLUE}Post-installation steps:${NC}'
     echo '1. Reboot into the new system'
-    echo '2. Set up user password: sudo passwd $(whoami)'
+    echo '2. Set up user password: sudo passwd \$(whoami)'
     echo '3. Move repo: mv /home/nixcfg ~/dev/nix/nixcfg && mkdir -p ~/dev/nix'
     echo '4. Update remote: cd ~/dev/nix/nixcfg && git remote set-url origin git@github.com:bashfulrobot/nixcfg.git'
     echo '5. Commit hardware config: git add . && git commit && git push'

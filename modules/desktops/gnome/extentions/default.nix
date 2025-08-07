@@ -29,6 +29,7 @@ in
       gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.caffeine
       gnomeExtensions.media-controls
+      gnomeExtensions.appindicator
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
     ];
 
@@ -42,6 +43,7 @@ in
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
             "mediacontrols@cliffniff.github.com"
+            "appindicatorsupport@rgcjonas.gmail.com"
           ];
 
           # Disabled extensions

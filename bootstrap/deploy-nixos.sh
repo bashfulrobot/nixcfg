@@ -248,8 +248,12 @@ nix-shell -p git git-crypt wget curl --run "
     echo -e '${BLUE}Installing NixOS system: '\$SYSTEM_NAME'${NC}'
     echo -e '${BLUE}Current directory: '\$(pwd)'${NC}'
     ls -la flake.nix || echo 'flake.nix not found in current directory'
-    ulimit -n 4096
-    nixos-install --flake \".\#\${SYSTEM_NAME}\" --impure --no-root-passwd
+    echo
+    echo -e '${YELLOW}Run the following command to install:${NC}'
+    echo \"ulimit -n 4096 && nixos-install --flake .#\${SYSTEM_NAME} --impure --no-root-passwd\"
+    echo
+    echo -e '${BLUE}Press Enter when installation is complete...${NC}'
+    read -p '' install_done
     
     echo
     echo -e '${GREEN}Installation complete!${NC}'

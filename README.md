@@ -64,19 +64,31 @@ nixos-install --flake .#SYSTEM --impure
 
 ## Post-Installation
 
-After reboot:
+After reboot, the bootstrap script provides clear next steps. The repository (with updated hardware config) will be available at `/home/nixcfg`:
 
 ```bash
-# Set user password
+# 1. Set user password
 sudo passwd $(whoami)
 
-# Apply any updates
-just rebuild
+# 2. Move repo to expected location
+mkdir -p ~/dev/nix && mv /home/nixcfg ~/dev/nix/nixcfg
 
-# Optional: Set up development environment
-mkdir -p ~/dev/nix && cd ~/dev/nix
-git clone https://github.com/bashfulrobot/nixcfg
+# 3. Update git remote to SSH
+cd ~/dev/nix/nixcfg
+git remote set-url origin git@github.com:bashfulrobot/nixcfg.git
+
+# 4. Commit updated hardware config
+git add . && git commit -m "feat: update hardware config for $(hostname)" && git push
+
+# 5. Apply any updates
+just rebuild
 ```
+
+The bootstrap process automatically:
+- Generates hardware configuration for your specific system
+- Unlocks git-crypt with your network-accessible key
+- Copies the complete repo to `/home/nixcfg` for easy access
+- Provides step-by-step post-installation instructions
 
 ## Development
 

@@ -16,8 +16,8 @@
   desktops.gnome.enable = true;
   desktops.tiling.hyprland.enable = false;
 
-  apps.syncthing = {
-    enable = true;
-    host.donkeykong = true;
-  };
+  # apps.syncthing = {
+  #   enable = true;
+  #   host.donkeykong = true;
+  # };
 }

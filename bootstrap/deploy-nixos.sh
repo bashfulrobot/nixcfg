@@ -243,17 +243,50 @@ nix-shell -p git git-crypt wget curl --run "
     mkdir -p /mnt/tmp/nixcfg-deploy
     cp -r \"\$PWD\" /mnt/tmp/nixcfg-deploy/
     
-    # Install the system
+    # Deployment options
     echo
-    echo -e '${BLUE}Installing NixOS system: '\$SYSTEM_NAME'${NC}'
+    echo -e '${BLUE}Selected system: '\$SYSTEM_NAME'${NC}'
     echo -e '${BLUE}Current directory: '\$(pwd)'${NC}'
-    ls -la flake.nix || echo 'flake.nix not found in current directory'
+    ls -la flake.nix || echo -e '${RED}ERROR: flake.nix not found - wrong directory!${NC}'
     echo
-    echo -e '${YELLOW}Run the following command to install:${NC}'
-    echo \"ulimit -n 4096 && nixos-install --flake .#\${SYSTEM_NAME} --impure --no-root-passwd\"
+    echo -e '${BLUE}Deployment options:${NC}'
+    echo '1) Auto-install (run nixos-install automatically)'
+    echo '2) Manual install (show command to run manually)'
+    echo '3) Skip installation (configuration only)'
     echo
-    echo -e '${BLUE}Press Enter when installation is complete...${NC}'
-    read -p '' install_done
+    
+    while true; do
+        read -p 'Select deployment option (1-3): ' deploy_choice
+        
+        case \$deploy_choice in
+            1)
+                echo -e '${BLUE}Running automatic installation...${NC}'
+                ulimit -n 4096
+                if nixos-install --flake \".#\$SYSTEM_NAME\" --impure --no-root-passwd; then
+                    echo -e '${GREEN}Installation completed successfully!${NC}'
+                else
+                    echo -e '${RED}Installation failed. Check the error messages above.${NC}'
+                fi
+                break
+                ;;
+            2)
+                echo
+                echo -e '${YELLOW}Run the following command to install:${NC}'
+                echo \"ulimit -n 4096 && nixos-install --flake .#\$SYSTEM_NAME --impure --no-root-passwd\"
+                echo
+                echo -e '${BLUE}Press Enter when installation is complete...${NC}'
+                read -p '' install_done
+                break
+                ;;
+            3)
+                echo -e '${YELLOW}Skipping installation - configuration prepared only${NC}'
+                break
+                ;;
+            *)
+                echo -e '${RED}Invalid selection. Please enter 1, 2, or 3.${NC}'
+                ;;
+        esac
+    done
     
     echo
     echo -e '${GREEN}Installation complete!${NC}'

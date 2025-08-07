@@ -174,6 +174,11 @@ nix-shell -p git git-crypt wget curl --run "
     while true; do
         read -p 'Select an option (1-5): ' secrets_choice
         
+        # Stash the hardware config before any operation that needs a clean git directory
+        echo -e '${BLUE}Stashing modified hardware config...${NC}'
+        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
+        git stash
+        
         case \"\$secrets_choice\" in
             1|2)
                 local_ip=\"192.168.169.2\"
@@ -188,17 +193,8 @@ nix-shell -p git git-crypt wget curl --run "
                     echo -e '${BLUE}Attempting to unlock with fetched key...${NC}'
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
-                        
-                        echo -e '${BLUE}Stashing modified hardware config to allow decryption...${NC}'
-                        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
-                        git stash
-                        
                         echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
                         git checkout .
-                        
-                        echo -e '${BLUE}Restoring hardware config...${NC}'
-                        git stash pop
-                        
                         git-crypt status
                         
                         # Fetch SSH keys (optional)
@@ -214,7 +210,6 @@ nix-shell -p git git-crypt wget curl --run "
                         else
                             echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
                         fi
-                        break
                     else
                         echo -e '${RED}Failed to unlock git-crypt with the fetched key.${NC}'
                     fi
@@ -231,12 +226,8 @@ nix-shell -p git git-crypt wget curl --run "
                         GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
                         if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                             echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
-                            git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
-                            git stash
                             git checkout .
-                            git stash pop
                             git-crypt status
-                            break
                         else
                             echo -e '${RED}Failed to unlock git-crypt with the provided key.${NC}'
                         fi
@@ -253,12 +244,8 @@ nix-shell -p git git-crypt wget curl --run "
                     GIT_CRYPT_KEY_PATH=\$(readlink -f \"\$key_path\")
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
-                        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
-                        git stash
                         git checkout .
-                        git stash pop
                         git-crypt status
-                        break
                     else
                         echo -e \"${RED}Failed to unlock git-crypt with key: \$key_path${NC}\"
                     fi
@@ -268,12 +255,23 @@ nix-shell -p git git-crypt wget curl --run "
                 ;;
             5)
                 echo -e '${YELLOW}Exiting deployment script.${NC}'
+                # Restore stashed changes before exiting
+                git stash pop 2>/dev/null || true
                 exit 0
                 ;;
             *)
                 echo -e '${RED}Invalid selection. Please enter 1, 2, 3, 4, or 5.${NC}'
                 ;;
         esac
+        
+        # Restore stashed changes before looping or breaking
+        echo -e '${BLUE}Restoring hardware config...${NC}'
+        git stash pop 2>/dev/null || true
+        
+        # Break the loop if a valid selection was made and processed
+        if [[ \"\$secrets_choice\" -ge 1 && \"\$secrets_choice\" -le 4 ]]; then
+            break
+        fi
         echo
     done
     

@@ -148,18 +148,8 @@ nix-shell -p git git-crypt wget curl --run "
         fi
     fi
     
-    # Generate hardware configuration
-    echo -e '${BLUE}Generating hardware configuration...${NC}'
-    nixos-generate-config --no-filesystems --root /mnt
-    
-    # Copy hardware config to repo
-    cp /mnt/etc/nixos/hardware-configuration.nix \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
-    
-    echo -e '${BLUE}Hardware configuration saved to hosts/\$SYSTEM_NAME/config/hardware-configuration.nix${NC}'
-    
-    # Handle secrets (git-crypt) and SSH keys
+    # Handle secrets (git-crypt) and SSH keys FIRST
     GIT_CRYPT_KEY_PATH=\"\"
-    
     echo
     echo -e '${BLUE}Secrets (git-crypt) & SSH Key Options${NC}'
     echo -e '${YELLOW}This repository uses git-crypt to manage secrets. To unlock them, you need a symmetric key file.${NC}'
@@ -174,11 +164,6 @@ nix-shell -p git git-crypt wget curl --run "
     while true; do
         read -p 'Select an option (1-5): ' secrets_choice
         
-        # Stash the hardware config before any operation that needs a clean git directory
-        echo -e '${BLUE}Stashing modified hardware config...${NC}'
-        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
-        git stash
-        
         case \"\$secrets_choice\" in
             1|2)
                 local_ip=\"192.168.169.2\"
@@ -190,10 +175,8 @@ nix-shell -p git git-crypt wget curl --run "
                 
                 if scp \"dustin@\$local_ip:~/.ssh/git-crypt\" ./git-crypt-key; then
                     GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
-                    echo -e '${BLUE}Attempting to unlock with fetched key...${NC}'
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
-                        echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
                         git checkout .
                         git-crypt status
                         
@@ -210,6 +193,7 @@ nix-shell -p git git-crypt wget curl --run "
                         else
                             echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
                         fi
+                        break
                     else
                         echo -e '${RED}Failed to unlock git-crypt with the fetched key.${NC}'
                     fi
@@ -228,6 +212,7 @@ nix-shell -p git git-crypt wget curl --run "
                             echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
                             git checkout .
                             git-crypt status
+                            break
                         else
                             echo -e '${RED}Failed to unlock git-crypt with the provided key.${NC}'
                         fi
@@ -246,6 +231,7 @@ nix-shell -p git git-crypt wget curl --run "
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
                         git checkout .
                         git-crypt status
+                        break
                     else
                         echo -e \"${RED}Failed to unlock git-crypt with key: \$key_path${NC}\"
                     fi
@@ -255,25 +241,23 @@ nix-shell -p git git-crypt wget curl --run "
                 ;;
             5)
                 echo -e '${YELLOW}Exiting deployment script.${NC}'
-                # Restore stashed changes before exiting
-                git stash pop 2>/dev/null || true
                 exit 0
                 ;;
             *)
                 echo -e '${RED}Invalid selection. Please enter 1, 2, 3, 4, or 5.${NC}'
                 ;;
         esac
-        
-        # Restore stashed changes before looping or breaking
-        echo -e '${BLUE}Restoring hardware config...${NC}'
-        git stash pop 2>/dev/null || true
-        
-        # Break the loop if a valid selection was made and processed
-        if [[ \"\$secrets_choice\" -ge 1 && \"\$secrets_choice\" -le 4 ]]; then
-            break
-        fi
         echo
     done
+    
+    # Generate hardware configuration
+    echo -e '${BLUE}Generating hardware configuration...${NC}'
+    nixos-generate-config --no-filesystems --root /mnt
+    
+    # Copy hardware config to repo
+    cp /mnt/etc/nixos/hardware-configuration.nix \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
+    
+    echo -e '${BLUE}Hardware configuration saved to hosts/\$SYSTEM_NAME/config/hardware-configuration.nix${NC}'
     
     # Handle wallpapers (OPTIONAL for theme support)
     echo

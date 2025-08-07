@@ -347,6 +347,19 @@ nix-shell -p git git-crypt wget curl --run "
         echo
     done
     
+    # Temporarily fix wallpaper setting for stylix theme generation
+    echo -e '${BLUE}Temporarily fixing wallpaper setting for initial build...${NC}'
+    if [[ -f settings/settings.json ]]; then
+        # Backup original settings
+        cp settings/settings.json settings/settings.json.backup
+        
+        # Replace urban.jpg with available adwaita-l.jpg temporarily
+        sed -i 's/"wallpaper": "urban.jpg"/"wallpaper": "adwaita-l.jpg"/' settings/settings.json
+        echo -e '${GREEN}Wallpaper setting temporarily updated for build${NC}'
+    else
+        echo -e '${YELLOW}Settings file not found - skipping wallpaper fix${NC}'
+    fi
+    
     # Copy repo with updated hardware config to new system
     mkdir -p /mnt/home
     cp -r \"\$PWD\" /mnt/home/nixcfg
@@ -399,6 +412,13 @@ nix-shell -p git git-crypt wget curl --run "
                 ;;
         esac
     done
+    
+    # Restore original wallpaper setting
+    if [[ -f settings/settings.json.backup ]]; then
+        echo -e '${BLUE}Restoring original wallpaper setting...${NC}'
+        mv settings/settings.json.backup settings/settings.json
+        echo -e '${GREEN}Original settings restored${NC}'
+    fi
     
     echo
     echo -e '${GREEN}Installation complete!${NC}'

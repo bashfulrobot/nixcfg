@@ -368,6 +368,23 @@ nix-shell -p git git-crypt wget curl --run "
     mkdir -p /mnt/tmp/nixcfg-deploy
     cp -r \"\$PWD\" /mnt/tmp/nixcfg-deploy/
     
+    # Unlock git-crypt in both copied repos
+    if [[ -f ./git-crypt-key ]]; then
+        echo -e '${BLUE}Unlocking git-crypt in copied repositories...${NC}'
+        
+        # Unlock in main target repo
+        cd /mnt/home/nixcfg
+        git-crypt unlock \"\$OLDPWD/git-crypt-key\"
+        echo -e '${GREEN}Git-crypt unlocked in /mnt/home/nixcfg${NC}'
+        
+        # Unlock in backup repo  
+        cd /mnt/tmp/nixcfg-deploy/nixcfg
+        git-crypt unlock \"\$OLDPWD/git-crypt-key\"
+        echo -e '${GREEN}Git-crypt unlocked in /mnt/tmp/nixcfg-deploy${NC}'
+        
+        cd - > /dev/null
+    fi
+    
     # Deployment options
     echo
     echo -e '${BLUE}Selected system: '\$SYSTEM_NAME'${NC}'

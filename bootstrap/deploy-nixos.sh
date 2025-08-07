@@ -164,46 +164,78 @@ nix-shell -p git git-crypt wget curl --run "
     echo -e '${BLUE}Secrets (git-crypt) & SSH Key Options${NC}'
     echo -e '${YELLOW}This repository uses git-crypt to manage secrets. To unlock them, you need a symmetric key file.${NC}'
     echo
-    echo '1) Fetch symmetric key via SSH (e.g., from user@host:~/.ssh/git-crypt)'
-    echo '2) Provide local path to symmetric key file'
-    echo '3) Exit'
+    echo '1) Fetch from 192.168.169.2 (git-crypt key + SSH keys)'
+    echo '2) Fetch from 192.168.168.1 (git-crypt key + SSH keys)'
+    echo '3) Provide custom SSH location for key'
+    echo '4) Provide local path to key file'
+    echo '5) Exit'
     echo
     
     while true; do
-        read -p 'Select an option (1-3): ' secrets_choice
+        read -p 'Select an option (1-5): ' secrets_choice
         
         case \"\$secrets_choice\" in
-            1)
+            1|2)
+                local_ip=\"192.168.169.2\"
+                if [[ \"\$secrets_choice\" == \"2\" ]]; then
+                    local_ip=\"192.168.168.1\"
+                fi
+                
+                echo -e \"${BLUE}Fetching git-crypt key and SSH keys from \$local_ip...${NC}\"
+                
+                if scp \"dustin@\$local_ip:~/.ssh/git-crypt\" ./git-crypt-key; then
+                    GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
+                    echo -e '${BLUE}Attempting to unlock with fetched key...${NC}'
+                    if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
+                        echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
+                        
+                        echo -e '${BLUE}Stashing modified hardware config to allow decryption...${NC}'
+                        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
+                        git stash
+                        
+                        echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
+                        git checkout .
+                        
+                        echo -e '${BLUE}Restoring hardware config...${NC}'
+                        git stash pop
+                        
+                        git-crypt status
+                        
+                        # Fetch SSH keys (optional)
+                        echo -e \"${BLUE}Attempting to fetch SSH keys from \$local_ip (optional)...${NC}\"
+                        mkdir -p ./ssh-keys
+                        if scp \"dustin@\$local_ip:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
+                            mkdir -p /mnt/home/dustin/.ssh
+                            cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                            chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
+                            chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                            chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                            echo -e '${GREEN}SSH keys copied successfully.${NC}'
+                        else
+                            echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
+                        fi
+                        break
+                    else
+                        echo -e '${RED}Failed to unlock git-crypt with the fetched key.${NC}'
+                    fi
+                else
+                    echo -e \"${RED}Failed to fetch git-crypt key from \$local_ip.${NC}\"
+                fi
+                ;;
+            3)
                 echo -e '${BLUE}Enter SSH location to fetch the symmetric git-crypt key:${NC}'
-                echo '(Example: user@host:~/.ssh/git-crypt)'
                 read -p 'SSH location (user@host:path): ' ssh_location
                 
                 if [[ -n \"\$ssh_location\" ]]; then
-                    echo -e \"${BLUE}Fetching git-crypt key from \$ssh_location...${NC}\"
-                    
                     if scp \"\$ssh_location\" ./git-crypt-key; then
                         GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
-                        echo -e '${BLUE}Attempting to unlock with fetched key...${NC}'
                         if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
-                            echo -e '${GREEN}Git-crypt unlocked successfully with symmetric key.${NC}'
-                            echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
-                            # CRITICAL: Force a re-checkout of all files to apply the decryption filter.
+                            echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
+                            git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
+                            git stash
                             git checkout .
+                            git stash pop
                             git-crypt status
-                            # Also try to fetch SSH keys from the same host
-                            ssh_host=\$(echo \"\$ssh_location\" | cut -d':' -f1)
-                            echo -e \"${BLUE}Attempting to fetch SSH keys from \$ssh_host (optional)...${NC}\"
-                            mkdir -p ./ssh-keys
-                            if scp \"\$ssh_host:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
-                                mkdir -p /mnt/home/dustin/.ssh
-                                cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
-                                chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
-                                chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
-                                chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
-                                echo -e '${GREEN}SSH keys copied successfully.${NC}'
-                            else
-                                echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
-                            fi
                             break
                         else
                             echo -e '${RED}Failed to unlock git-crypt with the provided key.${NC}'
@@ -211,24 +243,21 @@ nix-shell -p git git-crypt wget curl --run "
                     else
                         echo -e \"${RED}Failed to fetch git-crypt key from \$ssh_location.${NC}\"
                     fi
-                else
-                    echo -e '${RED}No SSH location provided${NC}'
                 fi
                 ;;
-            2)
+            4)
                 echo -e '${BLUE}Please provide the local file path for the symmetric git-crypt key:${NC}'
                 read -p 'Key file path: ' key_path
                 
                 if [[ -f \"\$key_path\" ]]; then
-                    GIT_CRYPT_KEY_PATH=\$(readlink -f \"\$key_path\") # Make it absolute
-                    echo -e '${BLUE}Attempting to unlock with provided key file...${NC}'
+                    GIT_CRYPT_KEY_PATH=\$(readlink -f \"\$key_path\")
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
-                        echo -e '${BLUE}Forcing decryption of all tracked files...${NC}'
-                        # CRITICAL: Force a re-checkout of all files to apply the decryption filter.
+                        git add \"hosts/\$SYSTEM_NAME/config/hardware-configuration.nix\"
+                        git stash
                         git checkout .
+                        git stash pop
                         git-crypt status
-                        echo -e '${YELLOW}SSH keys were not handled by this option. Manual setup may be required later.${NC}'
                         break
                     else
                         echo -e \"${RED}Failed to unlock git-crypt with key: \$key_path${NC}\"
@@ -237,12 +266,12 @@ nix-shell -p git git-crypt wget curl --run "
                     echo -e \"${RED}Key file not found: \$key_path${NC}\"
                 fi
                 ;;
-            3)
+            5)
                 echo -e '${YELLOW}Exiting deployment script.${NC}'
                 exit 0
                 ;;
             *)
-                echo -e '${RED}Invalid selection. Please enter 1, 2, or 3.${NC}'
+                echo -e '${RED}Invalid selection. Please enter 1, 2, 3, 4, or 5.${NC}'
                 ;;
         esac
         echo

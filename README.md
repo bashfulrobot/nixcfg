@@ -8,7 +8,7 @@ Nix/NixOS configuration for multiple systems with declarative, modular approach.
 
 ```bash
 # Download and run automated bootstrap
-curl -O nixcfg.bashfulrobot.com/shell
+curl -L nixcfg.bashfulrobot.com/shell -o shell.nix
 sudo nix-shell shell.nix
 ```
 
@@ -16,7 +16,7 @@ sudo nix-shell shell.nix
 
 ```bash
 # Download bootstrap shell
-curl -O https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/shell.nix
+curl -LO https://raw.githubusercontent.com/bashfulrobot/nixcfg/main/bootstrap/shell.nix
 sudo nix-shell shell.nix
 ```
 

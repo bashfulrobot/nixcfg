@@ -14,7 +14,6 @@ pkgs.mkShell {
     curl
     wget
     just
-    1
     password-gui
 
     # System tools

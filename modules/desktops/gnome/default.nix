@@ -36,6 +36,11 @@ in {
       pinentry-all # gpg passphrase prompting
       gnome-tweaks
       nautilus-open-any-terminal # open terminal(s) in nautilus
+      # Icon theme support for notifications
+      hicolor-icon-theme
+      shared-mime-info
+      desktop-file-utils
+      gtk3.out # for gtk-update-icon-cache
     ];
 
     environment.gnome.excludePackages = with pkgs; [
@@ -62,6 +67,25 @@ in {
 
       chown root:root /var/lib/AccountsService/icons/${user-settings.user.username}
       chmod 0444 /var/lib/AccountsService/icons/${user-settings.user.username}
+
+      # Update icon caches for proper notification icons in lock screen
+      if [ -x "${pkgs.gtk3.out}/bin/gtk-update-icon-cache" ]; then
+        for theme_dir in /run/current-system/sw/share/icons/*; do
+          if [ -d "$theme_dir" ]; then
+            echo "Updating icon cache for $(basename "$theme_dir")"
+            ${pkgs.gtk3.out}/bin/gtk-update-icon-cache -f -t "$theme_dir" 2>/dev/null || true
+          fi
+        done
+        # Also update user-specific icon cache
+        if [ -d "${user-settings.user.home}/.local/share/icons" ]; then
+          for user_theme_dir in ${user-settings.user.home}/.local/share/icons/*; do
+            if [ -d "$user_theme_dir" ]; then
+              echo "Updating user icon cache for $(basename "$user_theme_dir")"
+              ${pkgs.gtk3.out}/bin/gtk-update-icon-cache -f -t "$user_theme_dir" 2>/dev/null || true
+            fi
+          done
+        fi
+      fi
     '';
 
     sys = {

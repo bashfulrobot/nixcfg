@@ -17,8 +17,12 @@ let
                       else "";
   
   # Determine Plymouth logo path: custom background first, then default icon
+  # Copy custom background to Nix store if it exists, similar to stylix-theme module
   plymouthLogo = if plymouthBackgroundSetting != "" && builtins.pathExists customPlymouthPath
-                then customPlymouthPath
+                then builtins.path {
+                  path = customPlymouthPath;
+                  name = builtins.baseNameOf plymouthBackgroundSetting;
+                }
                 else "${plymouthIcon}/share/icons/hicolor/48x48/apps/plymouth.png";
 in {
 

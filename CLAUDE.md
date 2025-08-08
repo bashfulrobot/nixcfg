@@ -50,13 +50,13 @@ This is a comprehensive NixOS configuration repository for Dustin Krysak, managi
 
 ### Module System
 
-The repository uses an **auto-import** system (`autoimport.nix`) that recursively discovers and imports all `.nix` files while excluding:
+The repository uses an **auto-import** system (`imports.nix`) that recursively discovers and imports all `.nix` files while excluding:
 
 - `home-manager` directories
 - `build` directories
 - `disabled` directories
 - `module-config` directories
-- `autoimport.nix` itself
+- `imports.nix` itself
 
 ### Configuration Organization
 

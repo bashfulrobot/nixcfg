@@ -9,7 +9,7 @@
     ./hardware
     ./networking
     ./config
-    # ../../modules/autoimport.nix # autoimport modules
+    # ../../modules/imports.nix # autoimport modules
     # TODO: make an importable file of common server modules
 
     # Common modules

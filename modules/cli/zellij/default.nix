@@ -28,6 +28,7 @@ in {
           scroll_buffer_size = 50000;
           mouse_mode = true;
           default_mode = "normal";
+          show_startup_tips = false;
           # TODO: Until I can figure out: https://github.com/karimould/zellij-forgot/issues/11
           # default_layout = "compact";
           pane_frames = false;

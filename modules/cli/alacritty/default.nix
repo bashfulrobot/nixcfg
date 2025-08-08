@@ -34,20 +34,20 @@ in {
           selection.save_to_clipboard = true;
 
           font = {
-            # Preserve font offset settings for VictorMono
-            offset = {
-              x = 2;
-              y = 1;
-            };
-            glyph_offset = {
-              x = 6;
-              y = 1;
-            };
+            # Preserve font offset settings for VictorMono (commented out to match Kitty)
+            # offset = {
+            #   x = 2;
+            #   y = 1;
+            # };
+            # glyph_offset = {
+            #   x = 6;
+            #   y = 1;
+            # };
             normal = {
               family = "JetBrainsMono Nerd Font Mono";
               style = "Regular";
             };
-            size = 18.0;
+            size = 18;
           };
 
           # dynamic_title = true;

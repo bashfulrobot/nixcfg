@@ -106,10 +106,10 @@ in {
           {
             binding = "<Super>t";
             # command = "kgx";
-            # command = "alacritty";
+            command = "alacritty";
             # command = "ghostty";
             # command = "foot";
-            command = "blackbox";
+            # command = "blackbox";
             # command = "kitty";
             name = "Default Terminal";
           };

@@ -12,7 +12,7 @@
     "theme": {
         "personal-wallpaper": "urban-mini.jpg",
         "professional-wallpaper": "urban-mini-kong.png",
-        "personal-plymouth-background": "",
+        "personal-plymouth-background": "urban-mini.jpg",
         "professional-plymouth-background": "laptop-kong-logo.png"
     }
 }

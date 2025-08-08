@@ -80,6 +80,9 @@ in
 
       # Qt platform configuration - use gnome for native GNOME integration
       targets.qt.platform = lib.mkForce "gnome";
+      
+      # Disable Plymouth targeting to avoid missing theme files
+      targets.plymouth.enable = lib.mkForce false;
     };
 
     # Install necessary packages for stylix functionality

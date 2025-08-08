@@ -41,6 +41,7 @@ in {
     ];
     boot.plymouth = {
       enable = true;
+      theme = "bgrt";  # Use bgrt theme which supports logos and encryption prompts
       font = "${pkgs.work-sans}/share/fonts/opentype/WorkSans-Regular.ttf";
       logo = plymouthLogo;
       extraConfig = ''
@@ -48,6 +49,9 @@ in {
         DeviceScale=2
       '';
     };
+
+    # Ensure Plymouth handles disk encryption prompts
+    boot.initrd.systemd.enable = true;
 
   };
 }

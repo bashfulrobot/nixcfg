@@ -173,25 +173,37 @@ nix-shell -p git git-crypt wget curl --run "
                 
                 echo -e \"${BLUE}Fetching git-crypt key and SSH keys from \$local_ip...${NC}\"
                 
-                if scp \"dustin@\$local_ip:~/.ssh/git-crypt\" ./git-crypt-key; then
-                    GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
+                mkdir -p /mnt/home/sensitive
+                if scp \"dustin@\$local_ip:~/.ssh/git-crypt\" /mnt/home/sensitive/git-crypt-key; then
+                    GIT_CRYPT_KEY_PATH=\"/mnt/home/sensitive/git-crypt-key\"
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
                         git checkout .
                         git-crypt status
                         
-                        # Fetch SSH keys (optional)
+                        # Fetch SSH keys (optional) - store in /home/sensitive
                         echo -e \"${BLUE}Attempting to fetch SSH keys from \$local_ip (optional)...${NC}\"
-                        mkdir -p ./ssh-keys
-                        if scp \"dustin@\$local_ip:~/.ssh/id*\" ./ssh-keys/ 2>/dev/null; then
+                        if scp \"dustin@\$local_ip:~/.ssh/id*\" /mnt/home/sensitive/ 2>/dev/null; then
                             mkdir -p /mnt/home/dustin/.ssh
-                            cp ./ssh-keys/* /mnt/home/dustin/.ssh/ 2>/dev/null || true
+                            cp /mnt/home/sensitive/id* /mnt/home/dustin/.ssh/ 2>/dev/null || true
                             chmod 700 /mnt/home/dustin/.ssh 2>/dev/null || true
                             chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
                             chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
-                            echo -e '${GREEN}SSH keys copied successfully.${NC}'
+                            echo -e '${GREEN}SSH keys copied successfully (stored in /home/sensitive).${NC}'
                         else
                             echo -e '${YELLOW}SSH keys not found or failed to copy (this is not critical).${NC}'
+                        fi
+                        
+                        # Fetch GPG keys (optional) - store in /home/sensitive
+                        echo -e \"${BLUE}Attempting to fetch GPG keys from \$local_ip (optional)...${NC}\"
+                        if scp -r \"dustin@\$local_ip:~/.gnupg\" /mnt/home/sensitive/ 2>/dev/null; then
+                            mkdir -p /mnt/home/dustin/.gnupg
+                            cp -r /mnt/home/sensitive/.gnupg/* /mnt/home/dustin/.gnupg/ 2>/dev/null || true
+                            chmod 700 /mnt/home/dustin/.gnupg 2>/dev/null || true
+                            chmod -R 600 /mnt/home/dustin/.gnupg/* 2>/dev/null || true
+                            echo -e '${GREEN}GPG keys copied successfully (stored in /home/sensitive).${NC}'
+                        else
+                            echo -e '${YELLOW}GPG keys not found or failed to copy (this is not critical).${NC}'
                         fi
                         break
                     else
@@ -206,8 +218,9 @@ nix-shell -p git git-crypt wget curl --run "
                 read -p 'SSH location (user@host:path): ' ssh_location
                 
                 if [[ -n \"\$ssh_location\" ]]; then
-                    if scp \"\$ssh_location\" ./git-crypt-key; then
-                        GIT_CRYPT_KEY_PATH=\"\$PWD/git-crypt-key\"
+                    mkdir -p /mnt/home/sensitive
+                    if scp \"\$ssh_location\" /mnt/home/sensitive/git-crypt-key; then
+                        GIT_CRYPT_KEY_PATH=\"/mnt/home/sensitive/git-crypt-key\"
                         if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                             echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
                             git checkout .
@@ -226,7 +239,9 @@ nix-shell -p git git-crypt wget curl --run "
                 read -p 'Key file path: ' key_path
                 
                 if [[ -f \"\$key_path\" ]]; then
-                    GIT_CRYPT_KEY_PATH=\$(readlink -f \"\$key_path\")
+                    mkdir -p /mnt/home/sensitive
+                    cp \"\$key_path\" /mnt/home/sensitive/git-crypt-key
+                    GIT_CRYPT_KEY_PATH=\"/mnt/home/sensitive/git-crypt-key\"
                     if git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\"; then
                         echo -e '${GREEN}Git-crypt unlocked successfully.${NC}'
                         git checkout .
@@ -276,7 +291,7 @@ nix-shell -p git git-crypt wget curl --run "
                 echo -e '${BLUE}Fetching wallpapers from 192.168.169.2...${NC}'
                 if scp -r dustin@192.168.169.2:Pictures/Wallpapers ./wallpapers 2>/dev/null; then
                     mkdir -p /mnt/home/dustin/Pictures
-                    cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                    cp -r ./wallpapers /mnt/home/dustin/Pictures/Wallpapers
                     echo -e '${GREEN}Wallpapers copied successfully${NC}'
                     break
                 else
@@ -287,7 +302,7 @@ nix-shell -p git git-crypt wget curl --run "
                 echo -e '${BLUE}Fetching wallpapers from 192.168.168.1...${NC}'
                 if scp -r dustin@192.168.168.1:Pictures/Wallpapers ./wallpapers 2>/dev/null; then
                     mkdir -p /mnt/home/dustin/Pictures
-                    cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                    cp -r ./wallpapers /mnt/home/dustin/Pictures/Wallpapers
                     echo -e '${GREEN}Wallpapers copied successfully${NC}'
                     break
                 else
@@ -303,7 +318,7 @@ nix-shell -p git git-crypt wget curl --run "
                     echo -e \"${BLUE}Fetching wallpapers from \$ssh_location...${NC}\"
                     if scp -r \"\$ssh_location\" ./wallpapers 2>/dev/null; then
                         mkdir -p /mnt/home/dustin/Pictures
-                        cp -r ./wallpapers /mnt/home/dustin/Pictures/
+                        cp -r ./wallpapers /mnt/home/dustin/Pictures/Wallpapers
                         echo -e '${GREEN}Wallpapers copied successfully${NC}'
                         break
                     else
@@ -351,6 +366,13 @@ nix-shell -p git git-crypt wget curl --run "
         echo -e '${BLUE}Unlocking git-crypt in final user repository at /mnt/home/nixcfg...${NC}'
         (cd /mnt/home/nixcfg && git-crypt unlock \"\$GIT_CRYPT_KEY_PATH\")
         echo -e '${GREEN}Git-crypt unlocked in /mnt/home/nixcfg${NC}'
+        
+        # Ensure git-crypt key is preserved in /home/sensitive for future use
+        echo -e '${BLUE}Preserving git-crypt key in /home/sensitive for future use...${NC}'
+        mkdir -p /mnt/home/sensitive
+        cp \"\$GIT_CRYPT_KEY_PATH\" /mnt/home/sensitive/git-crypt-key
+        chmod 600 /mnt/home/sensitive/git-crypt-key
+        echo -e '${GREEN}Git-crypt key preserved in /home/sensitive${NC}'
     fi
 
     # Define the flake path for installation
@@ -419,6 +441,7 @@ nix-shell -p git git-crypt wget curl --run "
     echo '6. Run: just rebuild (to apply any updates)'
     echo
     echo -e '${YELLOW}The nixcfg repository (with updated hardware config) is available at /home/nixcfg${NC}'
+    echo -e '${YELLOW}Sensitive files (SSH keys, GPG keys, git-crypt key) are stored in /home/sensitive${NC}'
     echo
     read -p 'Reboot now? (y/N): ' reboot_now
     

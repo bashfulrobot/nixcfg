@@ -21,6 +21,12 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # Configure nautilus to use wezterm when enabled  
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "wezterm";
+    };
+
     ### HOME MANAGER SETTINGS
     home-manager.users."${user-settings.user.username}" = {
 

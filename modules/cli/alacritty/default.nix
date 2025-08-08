@@ -13,6 +13,12 @@ in {
 
   config = lib.mkIf cfg.enable {
 
+    # Configure nautilus to use alacritty when enabled
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "alacritty";
+    };
+
     ### HOME MANAGER SETTINGS
     home-manager.users."${user-settings.user.username}" = {
 

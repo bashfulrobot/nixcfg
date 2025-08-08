@@ -21,6 +21,12 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # Configure nautilus to use kitty when enabled
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "kitty";
+    };
+
     ### HOME MANAGER SETTINGS
     home-manager.users."${user-settings.user.username}" = {
 

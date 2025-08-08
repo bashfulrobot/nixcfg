@@ -75,10 +75,6 @@ in {
       extensions.enable = true;
     };
 
-    programs.nautilus-open-any-terminal = {
-      enable = true;
-      terminal = "kitty";
-    };
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {

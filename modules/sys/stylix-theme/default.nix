@@ -2,27 +2,7 @@
 
 let
   cfg = config.sys.stylix-theme;
-  
-  # Determine which wallpaper to use based on the wallpaperType option
-  getWallpaperSetting = wallpaperType:
-    if wallpaperType == "personal" && (user-settings.theme ? personal-wallpaper)
-    then user-settings.theme.personal-wallpaper
-    else if wallpaperType == "professional" && (user-settings.theme ? professional-wallpaper)
-    then user-settings.theme.professional-wallpaper
-    else if (user-settings.theme ? personal-wallpaper)
-    then user-settings.theme.personal-wallpaper  # default to personal if available
-    else "adwaita-d.jpg";  # fallback
-    
-  wallpaperSetting = getWallpaperSetting cfg.wallpaperType;
-  customWallpaperPath = "${user-settings.user.home}/Pictures/Wallpapers/${builtins.baseNameOf wallpaperSetting}";
-  
-  # Determine wallpaper path: custom wallpapers first, then gnome-backgrounds
-  wallpaperPath = if builtins.pathExists customWallpaperPath
-                  then builtins.path {
-                    path = customWallpaperPath;
-                    name = builtins.baseNameOf wallpaperSetting;
-                  }
-                  else "${pkgs.gnome-backgrounds}/share/backgrounds/gnome/${builtins.baseNameOf wallpaperSetting}";
+  wallpaperPath = config.sys.wallpapers.getWallpaper cfg.wallpaperType;
 in
 {
   options.sys.stylix-theme = {

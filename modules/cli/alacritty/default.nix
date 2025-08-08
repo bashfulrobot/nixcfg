@@ -6,7 +6,7 @@ in {
   options = {
     cli.alacritty.enable = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
       description = "Enable the Alacritty terminal.";
     };
   };
@@ -33,7 +33,6 @@ in {
 
           selection.save_to_clipboard = true;
 
-          # Font and colors handled by stylix
           font = {
             # Preserve font offset settings for VictorMono
             offset = {
@@ -44,6 +43,11 @@ in {
               x = 6;
               y = 1;
             };
+            normal = {
+              family = "JetBrainsMono Nerd Font Mono";
+              style = "Regular";
+            };
+            size = 18.0;
           };
 
           # dynamic_title = true;

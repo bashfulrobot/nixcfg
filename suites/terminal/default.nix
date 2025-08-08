@@ -20,7 +20,7 @@ in
 
   config = lib.mkIf cfg.enable {
     cli = {
-      alacritty.enable = false;
+      alacritty.enable = true;
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;

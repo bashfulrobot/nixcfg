@@ -6,6 +6,7 @@
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-25.05"; };
     nixpkgs-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     nixos-hardware = { url = "github:NixOS/nixos-hardware/master"; };
+    nixos-hardware-fork = { url = "github:bashfulrobot/nixos-hardware/master"; };
     nix-flatpak = { url = "github:gmodena/nix-flatpak"; };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
@@ -43,7 +44,7 @@
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak
-    , disko, nixos-hardware, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
+    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {

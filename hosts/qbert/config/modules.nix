@@ -11,7 +11,7 @@
     };
     disable-stub-dns.enable = true;
     stylix-theme.wallpaperType = "personal";
-    plymouth.backgroundType = "unconfigured";
+    plymouth.backgroundType = "personal";
   };
 
   # Enable gnome desktop

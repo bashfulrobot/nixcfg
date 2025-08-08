@@ -93,7 +93,7 @@ in
         # todoist
         "jldhpllghnbhlbpcmnajkpdmadaolakh"
         # Loom video recording
-        "liecbddmkiiihnedobmlmillhodjkdmb"
+        # "liecbddmkiiihnedobmlmillhodjkdmb"
         # Privacy Badger
         #"pkehgijcmpdhfbdbbnkijodmdjhbjlgp"
         # Checker Plus for Mail
@@ -135,15 +135,15 @@ in
         # tineye
         # "haebnnbpedcbhciplfhjjkbafijpncjl"
         # Gainsight Assist
-        "kbiepllbcbandmpckhoejbgcaddcpbno"
+        # "kbiepllbcbandmpckhoejbgcaddcpbno"
         # Material Theme Dark (blue-grey)
         # "paoafodbgcjnmijjepmpgnlhnogaahme"
         # Material Theme Dark (black)
-        "bokiaeofleahagjcmcodjofilfdnoblk"
+        # "bokiaeofleahagjcmcodjofilfdnoblk"
         # Adguard AdBlocker
         "bgnkhhnnamicmpeenaelnjfhikgbkllg"
         # Dracula theme
-        "gfapcejdoghpoidkfodoiiffaaibpaem"
+        # "gfapcejdoghpoidkfodoiiffaaibpaem"
 
       ];
       # initialPrefs = {
@@ -217,7 +217,6 @@ in
 
       home.sessionVariables.BROWSER = "${defaultApplication}";
 
-
       # xdg.mimeApps.defaultApplications = {
       #   "text/html" = "${defaultApplication}.desktop";
       #   "x-scheme-handler/http" = "${defaultApplication}.desktop";
@@ -260,12 +259,12 @@ in
           ".config/electron-flags24.conf".text = flags;
           ".config/electron-flags25.conf".text = flags;
           # Dark Reader configuration using stylix theme colors
-          ".config/darkreader/Dark-Reader-Settings.json".text = 
+          ".config/darkreader/Dark-Reader-Settings.json".text =
             let
               # Access stylix colors when available
               inherit (config.lib.stylix.colors) base00 base05 base01 base0D base07 base02;
-              
-              # Fallback colors if stylix is not configured
+
+# Fallback colors if stylix is not configured
               backgroundColor = if config.stylix.enable then "#${base00}" else "#1e1e2e";
               textColor = if config.stylix.enable then "#${base05}" else "#cdd6f4";
               surfaceColor = if config.stylix.enable then "#${base01}" else "#313244";

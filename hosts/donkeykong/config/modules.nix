@@ -10,6 +10,8 @@
 
     };
     disable-stub-dns.enable = true;
+    stylix-theme.wallpaperType = "professional";
+    plymouth.backgroundType = "professional";
   };
 
   # Enable gnome desktop

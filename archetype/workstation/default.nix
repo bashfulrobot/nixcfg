@@ -40,6 +40,7 @@ in {
       flatpaks.enable = true;
       fonts.enable = true;
       ssh.enable = true;
+      wallpapers.enable = true;
       scripts = {
         hw-scan.enable = true;
         screenshots.enable = true;

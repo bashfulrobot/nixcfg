@@ -42,7 +42,7 @@ in
           associations = {
             # added = { "x-scheme-handler/tg" = "org.telegram.desktop.desktop"; };
           };
-          enable = false;
+          enable = true;
           defaultApplications = {
             "text/html" = [ "chromium-browser.desktop" ];
             "text/plain" = [ "code.desktop" ];

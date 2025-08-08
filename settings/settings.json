@@ -10,6 +10,9 @@
         "release": "25.05"
     },
     "theme": {
-        "wallpaper": "urban-mini.jpg"
+        "personal-wallpaper": "urban-mini.jpg",
+        "professional-wallpaper": "urban-mini-kong.png",
+        "personal-plymouth-background": "",
+        "professional-plymouth-background": "laptop-kong-logo.png"
     }
 }

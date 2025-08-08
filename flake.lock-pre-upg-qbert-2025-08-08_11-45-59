@@ -700,11 +700,11 @@
     },
     "nixos-hardware-fork": {
       "locked": {
-        "lastModified": 1754678288,
-        "narHash": "sha256-QTtiJx48KO2KLilmicgfFYOnrLvngPtDzNVLg8XxAxE=",
+        "lastModified": 1754671998,
+        "narHash": "sha256-v4ew4m0oLNxV/LXBeowKNkPyyAcL8f99KH9mB6H2fxQ=",
         "owner": "bashfulrobot",
         "repo": "nixos-hardware",
-        "rev": "69b5d17882120e71f3de8015057e15296f7371b9",
+        "rev": "3394443c154c384955c32f5c73eb4d4c5a07c2a0",
         "type": "github"
       },
       "original": {

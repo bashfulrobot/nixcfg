@@ -1,7 +1,15 @@
-{ user-settings, config, pkgs, lib, ... }:
-let cfg = config.cli.wezterm;
-
-in {
+{
+  user-settings,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.cli.wezterm;
+  inherit (config.lib.stylix) colors;
+in
+{
 
   options = {
     cli.wezterm.enable = lib.mkOption {
@@ -16,30 +24,36 @@ in {
     ### HOME MANAGER SETTINGS
     home-manager.users."${user-settings.user.username}" = {
 
-      # home.packages = with pkgs; [ mimeo ];
-
       programs.wezterm = {
         enable = true;
+        package = pkgs.unstable.wezterm;
+        
+
         extraConfig = ''
           local wezterm = require 'wezterm'
+          local config = {}
 
-          return {
-            font = wezterm.font_with_fallback({
-              "Victor Mono",
-              "Font Awesome 6 Free",
-              "Font Awesome 6 Free Regular",
-              "Font Awesome 6 Free Solid",
-              "Font Awesome 6 Brands",
-            }),
-            font_size = 20,
+          -- Use config builder object if possible
+          if wezterm.config_builder then
+            config = wezterm.config_builder()
+          end
+
+          config.audible_bell = "Disabled"
+          config.default_cursor_style = "BlinkingBlock"
+          config.default_prog = { '${pkgs.fish}/bin/fish', '-l' }
+          config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
+          config.font_size = 18.0
+          config.window_padding = {
+            left = 15,
+            right = 15,
+            top = 15,
+            bottom = 15,
           }
+          
+
+          return config
         '';
       };
     };
-
-    # Install wezterm via Homebrew when on Darwin
-    # homebrew.casks = lib.mkIf pkgs.stdenv.isDarwin [
-    #   "wezterm"
-    # ];
   };
 }

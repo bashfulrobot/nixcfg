@@ -2,10 +2,10 @@
 
 {
   imports = [
-    ./config/autoimport.nix
-    ../../modules/autoimport.nix
-    ../../archetype/autoimport.nix
-    ../../suites/autoimport.nix
+    ./config/imports.nix
+    ../../modules/imports.nix
+    ../../archetype/imports.nix
+    ../../suites/imports.nix
   ];
   networking.hostName = "qbert";
 

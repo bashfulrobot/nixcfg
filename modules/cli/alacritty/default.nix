@@ -47,7 +47,7 @@ in {
               family = "JetBrainsMono Nerd Font Mono";
               style = "Regular";
             };
-            size = 18;
+            size = lib.mkDefault 18;
           };
 
           # dynamic_title = true;

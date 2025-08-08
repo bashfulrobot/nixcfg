@@ -11,11 +11,11 @@
 
 - install
 - get hardware config into the repo
-- copy over `Pictures` (wallpapers), and `.ssh` (gitcrypt)
+- copy over `Pictures` (wallpapers), `.ssh` (keys), `.gnupg` (gpg keys), and git-crypt key (all stored in `/home/sensitive`)
 - on laptop `nix-shell -p git just helix git-crypt wget curl`
 - `mkdir -p ~/dev/nix && cd ~/dev/nix`
 - `git clone https://github.com/bashfulrobot/nixcfg`
-- `git-crypt unlock ~/.ssh/git-crypt && git-crypt status`
+- `git-crypt unlock /home/sensitive/git-crypt-key && git-crypt status`
 - `sudo nixos-rebuild switch --impure --flake .#HOSTNAME`
 - `just rebuild`
 - `sudo reboot`

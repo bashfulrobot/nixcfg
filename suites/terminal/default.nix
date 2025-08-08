@@ -27,7 +27,7 @@ in
       zellij.enable = true;
       yazi.enable = true;
       foot.enable = false;
-      blackbox.enable = true;
+      blackbox.enable = false;
       ghostty.enable = false;
       ntf.enable = true;
       xkill.enable = true;

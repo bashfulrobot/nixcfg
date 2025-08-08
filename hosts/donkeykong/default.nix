@@ -2,6 +2,7 @@
 
 {
   imports = [
+    inputs.nixos-hardware-fork.nixosModules.lenovo-thinkpad-t14-intel-gen6
     ./config/autoimport.nix
     ../../modules/autoimport.nix
     ../../archetype/autoimport.nix

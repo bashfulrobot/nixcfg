@@ -3,8 +3,17 @@
 let
   cfg = config.sys.stylix-theme;
   
-  # Import custom wallpaper into Nix store if it exists
-  wallpaperSetting = if (user-settings.theme ? wallpaper) then user-settings.theme.wallpaper else "adwaita-d.jpg";
+  # Determine which wallpaper to use based on the wallpaperType option
+  getWallpaperSetting = wallpaperType:
+    if wallpaperType == "personal" && (user-settings.theme ? personal-wallpaper)
+    then user-settings.theme.personal-wallpaper
+    else if wallpaperType == "professional" && (user-settings.theme ? professional-wallpaper)
+    then user-settings.theme.professional-wallpaper
+    else if (user-settings.theme ? personal-wallpaper)
+    then user-settings.theme.personal-wallpaper  # default to personal if available
+    else "adwaita-d.jpg";  # fallback
+    
+  wallpaperSetting = getWallpaperSetting cfg.wallpaperType;
   customWallpaperPath = "${user-settings.user.home}/Pictures/Wallpapers/${builtins.baseNameOf wallpaperSetting}";
   
   # Determine wallpaper path: custom wallpapers first, then gnome-backgrounds
@@ -18,6 +27,11 @@ in
 {
   options.sys.stylix-theme = {
     enable = lib.mkEnableOption "Stylix system-wide theming";
+    wallpaperType = lib.mkOption {
+      type = lib.types.enum [ "personal" "professional" ];
+      default = "personal";
+      description = "Which wallpaper type to use: personal or professional";
+    };
   };
 
   config = lib.mkIf cfg.enable {

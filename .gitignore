@@ -2,3 +2,5 @@ nix-darwin/systems/.DS_Store
 .DS_Store
 error.txt
 prompt.txt
+git-crypt-key
+ssh-keys/

@@ -43,6 +43,7 @@ in
           config.default_prog = { '${pkgs.fish}/bin/fish', '-l' }
           config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
           config.font_size = 18.0
+          config.window_decorations = "INTEGRATED_BUTTONS"
           config.window_padding = {
             left = 15,
             right = 15,

@@ -324,7 +324,7 @@ in
           dwindle = {
             pseudotile = true;
             preserve_split = true;
-            permanent_direction_override = true;
+            permanent_direction_override = false;
             smart_split = true;
           };
           master = {

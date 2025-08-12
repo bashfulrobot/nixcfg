@@ -10,9 +10,9 @@ let
   cfg = config.desktops.tiling.hyprland;
   inherit (lib) getExe getExe';
 
-  terminal = "kitty";
+  terminal = "alacritty";
   terminalFileManager = "ranger";
-  browser = "chromium";
+  browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
 in
@@ -57,11 +57,18 @@ in
       };
     };
     services = {
-      displayManager = {
-        defaultSession = "hyprland";
-        sddm = {
-          enable = true;
-          wayland.enable = true;
+      displayManager.defaultSession = "hyprland";
+      xserver = {
+        enable = true;
+        displayManager = {
+          # sddm = {
+          #   enable = true;
+          #   wayland.enable = true;
+          # };
+          gdm = {
+            enable = true;
+            wayland = true;
+          };
         };
       };
       gnome.gnome-keyring.enable = true;
@@ -83,6 +90,7 @@ in
       brightnessctl
       networkmanagerapplet
       pamixer
+      nautilus
       pavucontrol
       playerctl
       waybar
@@ -100,7 +108,8 @@ in
       # jq # for and autowaybar.sh
     ];
 
-    security.pam.services.sddm.enableGnomeKeyring = true;
+    # security.pam.services.sddm.enableGnomeKeyring = true;
+    security.pam.services.gdm.enableGnomeKeyring = true;
 
     hw.bluetooth.enable = true;
 
@@ -112,7 +121,7 @@ in
 
     programs.nautilus-open-any-terminal = {
       enable = true;
-      terminal = "blackbox";
+      terminal = "alacritty";
     };
 
     ##### Home Manager Config options #####
@@ -179,6 +188,7 @@ in
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
             "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
+            "GNOME_KEYRING_CONTROL,$XDG_RUNTIME_DIR/keyring"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"
             "QT_STYLE_OVERRIDE,kvantum"
@@ -206,7 +216,7 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
-            "gnome-keyring-daemon --start --components=secrets,ssh,pkcs11"
+            # "gnome-keyring-daemon --start --components=secrets,ssh,pkcs11" # Now handled by GDM/systemd
             "pamixer --set-volume 50"
           ];
           input = {

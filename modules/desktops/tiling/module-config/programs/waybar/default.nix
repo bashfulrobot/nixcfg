@@ -27,7 +27,7 @@
             modules-left = ["hyprland/workspaces" "cava"];
             # modules-center = ["clock" "custom/notification"];
             modules-center = ["idle_inhibitor" "clock"];
-            modules-right = ["custom/gpuinfo" "cpu" "memory" "backlight" "pulseaudio" "bluetooth" "network" "tray" "battery"];
+            modules-right = ["custom/gpuinfo" "cpu" "memory" "backlight" "pulseaudio" "pulseaudio#microphone" "bluetooth" "network" "tray" "battery"];
 
             "custom/notification" = {
               tooltip = false;
@@ -105,7 +105,7 @@
               max-length = 30;
             };
             "temperature" = {
-              hwmon-path = "/sys/class/hwmon/hwmon1/temp1_input";
+              hwmon-path = "/sys/class/hwmon/hwmon5/temp1_input";
               critical-threshold = 83;
               format = "{icon} {temperatureC}°C";
               format-icons = ["" "" ""];

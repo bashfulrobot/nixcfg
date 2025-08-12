@@ -56,6 +56,24 @@ in
         TimeoutStopSec = 10;
       };
     };
+
+    systemd.user.services.gnome-keyring = {
+      description = "GNOME Keyring daemon with SSH support";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --daemonize --components=secrets,ssh,pkcs11 --login";
+        Environment = [
+          "GNOME_KEYRING_CONTROL=%t/keyring"
+          "SSH_AUTH_SOCK=%t/keyring/ssh"
+        ];
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+    };
     services = {
       displayManager.defaultSession = "hyprland";
       xserver = {
@@ -110,6 +128,8 @@ in
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
     security.pam.services.gdm.enableGnomeKeyring = true;
+    security.pam.services.gdm-password.enableGnomeKeyring = true;
+    security.pam.services.login.enableGnomeKeyring = true;
 
     hw.bluetooth.enable = true;
 
@@ -216,7 +236,8 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
-            # "gnome-keyring-daemon --start --components=secrets,ssh,pkcs11" # Now handled by GDM/systemd
+            "eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)" # Ensure SSH agent is available
+            "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
           ];
           input = {

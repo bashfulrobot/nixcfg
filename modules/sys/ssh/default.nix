@@ -86,10 +86,10 @@ in {
 
           # Global Config
           Host *
-            # IgnoreUnknown UseKeychain,AddKeysToAgent
             IgnoreUnknown UseKeychain
             AddKeysToAgent yes
             UseKeychain yes
+            IdentitiesOnly yes
             # Ghostty workaround - https://ghostty.org/docs/help/terminfo#configure-ssh-to-fall-back-to-a-known-terminfo-entry
             SetEnv TERM=xterm-256color
         '';

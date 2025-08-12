@@ -59,20 +59,6 @@ just dev-rebuild
 - 🔄 Wallpaper-based color extraction
 - 🔄 Automatic application theming
 
-## Migration Summary
-
-### Removed Components
-- Catppuccin theme modules
-- Dracula theme modules  
-- Adwaita theme modules
-- Manual color configurations
-
-### Added Components
-- Stylix integration
-- Wallpaper color extraction
-- Automatic font management
-- GTK theming module
-
 ## Future Enhancements
 
 Once stylix compatibility is resolved:

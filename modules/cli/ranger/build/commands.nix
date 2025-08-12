@@ -32,8 +32,8 @@
     map DD shell trash-put %s
     map <Delete> shell trash-put %s
     
-    # Quick edit
-    map E edit
+    # Quick edit with helix
+    map E shell hx %s
     
     # File operations
     map yy copy

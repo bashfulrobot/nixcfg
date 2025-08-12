@@ -46,19 +46,19 @@
     # Markdown files - edit
     {
       condition = "ext md";
-      command = "$EDITOR \"$1\"";
+      command = "hx \"$1\"";
     }
     
     # Text files
     {
       condition = "mime ^text|json|xml|javascript";
-      command = "$EDITOR \"$1\"";
+      command = "hx \"$1\"";
     }
     
     # Configuration files
     {
       condition = "ext conf|config|cfg|ini|toml|yaml|yml";
-      command = "$EDITOR \"$1\"";
+      command = "hx \"$1\"";
     }
     
     # Images
@@ -94,7 +94,7 @@
     # Scripts - edit
     {
       condition = "ext sh|py|pl|rb|js|ts";
-      command = "$EDITOR \"$1\"";
+      command = "hx \"$1\"";
     }
     
     # Directories

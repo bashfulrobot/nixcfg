@@ -12,6 +12,7 @@
     disable-stub-dns.enable = true;
     stylix-theme.wallpaperType = "personal";
     plymouth.backgroundType = "personal";
+    timezone.enable = true;
   };
 
   # Enable gnome desktop

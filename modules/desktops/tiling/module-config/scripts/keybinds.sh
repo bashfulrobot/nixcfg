@@ -54,8 +54,8 @@ yad \
   "SUPER F9" "Enable night mode" "hyprsunset --temperature 2500" \
   "SUPER F10" "Disable night mode" "pkill hyprsunset" \
   "SUPER F8" "Toggle autoclicker" "scripts/autoclicker.nix" \
-  "SUPER ALT H" "Split Horizontal (next window right)" "layoutmsg, preselect r" \
-  "SUPER ALT V" "Split Vertical (next window below)" "layoutmsg, preselect d" \
+  "SUPER ;" "Split Horizontal (next window right)" "layoutmsg, preselect r" \
+  "SUPER '" "Split Vertical (next window below)" "layoutmsg, preselect d" \
   "SUPER CTRL C" "Colour picker" "hyprpicker --autocopy" \
   "SUPER, Left Click" "Move window with mouse" "movewindow" \
   "SUPER, Right Click" "Resize window with mouse" "resizewindow" \
@@ -63,10 +63,10 @@ yad \
   "SUPER SHIFT ←" "Resize window left" "resizeactive -30 0" \
   "SUPER SHIFT ↑" "Resize window up" "resizeactive 0 -30" \
   "SUPER SHIFT ↓" "Resize window down" "resizeactive 0 30" \
-  "SUPER SHIFT L" "Resize window right (HJKL)" "resizeactive 30 0" \
-  "SUPER SHIFT H" "Resize window left (HJKL)" "resizeactive -30 0" \
-  "SUPER SHIFT K" "Resize window up (HJKL)" "resizeactive 0 -30" \
-  "SUPER SHIFT J" "Resize window down (HJKL)" "resizeactive 0 30" \
+  "SUPER CTRL L" "Resize window right (HJKL)" "resizeactive 30 0" \
+  "SUPER CTRL H" "Resize window left (HJKL)" "resizeactive -30 0" \
+  "SUPER CTRL K" "Resize window up (HJKL)" "resizeactive 0 -30" \
+  "SUPER CTRL J" "Resize window down (HJKL)" "resizeactive 0 30" \
   "XF86MonBrightnessDown" "Decrease brightness" "brightnessctl set 2%-" \
   "XF86MonBrightnessUp" "Increase brightness" "brightnessctl set +2%" \
   "XF86AudioLowerVolume" "Lower volume" "pamixer -d 2" \
@@ -99,10 +99,18 @@ yad \
   "SUPER CTRL P" "Screenshot (frozen screen)" "scripts/screenshot.sh sf" \
   "SUPER Print" "Screenshot (current monitor)" "scripts/screenshot.sh m" \
   "SUPER ALT P" "Screenshot (all monitors)" "scripts/screenshot.sh p" \
-  "SUPER SHIFT CTRL ←" "Move window left" "movewindow l" \
-  "SUPER SHIFT CTRL →" "Move window right" "movewindow r" \
-  "SUPER SHIFT CTRL ↑" "Move window up" "movewindow u" \
-  "SUPER SHIFT CTRL ↓" "Move window down" "movewindow d" \
+  "SUPER SHIFT ←" "Move window left" "movewindow l" \
+  "SUPER SHIFT →" "Move window right" "movewindow r" \
+  "SUPER SHIFT ↑" "Move window up" "movewindow u" \
+  "SUPER SHIFT ↓" "Move window down" "movewindow d" \
+  "SUPER SHIFT H" "Move window left (HJKL)" "movewindow l" \
+  "SUPER SHIFT L" "Move window right (HJKL)" "movewindow r" \
+  "SUPER SHIFT K" "Move window up (HJKL)" "movewindow u" \
+  "SUPER SHIFT J" "Move window down (HJKL)" "movewindow d" \
+  "SUPER SHIFT CTRL H" "Swap window left (HJKL)" "swapwindow l" \
+  "SUPER SHIFT CTRL L" "Swap window right (HJKL)" "swapwindow r" \
+  "SUPER SHIFT CTRL K" "Swap window up (HJKL)" "swapwindow u" \
+  "SUPER SHIFT CTRL J" "Swap window down (HJKL)" "swapwindow d" \
   "SUPER CTRL S" "Move to scratchpad" "movetoworkspacesilent special" \
   "SUPER S" "Toggle scratchpad workspace" "togglespecialworkspace" \
   "SUPER Tab" "Cycle next window" "cyclenext" \
@@ -114,6 +122,10 @@ yad \
   "SUPER →" "Move focus right" "movefocus r" \
   "SUPER ↑" "Move focus up" "movefocus u" \
   "SUPER ↓" "Move focus down" "movefocus d" \
+  "SUPER H" "Move focus left (HJKL)" "movefocus l" \
+  "SUPER L" "Move focus right (HJKL)" "movefocus r" \
+  "SUPER K" "Move focus up (HJKL)" "movefocus u" \
+  "SUPER J" "Move focus down (HJKL)" "movefocus d" \
   "ALT Tab" "Move focus down" "movefocus d" \
   "SUPER 1-0" "Switch to workspace 1-10" "workspace 1-10" \
   "SUPER SHIFT 1-0" "Move to workspace 1-10" "movetoworkspace 1-10" \

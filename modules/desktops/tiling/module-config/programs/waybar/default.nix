@@ -197,7 +197,7 @@
             };
 
             "network" = {
-              # on-click = "nm-connection-editor";
+              on-click = "kitty --class floating-terminal nmtui";
               # "interface" = "wlp2*"; # (Optional) To force the use of this interface
               format-wifi = "󰤨 Wi-Fi";
               # format-wifi = " {bandwidthDownBits}  {bandwidthUpBits}";

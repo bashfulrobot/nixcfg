@@ -38,6 +38,9 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # Enable D-Bus for proper desktop session integration
+    services.dbus.enable = true;
+    
     nix.settings = {
       substituters = [ "https://hyprland.cachix.org" ];
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
@@ -262,7 +265,7 @@ in
             "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
             "col.inactive_border" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
             resize_on_border = true;
-            layout = "master"; # dwindle or master
+            layout = "dwindle"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)
           };
           decoration = {
@@ -341,12 +344,17 @@ in
           gestures = {
             workspace_swipe = true;
             workspace_swipe_fingers = 3;
+            workspace_swipe_distance = 300;
+            workspace_swipe_forever = true;
+            workspace_swipe_cancel_ratio = 0.15;
           };
           dwindle = {
             pseudotile = true;
             preserve_split = true;
-            permanent_direction_override = false;
-            smart_split = true;
+            permanent_direction_override = true;  # Enable for better auto-splits
+            smart_split = false;                  # Let Hyprland handle splits intelligently
+            smart_resizing = true;               # Add this for better resizing
+            force_split = 2;                     # Add this for consistent splitting
           };
           master = {
             new_status = "master";
@@ -449,11 +457,7 @@ in
             "$mainMod SHIFT, up, resizeactive, 0 -30"
             "$mainMod SHIFT, down, resizeactive, 0 30"
 
-            # Resize windows with hjkl keys
-            "$mainMod CTRL, l, resizeactive, 30 0"
-            "$mainMod CTRL, h, resizeactive, -30 0"
-            "$mainMod CTRL, k, resizeactive, 0 -30"
-            "$mainMod CTRL, j, resizeactive, 0 30"
+            # Removed resize bindings - moved to submap
 
             # Functional keybinds
             ",XF86MonBrightnessDown,exec,brightnessctl set 2%-"
@@ -612,6 +616,12 @@ in
               # Split toggles (preselect for next window only)
               "$mainMod, semicolon, layoutmsg, preselect r"       # split horizontally (next window right)
               "$mainMod, apostrophe, layoutmsg, preselect d"      # split vertically (next window below)
+              
+              # Toggle split direction of current window
+              "$mainMod, O, togglesplit"                          # Toggle split direction of focused window
+              
+              # Enter resize mode
+              "$mainMod, R, submap, resize"                       # Enter resize mode
 
               # Special workspaces (scratchpad)
               "$mainMod CTRL, S, movetoworkspacesilent, special"
@@ -647,6 +657,16 @@ in
             #allow_workspace_cycles=1
             #pass_mouse_when_bound=0
           }
+
+          # Resize submap for cleaner resize workflow
+          submap = resize
+          binde = , h, resizeactive, -30 0
+          binde = , l, resizeactive, 30 0
+          binde = , k, resizeactive, 0 -30
+          binde = , j, resizeactive, 0 30
+          bind = , escape, submap, reset
+          bind = , return, submap, reset
+          submap = reset
 
           # Easily plug in any monitor
           monitor=,preferred,auto,1

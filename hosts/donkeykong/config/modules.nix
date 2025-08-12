@@ -14,9 +14,9 @@
     plymouth.backgroundType = "professional";
   };
 
-  # Enable gnome desktop
+  # Enable desktop environments
   desktops.gnome.enable = true;
-  desktops.tiling.hyprland.enable = false;
+  desktops.tiling.hyprland.enable = true;
 
   # apps.syncthing = {
   #   enable = true;

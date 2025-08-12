@@ -12,11 +12,20 @@ fi
 #     grep "$1" "$HOME/NixOS/flake.nix" | sed -E 's/.*"([^"]+)".*/\1/'
 # }
 get_nix_value() {
+    # Get user home from settings.json, fallback to $HOME
+    local user_home
+    if command -v jq >/dev/null 2>&1; then
+        user_home=$(jq -r '.user.home // empty' "$HOME/dev/nix/nixcfg/settings/settings.json" 2>/dev/null || echo "$HOME")
+    else
+        user_home="$HOME"
+    fi
+    local nixcfg_dir="${user_home}/dev/nix/nixcfg"
+    
     awk '
     /settings = {/ {inside_settings=1; next}
     inside_settings && /}/ {inside_settings=0}
     inside_settings && $0 ~ key {print gensub(/.*"([^"]+)".*/, "\\1", "g", $0)}
-    ' key="$1" "$HOME/NixOS/flake.nix"
+    ' key="$1" "$nixcfg_dir/flake.nix"
 }
 
 _browser=$(get_nix_value "browser =")

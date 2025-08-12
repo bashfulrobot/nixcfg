@@ -542,6 +542,9 @@
 
           #cava {
           	color: @pink;
+            padding-left: 15px;
+            padding-bottom: 3px;
+            border-bottom: 2px solid transparent;
           }
 
           #mpris {

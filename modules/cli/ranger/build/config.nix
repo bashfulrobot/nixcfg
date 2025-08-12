@@ -49,5 +49,8 @@
     # Bookmarks
     autosave_bookmarks = true;
     save_backtick_bookmark = true;
+    
+    # Editor
+    default_editor = "hx";
   };
 }

@@ -26,6 +26,7 @@ in
       fish.enable = true;
       zellij.enable = true;
       yazi.enable = true;
+      ranger.enable = true;
       foot.enable = false;
       blackbox.enable = false;
       ghostty.enable = false;

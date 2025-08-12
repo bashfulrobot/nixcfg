@@ -6,16 +6,13 @@ in {
     sys.timezone.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable automatic timezone detection based on geolocation.";
+      description = "Enable timezone configuration.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable automatic timezone detection based on location
-    services.automatic-timezoned.enable = true;
-    
-    # Set Vancouver as fallback timezone (lower priority so automatic-timezoned can override)
-    time.timeZone = lib.mkDefault "America/Vancouver";
+    # Set Chicago timezone
+    time.timeZone = "America/Chicago";
   };
 
 }

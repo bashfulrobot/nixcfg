@@ -262,7 +262,7 @@ in
             "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
             "col.inactive_border" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
             resize_on_border = true;
-            layout = "dwindle"; # dwindle or master
+            layout = "master"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)
           };
           decoration = {
@@ -450,10 +450,10 @@ in
             "$mainMod SHIFT, down, resizeactive, 0 30"
 
             # Resize windows with hjkl keys
-            "$mainMod SHIFT, l, resizeactive, 30 0"
-            "$mainMod SHIFT, h, resizeactive, -30 0"
-            "$mainMod SHIFT, k, resizeactive, 0 -30"
-            "$mainMod SHIFT, j, resizeactive, 0 30"
+            "$mainMod CTRL, l, resizeactive, 30 0"
+            "$mainMod CTRL, h, resizeactive, -30 0"
+            "$mainMod CTRL, k, resizeactive, 0 -30"
+            "$mainMod CTRL, j, resizeactive, 0 30"
 
             # Functional keybinds
             ",XF86MonBrightnessDown,exec,brightnessctl set 2%-"
@@ -469,7 +469,7 @@ in
               # Keybinds help menu
               "$mainMod, question, exec, ${../module-config/scripts/keybinds.sh}"
               "$mainMod, slash, exec, ${../module-config/scripts/keybinds.sh}"
-              "$mainMod CTRL, K, exec, ${../module-config/scripts/keybinds.sh}"
+              "$mainMod CTRL, question, exec, ${../module-config/scripts/keybinds.sh}"
 
               "$mainMod, F8, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 40"
               # "$mainMod ALT, mouse:276, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 60"
@@ -555,11 +555,11 @@ in
               "$mainMod, down, movefocus, d"
               "ALT, Tab, movefocus, d"
 
-              # Move focus with mainMod + HJKL keys
+              # Move focus with mainMod + HJKL keys (vim style)
               "$mainMod, h, movefocus, l"
-              "$mainMod, l, movefocus, r"
-              "$mainMod, k, movefocus, u"
               "$mainMod, j, movefocus, d"
+              "$mainMod, k, movefocus, u"
+              "$mainMod, l, movefocus, r"
 
               # Go to workspace 6 and 7 with mouse side buttons
               "$mainMod, mouse:276, workspace, 5"
@@ -585,17 +585,33 @@ in
               "$mainMod CTRL ALT, right, movetoworkspace, r+1"
               "$mainMod CTRL ALT, left, movetoworkspace, r-1"
 
-              # Move active window around current workspace with mainMod + SHIFT + CTRL [←→↑↓]
-              "$mainMod SHIFT $CONTROL, left, movewindow, l"
-              "$mainMod SHIFT $CONTROL, right, movewindow, r"
-              "$mainMod SHIFT $CONTROL, up, movewindow, u"
-              "$mainMod SHIFT $CONTROL, down, movewindow, d"
+              # Move active window around current workspace with mainMod + SHIFT [←→↑↓]
+              "$mainMod SHIFT, left, movewindow, l"
+              "$mainMod SHIFT, right, movewindow, r"
+              "$mainMod SHIFT, up, movewindow, u"
+              "$mainMod SHIFT, down, movewindow, d"
 
-              # Move active window around current workspace with mainMod + SHIFT + CTRL [HLJK]
-              "$mainMod SHIFT $CONTROL, H, movewindow, l"
-              "$mainMod SHIFT $CONTROL, L, movewindow, r"
-              "$mainMod SHIFT $CONTROL, K, movewindow, u"
-              "$mainMod SHIFT $CONTROL, J, movewindow, d"
+              # Move active window around current workspace with mainMod + SHIFT [HLJK] (shorter)
+              "$mainMod SHIFT, H, movewindow, l"
+              "$mainMod SHIFT, L, movewindow, r"
+              "$mainMod SHIFT, K, movewindow, u"
+              "$mainMod SHIFT, J, movewindow, d"
+
+              # Swap windows with mainMod + SHIFT + CTRL [HLJK] (longer for less common action)
+              "$mainMod SHIFT $CONTROL, H, swapwindow, l"
+              "$mainMod SHIFT $CONTROL, L, swapwindow, r"
+              "$mainMod SHIFT $CONTROL, K, swapwindow, u"
+              "$mainMod SHIFT $CONTROL, J, swapwindow, d"
+
+              # Swap windows with mainMod + SHIFT + CTRL [arrows] (longer for less common action)
+              "$mainMod SHIFT $CONTROL, left, swapwindow, l"
+              "$mainMod SHIFT $CONTROL, right, swapwindow, r"
+              "$mainMod SHIFT $CONTROL, up, swapwindow, u"
+              "$mainMod SHIFT $CONTROL, down, swapwindow, d"
+
+              # Split toggles (preselect for next window only)
+              "$mainMod, semicolon, layoutmsg, preselect r"       # split horizontally (next window right)
+              "$mainMod, apostrophe, layoutmsg, preselect d"      # split vertically (next window below)
 
               # Special workspaces (scratchpad)
               "$mainMod CTRL, S, movetoworkspacesilent, special"

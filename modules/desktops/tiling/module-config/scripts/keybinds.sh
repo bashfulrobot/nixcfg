@@ -63,10 +63,9 @@ yad \
   "SUPER SHIFT ←" "Resize window left" "resizeactive -30 0" \
   "SUPER SHIFT ↑" "Resize window up" "resizeactive 0 -30" \
   "SUPER SHIFT ↓" "Resize window down" "resizeactive 0 30" \
-  "SUPER CTRL L" "Resize window right (HJKL)" "resizeactive 30 0" \
-  "SUPER CTRL H" "Resize window left (HJKL)" "resizeactive -30 0" \
-  "SUPER CTRL K" "Resize window up (HJKL)" "resizeactive 0 -30" \
-  "SUPER CTRL J" "Resize window down (HJKL)" "resizeactive 0 30" \
+  "SUPER R" "Enter resize mode" "submap resize" \
+  "In resize mode: HJKL" "Resize window, ESC/Enter to exit" "hjkl keys" \
+  "SUPER O" "Toggle split direction" "togglesplit" \
   "XF86MonBrightnessDown" "Decrease brightness" "brightnessctl set 2%-" \
   "XF86MonBrightnessUp" "Increase brightness" "brightnessctl set +2%" \
   "XF86AudioLowerVolume" "Lower volume" "pamixer -d 2" \

@@ -31,7 +31,7 @@ source = auto
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
-ascii_max_range = 7
+ascii_max_range = 1
 EOF
 # ascii_max_range = 9
 

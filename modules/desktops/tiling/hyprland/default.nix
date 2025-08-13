@@ -233,7 +233,7 @@ in
             "swaync"
             "nm-applet --indicator"
             "blueman-applet"
-            "pwvucontrol --hide-window"
+            "pwvucontrol"
             "wl-clipboard-history -t"
             "${getExe' pkgs.wl-clipboard "wl-paste"} --type text --watch cliphist store" # clipboard store text data
             "${getExe' pkgs.wl-clipboard "wl-paste"} --type image --watch cliphist store" # clipboard store image data

@@ -24,10 +24,10 @@
             margin-right = 10;
             margin-bottom = 0;
 
-            modules-left = ["hyprland/workspaces" "cava"];
+            modules-left = ["hyprland/workspaces"];
             # modules-center = ["clock" "custom/notification"];
             modules-center = ["idle_inhibitor" "clock"];
-            modules-right = [/* "custom/gpuinfo" "cpu" "memory" "backlight" */ "battery" "tray" "custom/notification" "custom/power"];
+            modules-right = ["pulseaudio" /* "custom/gpuinfo" "cpu" "memory" "backlight" */ "battery" "tray" "custom/notification" "custom/power"];
 
             "custom/notification" = {
               tooltip = false;
@@ -212,6 +212,27 @@
             };
 
 
+            "pulseaudio" = {
+              format = "{icon}";
+              format-muted = "󰝟";
+              format-icons = {
+                headphone = "󰋋";
+                hands-free = "󰋎";
+                headset = "󰋎";
+                phone = "";
+                portable = "";
+                car = "";
+                default = ["󰕿" "󰖀" "󰕾"];
+              };
+              scroll-step = 5;
+              on-click = "bash -c 'selected=$(printf \"🔧 Open PulseAudio Control\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in \"🔧 Open PulseAudio Control\") pavucontrol & ;; \"🔇 Toggle Output Mute\") pamixer -t; notify-send \"🔊 Audio\" \"Output mute toggled\" -t 2000 ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; notify-send \"🎤 Audio\" \"Input mute toggled\" -t 2000 ;; esac'";
+              on-click-right = "pamixer -t";
+              on-scroll-up = "pamixer -i 5";
+              on-scroll-down = "pamixer -d 5";
+              tooltip-format = "Source: {desc}\nVolume: {volume}%\nClick: Audio menu | Right-click: Mute | Scroll: Volume";
+              max-volume = 150;
+            };
+
             "battery" = {
               states = {
                 good = 95;
@@ -229,7 +250,7 @@
 
             "tray" = {
               icon-size = 16;
-              spacing = 5;
+              spacing = 10;
             };
 
             "custom/power" = {
@@ -279,14 +300,14 @@
           	background: @theme_base_color;
            	border: 1px solid @blue;
           	padding-right: 15px;
-          	padding-left: 2px;
+          	padding-left: 8px;
           	border-radius: 10px;
           }
           .modules-center {
           	background: @theme_base_color;
             border: 0.5px solid @overlay0;
-          	padding-right: 5px;
-          	padding-left: 5px;
+          	padding-right: 10px;
+          	padding-left: 10px;
           	border-radius: 10px;
           }
           .modules-right {
@@ -340,10 +361,10 @@
           #custom-weather.showyIcyDay,
           #custom-weather.snowyIcyNight,
           #custom-weather.sunnyDay {
-          	padding-top: 3px;
-          	padding-bottom: 3px;
-          	padding-right: 6px;
-          	padding-left: 6px;
+          	padding-top: 4px;
+          	padding-bottom: 4px;
+          	padding-right: 8px;
+          	padding-left: 8px;
           }
 
           #idle_inhibitor {
@@ -380,8 +401,8 @@
           }
 
           #custom-notification {
-            color: #dfdfdf;
-            padding: 0px 5px;
+            color: @text;
+            padding: 4px 10px;
             border-radius: 5px;
           }
 
@@ -395,7 +416,7 @@
 
           #custom-icon {
             font-size: 15px;
-            color: #cba6f7;
+            color: @lavender;
           }
 
           #custom-gpuinfo {
@@ -439,8 +460,8 @@
           	text-shadow: none;
               padding: 0px;
               border-radius: 9px;
-              padding-left: 4px;
-              padding-right: 4px;
+              padding-left: 6px;
+              padding-right: 6px;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.5s cubic-bezier(.55,-0.68,.48,1.682);
           }
@@ -449,8 +470,8 @@
           	border-radius: 10px;
           	color: @overlay0;
           	background-color: @surface0;
-           	padding-left: 2px;
-              padding-right: 2px;
+           	padding-left: 4px;
+              padding-right: 4px;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
           }
@@ -464,8 +485,8 @@
           #workspaces button.occupied {
           	color: @peach;
           	border-radius: 10px;
-              padding-left: 6px;
-              padding-right: 6px;
+              padding-left: 8px;
+              padding-right: 8px;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
           }
 
@@ -473,8 +494,8 @@
           #workspaces button.active {
           	color: @peach;
             	border-radius: 10px 10px 0px 0px;
-              padding-left: 8px;
-              padding-right: 8px;
+              padding-left: 10px;
+              padding-right: 10px;
               border-bottom: 2px solid @peach;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
@@ -486,15 +507,15 @@
           }
 
           #taskbar button.active {
-              padding-left: 8px;
-              padding-right: 8px;
+              padding-left: 10px;
+              padding-right: 10px;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
           }
 
           #taskbar button:hover {
-              padding-left: 2px;
-              padding-right: 2px;
+              padding-left: 4px;
+              padding-right: 4px;
               animation: gradient_f 20s ease-in infinite;
               transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
           }
@@ -505,7 +526,7 @@
 
           #cava {
           	color: @pink;
-            padding-left: 15px;
+            padding-left: 18px;
             padding-bottom: 8px;
             border-bottom: 2px solid transparent;
           }
@@ -520,6 +541,7 @@
 
           #custom-power {
             color: @red;
+            padding: 4px 10px;
           }
 
           #custom-updater {

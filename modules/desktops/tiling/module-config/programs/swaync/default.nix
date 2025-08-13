@@ -35,6 +35,7 @@
             "dnd"
             "menubar#desktop"
             "volume"
+            "backlight"
             "mpris"
             "notifications"
           ];
@@ -92,6 +93,12 @@
             };
             dnd = {
               text = " Do Not Disturb";
+            };
+            backlight = {
+              label = "󰃞";
+              device = "intel_backlight";
+              min = 1;
+              max = 100;
             };
             mpris = {
               image-size = 96;
@@ -256,7 +263,7 @@
           /* Control center */
 
           .control-center {
-            background: alpha(@crust, .80);
+            background: @theme_base_color;
             border-radius: 15px;
             border: 0px solid @selected;
             box-shadow: 0 0 10px 0 rgba(0,0,0,.80);
@@ -269,8 +276,7 @@
           /* } */
 
           .control-center-list {
-            /* background: @base; */
-            background: alpha(@crust, .80);
+            background: @theme_base_color;
             min-height: 5px;
             /* border: 1px solid @surface1; */
             border-top: none;
@@ -307,9 +313,8 @@
           .notification-row {
             outline: none;
             transition: all 1s ease;
-            background: alpha(@mantle, .80);
-            /* background: @theme_bg_color; */
-            border: 0px solid @crust;
+            background: @theme_bg_color;
+            border: 0px solid @theme_unfocused_bg_color;
             margin: 10px 5px 0px 5px;
             border-radius: 14px;
             /* box-shadow: 0px 0px 4px black; */
@@ -345,8 +350,7 @@
           /* Title widget */
           .widget-title {
             margin: 0px;
-            background: transparent;
-            /* background: @theme_bg_color; */
+            background: @theme_bg_color;
             border-radius: 4px 4px 0px 0px;
             /* border: 1px solid @surface1; */
             border-bottom: none;
@@ -378,8 +382,7 @@
             margin: 0px;
             padding: 0px;
             min-height: 5px;
-            background: alpha(@mantle, .80);
-            /* background: @theme_bg_color; */
+            background: @theme_bg_color;
             border-radius: 0px 0px 4px 4px;
             /* border: 1px solid @surface1; */
             border-top: none;

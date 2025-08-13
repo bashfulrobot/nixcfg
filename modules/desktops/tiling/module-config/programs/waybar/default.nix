@@ -27,7 +27,7 @@
             modules-left = ["hyprland/workspaces" "cava"];
             # modules-center = ["clock" "custom/notification"];
             modules-center = ["idle_inhibitor" "clock"];
-            modules-right = ["custom/gpuinfo" "cpu" "memory" "backlight" "pulseaudio" "pulseaudio#microphone" "bluetooth" "network" "tray" "battery"];
+            modules-right = [/* "custom/gpuinfo" "cpu" "memory" "backlight" */ "battery" "tray" "custom/notification" "custom/power"];
 
             "custom/notification" = {
               tooltip = false;
@@ -58,7 +58,7 @@
             };
             "custom/cava_mviz" = {
               exec = "${../../scripts/WaybarCava.sh}";
-              format = "{}";
+              format = "";
             };
             "cava" = {
               hide_on_silence = false;
@@ -82,7 +82,7 @@
             "custom/icon" = {
               # format = " ";
               exec = "echo ' '";
-              format = "{}";
+              format = "";
             };
             "mpris" = {
               format = "{player_icon} {title} - {artist}";
@@ -211,46 +211,6 @@
               tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
             };
 
-            "bluetooth" = {
-              format = "";
-              # format-disabled = ""; # an empty format will hide the module
-              format-connected = " {num_connections}";
-              tooltip-format = " {device_alias}";
-              tooltip-format-connected = "{device_enumerate}";
-              tooltip-format-enumerate-connected = " {device_alias}";
-              on-click = "blueman-manager";
-            };
-
-            "pulseaudio" = {
-              format = "{icon} {volume}";
-              format-muted = " ";
-              on-click = "pavucontrol -t 3";
-              tooltip-format = "{icon} {desc} // {volume}%";
-              scroll-step = 4;
-              format-icons = {
-                headphone = "";
-                hands-free = "";
-                headset = "";
-                phone = "";
-                portable = "";
-                car = "";
-                default = ["" "" ""];
-              };
-            };
-
-            "pulseaudio#microphone" = {
-              format = "{format_source}";
-              format-source = " {volume}%";
-              format-source-muted = "";
-              on-click = "pavucontrol -t 4";
-              tooltip-format = "{format_source} {source_desc} // {source_volume}%";
-              scroll-step = 5;
-            };
-
-            "tray" = {
-              icon-size = 12;
-              spacing = 5;
-            };
 
             "battery" = {
               states = {
@@ -259,18 +219,23 @@
                 critical = 20;
               };
               format = "{icon} {capacity}%";
-              # format-charging = " {capacity}%";
-              format-charging = " {capacity}%";
-              format-plugged = " {capacity}%";
-              format-alt = "{time} {icon}";
+              format-charging = " {capacity}%";
+              format-plugged = " {capacity}%";
               format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+              on-click = "bash -c 'current=$(powerprofilesctl get 2>/dev/null || echo \"balanced\"); performance_option=\"🚀 Performance\"; balanced_option=\"⚖️ Balanced\"; powersaver_option=\"🔋 Power Saver\"; case \"$current\" in \"performance\") performance_option=\"🚀 Performance ✓\"; ;; \"balanced\") balanced_option=\"⚖️ Balanced ✓\"; ;; \"power-saver\") powersaver_option=\"🔋 Power Saver ✓\"; ;; esac; selected=$(printf \"%s\\n%s\\n%s\" \"$performance_option\" \"$balanced_option\" \"$powersaver_option\" | rofi -dmenu -p \"Power Profile\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in *\"Performance\"*) powerprofilesctl set performance; notify-send \"🚀 Power Profile\" \"Switched to Performance mode\" -t 3000; ;; *\"Balanced\"*) powerprofilesctl set balanced; notify-send \"⚖️ Power Profile\" \"Switched to Balanced mode\" -t 3000; ;; *\"Power Saver\"*) powerprofilesctl set power-saver; notify-send \"🔋 Power Profile\" \"Switched to Power Saver mode\" -t 3000; ;; esac'";
+              on-click-right = "swaync-client -t";
+              tooltip-format = "Battery: {capacity}% | Time: {time} | Click for power profile";
+            };
+
+            "tray" = {
+              icon-size = 16;
+              spacing = 5;
             };
 
             "custom/power" = {
               format = "{}";
-              on-click = "wlogout -b 4";
-              interval = 86400; # once every day
-              tooltip = true;
+              on-click = "bash -c 'selected=$(printf \"🔁 Reboot\\n⏸️ Suspend\\n🔌 Shutdown\\n🚪 Logout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {width: 250px;}\"); case \"$selected\" in *\"Reboot\"*) systemctl reboot; ;; *\"Suspend\"*) systemctl suspend; ;; *\"Shutdown\"*) systemctl poweroff; ;; *\"Logout\"*) hyprctl dispatch exit 0; ;; esac'";
+              tooltip-format = "Power Options (click for menu)";
             };
           }
         ];
@@ -335,7 +300,6 @@
           #backlight,
           #backlight-slider,
           #battery,
-          #bluetooth,
           #clock,
           #cpu,
           #disk,
@@ -386,7 +350,6 @@
             color: @blue;
           }
 
-          #bluetooth,
           #backlight {
             color: @blue;
           }
@@ -641,6 +604,7 @@
           	min-width: 10px;
           	border-radius: 5px;
           }
+
         '';
       };
     })

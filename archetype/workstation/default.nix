@@ -56,5 +56,9 @@ in {
       firmware.enable = true;
     };
 
+    sys = {
+      power.enable = true;
+    };
+
   };
 }

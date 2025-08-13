@@ -11,10 +11,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # environment.systemPackages = with pkgs; [  ];
-    # powerManagement.enable = true;
+    environment.systemPackages = with pkgs; [
+      brightnessctl
+      light
+    ];
 
-    services.tlp.enable = true;
+    services.power-profiles-daemon.enable = true;
 
     # home-manager.users."${user-settings.user.username}" = {
 

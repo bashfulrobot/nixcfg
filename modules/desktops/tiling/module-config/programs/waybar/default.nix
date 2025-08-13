@@ -225,7 +225,7 @@
                 default = ["󰕿" "󰖀" "󰕾"];
               };
               scroll-step = 5;
-              on-click = "bash -c 'selected=$(printf \"🔧 Open PulseAudio Control\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in \"🔧 Open PulseAudio Control\") pavucontrol & ;; \"🔇 Toggle Output Mute\") pamixer -t; notify-send \"🔊 Audio\" \"Output mute toggled\" -t 2000 ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; notify-send \"🎤 Audio\" \"Input mute toggled\" -t 2000 ;; esac'";
+              on-click = "bash -c 'selected=$(printf \"🔧 Open PipeWire Control\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in \"🔧 Open PipeWire Control\") pwvucontrol & ;; \"🔇 Toggle Output Mute\") pamixer -t; notify-send \"🔊 Audio\" \"Output mute toggled\" -t 2000 ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; notify-send \"🎤 Audio\" \"Input mute toggled\" -t 2000 ;; esac'";
               on-click-right = "pamixer -t";
               on-scroll-up = "pamixer -i 5";
               on-scroll-down = "pamixer -d 5";

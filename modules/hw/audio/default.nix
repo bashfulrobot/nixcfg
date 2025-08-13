@@ -44,7 +44,8 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-
+      pwvucontrol
+      pavucontrol
     ];
   };
 }

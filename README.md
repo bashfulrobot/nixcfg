@@ -2,6 +2,10 @@
 
 Nix/NixOS configuration for multiple systems with declarative, modular approach.
 
+## Status
+
+In prod. Currently refactoring to break dependencies between having both gnome and hyprland running to get a proper hyprland environment.
+
 ## Quick Deployment
 
 **From NixOS Live ISO:**

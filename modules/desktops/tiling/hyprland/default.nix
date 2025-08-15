@@ -60,6 +60,19 @@ in
       };
     };
 
+    # GNOME Keyring systemd user service for reliable SSH component startup
+    # This ensures keyring starts with both SSH and secrets components from boot
+    systemd.user.services.gnome-keyring = {
+      description = "GNOME Keyring daemon";
+      wantedBy = [ "graphical-session.target" ];
+      before = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --foreground --components=ssh,secrets";
+        Restart = "on-failure";
+      };
+    };
+
     # GNOME Keyring is now started automatically by PAM during login
     # This ensures proper unlock integration with GDM password authentication
     services = {
@@ -77,7 +90,6 @@ in
           };
         };
       };
-      gnome.gnome-keyring.enable = true;
       blueman.enable = true;
     };
 
@@ -124,6 +136,9 @@ in
     security.pam.services.login.enableGnomeKeyring = true;
 
     hw.bluetooth.enable = true;
+
+    # Fix keyring unlock by ensuring XDG_RUNTIME_DIR is properly set during login
+    environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
 
     sys = {
       dconf.enable = true;
@@ -200,6 +215,8 @@ in
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
             "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
+            "SSH_ASKPASS,${pkgs.gcr_4}/libexec/gcr4-ssh-askpass"
+            "DISPLAY,:0"
             "GNOME_KEYRING_CONTROL,$XDG_RUNTIME_DIR/keyring"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"
@@ -230,7 +247,7 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
-            "${pkgs.gcr_4}/libexec/gcr-prompter" # GCR prompter for keyring password dialogs
+            "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass" # GCR SSH askpass for keyring password prompts
             "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
           ] ++ lib.optionals config.apps.one-password.enable [

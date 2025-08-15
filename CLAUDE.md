@@ -108,3 +108,67 @@ The repository uses an **auto-import** system (`imports.nix`) that recursively d
     - Using conventional commits with emojis
     - Being extra careful to write commit messages based strictly on git changes
     - Ensuring all commits are signed
+
+## Troubleshooting Log - GNOME Keyring SSH Integration (Aug 15, 2025)
+
+### Issue
+- SSH key password prompts not showing "save to keyring" checkbox
+- 1Password indicates keyring is not unlocked at startup
+- SSH agent socket missing (`/run/user/1000/keyring/ssh`)
+
+### Root Cause Analysis
+1. **PAM Integration**: Working correctly - logs show "gkr-pam: gnome-keyring-daemon started properly and unlocked keyring"
+2. **SSH Component**: Not starting with keyring daemon (only secrets component active)
+3. **XDG_RUNTIME_DIR**: May not be properly set during GDM startup phase
+
+### Configurations Tested
+- ✅ PAM services configured: `gdm`, `gdm-password`, `login` all have `enableGnomeKeyring = true`
+- ✅ GCR 4.x installed with `gcr4-ssh-askpass` (not `gcr-prompter`)
+- ✅ SSH_ASKPASS environment variable set to `${pkgs.gcr_4}/libexec/gcr4-ssh-askpass`
+- ✅ Added `environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";` (commit d878249)
+
+### Current Status
+- Need to test reboot with XDG_RUNTIME_DIR fix
+- If issue persists, investigate SSH component startup
+- SSH socket appears when manually restarting keyring with `--components=ssh,secrets`
+
+### Additional Context (Aug 15, 2025)
+- Found another user's config (May 2025) with explicit systemd user service for keyring with SSH component
+- Their comment: "GNOME keyring does not enable a ssh agent/GPG agent in NixOS" (still relevant in May 2025)
+- Current running daemon shows SSH component DOES work when manually started: `--components=ssh,secrets`
+- No systemd configs found in `/etc/systemd/` - keyring started by PAM or other mechanism
+- Claude's knowledge cutoff: January 2025 (may miss recent NixOS changes)
+
+### Solution Implemented (Aug 15, 2025)
+After reboot testing confirmed XDG_RUNTIME_DIR fix was insufficient, implemented systemd user service approach:
+
+**Changes Made:**
+- Removed `services.gnome.gnome-keyring.enable = true;` (was creating conflicting auto-start services)
+- Added custom systemd user service with explicit `--components=ssh,secrets`
+- Kept PAM integration and gnome-keyring package
+- Fixed deprecated package reference: `pkgs.gnome.gnome-keyring` → `pkgs.gnome-keyring`
+
+**Systemd Service Added:**
+```nix
+systemd.user.services.gnome-keyring = {
+  description = "GNOME Keyring daemon";
+  wantedBy = [ "graphical-session.target" ];
+  before = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "dbus";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --foreground --components=ssh,secrets";
+    Restart = "on-failure";
+  };
+};
+```
+
+### Ready for Reboot Testing (Aug 15, 2025)
+- Deprecation warning fixed in default.nix:71
+- System ready for reboot test to verify SSH keyring integration
+
+### Test Commands After Next Reboot
+1. Check keyring unlock: `secret-tool lookup test test 2>/dev/null && echo "Unlocked" || echo "Locked"`
+2. Verify SSH socket: `ls -la /run/user/1000/keyring/ssh`
+3. Check SSH keys loaded: `ssh-add -l`
+4. Test with 1Password keyring integration
+5. Verify single keyring process: `ps aux | grep gnome-keyring` (should show one clean process)

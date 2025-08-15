@@ -62,20 +62,25 @@ in
 
     
 
-    # GNOME Keyring daemon for secrets and ssh
+    # GNOME Keyring daemon with D-Bus support for Signal and SSH for git
+    # Start after login but replace any existing keyring from PAM
     systemd.user.services.gnome-keyring = {
       description = "GNOME Keyring daemon";
       wantedBy = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh";
+        Type = "dbus";
+        BusName = "org.freedesktop.secrets";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --replace --foreground --components=secrets,ssh";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
     };
+
+    # Disable the default NixOS keyring service to prevent conflicts
+    systemd.user.services.gnome-keyring-daemon.enable = false;
 
     # GNOME Keyring is now started automatically by PAM during login
     # This ensures proper unlock integration with GDM password authentication
@@ -133,6 +138,7 @@ in
     ];
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
+    # Enable PAM keyring for automatic unlock on login
     security.pam.services.gdm.enableGnomeKeyring = true;
     security.pam.services.gdm-password.enableGnomeKeyring = true;
     security.pam.services.login.enableGnomeKeyring = true;

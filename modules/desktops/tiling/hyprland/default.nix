@@ -60,16 +60,19 @@ in
       };
     };
 
-    # GNOME Keyring systemd user service for reliable SSH component startup
-    # This ensures keyring starts with both SSH and secrets components from boot
-    systemd.user.services.gnome-keyring = {
-      description = "GNOME Keyring daemon";
+    # GNOME Keyring SSH agent using the traditional approach but configured properly
+    # This ensures SSH component starts after keyring is unlocked by PAM
+    systemd.user.services.gnome-keyring-ssh = {
+      description = "GNOME Keyring SSH agent";
       wantedBy = [ "graphical-session.target" ];
-      before = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig = {
-        Type = "dbus";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --foreground --components=ssh,secrets";
+        Type = "forking";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
+        ExecStartPost = "/run/current-system/sw/bin/sleep 1";
         Restart = "on-failure";
+        RestartSec = "3";
       };
     };
 

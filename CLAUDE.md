@@ -209,7 +209,7 @@ The GNOME keyring SSH integration is now fully functional. The final solution us
 2. Separate systemd user service for SSH component
 3. Proper timing: SSH service starts after graphical session target
 
-### Final Configuration Summary
+### Final Configuration Summary (Updated Aug 15, 2025)
 ```nix
 # PAM integration for keyring unlock (unchanged)
 security.pam.services = {
@@ -218,18 +218,106 @@ security.pam.services = {
   login.enableGnomeKeyring = true;
 };
 
-# Systemd user service for SSH component only
-systemd.user.services.gnome-keyring-ssh = {
-  description = "GNOME Keyring SSH agent";
+# Consolidated systemd user service for both secrets and SSH components
+systemd.user.services.gnome-keyring = {
+  description = "GNOME Keyring daemon";
   wantedBy = [ "graphical-session.target" ];
+  wants = [ "graphical-session.target" ];
   after = [ "graphical-session.target" ];
-  partOf = [ "graphical-session.target" ];
   serviceConfig = {
     Type = "forking";
-    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
-    ExecStartPost = "/run/current-system/sw/bin/sleep 1";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh";
     Restart = "on-failure";
-    RestartSec = "3";
+    RestartSec = 1;
+    TimeoutStopSec = 10;
   };
 };
+
+# Seahorse package for GUI keyring management
+environment.systemPackages = with pkgs; [
+  seahorse
+  # ... other packages
+];
+```
+
+### Latest Architecture Changes (Aug 15, 2025)
+- **Simplified approach**: Consolidated separate SSH and secrets services into single unified service
+- **Cleaner configuration**: Single systemd user service handles both components with `--components=secrets,ssh`
+- **GUI management**: Added seahorse package for keyring management interface
+- **Improved reliability**: Adjusted timeout and restart settings for better service stability
+
+## Current Status & Testing Requirements (Aug 15, 2025)
+
+### Core Requirements
+1. **Auto-unlock on login with GDM**: Keyring must unlock automatically using login password
+2. **SSH keys auto-added and saved**: SSH keys automatically loaded into keyring agent
+3. **Components**: Keyring must run with `--components=secrets,ssh`
+4. **D-Bus support**: Must expose `org.freedesktop.secrets` for Signal integration
+
+### Current Configuration Status
+```nix
+# PAM integration for auto-unlock
+security.pam.services.gdm.enableGnomeKeyring = true;
+security.pam.services.gdm-password.enableGnomeKeyring = true;
+security.pam.services.login.enableGnomeKeyring = true;
+
+# Systemd service with D-Bus and replace functionality
+systemd.user.services.gnome-keyring = {
+  description = "GNOME Keyring daemon";
+  wantedBy = [ "graphical-session.target" ];
+  wants = [ "graphical-session.target" ];
+  after = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "dbus";
+    BusName = "org.freedesktop.secrets";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --replace --foreground --components=secrets,ssh";
+    Restart = "on-failure";
+    RestartSec = 1;
+    TimeoutStopSec = 10;
+  };
+};
+
+# Disable default NixOS service to prevent conflicts
+systemd.user.services.gnome-keyring-daemon.enable = false;
+```
+
+### Last Test Results (Pre-Reboot)
+- ❓ **Auto-unlock**: Still required manual password entry (needs reboot test)
+- ✅ **SSH functionality**: Both keys loaded (`ssh-add -l` shows 2 keys)
+- ✅ **D-Bus services**: `org.freedesktop.secrets` active
+- ✅ **Components**: Running with `secrets,ssh` components
+- ❓ **Signal**: Need to test after reboot
+
+### Post-Reboot Test Plan
+1. **Login test**: Should auto-unlock without password prompt
+2. **SSH test**: `ssh-add -l` should show 2 keys automatically
+3. **D-Bus test**: `busctl --user list | grep keyring` should show services
+4. **Signal test**: Should use `gnome_libsecret` (not `basic_text`)
+5. **Persistence test**: All functionality should survive across sessions
+
+### Known Issues to Watch For
+- If PAM and systemd services conflict, will see "another secret service is running"
+- If D-Bus not working, Signal will fall back to `basic_text`
+- If SSH component fails, will see socket binding errors
+- If auto-unlock fails, will prompt for keyring password on first access
+
+### Troubleshooting Commands
+```bash
+# Check service status
+systemctl --user status gnome-keyring
+
+# Check D-Bus services
+busctl --user list | grep keyring
+
+# Test keyring unlock
+secret-tool lookup test test
+
+# Check SSH functionality
+ssh-add -l
+
+# Check processes
+ps aux | grep gnome-keyring
+
+# View logs
+journalctl --user -u gnome-keyring.service
 ```

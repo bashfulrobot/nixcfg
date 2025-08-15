@@ -162,13 +162,72 @@ systemd.user.services.gnome-keyring = {
 };
 ```
 
-### Ready for Reboot Testing (Aug 15, 2025)
-- Deprecation warning fixed in default.nix:71
-- System ready for reboot test to verify SSH keyring integration
+### Post-Reboot Test Results (Aug 15, 2025)
+After reboot and rebuild, keyring unlock is working but SSH component still not functioning:
 
-### Test Commands After Next Reboot
-1. Check keyring unlock: `secret-tool lookup test test 2>/dev/null && echo "Unlocked" || echo "Locked"`
-2. Verify SSH socket: `ls -la /run/user/1000/keyring/ssh`
-3. Check SSH keys loaded: `ssh-add -l`
-4. Test with 1Password keyring integration
-5. Verify single keyring process: `ps aux | grep gnome-keyring` (should show one clean process)
+**✅ Working:**
+- Keyring unlock: `secret-tool lookup test test` returns "Unlocked"
+- Environment variable: `SSH_AUTH_SOCK=/run/user/1000/keyring/ssh` is set correctly
+
+**❌ Still Broken:**
+- SSH socket missing: `/run/user/1000/keyring/ssh` does not exist
+- SSH agent connection fails: `ssh-add -l` returns "Error connecting to agent: No such file or directory"
+- Git push still prompts for SSH key password without "save to keyring" option
+
+**🔍 Root Cause Identified:**
+Two conflicting keyring processes are running:
+1. `gnome-keyring-daemon --daemonize --login` (PID 4259) - started by PAM
+2. `gnome-keyring-daemon --start --foreground --components=secrets` (PID 5177) - started by systemd user service
+
+The systemd service is starting with `--components=secrets` only, not `ssh,secrets` as configured. Need to investigate why the SSH component is being dropped.
+
+### Solution Implemented Successfully (Aug 15, 2025)
+
+**Final Working Configuration:**
+- PAM integration handles keyring unlock (secrets component)
+- Separate systemd user service handles SSH component: `gnome-keyring-ssh.service`
+- Service starts after `graphical-session.target` with `--components=ssh` only
+- SSH socket created at `/run/user/1000/keyring/ssh` with proper permissions
+- SSH keys automatically loaded and available: `ssh-add -l` shows 2 keys
+
+**Key Insights:**
+1. **Separation of concerns**: PAM handles keyring unlock, systemd handles SSH component
+2. **Timing matters**: SSH service must start AFTER keyring is unlocked by PAM
+3. **Modern approach failed**: GCR 4.x only provides `gcr4-ssh-askpass`, not `gcr4-ssh-agent`
+4. **Traditional approach works**: `gnome-keyring-daemon --start --components=ssh` still the correct method
+
+**Current Status (✅ WORKING):**
+- ✅ Keyring unlock: Working via PAM integration
+- ✅ SSH socket: Created at proper location with correct permissions
+- ✅ SSH agent: Running and managing 2 SSH keys
+- ❓ SSH password prompts: Need to test if "save to keyring" option appears
+
+### Still To Test
+- Git operations to verify SSH password prompt shows "save to keyring" checkbox
+- 1Password keyring integration behavior
+- Reboot persistence of configuration
+
+### Final Configuration Summary
+```nix
+# PAM integration for keyring unlock (unchanged)
+security.pam.services = {
+  gdm.enableGnomeKeyring = true;
+  gdm-password.enableGnomeKeyring = true;
+  login.enableGnomeKeyring = true;
+};
+
+# Systemd user service for SSH component only
+systemd.user.services.gnome-keyring-ssh = {
+  description = "GNOME Keyring SSH agent";
+  wantedBy = [ "graphical-session.target" ];
+  after = [ "graphical-session.target" ];
+  partOf = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "forking";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
+    ExecStartPost = "/run/current-system/sw/bin/sleep 1";
+    Restart = "on-failure";
+    RestartSec = "3";
+  };
+};
+```

@@ -11,8 +11,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Set Chicago timezone
-    time.timeZone = "America/Chicago";
+    # Set Vancouver timezone
+    time.timeZone = "America/Vancouver";
   };
 
 }

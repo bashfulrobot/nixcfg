@@ -40,7 +40,7 @@ in
 
     # Enable D-Bus for proper desktop session integration
     services.dbus.enable = true;
-    
+
     nix.settings = {
       substituters = [ "https://hyprland.cachix.org" ];
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
@@ -60,19 +60,20 @@ in
       };
     };
 
-    # GNOME Keyring SSH agent using the traditional approach but configured properly
-    # This ensures SSH component starts after keyring is unlocked by PAM
-    systemd.user.services.gnome-keyring-ssh = {
-      description = "GNOME Keyring SSH agent";
+    
+
+    # GNOME Keyring daemon for secrets and ssh
+    systemd.user.services.gnome-keyring = {
+      description = "GNOME Keyring daemon";
       wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
-        ExecStartPost = "/run/current-system/sw/bin/sleep 1";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh";
         Restart = "on-failure";
-        RestartSec = "3";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
       };
     };
 
@@ -96,9 +97,6 @@ in
       blueman.enable = true;
     };
 
-    # Enable seahorse for keyring GUI management
-    programs.seahorse.enable = true;
-
     programs.hyprland = {
       enable = true;
       # withUWSM = true;
@@ -106,6 +104,7 @@ in
 
     environment.systemPackages = with pkgs; [
       hyprpaper
+      seahorse
       hyprpicker
       cliphist
       grimblast
@@ -253,7 +252,8 @@ in
             "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass" # GCR SSH askpass for keyring password prompts
             "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
-          ] ++ lib.optionals config.apps.one-password.enable [
+          ]
+          ++ lib.optionals config.apps.one-password.enable [
             "1password"
           ];
           input = {
@@ -364,10 +364,10 @@ in
           dwindle = {
             pseudotile = true;
             preserve_split = true;
-            permanent_direction_override = true;  # Enable for better auto-splits
-            smart_split = false;                  # Let Hyprland handle splits intelligently
-            smart_resizing = true;               # Add this for better resizing
-            force_split = 2;                     # Add this for consistent splitting
+            permanent_direction_override = true; # Enable for better auto-splits
+            smart_split = false; # Let Hyprland handle splits intelligently
+            smart_resizing = true; # Add this for better resizing
+            force_split = 2; # Add this for consistent splitting
           };
           master = {
             new_status = "master";
@@ -627,14 +627,14 @@ in
               "$mainMod SHIFT $CONTROL, down, swapwindow, d"
 
               # Split toggles (preselect for next window only)
-              "$mainMod, semicolon, layoutmsg, preselect r"       # split horizontally (next window right)
-              "$mainMod, apostrophe, layoutmsg, preselect d"      # split vertically (next window below)
-              
+              "$mainMod, semicolon, layoutmsg, preselect r" # split horizontally (next window right)
+              "$mainMod, apostrophe, layoutmsg, preselect d" # split vertically (next window below)
+
               # Toggle split direction of current window
-              "$mainMod, O, togglesplit"                          # Toggle split direction of focused window
-              
+              "$mainMod, O, togglesplit" # Toggle split direction of focused window
+
               # Enter resize mode
-              "$mainMod, R, submap, resize"                       # Enter resize mode
+              "$mainMod, R, submap, resize" # Enter resize mode
 
               # Special workspaces (scratchpad)
               "$mainMod CTRL, S, movetoworkspacesilent, special"

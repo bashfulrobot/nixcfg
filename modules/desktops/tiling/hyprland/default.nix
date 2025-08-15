@@ -68,7 +68,7 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --daemonize --components=secrets,ssh,pkcs11 --login";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --daemonize --components=secrets,ssh,pkcs11";
         Environment = [
           "GNOME_KEYRING_CONTROL=%t/keyring"
           "SSH_AUTH_SOCK=%t/keyring/ssh"
@@ -241,9 +241,10 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
-            "eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)" # Ensure SSH agent is available
             "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
+          ] ++ lib.optionals config.apps.one-password.enable [
+            "1password"
           ];
           input = {
             kb_layout = "${kbdLayout},us";

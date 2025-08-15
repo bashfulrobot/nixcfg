@@ -45,7 +45,7 @@ in {
 
     };
 
-    # used in Gnome
+    # used in Gnome and Hyprland
     home-manager.users."${user-settings.user.username}" = {
       home.file."1password.desktop" = {
         source = ./1password.desktop;

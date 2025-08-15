@@ -110,6 +110,7 @@ in
       bibata-cursors
       ranger
       gnome-keyring
+      gcr_4 # GCR 4.x for modern keyring password prompts
       libsecret
       blueman
       papirus-folders
@@ -198,7 +199,7 @@ in
             "NIXPKGS_ALLOW_UNFREE,1"
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
-            "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/.ssh"
+            "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
             "GNOME_KEYRING_CONTROL,$XDG_RUNTIME_DIR/keyring"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"
@@ -229,6 +230,7 @@ in
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
+            "${pkgs.gcr_4}/libexec/gcr-prompter" # GCR prompter for keyring password dialogs
             "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
           ] ++ lib.optionals config.apps.one-password.enable [

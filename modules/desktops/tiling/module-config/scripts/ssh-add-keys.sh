@@ -4,7 +4,7 @@
 # This ensures keys are loaded and stored persistently
 
 SSH_DIR="$HOME/.ssh"
-KEYRING_SSH_SOCK="/run/user/$UID/keyring/.ssh"
+KEYRING_SSH_SOCK="/run/user/$UID/keyring/ssh"
 
 # Check if gnome-keyring SSH agent is running
 if [[ ! -S "$KEYRING_SSH_SOCK" ]]; then

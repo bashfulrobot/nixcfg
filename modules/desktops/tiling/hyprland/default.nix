@@ -198,7 +198,7 @@ in
             "NIXPKGS_ALLOW_UNFREE,1"
             "XCURSOR_THEME,Bibata-Modern-Classic"
             "XCURSOR_SIZE,24"
-            "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/ssh"
+            "SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/keyring/.ssh"
             "GNOME_KEYRING_CONTROL,$XDG_RUNTIME_DIR/keyring"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"

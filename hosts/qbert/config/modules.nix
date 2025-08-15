@@ -17,7 +17,7 @@
 
   # Enable gnome desktop
   desktops.gnome.enable = true;
-  desktops.tiling.hyprland.enable = false;
+  desktops.tiling.hyprland.enable = true;
 
   apps.syncthing = {
     enable = true;

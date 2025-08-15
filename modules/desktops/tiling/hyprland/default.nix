@@ -60,23 +60,8 @@ in
       };
     };
 
-    systemd.user.services.gnome-keyring = {
-      description = "GNOME Keyring daemon with SSH support";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --daemonize --components=secrets,ssh,pkcs11";
-        Environment = [
-          "GNOME_KEYRING_CONTROL=%t/keyring"
-          "SSH_AUTH_SOCK=%t/keyring/ssh"
-        ];
-        Restart = "on-failure";
-        RestartSec = 2;
-      };
-    };
+    # GNOME Keyring is now started automatically by PAM during login
+    # This ensures proper unlock integration with GDM password authentication
     services = {
       displayManager.defaultSession = "hyprland";
       xserver = {
@@ -95,6 +80,9 @@ in
       gnome.gnome-keyring.enable = true;
       blueman.enable = true;
     };
+
+    # Enable seahorse for keyring GUI management
+    programs.seahorse.enable = true;
 
     programs.hyprland = {
       enable = true;

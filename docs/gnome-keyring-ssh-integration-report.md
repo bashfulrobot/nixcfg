@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Successfully implemented GNOME keyring SSH integration using a **unified service architecture** that consolidates both secrets and SSH components into a single systemd service while maintaining PAM integration for keyring unlock. This approach eliminates service conflicts and provides complete SSH key management functionality.
+Successfully implemented GNOME keyring SSH integration using a **separated service architecture** where PAM manages keyring unlock (secrets component) and a dedicated systemd service manages SSH component functionality. This approach eliminates service conflicts and provides complete SSH key management functionality.
 
 ## Problem Statement
 
@@ -24,14 +24,14 @@ Successfully implemented GNOME keyring SSH integration using a **unified service
 
 ## Solution Architecture
 
-### Core Design Principle: Unified Service Architecture
+### Core Design Principle: Separated Service Architecture
 
 ```
 ┌─────────────────┐    ┌──────────────────────┐
 │   PAM Service   │    │  Systemd User Service │
 │                 │    │                      │
-│ Keyring Unlock  │    │ Secrets + SSH        │
-│ (initial auth)  │    │ Component Management │
+│ Keyring Unlock  │    │    SSH Component     │
+│ (secrets comp.) │    │     Management       │
 │                 │    │                      │
 │ Triggered by:   │    │ Triggered by:        │
 │ - GDM login     │    │ - graphical-session  │
@@ -50,27 +50,27 @@ security.pam.services = {
 };
 ```
 
-#### 2. Unified Keyring Service
+#### 2. SSH Component Service
 ```nix
-systemd.user.services.gnome-keyring = {
-  description = "GNOME Keyring daemon";
+systemd.user.services.gnome-keyring-ssh = {
+  description = "GNOME Keyring SSH component";
   wantedBy = [ "graphical-session.target" ];
   wants = [ "graphical-session.target" ];
   after = [ "graphical-session.target" ];
   serviceConfig = {
     Type = "forking";
-    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
     Restart = "on-failure";
-    RestartSec = 1;
+    RestartSec = 2;
     TimeoutStopSec = 10;
   };
 };
 ```
 
 #### 3. Supporting Infrastructure
-- **XDG Runtime Directory**: `environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID"`
 - **SSH Environment**: `SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/keyring/ssh`
 - **SSH Askpass**: `SSH_ASKPASS=${pkgs.gcr_4}/libexec/gcr4-ssh-askpass`
+- **Signal Integration**: `SIGNAL_PASSWORD_STORE=gnome-libsecret`
 - **GUI Management**: `seahorse` package in `environment.systemPackages`
 
 ## Evolution Timeline
@@ -82,13 +82,13 @@ systemd.user.services.gnome-keyring = {
 | `e8f5c3f` | Remove `services.gnome.gnome-keyring.enable` | ✅ Kept | Eliminated service conflicts |
 | `634f913` | Fix SSH socket path | ✅ Kept | Correct socket location |
 | `d878249` | Add GCR 4.x package | ✅ Kept | Modern password prompts |
-| `3d88d87` | Unified systemd service | ✅ Final | Consolidated architecture |
+| `9aa522b` | Separated SSH service + Signal integration | ✅ Final | Non-conflicting architecture |
 
 ### What Was Removed vs Preserved
 
 #### 🚫 Removed (Conflicting Elements)
 - `services.gnome.gnome-keyring.enable = true`
-- Separate SSH-only systemd service
+- Conflicting unified systemd service with `--replace` flag
 - Manual keyring daemon evaluation in exec-once
 - `ExecStartPost` sleep delays
 
@@ -99,9 +99,9 @@ systemd.user.services.gnome-keyring = {
 - Core packages (gnome-keyring, libsecret)
 
 #### 🔄 Enhanced (Improved Elements)
-- Unified systemd service with both components
+- Separated SSH-only systemd service (non-conflicting)
 - Added GCR 4.x for modern prompts
-- XDG_RUNTIME_DIR environment fix
+- Signal integration with `SIGNAL_PASSWORD_STORE` environment variable
 - Seahorse GUI management tool
 - Improved timeout and restart configuration
 
@@ -150,8 +150,8 @@ $ ps aux | grep gnome-keyring
 - **Implementation**: Use `after = [ "graphical-session.target" ]` for proper sequencing
 
 ### 3. Service Architecture
-- **Failed Approach**: Separate services competing for components
-- **Successful Approach**: Unified service - PAM for initial unlock, systemd for comprehensive component management
+- **Failed Approach**: Unified service with `--replace` flag conflicting with PAM
+- **Successful Approach**: Separated responsibilities - PAM handles secrets component unlock, systemd handles SSH component only
 
 ### 4. NixOS-Specific Considerations
 - PAM integration works reliably for keyring unlock
@@ -174,14 +174,14 @@ ssh-add -l | grep -q "ssh" && echo "SSH agent OK"
 
 ### Troubleshooting Commands
 ```bash
-# Restart keyring service
-systemctl --user restart gnome-keyring
+# Restart SSH service (secrets handled by PAM)
+systemctl --user restart gnome-keyring-ssh
 
 # Check service status
-systemctl --user status gnome-keyring
+systemctl --user status gnome-keyring-ssh
 
 # View service logs
-journalctl --user -u gnome-keyring
+journalctl --user -u gnome-keyring-ssh
 ```
 
 ## Configuration Files Modified
@@ -192,12 +192,13 @@ journalctl --user -u gnome-keyring
 
 ## Conclusion
 
-The GNOME keyring SSH integration is now fully functional and persistent across reboots. The unified service architecture provides:
+The GNOME keyring SSH integration is now fully functional and persistent across reboots. The separated service architecture provides:
 
-1. **Reliability**: No service conflicts or competing daemons
-2. **Maintainability**: Single service managing all keyring components
-3. **Robustness**: Improved timeout handling and restart mechanisms
+1. **Reliability**: No service conflicts between PAM and systemd services
+2. **Maintainability**: Clear separation - PAM handles secrets, systemd handles SSH
+3. **Robustness**: Improved timeout handling and restart mechanisms  
 4. **User Experience**: Seamless SSH key management without password prompts
+5. **Application Integration**: Signal and other apps use secure keyring storage
 
 This implementation serves as a reference for NixOS systems requiring GNOME keyring SSH integration in tiling window manager environments.
 

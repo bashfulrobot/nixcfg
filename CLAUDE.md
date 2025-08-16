@@ -397,3 +397,60 @@ busctl --user list | grep -E "(keyring|secrets)"
 - **GitHub Issue**: https://github.com/flathub/org.signal.Signal/issues/753
 - **Key insight**: Signal's SafeStorage backend changes when keyring unavailable
 - **Solution**: Ensure keyring auto-unlock + `SIGNAL_PASSWORD_STORE` environment variable
+
+## Final Resolution Status (Aug 15, 2025)
+
+### ✅ COMPLETED - All Requirements Met
+- **Auto-unlock on login**: PAM integration working (`security.pam.services.*.enableGnomeKeyring = true`)
+- **SSH keys loaded**: SSH component service running (`gnome-keyring-ssh.service`)
+- **Signal secure storage**: Environment variable configured (`SIGNAL_PASSWORD_STORE=gnome-libsecret`)
+- **D-Bus integration**: Services available for applications requiring secret storage
+- **Account reset**: Signal data reset and re-linked with secure backend
+
+### Current Architecture (Working Solution)
+```nix
+# PAM integration handles keyring unlock with login password
+security.pam.services.gdm.enableGnomeKeyring = true;
+security.pam.services.gdm-password.enableGnomeKeyring = true;
+security.pam.services.login.enableGnomeKeyring = true;
+
+# Separate SSH service works with PAM-unlocked keyring
+systemd.user.services.gnome-keyring-ssh = {
+  description = "GNOME Keyring SSH component";
+  wantedBy = [ "graphical-session.target" ];
+  wants = [ "graphical-session.target" ];
+  after = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "forking";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
+    Restart = "on-failure";
+    RestartSec = 2;
+    TimeoutStopSec = 10;
+  };
+};
+
+# Signal forced to use secure backend
+"SIGNAL_PASSWORD_STORE,gnome-libsecret"
+```
+
+### Verification Commands
+```bash
+# Keyring unlock status
+secret-tool lookup nonexistent key 2>/dev/null && echo "Unlocked" || echo "Locked"
+
+# SSH functionality  
+ssh-add -l
+
+# D-Bus services
+busctl --user list | grep -E "(keyring|secrets)"
+
+# Signal backend verification
+echo $SIGNAL_PASSWORD_STORE  # Should show: gnome-libsecret
+```
+
+### Key Lessons Learned
+1. **Separation of concerns**: PAM handles unlock, systemd handles SSH
+2. **No conflicts**: Avoid `--replace` flag when PAM already manages keyring
+3. **Signal data reset**: Required when backend changes to avoid encryption errors
+4. **Environment variables**: Critical for forcing application backend selection
+5. **NixOS packages**: Signal from nixpkgs respects environment variables (unlike some Flatpak versions)

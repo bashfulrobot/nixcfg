@@ -304,7 +304,7 @@ systemd.user.services.gnome-keyring-daemon.enable = false;
 ### Troubleshooting Commands
 ```bash
 # Check service status
-systemctl --user status gnome-keyring
+systemctl --user status gnome-keyring-ssh
 
 # Check D-Bus services
 busctl --user list | grep keyring
@@ -319,5 +319,81 @@ ssh-add -l
 ps aux | grep gnome-keyring
 
 # View logs
-journalctl --user -u gnome-keyring.service
+journalctl --user -u gnome-keyring-ssh.service
 ```
+
+## GNOME Keyring & Signal Integration - SOLUTION IMPLEMENTED (Aug 15, 2025)
+
+### Issue Summary
+Two main problems were identified and resolved:
+1. **PAM auto-unlock not working**: Keyring started but remained locked after login
+2. **Signal SafeStorage backend error**: `Detected change in safeStorage backend, can't decrypt DB key (previous: gnome_libsecret, current: basic_text)`
+
+### Root Cause Analysis
+- **Conflicting keyring services**: Original systemd service with `--replace` flag was overriding PAM-unlocked keyring
+- **Missing Signal environment variable**: `SIGNAL_PASSWORD_STORE` not set to force `gnome-libsecret` usage
+- **NixOS package vs Flatpak**: Signal installed via NixOS packages (`unstable.signal-desktop`), not Flatpak
+
+### Final Working Configuration (hyprland/default.nix:67-79)
+```nix
+# GNOME Keyring SSH component - works with PAM-unlocked keyring
+# PAM handles secrets component unlock, this adds SSH functionality
+systemd.user.services.gnome-keyring-ssh = {
+  description = "GNOME Keyring SSH component";
+  wantedBy = [ "graphical-session.target" ];
+  wants = [ "graphical-session.target" ];
+  after = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "forking";
+    ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
+    Restart = "on-failure";
+    RestartSec = 2;
+    TimeoutStopSec = 10;
+  };
+};
+
+# PAM integration for auto-unlock (lines 142-144)
+security.pam.services.gdm.enableGnomeKeyring = true;
+security.pam.services.gdm-password.enableGnomeKeyring = true;
+security.pam.services.login.enableGnomeKeyring = true;
+
+# Signal environment variable (line 228)
+"SIGNAL_PASSWORD_STORE,gnome-libsecret"
+```
+
+### Key Architecture Changes
+1. **Separation of concerns**: PAM handles keyring unlock (secrets), systemd handles SSH component
+2. **Non-conflicting services**: SSH service uses `--start --components=ssh` instead of `--replace`
+3. **Signal integration**: Environment variable ensures Signal uses correct storage backend
+
+### Verification Status (as of Aug 15, 2025 - 16:52)
+- ✅ **SSH functionality**: Both keys loaded and working (`ssh-add -l` shows 2 keys)
+- ✅ **Signal working**: Successfully decrypted database and loaded when keyring unlocked
+- ✅ **D-Bus services**: `org.freedesktop.secrets` active for Signal integration
+- ✅ **Environment variable**: `SIGNAL_PASSWORD_STORE=gnome-libsecret` configured
+- ❓ **PAM auto-unlock**: Still requires reboot testing to verify automatic unlock
+
+### Next Steps for Complete Resolution
+1. **Reboot test**: Verify PAM auto-unlock works from fresh login
+2. **Signal test**: Confirm Signal works immediately without manual intervention
+3. **If PAM fails**: Investigate deeper PAM configuration issues
+
+### Working Commands for Testing
+```bash
+# Test keyring unlock status (safe - no secrets revealed)
+secret-tool lookup nonexistent key 2>/dev/null && echo "Keyring unlocked" || echo "Keyring locked"
+
+# Test Signal with correct environment
+SIGNAL_PASSWORD_STORE=gnome-libsecret signal-desktop --password-store=gnome-libsecret
+
+# Check SSH integration
+ssh-add -l
+
+# Verify D-Bus services
+busctl --user list | grep -E "(keyring|secrets)"
+```
+
+### Known Working Solution Reference
+- **GitHub Issue**: https://github.com/flathub/org.signal.Signal/issues/753
+- **Key insight**: Signal's SafeStorage backend changes when keyring unavailable
+- **Solution**: Ensure keyring auto-unlock + `SIGNAL_PASSWORD_STORE` environment variable

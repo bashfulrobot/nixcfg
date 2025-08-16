@@ -62,19 +62,18 @@ in
 
     
 
-    # GNOME Keyring daemon with D-Bus support for Signal and SSH for git
-    # Start after login but replace any existing keyring from PAM
-    systemd.user.services.gnome-keyring = {
-      description = "GNOME Keyring daemon";
+    # GNOME Keyring SSH component - works with PAM-unlocked keyring
+    # PAM handles secrets component unlock, this adds SSH functionality
+    systemd.user.services.gnome-keyring-ssh = {
+      description = "GNOME Keyring SSH component";
       wantedBy = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
       serviceConfig = {
-        Type = "dbus";
-        BusName = "org.freedesktop.secrets";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --replace --foreground --components=secrets,ssh";
+        Type = "forking";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
         Restart = "on-failure";
-        RestartSec = 1;
+        RestartSec = 2;
         TimeoutStopSec = 10;
       };
     };
@@ -226,6 +225,7 @@ in
             "SSH_ASKPASS,${pkgs.gcr_4}/libexec/gcr4-ssh-askpass"
             "DISPLAY,:0"
             "GNOME_KEYRING_CONTROL,$XDG_RUNTIME_DIR/keyring"
+            "SIGNAL_PASSWORD_STORE,gnome-libsecret"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"
             "QT_STYLE_OVERRIDE,kvantum"

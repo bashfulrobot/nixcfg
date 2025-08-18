@@ -25,7 +25,6 @@ in
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/swaync
-    ../module-config/programs/hyprshell
     # ../module-config/programs/dunst
   ];
 
@@ -532,6 +531,7 @@ in
 
               "$mainMod, A, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} drun" # launch desktop applications
               "$mainMod, SPACE, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} drun" # launch desktop applications
+              "$mainMod CTRL, SPACE, exec, pkill -x rofi || rofi -show window -show-icons" # window switcher with icons
               "$mainMod, Z, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} emoji" # launch emoji picker
               # "$mainMod, tab, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} window" # switch between desktop applications
               # "$mainMod, R, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} file" # brrwse system files

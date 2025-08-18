@@ -38,7 +38,7 @@ in
       obsidian.enable = true;
       chrome-based-browser.enable = true;
       vivaldi.enable = false;
-      zen-browser.enable = true;
+      zen-browser.enable = false;
       gcal-br.enable = true;
       gmail-br.enable = true;
       br-drive.enable = true;
@@ -85,12 +85,15 @@ in
       unstable.signal-desktop # instant messaging
       unstable.zulip
       # element-desktop # Matrix Client
-      #  # Email
+
+      # Email
+      unstable.meli # terminal email client
       gmailctl # cli to write gmail filters as code
       # thunderbird # email client
       # unstable.evolutionWithPlugins
       # mailspring # email client
       #geary # email reader
+
       # pandoc # document converter
       # lan-mouse # software kvm
     ];

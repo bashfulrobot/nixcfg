@@ -71,7 +71,8 @@ in
       unstable.todoist-electron # task manager
       # planify
 
-      # Communications
+      # Communications & AI
+      inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support
 
       unstable.zoom-us
 

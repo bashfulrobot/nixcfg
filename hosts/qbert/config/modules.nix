@@ -19,8 +19,11 @@
   desktops.gnome.enable = true;
   desktops.tiling.hyprland.enable = true;
 
-  apps.syncthing = {
-    enable = true;
-    host.qbert = true;
+  apps = {
+    claude-desktop.enable = true;
+    syncthing = {
+      enable = true;
+      host.qbert = true;
+    };
   };
 }

@@ -1,0 +1,279 @@
+#!/usr/bin/env bash
+
+# Claude commit helper script
+# Ensures signed commits with conventional commit format and emojis
+# Supports semantic versioning for releases
+
+set -euo pipefail
+
+# Conventional commit types with emojis
+declare -A COMMIT_TYPES=(
+    ["feat"]="✨"
+    ["fix"]="🐛"
+    ["docs"]="📝"
+    ["style"]="💄"
+    ["refactor"]="♻️"
+    ["perf"]="⚡"
+    ["test"]="✅"
+    ["build"]="👷"
+    ["ci"]="💚"
+    ["chore"]="🔧"
+    ["revert"]="⏪"
+    ["security"]="🔒"
+    ["deps"]="⬆️"
+    ["config"]="🔧"
+    ["remove"]="🔥"
+    ["add"]="➕"
+    ["update"]="🔄"
+    ["init"]="🎉"
+    ["release"]="🔖"
+    ["hotfix"]="🚑"
+    ["wip"]="🚧"
+)
+
+# Semantic versioning levels
+declare -A SEMVER_LEVELS=(
+    ["major"]="major"
+    ["minor"]="minor" 
+    ["patch"]="patch"
+)
+
+usage() {
+    cat << EOF
+Usage: commit [OPTIONS] <type> [scope] <message>
+
+OPTIONS:
+    -h, --help          Show this help message
+    -t, --tag <level>   Create a semantic version tag (major|minor|patch)
+    -p, --push          Push after committing (and tagging if applicable)
+    -d, --dry-run       Show what would be committed without executing
+
+COMMIT TYPES:
+    feat        ✨  New feature
+    fix         🐛  Bug fix
+    docs        📝  Documentation changes
+    style       💄  Code style changes (formatting, etc.)
+    refactor    ♻️   Code refactoring
+    perf        ⚡  Performance improvements
+    test        ✅  Adding or updating tests
+    build       👷  Build system changes
+    ci          💚  CI/CD changes
+    chore       🔧  Maintenance tasks
+    revert      ⏪  Revert previous commit
+    security    🔒  Security improvements
+    deps        ⬆️   Dependency updates
+    config      🔧  Configuration changes
+    remove      🔥  Remove code or files
+    add         ➕  Add new dependencies or files
+    update      🔄  Update existing functionality
+    init        🎉  Initial commit
+    release     🔖  Release version
+    hotfix      🚑  Critical hotfix
+    wip         🚧  Work in progress
+
+EXAMPLES:
+    commit feat "auth" "add JWT authentication"
+    commit fix "user-login" "resolve password validation issue"
+    commit docs "update README with installation steps"
+    commit feat "api" "implement user registration endpoint" --tag minor
+    commit chore "update dependencies" --push
+
+SEMANTIC VERSIONING:
+    --tag major     Breaking changes (1.0.0 -> 2.0.0)
+    --tag minor     New features (1.0.0 -> 1.1.0)
+    --tag patch     Bug fixes (1.0.0 -> 1.0.1)
+EOF
+}
+
+get_next_version() {
+    local level="$1"
+    
+    # Get the latest tag, default to 0.0.0 if none exists
+    local current_version
+    current_version=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+    
+    # Remove 'v' prefix if present
+    current_version=${current_version#v}
+    
+    # Split version into components
+    IFS='.' read -ra VERSION_PARTS <<< "$current_version"
+    local major=${VERSION_PARTS[0]:-0}
+    local minor=${VERSION_PARTS[1]:-0}
+    local patch=${VERSION_PARTS[2]:-0}
+    
+    case "$level" in
+        "major")
+            echo "v$((major + 1)).0.0"
+            ;;
+        "minor")
+            echo "v${major}.$((minor + 1)).0"
+            ;;
+        "patch")
+            echo "v${major}.${minor}.$((patch + 1))"
+            ;;
+        *)
+            echo "Invalid semver level: $level" >&2
+            exit 1
+            ;;
+    esac
+}
+
+check_git_config() {
+    # Check if git is configured for signing
+    if ! git config user.signingkey >/dev/null 2>&1; then
+        echo "Warning: No signing key configured. Commits will not be signed." >&2
+        echo "Configure with: git config user.signingkey <key-id>" >&2
+    fi
+    
+    # Check if commit signing is enabled
+    if [[ "$(git config commit.gpgsign)" != "true" ]]; then
+        echo "Warning: GPG signing not enabled. Enable with: git config commit.gpgsign true" >&2
+    fi
+}
+
+main() {
+    local commit_type=""
+    local scope=""
+    local message=""
+    local tag_level=""
+    local should_push=false
+    local dry_run=false
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -t|--tag)
+                tag_level="$2"
+                if [[ ! "${SEMVER_LEVELS[$tag_level]:-}" ]]; then
+                    echo "Error: Invalid semver level '$tag_level'" >&2
+                    echo "Valid levels: major, minor, patch" >&2
+                    exit 1
+                fi
+                shift 2
+                ;;
+            -p|--push)
+                should_push=true
+                shift
+                ;;
+            -d|--dry-run)
+                dry_run=true
+                shift
+                ;;
+            -*)
+                echo "Error: Unknown option $1" >&2
+                usage
+                exit 1
+                ;;
+            *)
+                if [[ -z "$commit_type" ]]; then
+                    commit_type="$1"
+                elif [[ -z "$scope" && $# -gt 1 ]]; then
+                    # Check if this looks like a scope (next arg exists and current doesn't start with uppercase)
+                    if [[ ! "$1" =~ ^[A-Z] ]]; then
+                        scope="$1"
+                    else
+                        message="$1"
+                    fi
+                elif [[ -z "$message" ]]; then
+                    message="$1"
+                else
+                    message="$message $1"
+                fi
+                shift
+                ;;
+        esac
+    done
+    
+    # Validate required arguments
+    if [[ -z "$commit_type" ]]; then
+        echo "Error: Commit type is required" >&2
+        usage
+        exit 1
+    fi
+    
+    if [[ -z "$message" ]]; then
+        echo "Error: Commit message is required" >&2
+        usage
+        exit 1
+    fi
+    
+    # Validate commit type
+    if [[ ! "${COMMIT_TYPES[$commit_type]:-}" ]]; then
+        echo "Error: Invalid commit type '$commit_type'" >&2
+        echo "Valid types: ${!COMMIT_TYPES[*]}" >&2
+        exit 1
+    fi
+    
+    # Check git configuration
+    check_git_config
+    
+    # Build commit message
+    local emoji="${COMMIT_TYPES[$commit_type]}"
+    local full_message
+    
+    if [[ -n "$scope" ]]; then
+        full_message="${commit_type}(${scope}): ${emoji} ${message}"
+    else
+        full_message="${commit_type}: ${emoji} ${message}"
+    fi
+    
+    # Show what will be committed
+    echo "Commit message: $full_message"
+    
+    if [[ "$dry_run" == true ]]; then
+        echo "[DRY RUN] Would execute: git commit -S -m \"$full_message\""
+        if [[ -n "$tag_level" ]]; then
+            local next_version
+            next_version=$(get_next_version "$tag_level")
+            echo "[DRY RUN] Would create tag: $next_version"
+        fi
+        if [[ "$should_push" == true ]]; then
+            echo "[DRY RUN] Would push to remote"
+        fi
+        exit 0
+    fi
+    
+    # Commit with signature
+    if ! git commit -S -m "$full_message"; then
+        echo "Error: Failed to create commit" >&2
+        exit 1
+    fi
+    
+    echo "✅ Commit created successfully"
+    
+    # Create tag if requested
+    if [[ -n "$tag_level" ]]; then
+        local next_version
+        next_version=$(get_next_version "$tag_level")
+        
+        echo "Creating tag: $next_version"
+        if ! git tag -s "$next_version" -m "Release $next_version"; then
+            echo "Error: Failed to create tag" >&2
+            exit 1
+        fi
+        echo "✅ Tag $next_version created successfully"
+    fi
+    
+    # Push if requested
+    if [[ "$should_push" == true ]]; then
+        echo "Pushing to remote..."
+        if ! git push; then
+            echo "Error: Failed to push commits" >&2
+            exit 1
+        fi
+        
+        if [[ -n "$tag_level" ]]; then
+            if ! git push --tags; then
+                echo "Error: Failed to push tags" >&2
+                exit 1
+            fi
+        fi
+        echo "✅ Pushed successfully"
+    fi
+}
+
+main "$@"

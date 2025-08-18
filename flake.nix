@@ -46,17 +46,13 @@
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprshell = {
-      url = "github:H3rmt/hyprshell?ref=hyprshell-release";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak, flake-utils, claude-desktop
-    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, hyprshell, ... }:
+    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {

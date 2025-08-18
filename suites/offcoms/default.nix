@@ -47,6 +47,7 @@ in
     cli = {
       note.enable = true;
       espanso.enable = true;
+      claude-code.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

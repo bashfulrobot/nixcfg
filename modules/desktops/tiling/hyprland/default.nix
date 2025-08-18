@@ -25,6 +25,7 @@ in
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/swaync
+    ../module-config/programs/hyprshell
     # ../module-config/programs/dunst
   ];
 
@@ -132,6 +133,7 @@ in
       libsecret
       blueman
       papirus-folders
+# hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];

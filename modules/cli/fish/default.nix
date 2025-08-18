@@ -348,6 +348,46 @@ let
           end
       end
     '';
+    frm = ''
+      set matches (fd -Hi $argv --max-depth 1 .)
+      if test (count $matches) -eq 0
+        echo "No matches found for pattern: $argv"
+        return 1
+      end
+      
+      echo "Found matches:"
+      for match in $matches
+        if test -d $match
+          set contents (ls -la $match 2>/dev/null | wc -l)
+          if test $contents -gt 3  # More than just . and .. entries
+            echo "📁 $match (non-empty directory)"
+          else
+            echo "📁 $match (empty directory)"
+          end
+        else
+          echo "📄 $match"
+        end
+      end
+      
+      echo
+      read -P "Remove all these items? [y/N]: " -n 1 confirm
+      echo
+      
+      if test "$confirm" = "y" -o "$confirm" = "Y"
+        for match in $matches
+          if test -d $match
+            rm -rf $match
+            echo "Removed directory: $match"
+          else
+            rm $match
+            echo "Removed file: $match"
+          end
+        end
+        echo "✅ Removal complete"
+      else
+        echo "❌ Operation cancelled"
+      end
+    '';
   };
 
   # Create a version of functions with Darwin exclusions

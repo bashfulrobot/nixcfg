@@ -19,6 +19,10 @@
   desktops.gnome.enable = true;
   desktops.tiling.hyprland.enable = true;
 
+  apps = {
+    claude-desktop.enable = true;
+  };
+  
   # apps.syncthing = {
   #   enable = true;
   #   host.donkeykong = true;

@@ -15,6 +15,13 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       services.espanso = {
         enable = true;
+        waylandSupport = true;
+        x11Support = true;
+        configs = {
+          default = {
+            show_notifications = false;
+          };
+        };
         matches = {
           base = {
             matches = [

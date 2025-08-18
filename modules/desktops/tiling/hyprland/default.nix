@@ -493,6 +493,8 @@ in
               "$mainMod, question, exec, ${../module-config/scripts/keybinds.sh}"
               "$mainMod, slash, exec, ${../module-config/scripts/keybinds.sh}"
               "$mainMod CTRL, question, exec, ${../module-config/scripts/keybinds.sh}"
+              # Espanso shortcuts menu
+              "$mainMod SHIFT, question, exec, ${../module-config/scripts/espanso-rofi.sh}"
 
               "$mainMod, F8, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 40"
               # "$mainMod ALT, mouse:276, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 60"

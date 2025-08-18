@@ -1,7 +1,8 @@
-{ ... }:
+{ lib, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
     ./kvm-routing.nix
     ./lid-power.nix
     ./nfs-srv.nix
@@ -12,7 +13,10 @@
   ];
 
   # Enable flakes and nix commands
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Set your time zone.
   time.timeZone = lib.mkDefault "America/Vancouver";

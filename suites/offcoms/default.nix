@@ -46,6 +46,7 @@ in
 
     cli = {
       note.enable = true;
+      espanso.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

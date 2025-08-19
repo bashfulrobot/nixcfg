@@ -16,6 +16,10 @@ set shell := ["bash", "-cu"]
 # "_" hides the recipie from listings
 _default:
     @just --list --unsorted --list-prefix ····
+# Validate flake configuration syntax and options without building
+dev-check:
+    @git add -A
+    @nix flake check --show-trace
 # Test nixos cfg on your current host without git commit. Switches, but does not create a bootloader entry
 dev-test:
     @git add -A

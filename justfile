@@ -19,7 +19,7 @@ default:
     @just --list --unsorted
 
 # === Development Commands ===
-# Fast syntax validation without building
+# Fast syntax validation without building  
 [group('dev')]
 check:
     #!/usr/bin/env bash

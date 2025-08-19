@@ -3,8 +3,7 @@
 
   # --- defines external dependencies (inputs)
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-25.05"; };
-    nixpkgs-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     nixos-hardware = { url = "github:NixOS/nixos-hardware/master"; };
     nixos-hardware-fork = { url = "github:bashfulrobot/nixos-hardware/master"; };
     nix-flatpak = { url = "github:gmodena/nix-flatpak"; };
@@ -17,7 +16,7 @@
       };
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
@@ -25,7 +24,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      # url = "github:nix-community/nixvim/nixos-25.05";
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -43,7 +41,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:nix-community/stylix/release-25.05";
+      url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -51,19 +49,10 @@
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak, flake-utils, claude-desktop
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-flatpak, flake-utils, claude-desktop
     , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
     let
-      # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable {
-          inherit (final) system;
-          config.allowUnfree = true;
-          config.nvidia.acceptLicense = true;
-        };
-      };
-
-      workstationOverlays = [ overlay-unstable ];
+      workstationOverlays = [ ];
 
       secrets =
         builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
@@ -123,7 +112,7 @@
         { isWorkstation, ... }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit user-settings inputs secrets nixpkgs-unstable isWorkstation zen-browser;
+            inherit user-settings inputs secrets isWorkstation zen-browser;
           };
           system = "x86_64-linux";
           inherit modules;

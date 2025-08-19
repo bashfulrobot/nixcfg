@@ -96,6 +96,9 @@ in
 
       # pandoc # document converter
       # lan-mouse # software kvm
+
+      # Networking
+      unstable.wgnord
     ];
 
     services.flatpak.packages = [

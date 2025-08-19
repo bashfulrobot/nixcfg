@@ -593,3 +593,5 @@ echo $SIGNAL_PASSWORD_STORE  # Should show: gnome-libsecret
 3. **Signal data reset**: Required when backend changes to avoid encryption errors
 4. **Environment variables**: Critical for forcing application backend selection
 5. **NixOS packages**: Signal from nixpkgs respects environment variables (unlike some Flatpak versions)
+
+- do not run rebuilds, or dev-rebuilds. I will run them manually in another terminal window. You can only run them if I ask you to.

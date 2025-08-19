@@ -286,7 +286,7 @@ in
             gaps_out = 9;
             border_size = 2;
             "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.inactive_border" = lib.mkForce config.lib.stylix.colors.withHashtag.base00;
+            "col.inactive_border" = lib.mkForce "rgba(${config.lib.stylix.colors.base00}66)";
             resize_on_border = true;
             layout = "dwindle"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)

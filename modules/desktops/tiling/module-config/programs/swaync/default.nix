@@ -4,7 +4,7 @@
   home-manager.sharedModules = lib.mkIf (config.desktops.tiling.hyprland.enable or false) [
     (_: {
       services.swaync = {
-        enable = true;
+        enable = false;
         settings = {
           "$schema" = "/etc/xdg/swaync/configSchema.json";
           positionX = "right";

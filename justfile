@@ -1,232 +1,249 @@
-# Docs
-# ---- https://github.com/casey/just
-# ---- https://stackabuse.com/how-to-change-the-output-color-of-echo-in-linux/
-# ---- https://cheatography.com/linux-china/cheat-sheets/justfile/
-# load a .env file if in the directory
-set dotenv-load
-# Ignore recipe lines beginning with #.
-set ignore-comments
-# Search justfile in parent directory if the first recipe on the command line is not found.
-set fallback
-# Set the shell to bash
-set shell := ["bash", "-cu"]
-# Set the shell to fish
-#set shell := ["fish", "-c"]
+# NixOS Configuration Management
+# https://github.com/casey/just
 
-# "_" hides the recipie from listings
-_default:
-    @just --list --unsorted --list-prefix ····
-# Test nixos cfg on your current host without git commit. Switches, but does not create a bootloader entry
-dev-test:
-    @git add -A
-    # @just garbage-build-cache
-    # @sudo nixos-rebuild test --fast--impure --flake .#\{{`hostname`}}
-    @sudo nixos-rebuild dry-build --fast --impure --flake .#\{{`hostname`}}
-# Rebuild nixos cfg on your current host without git commit.
-dev-rebuild:
-    @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
-    # @just _sway-reload
-# Rebuild nixos cfg without the cache.
-dev-rebuild-no-cache:
-    @git add -A
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}  --option binary-caches ''
-    # @just _sway-reload
-# Rebuild and trace nixos cfg on your current host without git commit.
-dev-rebuild-trace:
-    @git add -A
-    @just garbage-build-cache
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}} --show-trace > ~/dev/nix/nixcfg/rebuild-trace.log 2>&1
-    # @just _sway-reload
-# Test (with Trace) nixos cfg on your current host without git commit. Switches, but does not create a bootloader entry
-dev-test-trace:
-    @git add -A
-    @just garbage-build-cache
-    @sudo nixos-rebuild test --impure --flake .#\{{`hostname`}} --show-trace
-# Final build and garbage collect, will reboot
-final-build-reboot:
-    @just garbage-build-cache
-    @just rebuild
-    @just garbage-build-cache
-    @sudo reboot
-# Garbage Collect items older than 5 days on the current host
-garbage:
+# === Settings ===
+set dotenv-load := true
+set ignore-comments := true  
+set fallback := true
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# === Variables ===
+hostname := `hostname`
+host_flake := ".#" + hostname
+trace_log := justfile_directory() + "/rebuild-trace.log"
+timestamp := `date +%Y-%m-%d_%H-%M-%S`
+
+# === Help ===
+# Show available recipes
+default:
+    @just --list --unsorted
+
+# === Development Commands ===
+# Fast syntax validation without building
+[group('dev')]
+check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔍 Validating flake configuration..."
+    git add -A
+    nix flake check --show-trace
+
+# Dry run build test
+[group('dev')]  
+test:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🧪 Testing build (dry run)..."
+    git add -A
+    sudo nixos-rebuild dry-build --fast --impure --flake {{host_flake}}
+
+# Development rebuild with optional trace
+[group('dev')]
+build trace="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    git add -A
+    if [[ "{{trace}}" == "true" ]]; then
+        echo "🔧 Development rebuild with trace..."
+        just clean-full
+        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
+    else
+        echo "🔧 Development rebuild..."
+        sudo nixos-rebuild switch --impure --flake {{host_flake}}
+    fi
+
+# === Production Commands ===
+# Production rebuild with bootloader
+[group('prod')]
+rebuild trace="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ "{{trace}}" == "true" ]]; then
+        echo "🚀 Production rebuild with trace..."
+        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace
+    else
+        echo "🚀 Production rebuild..."
+        sudo nixos-rebuild switch --impure --flake {{host_flake}}
+    fi
+
+# Build VM for testing
+[group('dev')]
+vm:
+    @echo "🖥️  Building VM..."
+    @sudo nixos-rebuild build-vm --impure --flake {{host_flake}} --show-trace
+
+# Full system upgrade
+[group('prod')]  
+upgrade:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "⬆️  Upgrading system..."
+    cp flake.lock flake.lock-backup-{{timestamp}}
+    nix flake update
+    sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
+
+# === Maintenance Commands ===
+# Quick garbage collection (5 days)
+[group('maintenance')]
+clean:
+    @echo "🧹 Cleaning packages older than 5 days..."
     @sudo nix-collect-garbage --delete-older-than 5d
-### The below will delete from the Nix store everything that is not used by the current generations of each  profile
-# Garbage collect all, clear build cache
-garbage-build-cache:
+
+# Full garbage collection
+[group('maintenance')]
+clean-full:
+    @echo "🧹 Full garbage collection..."
     @sudo nix-collect-garbage -d
-# Version Updates (flake update) - IE sysdig-cli-scanner
-version-update:
-    @sudo nix-collect-garbage -d
-    @sudo nix flake update
-# check active kernel
+
+# Update nix database for comma tool
+[group('maintenance')]
+update-db:
+    @echo "🗄️  Updating nix database..."
+    @nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
+
+# Lint all nix files
+[group('maintenance')]
+lint:
+    @echo "🔍 Linting nix files..."
+    @fd -e nix --hidden --no-ignore --follow . -x statix check {}
+
+# === System Info ===
+# Show kernel and boot info
+[group('info')]
 kernel:
+    @echo "🐧 Current kernel:"
     @uname -r
-    @sudo ls /boot/EFI/nixos/
-# lint nix files
-nix-lint:
-    fd -e nix --hidden --no-ignore --follow . -x statix check {}
-# update nix database for use with comma
-nixdb:
-    nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
-# Rebuild nixos cfg on your current host.
-rebuild:
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}}
-    # @just _sway-reload
-# Rebuild nixos cfg on your current host with show-trace.
-rebuild-trace:
-    @sudo nixos-rebuild switch --impure --flake .#\{{`hostname`}} --show-trace
-    @just _sway-reload
-# Rebuild nixos cfg in a vm host with show-trace.
-rebuild-vm:
-    @sudo nixos-rebuild build-vm --impure --flake .#\{{`hostname`}} --show-trace
-# git fetch and reseset to remote repo git - leaving any untracked files and directories. Used to resolve conflicts due to syncthing
-repo-conflict:
+    @echo "📁 Boot entries:"
+    @sudo ls /boot/EFI/nixos/ 2>/dev/null || echo "No EFI entries found"
+
+# Comprehensive system information
+[group('info')]
+sysinfo:
+    @echo "💻 System Information:"
+    @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features 'nix-command flakes' --command nix-info -m
+
+# Update hardware firmware
+[group('info')]
+firmware:
+    @echo "🔧 Checking firmware updates..."
+    @sudo fwupdmgr get-updates || true
+    @sudo fwupdmgr update || true
+
+# === Git Commands ===
+# Show recent commits (default: 7 days)
+[group('git')]
+log days="7":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📜 Commits from last {{days}} days:"
+    echo "Total: $(git rev-list --count --since='{{days}} days ago' HEAD)"
+    echo "===================="
+    git log --since="{{days}} days ago" --pretty=format:"%h - %an: %s (%cr)" --graph
+
+# Reset to remote origin
+[group('git')]
+reset-origin:
+    @echo "🔄 Resetting to origin/main..."
     @git fetch
     @git reset --hard origin/main
     @git pull
-# git reset and clean - unstage any changes and revert your working directory to the last commit,remove any untracked files and directories. Used to resolve conflicts due to syncthing
-repo-conflict-nuke:
+
+# Hard reset with cleanup
+[group('git')]
+reset-hard:
+    @echo "⚠️  Hard reset with file cleanup..."
+    @git fetch
     @git reset --hard HEAD
     @git clean -fd
     @git pull
-# Show commands to inspect config
-inspect:
-    @echo "to find values to use in config:"
-    @echo 'IE - ${config.users.users.arthur.home}'
-    @echo "==================================="
-    @helpers/nix-repl.sh
 
-# Update Hardware Firmware
-run-fwup:
-    # @sudo fwupdmgr refresh --force?
-    @sudo fwupdmgr get-updates || true
-    @sudo fwupdmgr update || true
-# Update Flake
-upgrade-system:
-    #ulimit -n 4096
-    @cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
-    @nix flake update
-    @sudo nixos-rebuild switch --impure --upgrade --flake .#\{{`hostname`}} --show-trace
-# Change Log - 7 Days
-changelog-7d:
-    @echo "==================================="
-    @echo "Total commits in the last 7 days:"
-    @git rev-list --count --since="7 days ago" HEAD
-    @echo "==================================="
-    @git log --since="7 days ago" --pretty=full
-# Change Log - 2 Days
-changelog-2d:
-    @echo "==================================="
-    @echo "Total commits in the last 2 days:"
-    @git rev-list --count --since="2 days ago" HEAD
-    @echo "==================================="
-    @git log --since="2 days ago" --pretty=full
-# Change Log - 10 Commits
-changelog-10:
-    @git log -n 10 --pretty=full
-# Change Log - 7 Day Summary
-changelog-7d-summary:
-    @echo "==================================="
-    @echo "Total commits in the last 7 days:"
-    @git rev-list --count --since="7 days ago" HEAD
-    @echo "==================================="
-    @git log --since="7 days ago" --pretty=format:"%h - %s"
-# Change Log - 2 Day Summary
-changelog-2d-summary:
-    @echo "==================================="
-    @echo "Total commits in the last 2 days:"
-    @git rev-list --count --since="2 days ago" HEAD
-    @echo "==================================="
-    @git log --since="2 days ago" --pretty=format:"%h - %s"
-# Change Log - 10 Commit Summary
-changelog-10-summary:
-    @git log -n 10 --pretty=format:"%h - %s"
-# Change Log - 7 Day Summary
-changelog-7d-count:
-    @echo "==================================="
-    @echo "Total commits in the last 7 days:"
-    @git rev-list --count --since="7 days ago" HEAD
-    @echo "==================================="
-# Change Log - 2 Day Summary
-changelog-2d-count:
-    @echo "==================================="
-    @echo "Total commits in the last 2 days:"
-    @git rev-list --count --since="2 days ago" HEAD
-    @echo "==================================="
-# Get system Info for Nix related Issues
-nix-system-info:
-    @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
-
-# === Ubuntu/Home Manager Commands ===
-# Bootstrap home-manager and system-manager on Ubuntu - run this first on a new Ubuntu system
-ubuntu-bootstrap:
-    @git add -A
-    @echo "Setting up Nix configuration with helper script..."
-    @ubuntu/helpers/ubuntu-update-nix-conf.sh
-    @echo "Running home-manager bootstrap..."
-    @cd ubuntu && nix --option download-buffer-size 134217728 run home-manager/release-25.05 -- switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
-    @echo "Bootstrapping system-manager configuration..."
-    @cd ubuntu && sudo nix --option download-buffer-size 134217728 run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
-    @echo "Fixing SUID sandbox permissions..."
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-# Test home-manager and system-manager config without switching
-ubuntu-test:
-    @git add -A
-    @cd ubuntu && home-manager build --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
-    @cd ubuntu && nix run 'github:numtide/system-manager' -- build --flake .#\{{`hostname`}}
-# Switch to new home-manager and system-manager configuration
-ubuntu-rebuild:
-    @git add -A
-    @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}}
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}}
-    @echo "Fixing SUID sandbox permissions..."
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-# Switch to new home-manager and system-manager configuration with trace
-ubuntu-rebuild-trace:
-    @git add -A
-    @cd ubuntu && home-manager switch --impure --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
-    @cd ubuntu && sudo /nix/var/nix/profiles/default/bin/nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
-    @echo "Fixing SUID sandbox permissions..."
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-# Update flake and switch home-manager and system-manager
-ubuntu-upgrade-system:
-    @cd ubuntu && cp flake.lock flake.lock-pre-upg-$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)
-    @cd ubuntu && nix flake update
-    @cd ubuntu && home-manager switch --impure --upgrade --flake .#\{{`whoami`}}@\{{`hostname`}} --show-trace
-    @cd ubuntu && nix run 'github:numtide/system-manager' -- switch --flake .#\{{`hostname`}} --show-trace
-    @echo "Fixing SUID sandbox permissions..."
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-# Garbage collect home-manager generations and clear nix cache
-ubuntu-garbage:
-    @echo "Garbage collecting home-manager generations older than 5 days..."
-    @home-manager expire-generations "-5 days"
-    @echo "Garbage collecting nix store..."
-    @nix-collect-garbage --delete-older-than 5d
-    @echo "Optimizing nix store..."
-    @nix-store --optimise
-# Full garbage collection - remove all old generations and clear all caches
-ubuntu-garbage-full:
-    @echo "Removing all old home-manager generations..."
-    @home-manager expire-generations "-0 days"
-    @echo "Full garbage collection of nix store..."
-    @nix-collect-garbage -d
-    @echo "Optimizing nix store..."
-    @nix-store --optimise
-# Clean slate - remove all home-manager traces for fresh bootstrap (troubleshooting)
-ubuntu-clean-slate:
-    @echo "WARNING: This will remove ALL home-manager configurations and generations!"
-    @echo "Press Ctrl+C within 10 seconds to cancel..."
+# === Helper Commands ===
+# Full rebuild cycle with reboot
+[group('helpers')]
+rebuild-reboot:
+    @echo "🔄 Full rebuild cycle..."
+    @just clean-full
+    @just rebuild
+    @just clean-full
+    @echo "🔌 Rebooting in 10 seconds... (Ctrl+C to cancel)"
     @sleep 10
-    @echo "Removing home-manager state directory..."
-    @rm -rf ~/.local/state/home-manager || true
-    @echo "Removing home-manager generations..."
-    @nix run home-manager/release-25.05 -- expire-generations "-0 days" || true
-    @echo "Full garbage collection of nix store..."
-    @nix-collect-garbage -d
-    @echo "Optimizing nix store..."
-    @nix-store --optimise
-    @echo "Cleaning up any remaining home-manager links..."
-    @find ~ -type l -name ".*" -exec sh -c 'readlink "$1" | grep -q "/nix/store" && rm -f "$1"' _ {} \; 2>/dev/null || true
-    @echo "Clean slate complete! Run 'just ubuntu-bootstrap' to start fresh."
+    @sudo reboot
+
+# Show config inspection examples
+[group('helpers')]
+inspect:
+    @echo "🔍 Config inspection examples:"
+    @echo "nix eval .#nixosConfigurations.{{hostname}}.config.users.users --json"
+    @echo "nix eval .#nixosConfigurations.{{hostname}}.options.services --json"
+    @echo "================================"
+    @if [ -f helpers/nix-repl.sh ]; then helpers/nix-repl.sh; fi
+
+# === Ubuntu Commands ===
+# Bootstrap Ubuntu with home-manager
+[group('ubuntu')]
+ubuntu-init:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🐧 Bootstrapping Ubuntu system..."
+    git add -A
+    ubuntu/helpers/ubuntu-update-nix-conf.sh
+    cd ubuntu && nix run home-manager/release-25.05 -- switch --impure --flake .#$(whoami)@{{hostname}}
+    cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
+    sudo ubuntu/helpers/fix-suid-permissions.sh
+
+# Ubuntu rebuild with optional trace
+[group('ubuntu')]
+ubuntu-rebuild trace="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    git add -A
+    if [[ "{{trace}}" == "true" ]]; then
+        echo "🔧 Ubuntu rebuild with trace..."
+        cd ubuntu && home-manager switch --impure --flake .#$(whoami)@{{hostname}} --show-trace
+        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}} --show-trace
+    else
+        echo "🔧 Ubuntu rebuild..."
+        cd ubuntu && home-manager switch --impure --flake .#$(whoami)@{{hostname}}
+        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
+    fi
+    sudo ubuntu/helpers/fix-suid-permissions.sh
+
+# Ubuntu cleanup with options
+[group('ubuntu')]
+ubuntu-clean full="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ "{{full}}" == "true" ]]; then
+        echo "🧹 Ubuntu full cleanup..."
+        home-manager expire-generations "-0 days"
+        nix-collect-garbage -d
+    else
+        echo "🧹 Ubuntu cleanup (5 days)..."
+        home-manager expire-generations "-5 days"
+        nix-collect-garbage --delete-older-than 5d
+    fi
+    nix-store --optimise
+
+# Emergency Ubuntu reset
+[group('ubuntu')]
+ubuntu-reset:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "⚠️  WARNING: This removes ALL home-manager configurations!"
+    echo "Press Enter to continue or Ctrl+C to cancel..."
+    read -r
+    rm -rf ~/.local/state/home-manager || true
+    nix run home-manager/release-25.05 -- expire-generations "-0 days" || true
+    nix-collect-garbage -d
+    nix-store --optimise
+    find ~ -type l -name ".*" -exec sh -c 'readlink "$1" | grep -q "/nix/store" && rm -f "$1"' _ {} \; 2>/dev/null || true
+    echo "✅ Reset complete! Run 'just ubuntu-init' to start fresh."
+
+# === Workflow Aliases ===
+alias c := check
+alias t := test  
+alias b := build
+alias r := rebuild
+alias up := upgrade
+alias gc := clean
+alias l := log

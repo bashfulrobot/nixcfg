@@ -53,7 +53,7 @@ in
       eza # ls and exa alternative
       btop # top alternative
       pass # password manager
-			wcurl #curl wget wrapper
+      # wcurl removed in unstable - bundled with curl now
     ];
 
     programs = {

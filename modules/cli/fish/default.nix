@@ -512,7 +512,7 @@ let
     gos = "cd ~/Documents/Scratch/";
     gon = "cd ~/dev/nix/nixcfg";
     gon-e = "cd ~/dev/nix/nixcfg && code -r .";
-    do-update = "gon && git pull && just upgrade-system && git add -A && git commit -S && git push";
+    do-update = "gon && git pull && just upgrade && git add -A && git commit -S && git push";
     goscreen = "cd ~/Pictures/Screenshots/";
     # y = "cd ~/; yazi";
     e = "hx";
@@ -539,9 +539,9 @@ let
     yless = "${pkgs.jless}/bin/jless --yaml";
     rebuild-mac = "clear && echo;echo '***** UPDATE VERSIONS PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just darwin-rebuild";
     rebuild = "clear && echo;echo '***** UPDATE APPIMAGES PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just rebuild";
-    upgrade = "clear && cd ~/dev/nix/nixcfg/; ${pkgs.just}/bin/just upgrade-system";
-    dev-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-rebuild";
-    test-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just dev-test";
+    upgrade = "clear && cd ~/dev/nix/nixcfg/; ${pkgs.just}/bin/just upgrade";
+    dev-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just build";
+    test-rebuild = "clear && cd ~/dev/nix/nixcfg/; rm -f ${user-settings.user.home}/.config/mimeapps.list && ${pkgs.just}/bin/just test";
     kubitect = "${pkgs.steam-run}/bin/steam-run /etc/profiles/per-user/dustin/bin/kubitect";
     comma-db = "nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'";
   };

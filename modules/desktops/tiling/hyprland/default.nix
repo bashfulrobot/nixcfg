@@ -10,7 +10,7 @@ let
   cfg = config.desktops.tiling.hyprland;
   inherit (lib) getExe getExe';
 
-  terminal = "alacritty";
+  terminal = "kitty";
   terminalFileManager = "ranger";
   browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
@@ -37,6 +37,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    # Enable alternate minimal waybar style
+    desktops.waybar.alternateStyle = true;
 
     # Enable D-Bus for proper desktop session integration
     services.dbus.enable = true;
@@ -156,7 +159,7 @@ in
 
     programs.nautilus-open-any-terminal = {
       enable = true;
-      terminal = "alacritty";
+      terminal = "kitty";
     };
 
     ##### Home Manager Config options #####
@@ -283,7 +286,7 @@ in
             gaps_out = 9;
             border_size = 2;
             "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.inactive_border" = lib.mkDefault "rgba(b4befecc) rgba(6c7086cc) 45deg";
+            "col.inactive_border" = lib.mkForce config.lib.stylix.colors.withHashtag.base00;
             resize_on_border = true;
             layout = "dwindle"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)

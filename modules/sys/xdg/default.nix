@@ -60,7 +60,7 @@ in
             "x-scheme-handler/slack" = [ "slack.desktop" ];
             # "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
             "x-scheme-handler/webcal" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/terminal" = [ "alacritty.desktop" ];
+            "x-scheme-handler/terminal" = [ "kitty.desktop" ];
           };
         };
       };

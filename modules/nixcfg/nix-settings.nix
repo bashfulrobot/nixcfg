@@ -43,6 +43,19 @@ in {
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         ];
         download-buffer-size = 1024 * 1024 * 1024;
+        # Performance optimizations for faster rebuilds
+        keep-outputs = true;
+        keep-derivations = true;
+        builders-use-substitutes = true;
+        # Additional performance settings
+        eval-cache = true;
+        narinfo-cache-positive-ttl = 3600;
+        narinfo-cache-negative-ttl = 60;
+        fsync-metadata = false;  # Faster on SSDs
+        connect-timeout = 10;    # Faster timeout handling
+        max-substitution-jobs = 16;  # Parallel downloads
+        keep-build-log = false;  # Reduce storage overhead
+        compress-build-log = true;
       };
       # Automatic Garbage Collection
       # Disbaled in favour of NH garbage cleaning.

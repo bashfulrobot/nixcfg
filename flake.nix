@@ -65,11 +65,11 @@
 
       workstationOverlays = [ overlay-unstable ];
 
-      secrets =
-        builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
-
-      user-settings =
-        builtins.fromJSON (builtins.readFile "${self}/settings/settings.json");
+      # Pre-compute JSON files once for better performance
+      secretsFile = "${self}/secrets/secrets.json";
+      settingsFile = "${self}/settings/settings.json";
+      secrets = builtins.fromJSON (builtins.readFile secretsFile);
+      user-settings = builtins.fromJSON (builtins.readFile settingsFile);
 
       commonModules = [
         nix-flatpak.nixosModules.nix-flatpak

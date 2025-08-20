@@ -22,7 +22,7 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      unstable.gnomeExtensions.tiling-shell
+      gnomeExtensions.tiling-shell
       gnomeExtensions.vscode-search-provider
       gnomeExtensions.window-calls
       gnomeExtensions.quick-settings-audio-panel

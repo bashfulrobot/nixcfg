@@ -14,7 +14,7 @@ in {
 
     environment.systemPackages = with pkgs; [
 
-      unstable.go
+      go
     ];
     home-manager.users."${user-settings.user.username}" = {
 

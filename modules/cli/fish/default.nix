@@ -654,7 +654,6 @@ in
 
           };
         };
-        yazi.enableFishIntegration = true;
         nix-index.enableFishIntegration = true;
         eza.enableFishIntegration = true;
         autojump.enableFishIntegration = false;

@@ -14,18 +14,17 @@ in {
 
     cli = {
       spotify.enable = true;
-      comics-downloader.enable = true;
     };
 
     environment.systemPackages = with pkgs;
       [
         # transmission_4
         # deluge-gtk
-        unstable.vlc # media player
+        vlc # media player
         # foliate # ebook reader
         # mplayer # Video player
         # spotdl # Spotify downloader
-        unstable.mpv # Video player
+        mpv # Video player
       ];
   };
 }

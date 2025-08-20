@@ -24,7 +24,7 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      (unstable.vivaldi.override {
+      (vivaldi.override {
         proprietaryCodecs = true;
         inherit (unstable) vivaldi-ffmpeg-codecs;
         enableWidevine = true; # Seen some reports that can cause a crash

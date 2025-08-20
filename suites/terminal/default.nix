@@ -20,20 +20,13 @@ in
 
   config = lib.mkIf cfg.enable {
     cli = {
-      alacritty.enable = false;
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;
       zellij.enable = true;
-      yazi.enable = true;
       ranger.enable = true;
-      foot.enable = false;
-      blackbox.enable = false;
-      ghostty.enable = false;
-      ntf.enable = true;
       xkill.enable = true;
       kitty.enable = true;
-      wezterm.enable = false;
     };
 
     # A fuse filesystem that dynamically populates contents of /bin and /usr/bin/ so that it contains all executables from the PATH of the requesting process. This allows executing FHS based programs on a non-FHS system. For example, this is useful to execute shebangs on NixOS that assume hard coded locations like /bin or /usr/bin etc.
@@ -53,7 +46,6 @@ in
       eza # ls and exa alternative
       btop # top alternative
       pass # password manager
-      # wcurl removed in unstable - bundled with curl now
     ];
 
     programs = {

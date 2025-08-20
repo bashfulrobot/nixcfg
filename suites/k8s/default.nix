@@ -35,20 +35,20 @@ in
       # argocd-autopilot # https://argocd-autopilot.readthedocs.io/en/stable/
       # argocd # Gitops - cli
       # kubeone # Kubernetes cluster management
-      unstable.talosctl # Talos OS management tool - diabled until https://github.com/NixOS/nixpkgs/issues/264127 is fixed.
+      talosctl # Talos OS management tool - diabled until https://github.com/NixOS/nixpkgs/issues/264127 is fixed.
       # kompose # Kubernetes container orchestration
       # vultr-cli # Vultr cloud management
-      unstable.kubectl # Kubernetes command-line tool
+      kubectl # Kubernetes command-line tool
       # kubectx # Kubernetes context switcher TODO: RE-enable
       kubecolor # colorize kubectl output
       kubernetes-helm # Kubernetes package manager
       # butane # flatcar/ignition configuration
-      unstable.minikube # Local k8s cluster
+      minikube # Local k8s cluster
       ktop # K8s top command
-      unstable.krew
-      unstable.kubelogin-oidc # OIDC login for kubectl
-      unstable.kubelogin
-      unstable.omnictl # Omni CLI
+      krew
+      kubelogin-oidc # OIDC login for kubectl
+      kubelogin
+      omnictl # Omni CLI
     ];
 
     services.flatpak.packages = [

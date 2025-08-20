@@ -27,8 +27,8 @@ in {
       channel.enable = false;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        max-jobs = 4;
-        cores = 4;
+        max-jobs = 8;
+        cores = 16;
         http-connections = 50;
         warn-dirty = false;
         log-lines = 50;
@@ -37,12 +37,26 @@ in {
         auto-optimise-store = true;
         trusted-users = users;
         allowed-users = users;
-        # Cachix - https://wiki.hyprland.org/nix/cachix/
-        substituters = [ "https://hyprland.cachix.org" ];
+        # Binary caches for faster builds
+        substituters = [
+          "https://cache.nixos.org/"
+          "https://nix-community.cachix.org"
+          "https://nixpkgs-unfree.cachix.org"
+          "https://devenv.cachix.org"
+          "https://hyprland.cachix.org"
+        ];
         trusted-public-keys = [
+          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
+          "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         ];
         download-buffer-size = 1024 * 1024 * 1024;
+        # Performance optimizations for faster rebuilds
+        keep-outputs = true;
+        keep-derivations = true;
+        builders-use-substitutes = true;
       };
       # Automatic Garbage Collection
       # Disbaled in favour of NH garbage cleaning.

@@ -1,7 +1,7 @@
 { user-settings, lib, pkgs, config, ... }:
-let 
+let
   cfg = config.cli.claude-code;
-  
+
   commit-script = pkgs.writeShellApplication {
     name = "commit";
     runtimeInputs = with pkgs; [ git ];
@@ -18,7 +18,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.claude-code
+      claude-code
       commit-script
     ];
 

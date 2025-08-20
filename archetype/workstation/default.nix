@@ -24,11 +24,11 @@ in {
     };
 
     suites = {
-      content-creation.enable = false;
       dev.enable = true;
       entertainment.enable = true;
       infrastructure.enable = true;
       k8s.enable = true;
+      kong.enable = true;
       offcoms.enable = true;
       terminal.enable = true;
       utilities.enable = true;

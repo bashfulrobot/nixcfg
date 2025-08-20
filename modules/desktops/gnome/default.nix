@@ -16,12 +16,16 @@ in {
       # dbus.packages = [ pkgs.gcr ];
       # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/2?u=brnix
       # pcscd.enable = true;
+      
+      # Display manager (moved out of xserver)
+      displayManager.gdm.enable = true;
+      
+      # Desktop manager (moved out of xserver)
+      desktopManager.gnome.enable = true;
+      
       xserver = {
         # Enable the X11 windowing system.
         enable = true;
-        # Enable the GNOME Desktop Environment.
-        displayManager.gdm.enable = true;
-        desktopManager.gnome.enable = true;
         # Configure keymap in X11
         xkb = {
           layout = "us";

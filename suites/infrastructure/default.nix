@@ -35,7 +35,7 @@ in
       aws-iam-authenticator # AWS IAM authentication tool
 
       #  --- IAS
-      unstable.terraform # infrastructure as code tools
+      terraform # infrastructure as code tools
       cloud-utils # cloud management utilities
       cdrtools # mkisofs needed for cloud-init
       libxslt # A C library and tools to do XSL transformations - needed in my terraform scripts
@@ -47,7 +47,7 @@ in
       # --- Other
       ctop # container process monitoring
       wakeonlan
-      unstable.lazyjournal # TUI Logging
+      lazyjournal # TUI Logging
     ];
   };
 }

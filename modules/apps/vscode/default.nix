@@ -13,7 +13,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.vscode
+      vscode
     ];
     home-manager.users."${user-settings.user.username}" = {
       home.file.".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
@@ -29,7 +29,7 @@ in {
           path = "./themes/stylix.json";
         }];
       };
-      
+
       home.file.".vscode/extensions/stylix-theme/themes/stylix.json".text = lib.mkIf (config.stylix.enable or false) (builtins.toJSON {
         name = "Stylix";
         type = "dark";
@@ -61,7 +61,7 @@ in {
           "editorWarning.foreground" = "#${colors.base0A}";
           "editorInfo.foreground" = "#${colors.base0D}";
           "editorHint.foreground" = "#${colors.base0C}";
-          
+
           # Workbench colors
           "activityBar.background" = "#${colors.base00}";
           "activityBar.foreground" = "#${colors.base05}";
@@ -70,30 +70,30 @@ in {
           "activityBarBadge.foreground" = "#${colors.base00}";
           "activityBar.activeBorder" = "#${colors.base0D}";
           "activityBar.activeBackground" = "#${colors.base01}";
-          
+
           "sideBar.background" = "#${colors.base00}";
           "sideBar.foreground" = "#${colors.base05}";
           "sideBar.border" = "#${colors.base01}";
           "sideBarTitle.foreground" = "#${colors.base05}";
           "sideBarSectionHeader.background" = "#${colors.base01}";
           "sideBarSectionHeader.foreground" = "#${colors.base05}";
-          
+
           "statusBar.background" = "#${colors.base02}";
           "statusBar.foreground" = "#${colors.base04}";
           "statusBar.debuggingBackground" = "#${colors.base08}";
           "statusBar.debuggingForeground" = "#${colors.base00}";
           "statusBar.noFolderBackground" = "#${colors.base0E}";
           "statusBar.noFolderForeground" = "#${colors.base00}";
-          
+
           "titleBar.activeBackground" = "#${colors.base01}";
           "titleBar.activeForeground" = "#${colors.base05}";
           "titleBar.inactiveBackground" = "#${colors.base00}";
           "titleBar.inactiveForeground" = "#${colors.base03}";
-          
+
           # Panel colors
           "panel.background" = "#${colors.base00}";
           "panel.border" = "#${colors.base02}";
-          
+
           # Tab colors
           "tab.activeBackground" = "#${colors.base00}";
           "tab.activeForeground" = "#${colors.base05}";
@@ -115,7 +115,7 @@ in {
           "dropdown.background" = "#${colors.base01}";
           "dropdown.foreground" = "#${colors.base05}";
           "dropdown.border" = "#${colors.base02}";
-          
+
           # List and tree colors
           "list.activeSelectionBackground" = "#${colors.base0D}40";
           "list.activeSelectionForeground" = "#${colors.base07}";
@@ -126,13 +126,13 @@ in {
           "list.focusForeground" = "#${colors.base05}";
           "list.focusOutline" = "#${colors.base0D}";
           "list.highlightForeground" = "#${colors.base0D}";
-          
+
           # Terminal colors
           "terminal.background" = "#${colors.base00}";
           "terminal.foreground" = "#${colors.base05}";
           "terminal.selectionBackground" = "#${colors.base02}80";
           "terminal.border" = "#${colors.base02}";
-          
+
           # ANSI colors
           "terminal.ansiBlack" = "#${colors.base00}";
           "terminal.ansiRed" = "#${colors.base08}";
@@ -142,7 +142,7 @@ in {
           "terminal.ansiMagenta" = "#${colors.base0E}";
           "terminal.ansiCyan" = "#${colors.base0C}";
           "terminal.ansiWhite" = "#${colors.base05}";
-          
+
           # Bright ANSI colors
           "terminal.ansiBrightBlack" = "#${colors.base03}";
           "terminal.ansiBrightRed" = "#${colors.base08}";

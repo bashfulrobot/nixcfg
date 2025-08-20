@@ -58,8 +58,8 @@ in
         size = 24;
       };
 
-      # Qt platform configuration - use gnome for native GNOME integration
-      targets.qt.platform = lib.mkForce "gnome";
+      # Qt platform configuration - use qtct (only supported option by stylix)
+      targets.qt.platform = lib.mkForce "qtct";
       
       # Disable Plymouth targeting to avoid missing theme files
       targets.plymouth.enable = lib.mkForce false;

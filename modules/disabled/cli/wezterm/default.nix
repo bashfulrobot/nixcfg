@@ -32,7 +32,7 @@ in
 
       programs.wezterm = {
         enable = true;
-        package = pkgs.unstable.wezterm;
+        package = pkgs.wezterm;
         
 
         extraConfig = ''

@@ -14,40 +14,40 @@ let
     "ubuntu"
   ];
 
-  # Recursively constructs an attrset of a given folder, recursing on directories
-  getDir = dir:
-    mapAttrs
-    (file: type: if type == "directory" then getDir "${dir}/${file}" else type)
-    (builtins.readDir dir);
+  # Fast recursive file discovery - single traversal
+  findNixFiles = dir: 
+    let
+      readDirFast = path:
+        let entries = builtins.readDir path; in
+        concatLists (mapAttrsToList (name: type:
+          let fullPath = "${path}/${name}"; in
+          if type == "directory" && !(any (pattern: hasInfix pattern name) defaultExcludes)
+          then readDirFast fullPath
+          else if type == "regular" && hasSuffix ".nix" name && name != "imports.nix"
+          then [ (removePrefix "${toString dir}/" fullPath) ]
+          else []
+        ) entries);
+    in readDirFast (toString dir);
 
-  # Collects all files of a directory as a list of strings of paths
-  files = dir:
-    collect isString
-    (mapAttrsRecursive (path: type: concatStringsSep "/" path) (getDir dir));
-
-  # Core autoimport function
-  # dir: directory to import from (path)
-  # extraExcludes: additional patterns to exclude (list of strings)
-  # trace: whether to enable trace output for debugging (bool)
+  # Optimized autoimport function with single traversal
   autoImport = dir: extraExcludes: trace:
     let
       allExcludes = defaultExcludes ++ extraExcludes;
+      nixFiles = findNixFiles dir;
       
-      validFiles = map (file: dir + "/${file}") 
-        (filter (file:
-          # Check if file should be excluded
-          !(any (pattern: hasInfix pattern file) allExcludes) &&
-          # Must be a .nix file
-          hasSuffix ".nix" file &&
-          # Don't import imports.nix itself  
-          file != "imports.nix"
-        ) (files dir));
+      # Filter out additional exclusions (already filtered defaults and .nix requirements)
+      validFiles = filter (file: 
+        !(any (pattern: hasInfix pattern file) extraExcludes)
+      ) nixFiles;
+      
+      # Convert to full paths
+      fullPaths = map (file: dir + "/${file}") validFiles;
 
       tracedFiles = if trace then
         map (file: 
-          builtins.trace "Importing ${file} from ${builtins.dirOf file}" file
-        ) validFiles
-      else validFiles;
+          builtins.trace "Importing ${file}" file
+        ) fullPaths
+      else fullPaths;
     in
       { imports = tracedFiles; };
 

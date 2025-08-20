@@ -21,7 +21,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ unstable.opencommit ];
+    environment.systemPackages = with pkgs; [ opencommit ];
 
     home-manager.users."${user-settings.user.username}" = {
       home.file.".opencommit".text = ''

@@ -44,7 +44,7 @@ in
         libreoffice # office document preview
         mediainfo # media file info
         ouch # archive extraction
-        unstable.poppler-utils # PDF handling
+        poppler-utils # PDF handling
         ripdrag # drag and drop
         trash-cli # trash support
         udisks # mount support

@@ -14,23 +14,26 @@ in
     suites.kong.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable kong specific tools.";
+      description = "Enable Kong tooling..";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    cli = { };
-
-    apps = {
-      # crowdstrike.enable = true;
-    };
 
     environment.systemPackages = with pkgs; [
-
+      google-cloud-sdk # Google Cloud SDK
+      insomnia # API client - TODO: needs an update. Learn how to version bump
     ];
 
-    home-manager.users."${user-settings.user.username}" = {
+    services.flatpak.packages = [
 
+    ];
+    home-manager.users."${user-settings.user.username}" = {
+      programs = {
+        k9s = {
+          enable = true;
+        };
+      };
     };
   };
 }

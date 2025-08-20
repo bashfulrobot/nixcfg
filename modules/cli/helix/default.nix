@@ -11,7 +11,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.helix ];
+    environment.systemPackages = with pkgs; [ helix ];
 
     # Set editor globally
     environment.variables = { EDITOR = "hx"; };
@@ -22,23 +22,23 @@ in {
 
         enable = true;
         defaultEditor = true;
-        package = pkgs.unstable.helix;
+        package = pkgs.helix;
 
         extraPackages = with pkgs; [
           # copilot
-          unstable.helix-gpt
+          helix-gpt
           # nix
-          unstable.nixfmt-rfc-style
-          unstable.nixd
-          unstable.statix
+          nixfmt-rfc-style
+          nixd
+          statix
           # markdown
-          unstable.marksman
+          marksman
           # Go
-          unstable.gopls
-          unstable.golangci-lint-langserver
-          unstable.delve
+          gopls
+          golangci-lint-langserver
+          delve
           #yaml
-          unstable.yaml-language-server
+          yaml-language-server
 
         ];
 
@@ -64,7 +64,7 @@ in {
               name = "nix";
               auto-format = true;
               formatter.command =
-                "${pkgs.unstable.nixfmt-rfc-style}/bin/nixfmt";
+                "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
               language-servers = [ "nixd" "statix" ];
             }
             {

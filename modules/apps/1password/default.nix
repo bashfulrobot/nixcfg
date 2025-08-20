@@ -33,11 +33,11 @@ in {
     programs = {
       _1password = {
         enable = true;
-        package = pkgs.unstable._1password-cli;
+        package = pkgs._1password-cli;
       };
       _1password-gui = {
         enable = true;
-        package = pkgs.unstable._1password-gui;
+        package = pkgs._1password-gui;
         # polkitPolicyOwners = [ "${user-settings.user.username}" ];
         polkitPolicyOwners = [ "dustin" ];
         # polkitPolicyOwners = config.users.groups.wheel.members;

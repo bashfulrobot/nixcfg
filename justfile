@@ -3,7 +3,7 @@
 
 # === Settings ===
 set dotenv-load := true
-set ignore-comments := true  
+set ignore-comments := true
 set fallback := true
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -19,7 +19,7 @@ default:
     @just --list --unsorted
 
 # === Development Commands ===
-# Fast syntax validation without building  
+# Fast syntax validation without building
 [group('dev')]
 check:
     #!/usr/bin/env bash
@@ -29,7 +29,7 @@ check:
     nix flake check --show-trace
 
 # Dry run build test
-[group('dev')]  
+[group('dev')]
 test:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -46,10 +46,10 @@ build trace="false":
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
         just clean-full
-        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
     else
         echo "🔧 Development rebuild..."
-        sudo nixos-rebuild switch --impure --flake {{host_flake}}
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}}
     fi
 
 # === Production Commands ===
@@ -70,10 +70,10 @@ rebuild trace="false":
 [group('dev')]
 vm:
     @echo "🖥️  Building VM..."
-    @sudo nixos-rebuild build-vm --impure --flake {{host_flake}} --show-trace
+    @sudo nixos-rebuild build-vm --fast --impure --flake {{host_flake}} --show-trace
 
 # Full system upgrade
-[group('prod')]  
+[group('prod')]
 upgrade:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -178,70 +178,9 @@ inspect:
     @echo "================================"
     @if [ -f helpers/nix-repl.sh ]; then helpers/nix-repl.sh; fi
 
-# === Ubuntu Commands ===
-# Bootstrap Ubuntu with home-manager
-[group('ubuntu')]
-ubuntu-init:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "🐧 Bootstrapping Ubuntu system..."
-    git add -A
-    ubuntu/helpers/ubuntu-update-nix-conf.sh
-    cd ubuntu && nix run home-manager/release-25.05 -- switch --impure --flake .#$(whoami)@{{hostname}}
-    cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
-    sudo ubuntu/helpers/fix-suid-permissions.sh
-
-# Ubuntu rebuild with optional trace
-[group('ubuntu')]
-ubuntu-rebuild trace="false":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    git add -A
-    if [[ "{{trace}}" == "true" ]]; then
-        echo "🔧 Ubuntu rebuild with trace..."
-        cd ubuntu && home-manager switch --impure --flake .#$(whoami)@{{hostname}} --show-trace
-        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}} --show-trace
-    else
-        echo "🔧 Ubuntu rebuild..."
-        cd ubuntu && home-manager switch --impure --flake .#$(whoami)@{{hostname}}
-        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
-    fi
-    sudo ubuntu/helpers/fix-suid-permissions.sh
-
-# Ubuntu cleanup with options
-[group('ubuntu')]
-ubuntu-clean full="false":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    if [[ "{{full}}" == "true" ]]; then
-        echo "🧹 Ubuntu full cleanup..."
-        home-manager expire-generations "-0 days"
-        nix-collect-garbage -d
-    else
-        echo "🧹 Ubuntu cleanup (5 days)..."
-        home-manager expire-generations "-5 days"
-        nix-collect-garbage --delete-older-than 5d
-    fi
-    nix-store --optimise
-
-# Emergency Ubuntu reset
-[group('ubuntu')]
-ubuntu-reset:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "⚠️  WARNING: This removes ALL home-manager configurations!"
-    echo "Press Enter to continue or Ctrl+C to cancel..."
-    read -r
-    rm -rf ~/.local/state/home-manager || true
-    nix run home-manager/release-25.05 -- expire-generations "-0 days" || true
-    nix-collect-garbage -d
-    nix-store --optimise
-    find ~ -type l -name ".*" -exec sh -c 'readlink "$1" | grep -q "/nix/store" && rm -f "$1"' _ {} \; 2>/dev/null || true
-    echo "✅ Reset complete! Run 'just ubuntu-init' to start fresh."
-
 # === Workflow Aliases ===
 alias c := check
-alias t := test  
+alias t := test
 alias b := build
 alias r := rebuild
 alias up := upgrade

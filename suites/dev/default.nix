@@ -21,8 +21,6 @@ in
   config = lib.mkIf cfg.enable {
     dev = {
         go.enable = true;
-      #   npm.enable = true;
-      #   python.enable = true;
       nix.enable = true;
     };
 
@@ -39,8 +37,6 @@ in
     cli = {
       direnv.enable = true;
       git.enable = true;
-      nixvim.enable = false;
-      opencommit.enable = true;
       helix.enable = true;
       claude-code.enable = true;
     };
@@ -50,17 +46,18 @@ in
       awscli2
       ffuf
       just # command runner
-      unstable.doppler # secret management tool
+      doppler # secret management tool
       shadowenv # environment variable manager
       shfmt # shell script formatter
       jnv # json filtering with jq
       zed-editor # text editor
       markdown-oxide # Zed support
       nil # nix language server for Zed
-      # unstable.jetbrains.goland # Go IDE
-      unstable.pre-commit # pre-commit hooks
-      unstable.helix # text editor
-      unstable.gemini-cli # Gemini CLI client
+      # jetbrains.goland # Go IDE
+      pre-commit # pre-commit hooks
+      helix # text editor
+      gemini-cli # Gemini CLI client
+      nix-fast-build # parallel nix evaluation
     ];
 
     # programs = { jqp = { enable = true; }; };

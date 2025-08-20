@@ -37,15 +37,12 @@ in
       one-password.enable = true;
       obsidian.enable = true;
       chrome-based-browser.enable = true;
-      vivaldi.enable = false;
-      zen-browser.enable = false;
       gcal-br.enable = true;
       gmail-br.enable = true;
       br-drive.enable = true;
     };
 
     cli = {
-      note.enable = true;
       espanso.enable = true;
       claude-code.enable = true;
     };
@@ -70,27 +67,27 @@ in
 
       # Organize
       # morgen # AI calendar - testing
-      unstable.todoist-electron # task manager
+      todoist-electron # task manager
       # planify
 
       # Communications & AI
       inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support
 
-      unstable.zoom-us
+      zoom-us
 
       # # IM
       # fractal # Matrix Client
-      unstable.slack # instant messaging
+      slack # instant messaging
       whatsapp-for-linux # instant messaging
-      unstable.signal-desktop # instant messaging
-      unstable.zulip
+      signal-desktop # instant messaging
+      zulip
       # element-desktop # Matrix Client
 
       # Email
-      unstable.meli # terminal email client
+      meli # terminal email client
       gmailctl # cli to write gmail filters as code
       # thunderbird # email client
-      # unstable.evolutionWithPlugins
+      # evolutionWithPlugins
       # mailspring # email client
       #geary # email reader
 
@@ -98,7 +95,7 @@ in
       # lan-mouse # software kvm
 
       # Networking
-      unstable.wgnord
+      wgnord
     ];
 
     services.flatpak.packages = [

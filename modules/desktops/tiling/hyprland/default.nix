@@ -87,19 +87,16 @@ in
     # GNOME Keyring is now started automatically by PAM during login
     # This ensures proper unlock integration with GDM password authentication
     services = {
-      displayManager.defaultSession = "hyprland";
+      displayManager = {
+        defaultSession = "hyprland";
+        gdm = {
+          enable = true;
+          wayland = true;
+        };
+      };
       xserver = {
         enable = true;
-        displayManager = {
-          # sddm = {
-          #   enable = true;
-          #   wayland.enable = true;
-          # };
-          gdm = {
-            enable = true;
-            wayland = true;
-          };
-        };
+        # displayManager moved out of xserver in unstable
       };
       blueman.enable = true;
     };

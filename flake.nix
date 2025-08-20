@@ -7,13 +7,9 @@
     nixos-hardware = { url = "github:NixOS/nixos-hardware/master"; };
     nixos-hardware-fork = { url = "github:bashfulrobot/nixos-hardware/master"; };
     nix-flatpak = { url = "github:gmodena/nix-flatpak"; };
-    flake-utils = { url = "github:numtide/flake-utils"; };
     claude-desktop = {
       url = "github:k3d3/claude-desktop-linux-flake";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -49,7 +45,7 @@
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-flatpak, flake-utils, claude-desktop
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-flatpak, claude-desktop
     , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
     let
       workstationOverlays = [ ];

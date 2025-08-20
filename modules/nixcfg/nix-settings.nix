@@ -57,6 +57,15 @@ in {
         keep-outputs = true;
         keep-derivations = true;
         builders-use-substitutes = true;
+        # Additional performance settings
+        eval-cache = true;
+        narinfo-cache-positive-ttl = 3600;
+        narinfo-cache-negative-ttl = 60;
+        fsync-metadata = false;  # Faster on SSDs
+        connect-timeout = 10;    # Faster timeout handling
+        max-substitution-jobs = 16;  # Parallel downloads
+        keep-build-log = false;  # Reduce storage overhead
+        compress-build-log = true;
       };
       # Automatic Garbage Collection
       # Disbaled in favour of NH garbage cleaning.

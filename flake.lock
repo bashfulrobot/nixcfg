@@ -106,9 +106,7 @@
     },
     "claude-desktop": {
       "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
+        "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -905,7 +903,6 @@
       "inputs": {
         "claude-desktop": "claude-desktop",
         "disko": "disko",
-        "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "hyprflake": "hyprflake",
         "nix-flatpak": "nix-flatpak",

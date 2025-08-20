@@ -10,9 +10,9 @@
         "release": "25.05"
     },
     "theme": {
-        "personal-wallpaper": "blue-pxfuel.jpg",
+        "personal-wallpaper": "robot-bar.png",
         "professional-wallpaper": "urban-mini-kong.png",
-        "personal-plymouth-background": "blue-pxfuel.jpg",
+        "personal-plymouth-background": "robot-bar.png",
         "professional-plymouth-background": "400px-kong-logo-tsp.png"
     }
 }

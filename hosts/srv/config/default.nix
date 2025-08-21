@@ -4,7 +4,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./kvm-routing.nix
-    ./lid-power.nix
     ./nfs-srv.nix
     ./restic.nix
     ./services.nix
@@ -38,6 +37,9 @@
     insecure-packages.enable = true;
     nix-settings.enable = true;
   };
+
+  # Enable clamshell mode
+  sys.power.clamshell = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

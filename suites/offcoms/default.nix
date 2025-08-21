@@ -36,10 +36,9 @@ in
     apps = {
       one-password.enable = true;
       obsidian.enable = true;
-      chrome-based-browser.enable = true;
-      gcal-br.enable = true;
-      gmail-br.enable = true;
-      br-drive.enable = true;
+      chrome-based-browser.enable = false;
+      google-chrome.enable = false;
+      brave.enable = true;
     };
 
     cli = {
@@ -71,7 +70,7 @@ in
       # planify
 
       # Communications & AI
-      inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support
+      # inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support - temporarily disabled due to hash mismatch
 
       zoom-us
 

@@ -23,8 +23,8 @@ in {
     ];
 
     home-manager.users."${user-settings.user.username}" = {
-      xdg.configFile."claude/CLAUDE.md".source = ./CLAUDE.md;
-      xdg.configFile."claude/commands/commit.md".text = ''
+      home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
+      home.file.".claude/commands/commit.md".text = ''
         ---
         description: Create conventional commits with emoji and optional push, tagging, or GitHub releases
         allowed-tools: ["Bash", "Grep", "Read"]

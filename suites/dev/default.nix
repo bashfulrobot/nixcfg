@@ -61,6 +61,7 @@ in
       unstable.pre-commit # pre-commit hooks
       unstable.helix # text editor
       unstable.gemini-cli # Gemini CLI client
+      unstable.netlify-cli # Netlify CLI tool
     ];
 
     # programs = { jqp = { enable = true; }; };

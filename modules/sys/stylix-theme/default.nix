@@ -67,7 +67,7 @@ in
 
     # Install necessary packages for stylix functionality
     environment.systemPackages = with pkgs; [
-      imagemagick  # For color extraction from images
+      unstable.imagemagickBig  # For color extraction from images
       base16-schemes  # Base16 color schemes (fallback)
     ];
   };

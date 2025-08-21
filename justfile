@@ -1,195 +1,188 @@
-# Justfile for NixOS Configuration Management
-# Documentation: https://github.com/casey/just
+# NixOS Configuration Management
+# https://github.com/casey/just
 
 # === Settings ===
-set dotenv-load
-set ignore-comments
-set fallback
-set shell := ["bash", "-cu"]
+set dotenv-load := true
+set ignore-comments := true
+set fallback := true
+set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # === Variables ===
 hostname := `hostname`
 host_flake := ".#" + hostname
-trace_log := "~/dev/nix/nixcfg/rebuild-trace.log"
+trace_log := justfile_directory() + "/rebuild-trace.log"
+timestamp := `date +%Y-%m-%d_%H-%M-%S`
 
 # === Help ===
-_default:
-    @just --list --unsorted --list-prefix ····
+# Show available recipes
+default:
+    @just --list --unsorted
 
 # === Development Commands ===
-# Fast validation - syntax and options only (no building)
-dev-check:
-    @git add -A
-    @nix flake check --show-trace
-
-# Dry run build without bootloader changes
-dev-test:
-    @git add -A
-    @sudo nixos-rebuild dry-build --fast --impure --flake {{host_flake}}
-
-# Development rebuild (no bootloader)
-dev-rebuild trace="":
-    @git add -A
+# Fast syntax validation without building
+[group('dev')]
+check:
     #!/usr/bin/env bash
-    if [[ "{{trace}}" == "trace" ]]; then
-        just garbage-full
-        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace > {{trace_log}} 2>&1
+    set -euo pipefail
+    echo "🔍 Validating flake configuration..."
+    git add -A
+    nix flake check --show-trace
+
+# Dry run build test
+[group('dev')]
+test:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🧪 Testing build (dry run)..."
+    git add -A
+    sudo nixos-rebuild dry-build --fast --impure --flake {{host_flake}}
+
+# Development rebuild with optional trace
+[group('dev')]
+build trace="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    git add -A
+    if [[ "{{trace}}" == "true" ]]; then
+        echo "🔧 Development rebuild with trace..."
+        just clean-full
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
     else
-        sudo nixos-rebuild switch --impure --flake {{host_flake}}
+        echo "🔧 Development rebuild..."
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}}
     fi
 
 # === Production Commands ===
 # Production rebuild with bootloader
-rebuild trace="":
+[group('prod')]
+rebuild trace="false":
     #!/usr/bin/env bash
-    if [[ "{{trace}}" == "trace" ]]; then
+    set -euo pipefail
+    if [[ "{{trace}}" == "true" ]]; then
+        echo "🚀 Production rebuild with trace..."
         sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace
     else
+        echo "🚀 Production rebuild..."
         sudo nixos-rebuild switch --impure --flake {{host_flake}}
     fi
 
 # Build VM for testing
-rebuild-vm:
-    @sudo nixos-rebuild build-vm --impure --flake {{host_flake}} --show-trace
+[group('dev')]
+vm:
+    @echo "🖥️  Building VM..."
+    @sudo nixos-rebuild build-vm --fast --impure --flake {{host_flake}} --show-trace
 
-# Full system upgrade with flake update
-upgrade-system:
-    @cp flake.lock flake.lock-pre-upg-{{hostname}}-$(date +%Y-%m-%d_%H-%M-%S)
-    @nix flake update
-    @sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
+# Full system upgrade
+[group('prod')]
+upgrade:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "⬆️  Upgrading system..."
+    cp flake.lock flake.lock-backup-{{timestamp}}
+    nix flake update
+    sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
 
 # === Maintenance Commands ===
-# Garbage collection (5 days)
-garbage:
+# Quick garbage collection (5 days)
+[group('maintenance')]
+clean:
+    @echo "🧹 Cleaning packages older than 5 days..."
     @sudo nix-collect-garbage --delete-older-than 5d
 
 # Full garbage collection
-garbage-full:
+[group('maintenance')]
+clean-full:
+    @echo "🧹 Full garbage collection..."
     @sudo nix-collect-garbage -d
 
-# Update nix database for comma
-nixdb:
+# Update nix database for comma tool
+[group('maintenance')]
+update-db:
+    @echo "🗄️  Updating nix database..."
     @nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
 
-# Lint nix files
-nix-lint:
+# Lint all nix files
+[group('maintenance')]
+lint:
+    @echo "🔍 Linting nix files..."
     @fd -e nix --hidden --no-ignore --follow . -x statix check {}
 
 # === System Info ===
-# Show active kernel
+# Show kernel and boot info
+[group('info')]
 kernel:
+    @echo "🐧 Current kernel:"
     @uname -r
-    @sudo ls /boot/EFI/nixos/
+    @echo "📁 Boot entries:"
+    @sudo ls /boot/EFI/nixos/ 2>/dev/null || echo "No EFI entries found"
 
-# System information for debugging
-system-info:
-    @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features nix-command --extra-experimental-features flakes --command nix-info -m
+# Comprehensive system information
+[group('info')]
+sysinfo:
+    @echo "💻 System Information:"
+    @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features 'nix-command flakes' --command nix-info -m
 
 # Update hardware firmware
-firmware-update:
+[group('info')]
+firmware:
+    @echo "🔧 Checking firmware updates..."
     @sudo fwupdmgr get-updates || true
     @sudo fwupdmgr update || true
 
 # === Git Commands ===
-# View changelog with different time periods
-changelog days="7" format="summary":
+# Show recent commits (default: 7 days)
+[group('git')]
+log days="7":
     #!/usr/bin/env bash
-    case "{{format}}" in
-        "full")
-            echo "=== Commits from last {{days}} days ==="
-            git rev-list --count --since="{{days}} days ago" HEAD
-            echo "==="
-            git log --since="{{days}} days ago" --pretty=full
-            ;;
-        "summary")
-            echo "=== Commits from last {{days}} days ==="
-            git rev-list --count --since="{{days}} days ago" HEAD
-            echo "==="
-            git log --since="{{days}} days ago" --pretty=format:"%h - %s"
-            ;;
-        "count")
-            echo "=== Total commits from last {{days}} days ==="
-            git rev-list --count --since="{{days}} days ago" HEAD
-            ;;
-    esac
+    set -euo pipefail
+    echo "📜 Commits from last {{days}} days:"
+    echo "Total: $(git rev-list --count --since='{{days}} days ago' HEAD)"
+    echo "===================="
+    git log --since="{{days}} days ago" --pretty=format:"%h - %an: %s (%cr)" --graph
 
-# Reset to remote (resolve syncthing conflicts)
-repo-reset hard="":
+# Reset to remote origin
+[group('git')]
+reset-origin:
+    @echo "🔄 Resetting to origin/main..."
     @git fetch
-    #!/usr/bin/env bash
-    if [[ "{{hard}}" == "hard" ]]; then
-        git reset --hard HEAD
-        git clean -fd
-    else
-        git reset --hard origin/main
-    fi
+    @git reset --hard origin/main
+    @git pull
+
+# Hard reset with cleanup
+[group('git')]
+reset-hard:
+    @echo "⚠️  Hard reset with file cleanup..."
+    @git fetch
+    @git reset --hard HEAD
+    @git clean -fd
     @git pull
 
 # === Helper Commands ===
-# Quick reboot after full rebuild
-final-rebuild-reboot:
-    @just garbage-full
+# Full rebuild cycle with reboot
+[group('helpers')]
+rebuild-reboot:
+    @echo "🔄 Full rebuild cycle..."
+    @just clean-full
     @just rebuild
-    @just garbage-full
+    @just clean-full
+    @echo "🔌 Rebooting in 10 seconds... (Ctrl+C to cancel)"
+    @sleep 10
     @sudo reboot
 
-# Show config inspection commands
+# Show config inspection examples
+[group('helpers')]
 inspect:
-    @echo "To find values for config:"
-    @echo 'Example: ${config.users.users.arthur.home}'
-    @echo "==="
-    @helpers/nix-repl.sh
+    @echo "🔍 Config inspection examples:"
+    @echo "nix eval .#nixosConfigurations.{{hostname}}.config.users.users --json"
+    @echo "nix eval .#nixosConfigurations.{{hostname}}.options.services --json"
+    @echo "================================"
+    @if [ -f helpers/nix-repl.sh ]; then helpers/nix-repl.sh; fi
 
-# === Ubuntu Commands (simplified) ===
-# Bootstrap Ubuntu system
-ubuntu-bootstrap:
-    @git add -A
-    @ubuntu/helpers/ubuntu-update-nix-conf.sh
-    @cd ubuntu && nix run home-manager/release-25.05 -- switch --impure --flake .#{{`whoami`}}@{{hostname}}
-    @cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-
-# Ubuntu rebuild
-ubuntu-rebuild trace="":
-    @git add -A
-    #!/usr/bin/env bash
-    if [[ "{{trace}}" == "trace" ]]; then
-        cd ubuntu && home-manager switch --impure --flake .#{{`whoami`}}@{{hostname}} --show-trace
-        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}} --show-trace
-    else
-        cd ubuntu && home-manager switch --impure --flake .#{{`whoami`}}@{{hostname}}
-        cd ubuntu && sudo nix run 'github:numtide/system-manager' -- switch --flake .#{{hostname}}
-    fi
-    @sudo ubuntu/helpers/fix-suid-permissions.sh
-
-# Ubuntu garbage collection
-ubuntu-garbage full="":
-    #!/usr/bin/env bash
-    if [[ "{{full}}" == "full" ]]; then
-        home-manager expire-generations "-0 days"
-        nix-collect-garbage -d
-    else
-        home-manager expire-generations "-5 days"
-        nix-collect-garbage --delete-older-than 5d
-    fi
-    @nix-store --optimise
-
-# Clean slate Ubuntu (emergency reset)
-ubuntu-clean-slate:
-    @echo "WARNING: This will remove ALL home-manager configurations!"
-    @echo "Press Ctrl+C within 10 seconds to cancel..."
-    @sleep 10
-    @rm -rf ~/.local/state/home-manager || true
-    @nix run home-manager/release-25.05 -- expire-generations "-0 days" || true
-    @nix-collect-garbage -d
-    @nix-store --optimise
-    @find ~ -type l -name ".*" -exec sh -c 'readlink "$1" | grep -q "/nix/store" && rm -f "$1"' _ {} \; 2>/dev/null || true
-    @echo "Clean slate complete! Run 'just ubuntu-bootstrap' to start fresh."
-
-# === Aliases for common workflows ===
-alias check := dev-check
-alias test := dev-test
-alias build := dev-rebuild
-alias up := upgrade-system
-alias clean := garbage
-alias log := changelog
+# === Workflow Aliases ===
+alias c := check
+alias t := test
+alias b := build
+alias r := rebuild
+alias up := upgrade
+alias gc := clean
+alias l := log

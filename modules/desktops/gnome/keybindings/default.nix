@@ -110,7 +110,7 @@ in {
             # command = "ghostty";
             # command = "foot";
             # command = "blackbox";
-            command = "kitty";
+            command = "blackbox";
             name = "Default Terminal";
           };
 

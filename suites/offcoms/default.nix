@@ -99,6 +99,9 @@ in
       # pandoc # document converter
       # lan-mouse # software kvm
 
+      # Static Site Generation
+      hugo # static site generator
+
       # Networking
       unstable.wgnord
     ];

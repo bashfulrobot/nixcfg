@@ -28,11 +28,11 @@ in
       yazi.enable = true;
       ranger.enable = true;
       foot.enable = false;
-      blackbox.enable = false;
+      blackbox.enable = true;
       ghostty.enable = false;
       ntf.enable = true;
       xkill.enable = true;
-      kitty.enable = true;
+      kitty.enable = false;
       wezterm.enable = false;
     };
 
@@ -53,7 +53,7 @@ in
       eza # ls and exa alternative
       btop # top alternative
       pass # password manager
-			wcurl #curl wget wrapper
+      wcurl # curl wget wrapper
     ];
 
     programs = {

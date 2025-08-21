@@ -15,6 +15,7 @@
 
     };
     disable-stub-dns.enable = true;
+    power.clamshell = true;
     stylix-theme.wallpaperType = "professional";
     plymouth.backgroundType = "professional";
     timezone.enable = true;

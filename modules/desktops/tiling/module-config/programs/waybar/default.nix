@@ -1,15 +1,8 @@
-{pkgs, lib, config, ...}: let
-  cfg = config.desktops.waybar;
-in {
-  options.desktops.waybar = {
-    alternateStyle = lib.mkEnableOption "Enable alternate minimal waybar style";
-  };
-
-  config = {
-    fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
-    home-manager.sharedModules = [
-      (_: {
-        programs.waybar = {
+{pkgs, ...}: {
+  fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
+  home-manager.sharedModules = [
+    (_: {
+      programs.waybar = {
         enable = true;
         systemd = {
           enable = false;
@@ -218,7 +211,6 @@ in {
               tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
             };
 
-
             "pulseaudio" = {
               format = "{icon}";
               format-muted = "󰝟";
@@ -267,149 +259,7 @@ in {
             };
           }
         ];
-        style = if cfg.alternateStyle then ''
-          /* Minimal flat style with Stylix colors */
-          * {
-            font-family: "JetBrainsMono Nerd Font";
-            font-size: 14px;
-            font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
-            margin: 0px;
-            padding: 0px;
-            border: none;
-            border-radius: 0;
-            min-height: 0;
-          }
-
-          window#waybar {
-            background-color: @theme_base_color;
-            color: @theme_text_color;
-            transition-property: background-color;
-            transition-duration: 0.5s;
-            border-radius: 8px;
-            margin: 8px;
-          }
-
-          tooltip {
-            border-radius: 6px;
-            background-color: @theme_base_color;
-            color: @theme_text_color;
-            border: 1px solid @theme_fg_color;
-            padding: 2px;
-          }
-
-          tooltip label {
-            color: @theme_text_color;
-          }
-
-          .modules-left,
-          .modules-center,
-          .modules-right {
-            background: transparent;
-            margin: 0px 7.5px;
-            padding: 0px;
-            border: none;
-            border-radius: 0;
-          }
-
-          .modules-left,
-          .modules-right {
-            margin: 0px 8px;
-          }
-
-          #workspaces button {
-            padding: 4px 8px;
-            margin: 0px 2px;
-            min-width: 12px;
-            background-color: transparent;
-            color: @theme_text_color;
-            border: none;
-            border-radius: 6px;
-            box-shadow: none;
-            text-shadow: none;
-          }
-
-          #workspaces button.persistent {
-            color: mix(@theme_text_color, @theme_base_color, 0.5);
-            opacity: 0.5;
-            border-radius: 6px;
-          }
-
-          #workspaces button.occupied {
-            color: @theme_text_color;
-            opacity: 1.0;
-            border-radius: 6px;
-          }
-
-          #workspaces button.active {
-            color: @theme_text_color;
-            background-color: @theme_text_color;
-            color: @theme_base_color;
-            border-radius: 6px;
-          }
-
-          #workspaces button.urgent {
-            color: @theme_urgent_color;
-            animation: blink 0.5s linear infinite alternate;
-            border-radius: 6px;
-          }
-
-          @keyframes blink {
-            to {
-              opacity: 0.5;
-            }
-          }
-
-          #backlight,
-          #battery,
-          #clock,
-          #cpu,
-          #custom-gpuinfo,
-          #custom-notification,
-          #custom-power,
-          #disk,
-          #idle_inhibitor,
-          #keyboard-state,
-          #memory,
-          #network,
-          #pulseaudio,
-          #temperature,
-          #tray {
-            padding-top: 4px;
-            padding-bottom: 4px;
-            padding-right: 8px;
-            padding-left: 8px;
-            margin: 0px 2px;
-            background-color: transparent;
-            color: @theme_text_color;
-            border: none;
-            border-radius: 6px;
-          }
-
-          #battery.critical:not(.charging) {
-            color: @theme_urgent_color;
-            animation: blink 0.5s linear infinite alternate;
-          }
-
-          #custom-power {
-            color: @theme_urgent_color;
-          }
-
-          #pulseaudio.muted {
-            color: mix(@theme_text_color, @theme_base_color, 0.5);
-            opacity: 0.7;
-          }
-
-          #network.disconnected,
-          #network.disabled {
-            color: mix(@theme_text_color, @theme_base_color, 0.5);
-            opacity: 0.7;
-          }
-
-          #temperature.critical {
-            color: @theme_urgent_color;
-            animation: blink 0.5s linear infinite alternate;
-          }
-        '' else ''
+        style = ''
           * {
             font-family: "JetBrainsMono Nerd Font";
             font-size: 14px;
@@ -780,5 +630,4 @@ in {
       };
     })
   ];
-  };
 }

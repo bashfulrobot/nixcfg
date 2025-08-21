@@ -20,7 +20,7 @@
   desktops.tiling.hyprland.enable = true;
 
   apps = {
-    claude-desktop.enable = true;
+    # claude-desktop.enable = true; # Temporarily disabled due to hash mismatch
   };
   
   # apps.syncthing = {

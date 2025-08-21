@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   users.default.enable = true;
@@ -6,7 +11,7 @@
   sys = {
     desktop-files = {
       enable = true;
-      reboot-windows = true;
+      reboot-windows = false;
 
     };
     disable-stub-dns.enable = true;
@@ -17,12 +22,12 @@
 
   # Enable desktop environments
   desktops.gnome.enable = true;
-  desktops.tiling.hyprland.enable = true;
+  desktops.tiling.hyprland.enable = false;
 
   apps = {
     # claude-desktop.enable = true; # Temporarily disabled due to hash mismatch
   };
-  
+
   # apps.syncthing = {
   #   enable = true;
   #   host.donkeykong = true;

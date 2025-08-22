@@ -21,8 +21,6 @@ in
   config = lib.mkIf cfg.enable {
 
     programs = {
-      # Install firefox.
-      firefox.enable = true;
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       # mtr.enable = true;
@@ -34,16 +32,17 @@ in
     };
 
     apps = {
+      firefox.enable = true;
       one-password.enable = true;
       obsidian.enable = true;
       chrome-based-browser.enable = false;
-      google-chrome.enable = true;
+      google-chrome.enable = false;
       brave.enable = false;
       vivaldi.enable = false;
-      zen-browser.enable = true;
-      gcal-br.enable = true;
-      gmail-br.enable = true;
-      br-drive.enable = true;
+      zen-browser.enable = false;
+      gcal-br.enable = false;
+      gmail-br.enable = false;
+      br-drive.enable = false;
     };
 
     cli = {
@@ -54,12 +53,6 @@ in
 
     environment.systemPackages = with pkgs; [
       # projecteur # virtual laser pointer
-      # Browsers
-      #inputs.zen-browser.packages.x86_64-linux.zen-browser
-      #(opera.override { proprietaryCodecs = true; })
-      # brave
-      # google-chrome
-      # tangram
 
       # PDF
 
@@ -72,7 +65,7 @@ in
       # libreoffice # office suite
 
       # Organize
-      # morgen # AI calendar - testing
+      unstable.morgen # AI calendar - testing
       unstable.todoist-electron # task manager
       # planify
 

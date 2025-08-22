@@ -30,27 +30,30 @@ in
       gnomeExtensions.caffeine
       gnomeExtensions.media-controls
       gnomeExtensions.appindicator
+      gnomeExtensions.user-themes
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
-    ];
+  ];
 
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "org/gnome/shell" = {
           # Enabled extensions
           enabled-extensions = [
-            "tilingshell@ferrarodomenico.com"
             "caffeine@patapon.info"
             "quick-settings-audio-panel@rayzeq.github.io"
             "bluetooth-quick-connect@bjarosze.gmail.com"
             "mediacontrols@cliffniff.github.com"
             "appindicatorsupport@rgcjonas.gmail.com"
+            "user-theme@gnome-shell-extensions.gcampax.github.com"
+            "forge@jmmaranan.com"
+            "space-bar@luchrioh"
           ];
 
           # Disabled extensions
           disabled-extensions = [
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "window-calls@domandoman.xyz"
-
+            "tilingshell@ferrarodomenico.com"
           ];
         };
 

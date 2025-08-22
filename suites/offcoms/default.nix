@@ -22,7 +22,7 @@ in
 
     programs = {
       # Install firefox.
-      firefox.enable = false;
+      firefox.enable = true;
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       # mtr.enable = true;
@@ -37,10 +37,10 @@ in
       one-password.enable = true;
       obsidian.enable = true;
       chrome-based-browser.enable = false;
-      google-chrome.enable = false;
-      brave.enable = true;
+      google-chrome.enable = true;
+      brave.enable = false;
       vivaldi.enable = false;
-      zen-browser.enable = false;
+      zen-browser.enable = true;
       gcal-br.enable = true;
       gmail-br.enable = true;
       br-drive.enable = true;

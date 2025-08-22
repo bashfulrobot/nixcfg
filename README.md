@@ -98,6 +98,10 @@ The bootstrap process automatically:
 
 See [CLAUDE.md](./CLAUDE.md) for detailed development documentation, commands, and architecture information.
 
+## Related Projects
+
+- **[firefox-custom-css](https://github.com/bashfulrobot/firefox-custom-css)** - Standalone Firefox CSS theme with GNOME-style rounded corners. Reference for customizing the Firefox module in this repository.
+
 ## TODO
 
 - [ ] [Fix](https://github.com/fwupd/fwupd/wiki/PluginFlag:capsules-unsupported) Firmware updates 

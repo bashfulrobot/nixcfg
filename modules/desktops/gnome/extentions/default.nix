@@ -31,10 +31,11 @@ in
       gnomeExtensions.media-controls
       gnomeExtensions.appindicator
       gnomeExtensions.user-themes
+      gnomeExtensions.just-perfection
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
-  ];
+    ];
 
-  desktops.gnome.extensions.tiling.enable = false;
+    desktops.gnome.extensions.tiling.enable = false;
 
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {

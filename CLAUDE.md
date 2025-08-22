@@ -255,3 +255,10 @@ The repository uses an **auto-import** system (`lib/autoimport.nix`) that recurs
     - NEVER INCLUDE CLAUDE BRANDING IN A COMMIT MESSAGE. EVER. NEVER IN A MILLION YEARS.
     - If asked to tag, or create a release, use semver.
 - NEVER RUN REBUILD OR TESTS UNLESS I EXPLICITLY ASK YOU.
+
+### Tab Completion
+
+- **Just Recipe Completion**: `just <tab>` shows all available recipe names
+- **Lint with Tab Completion**: Use `jlint <tab>` for file/directory completion (fish wrapper function)
+- **Standard Lint**: `just lint [target]` works but without tab completion (direct justfile command)
+- Both `jlint` and `just lint` do the same thing, but `jlint` provides tab completion for file paths

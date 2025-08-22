@@ -388,6 +388,14 @@ let
         echo "❌ Operation cancelled"
       end
     '';
+    
+    jlint = ''
+      if test (count $argv) -eq 0
+        ${pkgs.just}/bin/just lint
+      else
+        ${pkgs.just}/bin/just lint $argv[1]
+      end
+    '';
   };
 
   # Create a version of functions with Darwin exclusions
@@ -577,9 +585,16 @@ in
               direnv hook fish | source
               ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
 
+              # Just completions
+              ${pkgs.just}/bin/just --completions fish | source
+
             ''
           else
-            "";
+            ''
+              # Just completions
+              ${pkgs.just}/bin/just --completions fish | source
+
+            '';
         interactiveShellInit =
           if isWorkstation then
             ''
@@ -631,6 +646,13 @@ in
         # Apply the filtered shell aliases
         shellAliases = filteredShellAliases;
       };
+
+      # Add custom completions for jlint
+      home.file.".config/fish/completions/jlint.fish".text = ''
+        # Tab completion for jlint function
+        complete -c jlint -xa "(__fish_complete_directories)"
+        complete -c jlint -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
+      '';
 
       programs = {
         fzf = {

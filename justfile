@@ -188,11 +188,28 @@ update-db:
     @echo "🗄️  Updating nix database..."
     @nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
 
-# Lint all nix files
+# Lint nix files (all by default, or specify a file/directory)
+# Note: Use `jlint` function in fish for tab completion of file paths
 [group('maintenance')]
-lint:
-    @echo "🔍 Linting nix files..."
-    @fd -e nix --hidden --no-ignore --follow . -x statix check {}
+lint target=".":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ "{{target}}" == "." ]]; then
+        echo "🔍 Linting all nix files..."
+        fd -e nix --hidden --no-ignore --follow . -x statix check {}
+    else
+        echo "🔍 Linting {{target}}..."
+        if [[ -f "{{target}}" ]]; then
+            # Single file
+            statix check "{{target}}"
+        elif [[ -d "{{target}}" ]]; then
+            # Directory
+            fd -e nix --hidden --no-ignore --follow . "{{target}}" -x statix check {}
+        else
+            echo "❌ Target not found: {{target}}"
+            exit 1
+        fi
+    fi
 
 # === System Info ===
 # Show kernel and boot info

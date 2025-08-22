@@ -1,4 +1,4 @@
-/* Based on varun.ch/posts/firefox/ */
+/* Firefox Custom CSS with GNOME-style rounded corners */
 
 /* Hide the default tab bar */
 #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
@@ -19,7 +19,6 @@
 /* Compact UI modifications */
 :root {
     --tab-min-height: 25px !important;
-    --toolbarbutton-border-radius: 6px !important;
 }
 
 /* Reduce toolbar padding */
@@ -44,9 +43,19 @@
     border-radius: 6px !important;
 }
 
-/* Round toolbar buttons */
-.toolbarbutton-1 {
+/* Round toolbar buttons - very specific to avoid extension interference */
+#nav-bar > #nav-bar-customization-target .toolbarbutton-1,
+#TabsToolbar > .toolbar-items .toolbarbutton-1,
+#PersonalToolbar > .toolbar-items .toolbarbutton-1 {
     border-radius: 6px !important;
+}
+
+/* Explicitly exclude extension popups and panels from any button styling */
+panel[id*="webext-"] button,
+panel[id*="webext-"] .button,
+.webextension-popup-browser button,
+.webextension-popup-browser .button {
+    border-radius: initial !important;
 }
 
 /* Round reload button specifically */

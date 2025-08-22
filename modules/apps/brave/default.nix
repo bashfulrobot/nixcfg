@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.apps.brave;
-  
+
   # Wayland-optimized command line arguments for Brave
   waylandFlags = [
     "--enable-features=UseOzonePlatform"
@@ -35,7 +35,7 @@ in
     home-manager.users."${user-settings.user.username}" = {
       programs.chromium = {
         enable = true;
-        package = pkgs.brave;
+        package = pkgs.unstable.brave;
         commandLineArgs = waylandFlags;
         extensions = [
           # pushover

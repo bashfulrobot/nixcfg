@@ -34,7 +34,7 @@ in
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
   ];
 
-  desktops.gnome.extensions.tiling.enable = true;
+  desktops.gnome.extensions.tiling.enable = false;
 
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
@@ -47,15 +47,15 @@ in
             "mediacontrols@cliffniff.github.com"
             "appindicatorsupport@rgcjonas.gmail.com"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
-            "forge@jmmaranan.com"
-            "space-bar@luchrioh"
+            "tilingshell@ferrarodomenico.com"
           ];
 
           # Disabled extensions
           disabled-extensions = [
             "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "window-calls@domandoman.xyz"
-            "tilingshell@ferrarodomenico.com"
+            "forge@jmmaranan.com"
+            "space-bar@luchrioh"
           ];
         };
 

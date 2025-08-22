@@ -261,4 +261,5 @@ The repository uses an **auto-import** system (`lib/autoimport.nix`) that recurs
 - **Just Recipe Completion**: `just <tab>` shows all available recipe names
 - **Lint with Tab Completion**: Use `jlint <tab>` for file/directory completion (fish wrapper function)
 - **Standard Lint**: `just lint [target]` works but without tab completion (direct justfile command)
+- **Targeted File Check**: Use `jcheck <tab>` for syntax checking specific files with tab completion
 - Both `jlint` and `just lint` do the same thing, but `jlint` provides tab completion for file paths

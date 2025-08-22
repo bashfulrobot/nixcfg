@@ -17,7 +17,7 @@ in {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "com/raggesilver/BlackBox" = {
           cursor-blink-mode = mkUint32 1;
-          cursor-shape = uint32 0;
+          cursor-shape = mkUint32 0;
           custom-working-directory = "/home/dustin/dev";
           show-headerbar = true;
           font = "JetBrainsMonoNL Nerd Font Mono 14";

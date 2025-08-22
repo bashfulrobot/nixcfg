@@ -62,10 +62,11 @@ in
       # tangram
 
       # PDF
-      xournalpp # note taking/pdf annotator
+
       # evince # pdf viewer
       # texliveSmall # get pdflatex
       # pdf-sign # pdf signing utility
+      kdePackages.okular # pdf viewer - can add sig stamps
 
       # Office
       # libreoffice # office suite

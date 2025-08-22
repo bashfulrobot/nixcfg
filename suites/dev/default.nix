@@ -62,6 +62,7 @@ in
       unstable.helix # text editor
       unstable.gemini-cli # Gemini CLI client
       unstable.netlify-cli # Netlify CLI tool
+      unstable.fx # Terminal JSON viewer
     ];
 
     # programs = { jqp = { enable = true; }; };

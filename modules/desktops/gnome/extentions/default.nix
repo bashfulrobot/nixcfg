@@ -34,6 +34,8 @@ in
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
   ];
 
+  desktops.gnome.extensions.tiling.enable = true;
+
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "org/gnome/shell" = {

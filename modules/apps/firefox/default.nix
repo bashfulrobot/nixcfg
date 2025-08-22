@@ -43,8 +43,8 @@ in
       stylix.targets.firefox = {
         profileNames = [ "default" ];
         # Optional: enable additional theming features
-        colorTheme.enable = true;
-        firefoxGnomeTheme.enable = true;
+        # colorTheme.enable = true;
+        # firefoxGnomeTheme.enable = true;
       };
       programs.firefox = {
         enable = true;

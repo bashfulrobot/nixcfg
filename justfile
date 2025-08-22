@@ -28,6 +28,93 @@ check:
     git add -A
     nix flake check --show-trace
 
+# Quick syntax check without building or evaluation
+[group('dev')]
+syntax:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "⚡ Quick syntax check..."
+    nix flake check --no-build 2>/dev/null || echo "❌ Syntax issues detected"
+
+# Fast evaluation check (validates options without building packages)
+[group('dev')]
+eval-check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔍 Quick evaluation check..."
+    git add -A
+    if nix eval .#nixosConfigurations.{{hostname}}.config --quiet >/dev/null 2>&1; then
+        echo "✅ Configuration evaluates successfully"
+    else
+        echo "❌ Configuration evaluation failed"
+        nix eval .#nixosConfigurations.{{hostname}}.config --quiet 2>&1 | head -20
+    fi
+
+# Fast check of changed nix files only  
+[group('dev')]
+check-diff:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "⚡ Checking changed nix files..."
+    
+    # Get changed .nix files (working tree + staged)
+    changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
+    staged_files=$(git diff --cached --name-only 2>/dev/null | grep '\.nix$' || true)
+    all_changed=$(echo -e "$changed_files\n$staged_files" | sort | uniq | grep -v '^$' || true)
+    
+    if [[ -z "$all_changed" ]]; then
+        echo "✅ No changed .nix files"
+        exit 0
+    fi
+    
+    echo "📁 Changed files:"
+    echo "$all_changed" | sed 's/^/  /'
+    
+    # Quick syntax check on each file
+    echo "🔍 Syntax check..."
+    failed_files=""
+    while IFS= read -r file; do
+        if [[ -f "$file" ]]; then
+            if ! nix-instantiate --parse "$file" >/dev/null 2>&1; then
+                failed_files="$failed_files$file\n"
+            fi
+        fi
+    done <<< "$all_changed"
+    
+    if [[ -n "$failed_files" ]]; then
+        echo "❌ Syntax errors in:"
+        echo -e "$failed_files" | sed 's/^/  /'
+        exit 1
+    fi
+    
+    # Quick eval test - only if files are in critical paths
+    critical_paths="flake.nix modules/ suites/ hosts/"
+    needs_eval=false
+    while IFS= read -r file; do
+        for path in $critical_paths; do
+            if [[ "$file" == $path* ]]; then
+                needs_eval=true
+                break 2
+            fi
+        done
+    done <<< "$all_changed"
+    
+    if [[ "$needs_eval" == "true" ]]; then
+        echo "🔍 Checking options and missing imports..."
+        # Try targeted evals to catch missing options quickly
+        if timeout 8 nix eval .#nixosConfigurations.{{hostname}}.options --quiet >/dev/null 2>&1; then
+            echo "✅ All options available"
+        else
+            echo "❌ Options evaluation failed - likely missing option or import issue"
+            echo "💡 Run 'just e' for detailed error"
+            exit 1
+        fi
+    else
+        echo "✅ No critical files changed, skipping option check"
+    fi
+    
+    echo "✅ All checks passed"
+
 # Dry run build test
 [group('dev')]
 test:
@@ -180,6 +267,9 @@ inspect:
 
 # === Workflow Aliases ===
 alias c := check
+alias s := syntax
+alias e := eval-check
+alias d := check-diff
 alias t := test
 alias b := build
 alias r := rebuild

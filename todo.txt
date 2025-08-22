@@ -1,0 +1,40 @@
+# Firefox Custom CSS Repository Setup Tasks
+
+## Completed ✅
+1. Navigate to and examine the old firefox-single-row-layout repo
+2. Delete the local repository directory
+
+## Pending Tasks 📋
+
+3. Complete GitHub auth refresh with delete_repo scope (code: 2604-CEA7)
+   - Visit: https://github.com/login/device
+   - Enter code: 2604-CEA7
+
+4. Delete the GitHub repository using gh repo delete command
+   - Run: gh repo delete bashfulrobot/firefox-single-row-layout --yes
+
+5. Create new local repository directory
+   - Run: mkdir ~/dev/firefox-custom-css
+
+6. Copy userChrome.css from nixcfg to new repo
+   - Run: cp ~/dev/nix/nixcfg/modules/apps/firefox/userChrome.css ~/dev/firefox-custom-css/
+
+7. Copy userContent.css from nixcfg to new repo  
+   - Run: cp ~/dev/nix/nixcfg/modules/apps/firefox/userContent.css ~/dev/firefox-custom-css/
+
+8. Create comprehensive README.md with installation instructions
+   - Include: Installation steps, features, GNOME integration, rounded corners
+
+9. Initialize git repo
+   - Run: cd ~/dev/firefox-custom-css && git init && git add . && git commit -m "feat: 🎨 Initial Firefox custom CSS with GNOME-style rounded corners"
+
+10. Create new GitHub repo
+    - Run: gh repo create firefox-custom-css --public --description "Custom Firefox CSS with GNOME-style rounded corners and compact layout"
+
+11. Push to GitHub
+    - Run: git push -u origin main
+
+## Notes
+- CSS features GNOME-style rounded corners (12px window, 8px URL bar, 6px buttons)
+- Based on varun.ch approach with custom enhancements
+- Includes comprehensive button rounding for all toolbar elements

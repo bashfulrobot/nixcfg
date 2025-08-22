@@ -1,36 +1,119 @@
-:root {
-  --navbar-width: 400px; 
-  --navbar-width-focused: 800px; 
-  --url-max-width-not-focused: 200px; 
-  /* tabs-width is the remaining part */
+/* Based on varun.ch/posts/firefox/ */
+
+/* Hide the default tab bar */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
+    opacity: 0;
+    pointer-events: none;
 }
 
-/* prevent urlbar from pushing the icons */
-#urlbar-container {
-  max-width: var(--url-max-width-not-focused);
-}
-
-/* rise the url bar to top and margin from right to shrink its width */
-#nav-bar {
-  margin: -44px calc(100vw - var(--navbar-width)) 0px 0px !important;
-}
-
-/* give empty space in tabs' left for placing navbar */
+/* Hide macOS traffic light area */
 #TabsToolbar {
-  -moz-padding-start: var(--navbar-width) !important;
+    display: none;
 }
 
-/* make navbar longer when focused */
-#nav-bar:has(#urlbar[open]){
-  margin: -44px calc(100vw - var(--navbar-width-focused)) 0px 0px !important;
+/* Hide sidebar header */
+#sidebar-box #sidebar-header {
+    display: none !important;
 }
 
-/* move tabs bar even more left when focused */
-body:has(#urlbar[open]) #TabsToolbar {
-  -moz-padding-start: var(--navbar-width-focused) !important;
+/* Compact UI modifications */
+:root {
+    --tab-min-height: 25px !important;
+    --toolbarbutton-border-radius: 6px !important;
 }
 
-/* make url field grow to url container when focused */
-body:has(#urlbar[open]) #urlbar-container{
-  max-width: 100vw !important;
+/* Reduce toolbar padding */
+#nav-bar {
+    padding-top: 8px !important;
+    padding-bottom: 4px !important;
+    height: 42px !important;
+}
+
+/* URL bar adjustments */
+#urlbar {
+    font-size: 13px !important;
+    border-radius: 8px !important;
+}
+
+#urlbar-background {
+    border-radius: 8px !important;
+}
+
+/* Round the search mode switcher (magnifying glass tile) */
+#urlbar-searchmode-switcher {
+    border-radius: 6px !important;
+}
+
+/* Round toolbar buttons */
+.toolbarbutton-1 {
+    border-radius: 6px !important;
+}
+
+/* Round reload button specifically */
+#reload-button {
+    border-radius: 6px !important;
+}
+
+/* Round forward button */
+#forward-button {
+    border-radius: 6px !important;
+}
+
+/* Round back button */
+#back-button {
+    border-radius: 6px !important;
+}
+
+/* Round Firefox account toolbar menu button */
+#fxa-toolbar-menu-button {
+    border-radius: 6px !important;
+}
+
+/* Round additional toolbar buttons */
+#stop-button,
+#downloads-button,
+#PanelUI-menu-button,
+#unified-extensions-button,
+#nav-bar-overflow-button,
+#stop-reload-button,
+#home-button,
+#identity-box,
+#tracking-protection-icon-container,
+#star-button-box,
+#pageActionButton,
+#urlbar-zoom-button {
+    border-radius: 6px !important;
+}
+
+/* Round extension buttons */
+#ublock0_raymondhill_net-browser-action,
+#_testpilot-containers-browser-action,
+#_d634138d-c276-4fc8-924b-40a0ea21d284_-browser-action,
+#checkerplusforgmail_jasonsavard_com-browser-action,
+#checkerplusforgooglecalendar_jasonsavard_com-browser-action,
+#jid0-adyhmvsp91nuo8prv0mn2vkeb84_jetpack-browser-action,
+#plugin_okta_com-browser-action {
+    border-radius: 6px !important;
+}
+
+/* Custom font - reverted to default */
+
+/* GNOME-style rounded corners */
+#main-window {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+/* Round the navbar top corners */
+#nav-bar {
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+/* Round the content area bottom corners */
+#browser,
+#appcontent,
+.browserContainer {
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
 }

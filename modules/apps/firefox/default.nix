@@ -39,6 +39,13 @@ in
 
   config = lib.mkIf cfg.enable {
     home-manager.users."${user-settings.user.username}" = {
+      # Configure stylix for Firefox theming
+      stylix.targets.firefox = {
+        profileNames = [ "default" ];
+        # Optional: enable additional theming features
+        # colorTheme.enable = true;
+        # firefoxGnomeTheme.enable = true;
+      };
       programs.firefox = {
         enable = true;
         profiles.default = {

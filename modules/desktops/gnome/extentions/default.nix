@@ -35,8 +35,6 @@ in
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
     ];
 
-    desktops.gnome.extensions.tiling.enable = false;
-
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "org/gnome/shell" = {
@@ -49,6 +47,7 @@ in
             "appindicatorsupport@rgcjonas.gmail.com"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "tilingshell@ferrarodomenico.com"
+            "just-perfection-desktop@just-perfection"
           ];
 
           # Disabled extensions
@@ -66,18 +65,53 @@ in
           mediacontrols-show-popup-menu = [ "<Shift><Control><Alt>m" ];
         };
 
+        "org/gnome/shell/extensions/just-perfection" = {
+          accent-color-icon = false;
+          accessibility-menu = false;
+          activities-button = true;
+          animation = mkUint32 0;
+          background-menu = true;
+          controls-manager-spacing-size = mkUint32 0;
+          dash = true;
+          dash-icon-size = mkUint32 0;
+          double-super-to-appgrid = true;
+          invert-calendar-column-items = true;
+          keyboard-layout = false;
+          max-displayed-search-results = mkUint32 0;
+          osd = true;
+          panel = true;
+          panel-in-overview = true;
+          quick-settings-airplane-mode = false;
+          ripple-box = true;
+          search = true;
+          show-apps-button = true;
+          startup-status = mkUint32 0;
+          support-notifier-showed-version = 34;
+          support-notifier-type = mkUint32 0;
+          theme = true;
+          weather = false;
+          window-demands-attention-focus = false;
+          window-maximized-on-create = false;
+          window-picker-icon = true;
+          window-preview-caption = true;
+          window-preview-close-button = true;
+          workspace = true;
+          workspace-background-corner-size = mkUint32 0;
+          workspace-popup = true;
+          workspace-switcher-size = mkUint32 0;
+          workspaces-in-app-grid = true;
+        };
+
         "org/gnome/shell/extensions/tilingshell" = {
           enable-blur-selected-tilepreview = true;
           enable-blur-snap-assistant = true;
           inner-gaps = mkUint32 16;
-          last-version-name-installed = "15.1";
           layouts-json = ''[{"id":"Layout 1","tiles":[{"x":0,"y":0,"width":0.22,"height":0.5,"groups":[2,1]},{"x":0,"y":0.5,"width":0.22,"height":0.5,"groups":[1,2]},{"x":0.22,"y":0,"width":0.2768023255813954,"height":0.501779359430605,"groups":[5,6,2]},{"x":0.78,"y":0,"width":0.22,"height":0.5,"groups":[4,3]},{"x":0.78,"y":0.5,"width":0.22,"height":0.5,"groups":[4,3]},{"x":0.49680232558139537,"y":0,"width":0.28319767441860466,"height":0.500355871886121,"groups":[3,7,5]},{"x":0.22,"y":0.501779359430605,"width":0.2768023255813954,"height":0.49822064056939497,"groups":[6,5,2]},{"x":0.49680232558139537,"y":0.500355871886121,"width":0.28319767441860466,"height":0.49964412811387904,"groups":[7,3,5]}]},{"id":"3722439","tiles":[{"x":0,"y":0,"width":0.35358796296296297,"height":0.49234449760765553,"groups":[1,2]},{"x":0.35358796296296297,"y":0,"width":0.6464120370370365,"height":1,"groups":[1]},{"x":0,"y":0.49234449760765553,"width":0.35358796296296297,"height":0.5076555023923448,"groups":[2,1]}]}]'';
+
           outer-gaps = mkUint32 8;
           overridden-settings = ''{"org.gnome.mutter.keybindings":{"toggle-tiled-right":"['<Super>Right']","toggle-tiled-left":"['<Super>Left']"},"org.gnome.desktop.wm.keybindings":{"maximize":"['<Super>Up']","unmaximize":"['<Super>Down', '<Alt>F5']"},"org.gnome.mutter":{"edge-tiling":"false"}}'';
           quarter-tiling-threshold = mkUint32 41;
           selected-layouts = [
-            [ "Layout 1" ]
-            [ "Layout 1" ]
             [ "Layout 1" ]
             [ "Layout 1" ]
           ];
@@ -106,6 +140,11 @@ in
           always-show-input-slider = true;
           media-control = "move";
           merge-panel = true;
+          add-button-applications-output-reset-to-default = true;
+          always-show-input-volume-slider = true;
+          create-profile-switcher = false;
+          master-volume-sliders-show-current-device = true;
+
         };
 
       };

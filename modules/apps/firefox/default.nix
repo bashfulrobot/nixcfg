@@ -29,11 +29,6 @@ in
         description = "Enable userContent.css for new tab styling.";
       };
 
-      enableHoverCollapse = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable hoverCollapse.css for navbar hover effects.";
-      };
     };
   };
 
@@ -53,8 +48,7 @@ in
           isDefault = true;
           name = "default";
 
-          userChrome = lib.optionalString cfg.enableUserChrome (builtins.readFile ./userChrome.css) +
-                       lib.optionalString cfg.enableHoverCollapse ("\n\n/* Hover Collapse CSS */\n" + builtins.readFile ./hoverCollapse.css);
+          userChrome = lib.optionalString cfg.enableUserChrome (builtins.readFile ./userChrome.css);
 
           userContent = lib.optionalString cfg.enableUserContent (builtins.readFile ./userContent.css);
 

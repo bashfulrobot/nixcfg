@@ -396,6 +396,48 @@ let
         ${pkgs.just}/bin/just lint $argv[1]
       end
     '';
+    
+    jcheck = ''
+      if test (count $argv) -eq 0
+        echo "Usage: jcheck <file.nix> [file2.nix ...]"
+        echo "Example: jcheck modules/apps/firefox/default.nix"
+        return 1
+      end
+      
+      echo "⚡ Syntax checking specified files..."
+      
+      set failed_files
+      set checked_count 0
+      
+      for file in $argv
+        if not test -f "$file"
+          echo "❌ File not found: $file"
+          set failed_files $failed_files $file
+          continue
+        end
+        
+        if not string match -q "*.nix" $file
+          echo "⚠️  Skipping non-nix file: $file"
+          continue
+        end
+        
+        echo "  📄 $file"
+        if not nix-instantiate --parse "$file" >/dev/null 2>&1
+          echo "    ❌ Syntax error"
+          set failed_files $failed_files $file
+        else
+          echo "    ✅ Valid syntax"
+        end
+        set checked_count (math $checked_count + 1)
+      end
+      
+      if test (count $failed_files) -gt 0
+        echo "❌ Found syntax errors in "(count $failed_files)" file(s)"
+        return 1
+      end
+      
+      echo "✅ All $checked_count files have valid syntax"
+    '';
   };
 
   # Create a version of functions with Darwin exclusions
@@ -647,11 +689,16 @@ in
         shellAliases = filteredShellAliases;
       };
 
-      # Add custom completions for jlint
+      # Add custom completions for jlint and jcheck
       home.file.".config/fish/completions/jlint.fish".text = ''
         # Tab completion for jlint function
         complete -c jlint -xa "(__fish_complete_directories)"
         complete -c jlint -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
+      '';
+      
+      home.file.".config/fish/completions/jcheck.fish".text = ''
+        # Tab completion for jcheck function - supports multiple files
+        complete -c jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
       '';
 
       programs = {

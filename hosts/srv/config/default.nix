@@ -39,7 +39,10 @@
   };
 
   # Enable clamshell mode
-  sys.power.clamshell = true;
+  sys.power = {
+    enable = true;
+    clamshell = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

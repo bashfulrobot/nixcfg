@@ -19,6 +19,7 @@
     ../../modules/cli/docker
     ../../modules/apps/kvm
     ../../modules/cli/helix
+    ../../modules/sys/power
   ];
 
 }

@@ -16,7 +16,8 @@ in {
       unstable.vscode
     ];
     home-manager.users."${user-settings.user.username}" = {
-      home.file.".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
+      home.file = {
+        ".vscode/extensions/stylix-theme/package.json".text = builtins.toJSON {
         name = "stylix-theme";
         displayName = "Stylix Theme";
         description = "Auto-generated theme from Stylix colors";
@@ -28,9 +29,9 @@ in {
           uiTheme = "vs-dark";
           path = "./themes/stylix.json";
         }];
-      };
-      
-      home.file.".vscode/extensions/stylix-theme/themes/stylix.json".text = lib.mkIf (config.stylix.enable or false) (builtins.toJSON {
+        };
+        
+        ".vscode/extensions/stylix-theme/themes/stylix.json".text = lib.mkIf (config.stylix.enable or false) (builtins.toJSON {
         name = "Stylix";
         type = "dark";
         colors = {
@@ -413,12 +414,13 @@ in {
         };
       });
 
-      # Force VSCode to use Wayland
-      home.file.".config/code-flags.conf".text = ''
+        # Force VSCode to use Wayland
+        ".config/code-flags.conf".text = ''
         --enable-features=UseOzonePlatform
         --ozone-platform=wayland
         --enable-features=WaylandWindowDecorations
       '';
+      };
     };
   };
 }

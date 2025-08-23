@@ -105,7 +105,7 @@ in
                      then professionalPlymouthBackground
                      else "";
         in
-        if cfg.enable && fileName != "" then getWallpaperPath ("${backgroundType}-plymouth") fileName
+        if cfg.enable && fileName != "" then getWallpaperPath "${backgroundType}-plymouth" fileName
         else "";
     };
   };

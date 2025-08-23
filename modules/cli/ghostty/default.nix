@@ -14,6 +14,12 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ ghostty-tip ];
 
+    # Configure nautilus to use ghostty when enabled  
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "ghostty";
+    };
+
     home-manager.users."${user-settings.user.username}" = {
       # https://ghostty.org/docs/config
       home.file.".config/ghostty/config".text = ''

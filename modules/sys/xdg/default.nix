@@ -31,8 +31,8 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
       xdg = {
-        # TODO: remeber, forcing the file to be overwritten when home-manager is run
-        # configFile."mimeapps.list".force = true;
+        # Force overwrite to prevent app conflicts
+        configFile."mimeapps.list".force = true;
 
         # desktopEntries.librewolf = {
         #   name = "LibreWolf";
@@ -44,23 +44,48 @@ in
           };
           enable = true;
           defaultApplications = {
-            "text/html" = [ "chromium-browser.desktop" ];
+            "text/html" = [ "firefox.desktop" ];
             "text/plain" = [ "code.desktop" ];
             "text/markdown" = [ "code.desktop" ];
-            # "inode/directory" = [ "lf.desktop" ];
-            # "application/pdf" = [ "okular.desktop" ];
-            "applications/x-www-browser" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/mailto" = [ "chromium-browser.desktop" ];
+            "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+            "application/pdf" = [ "okular.desktop" ];
+            "applications/x-www-browser" = [ "firefox.desktop" ];
+            "x-scheme-handler/about" = [ "firefox.desktop" ];
+            "x-scheme-handler/http" = [ "firefox.desktop" ];
+            "x-scheme-handler/https" = [ "firefox.desktop" ];
+            "x-scheme-handler/mailto" = [ "firefox.desktop" ];
             "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
             "x-scheme-handler/postman" = [ "Postman.desktop" ];
-            # "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
+            # "x-scheme-handler/unknown" = [ "firefox.desktop" ];
             "x-scheme-handler/slack" = [ "slack.desktop" ];
             # "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
-            "x-scheme-handler/webcal" = [ "chromium-browser.desktop" ];
-            "x-scheme-handler/terminal" = [ "kitty.desktop" ];
+            "x-scheme-handler/webcal" = [ "firefox.desktop" ];
+            "x-scheme-handler/terminal" = [ "blackbox.desktop" ];
+            # Image files
+            "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
+            "image/png" = [ "org.gnome.Loupe.desktop" ];
+            "image/gif" = [ "org.gnome.Loupe.desktop" ];
+            "image/webp" = [ "org.gnome.Loupe.desktop" ];
+            "image/svg+xml" = [ "org.gnome.Loupe.desktop" ];
+            # Audio files
+            "audio/mpeg" = [ "vlc.desktop" ];
+            "audio/wav" = [ "vlc.desktop" ];
+            "audio/flac" = [ "vlc.desktop" ];
+            "audio/ogg" = [ "vlc.desktop" ];
+            "audio/mp4" = [ "vlc.desktop" ];
+            # Video files
+            "video/mp4" = [ "vlc.desktop" ];
+            "video/x-matroska" = [ "vlc.desktop" ];
+            "video/webm" = [ "vlc.desktop" ];
+            "video/quicktime" = [ "vlc.desktop" ];
+            "video/x-msvideo" = [ "vlc.desktop" ];
+            # Archive files
+            "application/zip" = [ "org.gnome.FileRoller.desktop" ];
+            "application/vnd.rar" = [ "org.gnome.FileRoller.desktop" ];
+            "application/x-7z-compressed" = [ "org.gnome.FileRoller.desktop" ];
+            "application/gzip" = [ "org.gnome.FileRoller.desktop" ];
+            "application/x-compressed-tar" = [ "org.gnome.FileRoller.desktop" ];
+            "application/x-tar" = [ "org.gnome.FileRoller.desktop" ];
           };
         };
       };

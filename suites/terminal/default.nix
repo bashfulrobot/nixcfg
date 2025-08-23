@@ -29,7 +29,7 @@ in
       ranger.enable = true;
       foot.enable = false;
       blackbox.enable = true;
-      ghostty.enable = false;
+      ghostty.enable = true;
       ntf.enable = true;
       xkill.enable = true;
       kitty.enable = false;

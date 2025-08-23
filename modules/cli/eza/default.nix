@@ -25,7 +25,7 @@ in
         enable = true;
         colors = "auto";
         git = true;
-        icons = true;
+        icons = "auto";
         enableBashIntegration = true;
         enableFishIntegration = true;
         enableZshIntegration = true;

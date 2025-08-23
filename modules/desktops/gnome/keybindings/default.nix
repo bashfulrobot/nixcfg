@@ -33,7 +33,8 @@ in {
         # };
 
         "org/gnome/shell/keybindings" = {
-          show-screenshot-ui = [ "<Control><Alt>p" ];
+          # show-screenshot-ui = [ "<Control><Alt>p" ]; # Replaced with flameshot - moved to custom keybinding
+          show-screenshot-ui = [ ]; # Disabled - using custom flameshot keybinding instead
           switch-to-application-1 = [ ];
           switch-to-application-2 = [ ];
           switch-to-application-3 = [ ];
@@ -100,6 +101,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/"
           ];
         };
 
@@ -118,9 +120,9 @@ in {
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" =
           {
             binding = "<Control><Alt>a";
-            command =
-              "/etc/profiles/per-user/dustin/bin/screenshot-annotate.sh";
-            name = "Annotate Screenshot";
+            # command = "/etc/profiles/per-user/dustin/bin/screenshot-annotate.sh"; # Old screenshot annotate
+            command = "flameshot gui";
+            name = "Flameshot GUI";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" =
@@ -140,8 +142,9 @@ in {
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" =
           {
             binding = "<Control><Alt>o";
-            command = "/etc/profiles/per-user/dustin/bin/screenshot-ocr.sh";
-            name = "OCR Screenshot";
+            # command = "/etc/profiles/per-user/dustin/bin/screenshot-ocr.sh"; # Old OCR screenshot
+            command = "flameshot gui"; # Launch flameshot GUI for selection
+            name = "Flameshot GUI Selection";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" =
@@ -211,6 +214,12 @@ in {
           binding = "<Super><Shift>slash";
           command = "/home/${user-settings.user.username}/.local/bin/show-forge-shortcuts";
           name = "Show Forge Shortcuts";
+        };
+
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15" = {
+          binding = "<Control><Alt>p";
+          command = "flameshot gui";
+          name = "Flameshot Screenshot GUI";
         };
 
         # Forge Extensions Keybindings

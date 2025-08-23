@@ -1,5 +1,7 @@
-{ user-settings, pkgs, config, lib, inputs, ... }:
-let cfg = config.cli.ghostty;
+{ user-settings, pkgs, config, lib, ... }:
+let 
+  cfg = config.cli.ghostty;
+  ghostty-tip = pkgs.callPackage ./build {};
 in {
   options = {
     cli.ghostty.enable = lib.mkOption {
@@ -10,15 +12,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ inputs.ghostty.packages.${pkgs.system}.default ];
+    environment.systemPackages = [ ghostty-tip ];
 
     home-manager.users."${user-settings.user.username}" = {
-
-      programs.nautilus-open-any-terminal = {
-      enable = true;
-      terminal = "ghostty";
-    };
-
       # https://ghostty.org/docs/config
       home.file.".config/ghostty/config".text = ''
         font-size = 16

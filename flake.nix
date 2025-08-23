@@ -29,10 +29,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # ghostty = {
+    #   url = "github:ghostty-org/ghostty";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     opnix.url = "github:brizzbuzz/opnix";
     hyprflake = {
       url = "github:bashfulrobot/hyprflake";
@@ -52,7 +52,7 @@
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak, flake-utils, claude-desktop
-    , disko, nixos-hardware, nixos-hardware-fork, nixvim, ghostty, opnix, hyprflake, zen-browser, stylix, ... }:
+    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {

@@ -689,16 +689,38 @@ in
       };
 
       # Add custom completions for jlint and jcheck
-      home.file.".config/fish/completions/jlint.fish".text = ''
-        # Tab completion for jlint function
-        complete -c jlint -xa "(__fish_complete_directories)"
-        complete -c jlint -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
-      '';
-      
-      home.file.".config/fish/completions/jcheck.fish".text = ''
-        # Tab completion for jcheck function - supports multiple files
-        complete -c jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
-      '';
+      home = {
+        file = {
+          ".config/fish/completions/jlint.fish".text = ''
+            # Tab completion for jlint function
+            complete -c jlint -xa "(__fish_complete_directories)"
+            complete -c jlint -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
+          '';
+          
+          ".config/fish/completions/jcheck.fish".text = ''
+            # Tab completion for jcheck function - supports multiple files
+            complete -c jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
+          '';
+        };
+
+        packages = with pkgs; [
+          fishPlugins.tide
+          fishPlugins.grc
+          grc
+          fishPlugins.github-copilot-cli-fish
+          # TODO: fishPlugins.fzf-fish is broken on NixOS
+          # fishPlugins.fzf-fish
+
+          fishPlugins.colored-man-pages
+          fishPlugins.bass
+          fishPlugins.autopair
+          # fishPlugins.async-prompt
+          fishPlugins.done
+          fishPlugins.forgit
+          fishPlugins.sponge
+          gum
+        ];
+      };
 
       programs = {
         fzf = {
@@ -727,24 +749,6 @@ in
         eza.enableFishIntegration = true;
         autojump.enableFishIntegration = false;
       };
-
-      home.packages = with pkgs; [
-        fishPlugins.tide
-        fishPlugins.grc
-        grc
-        fishPlugins.github-copilot-cli-fish
-        # TODO: fishPlugins.fzf-fish is broken on NixOS
-        # fishPlugins.fzf-fish
-
-        fishPlugins.colored-man-pages
-        fishPlugins.bass
-        fishPlugins.autopair
-        # fishPlugins.async-prompt
-        fishPlugins.done
-        fishPlugins.forgit
-        fishPlugins.sponge
-        gum
-      ];
     };
   };
 }

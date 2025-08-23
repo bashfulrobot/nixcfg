@@ -46,35 +46,35 @@ in
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
     };
 
-    systemd.user.services.hyprpolkitagent = {
-      description = "Hyprpolkitagent - Polkit authentication agent";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
+    systemd.user.services = {
+      hyprpolkitagent = {
+        description = "Hyprpolkitagent - Polkit authentication agent";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 10;
+        };
       };
-    };
 
-    
-
-    # GNOME Keyring SSH component - works with PAM-unlocked keyring
-    # PAM handles secrets component unlock, this adds SSH functionality
-    systemd.user.services.gnome-keyring-ssh = {
-      description = "GNOME Keyring SSH component";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
-        Restart = "on-failure";
-        RestartSec = 2;
-        TimeoutStopSec = 10;
+      # GNOME Keyring SSH component - works with PAM-unlocked keyring
+      # PAM handles secrets component unlock, this adds SSH functionality
+      gnome-keyring-ssh = {
+        description = "GNOME Keyring SSH component";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=ssh";
+          Restart = "on-failure";
+          RestartSec = 2;
+          TimeoutStopSec = 10;
+        };
       };
     };
 
@@ -139,9 +139,11 @@ in
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
     # Enable PAM keyring for automatic unlock on login
-    security.pam.services.gdm.enableGnomeKeyring = true;
-    security.pam.services.gdm-password.enableGnomeKeyring = true;
-    security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services = {
+      gdm.enableGnomeKeyring = true;
+      gdm-password.enableGnomeKeyring = true;
+      login.enableGnomeKeyring = true;
+    };
 
     hw.bluetooth.enable = true;
 

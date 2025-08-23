@@ -1,4 +1,4 @@
-{ user-settings, pkgs, config, lib, ... }:
+{ user-settings, pkgs, config, lib, inputs, ... }:
 let cfg = config.cli.ghostty;
 in {
   options = {
@@ -10,9 +10,15 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.ghostty ];
+    environment.systemPackages = [ inputs.ghostty.packages.${pkgs.system}.default ];
 
     home-manager.users."${user-settings.user.username}" = {
+
+      programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "ghostty";
+    };
+
       # https://ghostty.org/docs/config
       home.file.".config/ghostty/config".text = ''
         font-size = 16

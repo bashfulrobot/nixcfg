@@ -13,6 +13,12 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ blackbox-terminal ];
 
+    # Configure nautilus to use blackbox when enabled
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "blackbox";
+    };
+
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "com/raggesilver/BlackBox" = {

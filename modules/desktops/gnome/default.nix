@@ -36,6 +36,7 @@ in {
       pinentry-all # gpg passphrase prompting
       gnome-tweaks
       nautilus-open-any-terminal # open terminal(s) in nautilus
+      file-roller # GNOME archive manager - core desktop component
       # Icon theme support for notifications
       hicolor-icon-theme
       shared-mime-info

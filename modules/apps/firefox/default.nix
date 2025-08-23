@@ -56,6 +56,9 @@ in
             # Enable custom CSS loading
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
+            # Enable Ctrl+Tab visual switcher with thumbnails
+            "browser.ctrlTab.recentlyUsedOrder" = true;
+
             # Basic privacy and usability settings - keeping minimal as requested
             # "browser.startup.homepage" = "about:home";
             # "browser.newtabpage.enabled" = true;

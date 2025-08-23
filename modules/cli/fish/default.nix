@@ -358,7 +358,7 @@ let
       echo "Found matches:"
       for match in $matches
         if test -d $match
-          set contents (ls -la $match 2>/dev/null | wc -l)
+          set contents (eza -la $match 2>/dev/null | wc -l)
           if test $contents -gt 3  # More than just . and .. entries
             echo "📁 $match (non-empty directory)"
           else
@@ -572,7 +572,6 @@ let
     n = "cd ~/dev/nix/nixcfg/; hx";
     ncommit = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
     nps = "nix --extra-experimental-features 'nix-command flakes' search nixpkgs";
-    ls = "${pkgs.eza}/bin/eza -al --octal-permissions --icons";
     font-cache-refresh = "sudo fc-cache -f -v";
     font-list = "fc-list";
     du = "${pkgs.du-dust}/bin/dust";

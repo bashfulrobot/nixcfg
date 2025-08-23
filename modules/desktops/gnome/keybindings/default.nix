@@ -113,7 +113,7 @@ in {
             # command = "ghostty";
             # command = "foot";
             # command = "blackbox";
-            command = "blackbox";
+            command = "ghostty";
             name = "Default Terminal";
           };
 
@@ -206,7 +206,7 @@ in {
             # ctrl-shift-?
             binding = "<Control><Shift>slash";
             command =
-              "/run/current-system/sw/bin/blackbox -c display-custom-keybindings";
+              "/run/current-system/sw/bin/ghostty -c display-custom-keybindings";
             name = "Show current custom keybindings in a terminal";
           };
 

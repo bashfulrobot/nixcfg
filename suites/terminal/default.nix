@@ -28,7 +28,7 @@ in
       yazi.enable = true;
       ranger.enable = true;
       foot.enable = false;
-      blackbox.enable = true;
+      blackbox.enable = false;
       ghostty.enable = true;
       ntf.enable = true;
       xkill.enable = true;

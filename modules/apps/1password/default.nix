@@ -23,7 +23,8 @@ in {
           vivaldi-bin
           brave
           chromium
-          .zen-wrapped
+          zen
+          zen-bin
         '';
         mode = "0755";
       };

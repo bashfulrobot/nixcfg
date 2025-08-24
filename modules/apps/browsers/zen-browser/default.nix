@@ -25,11 +25,6 @@ in
       zen-browser.packages.${pkgs.system}.default
     ];
 
-    # Configure 1Password integration
-    environment.etc."1password/custom_allowed_browsers".text = lib.mkAfter ''
-      zen
-    '';
-
     # Home-manager configuration
     home-manager.users."${user-settings.user.username}" = {
       home = {

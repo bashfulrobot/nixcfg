@@ -33,8 +33,8 @@ in {
         # };
 
         "org/gnome/shell/keybindings" = {
-          # show-screenshot-ui = [ "<Control><Alt>p" ]; # Replaced with flameshot - moved to custom keybinding
-          show-screenshot-ui = [ ]; # Disabled - using custom flameshot keybinding instead
+          # Re-enable GNOME screenshot UI since flameshot doesn't work in Wayland
+          show-screenshot-ui = [ "<Control><Alt>p" ];
           switch-to-application-1 = [ ];
           switch-to-application-2 = [ ];
           switch-to-application-3 = [ ];
@@ -120,9 +120,8 @@ in {
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" =
           {
             binding = "<Control><Alt>a";
-            # command = "/etc/profiles/per-user/dustin/bin/screenshot-annotate.sh"; # Old screenshot annotate
-            command = "flameshot gui";
-            name = "Flameshot GUI";
+            command = "/etc/profiles/per-user/dustin/bin/screenshot-annotate.sh";
+            name = "Screenshot Annotate";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" =
@@ -142,9 +141,8 @@ in {
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" =
           {
             binding = "<Control><Alt>o";
-            # command = "/etc/profiles/per-user/dustin/bin/screenshot-ocr.sh"; # Old OCR screenshot
-            command = "flameshot gui"; # Launch flameshot GUI for selection
-            name = "Flameshot GUI Selection";
+            command = "/etc/profiles/per-user/dustin/bin/screenshot-ocr.sh";
+            name = "Screenshot OCR";
           };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" =

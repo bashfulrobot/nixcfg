@@ -51,7 +51,7 @@ in
       note.enable = true;
       espanso.enable = true;
       claude-code.enable = true;
-      flameshot.enable = true;
+      flameshot.enable = false;
     };
 
     environment.systemPackages = with pkgs; [

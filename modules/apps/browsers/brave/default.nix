@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.apps.brave;
+  cfg = config.apps.browsers.brave;
 
   # Wayland-optimized command line arguments for Brave
   waylandFlags = [
@@ -22,11 +22,17 @@ let
 in
 {
   options = {
-    apps.brave = {
+    apps.browsers.brave = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable Brave browser with Wayland optimizations.";
+      };
+
+      setAsDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set Brave as the default browser";
       };
     };
   };
@@ -123,11 +129,15 @@ in
         ".config/electron-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
       };
 
-      home.sessionVariables = {
-        BROWSER = "brave";
-        # Force Wayland for Electron apps
-        ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-      };
+      home.sessionVariables = lib.mkMerge [
+        {
+          # Force Wayland for Electron apps
+          ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+        }
+        (lib.mkIf cfg.setAsDefault {
+          BROWSER = "brave";
+        })
+      ];
 
       # Override desktop file for proper Wayland execution
       xdg.desktopEntries.brave-browser = {
@@ -167,6 +177,15 @@ in
             exec = "brave ${lib.concatStringsSep " " waylandFlags} --incognito";
           };
         };
+      };
+
+      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
+        "text/html" = "brave-browser.desktop";
+        "x-scheme-handler/http" = "brave-browser.desktop";
+        "x-scheme-handler/https" = "brave-browser.desktop";
+        "x-scheme-handler/about" = "brave-browser.desktop";
+        "x-scheme-handler/unknown" = "brave-browser.desktop";
+        "applications/x-www-browser" = "brave-browser.desktop";
       };
     };
   };

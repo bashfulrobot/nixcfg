@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.apps.chrome-based-browser;
+  cfg = config.apps.browsers.chrome-based-browser;
 
   defaultApplication = "chromium";
 
@@ -48,11 +48,17 @@ in
 {
 
   options = {
-    apps.chrome-based-browser = {
+    apps.browsers.chrome-based-browser = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable a chromium based browser.";
+      };
+
+      setAsDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set Chromium as the default browser";
       };
     };
 
@@ -215,15 +221,18 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
 
-      home.sessionVariables.BROWSER = "${defaultApplication}";
+      home.sessionVariables = lib.mkIf cfg.setAsDefault {
+        BROWSER = "${defaultApplication}";
+      };
 
-      # xdg.mimeApps.defaultApplications = {
-      #   "text/html" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/http" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/https" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/about" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/unknown" = "${defaultApplication}.desktop";
-      # };
+      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
+        "text/html" = "${defaultApplication}.desktop";
+        "x-scheme-handler/http" = "${defaultApplication}.desktop";
+        "x-scheme-handler/https" = "${defaultApplication}.desktop";
+        "x-scheme-handler/about" = "${defaultApplication}.desktop";
+        "x-scheme-handler/unknown" = "${defaultApplication}.desktop";
+        "applications/x-www-browser" = "${defaultApplication}.desktop";
+      };
 
       # force chromium to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer
       # home.file.".config/chromium-flags.conf".text = ''

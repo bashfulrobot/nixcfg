@@ -6,15 +6,21 @@
   ...
 }:
 let
-  cfg = config.apps.firefox;
+  cfg = config.apps.browsers.firefox;
 in
 {
   options = {
-    apps.firefox = {
+    apps.browsers.firefox = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable Firefox browser with single-row layout customizations.";
+      };
+
+      setAsDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set Firefox as the default browser";
       };
 
       enableUserChrome = lib.mkOption {
@@ -41,6 +47,11 @@ in
         # colorTheme.enable = true;
         # firefoxGnomeTheme.enable = true;
       };
+
+      home.sessionVariables = lib.mkIf cfg.setAsDefault {
+        BROWSER = "firefox";
+      };
+
       programs.firefox = {
         enable = true;
         profiles.default = {
@@ -64,6 +75,17 @@ in
             # "browser.newtabpage.enabled" = true;
           };
         };
+      };
+
+      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
+        "text/html" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "x-scheme-handler/about" = "firefox.desktop";
+        "x-scheme-handler/unknown" = "firefox.desktop";
+        "x-scheme-handler/mailto" = "firefox.desktop";
+        "x-scheme-handler/webcal" = "firefox.desktop";
+        "applications/x-www-browser" = "firefox.desktop";
       };
     };
   };

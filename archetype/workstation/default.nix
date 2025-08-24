@@ -23,6 +23,8 @@ in {
       printing.enable = true;
     };
 
+    cli.audio-switch.enable = true;
+
     suites = {
       content-creation.enable = false;
       dev.enable = true;

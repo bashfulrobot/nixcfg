@@ -13,7 +13,7 @@
             layer = "top";
             position = "top";
             mode = "dock"; # Fixes fullscreen issues
-            height = 32; # 35
+            # height = 28; # let waybar auto-calculate optimal height
             exclusive = true;
             passthrough = false;
             gtk-layer-shell = true;
@@ -225,7 +225,7 @@
               };
               scroll-step = 5;
               on-click = "pwvucontrol &";
-              on-click-right = "bash -c 'selected=$(printf \"🔧 Open PipeWire Control\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in \"🔧 Open PipeWire Control\") pwvucontrol & ;; \"🔇 Toggle Output Mute\") pamixer -t; notify-send \"🔊 Audio\" \"Output mute toggled\" -t 2000 ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; notify-send \"🎤 Audio\" \"Input mute toggled\" -t 2000 ;; esac'";
+              on-click-right = "bash -c 'selected=$(printf \"🔧 Open PipeWire Control\\n🎤 Switch to Shure MV7\\n🎧 Switch to rempods (AirPods)\\n🎧 Switch to earmuffs\\n🔊 Switch to Speakers\\n🎤🎧 Mixed Mode (MV7 + rempods)\\n🎤🎧 Mixed Mode (MV7 + earmuffs)\\n📋 List Audio Devices\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 450px;}\"); case \"$selected\" in \"🔧 Open PipeWire Control\") pwvucontrol & ;; \"🎤 Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎤 Switched to Shure MV7\" ;; \"🎧 Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎧 Switched to rempods\" ;; \"🎧 Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎧 Switched to earmuffs\" ;; \"🔊 Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🔊 Switched to speakers\" ;; \"🎤🎧 Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"🎤🎧 Mixed mode: MV7 + rempods\" ;; \"🎤🎧 Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"🎤🎧 Mixed mode: MV7 + earmuffs\" ;; \"📋 List Audio Devices\") kitty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"🔇 Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"🔇 Output mute toggled\" ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"🎤 Input mute toggled\" ;; esac'";
               on-scroll-up = "pamixer -i 5";
               on-scroll-down = "pamixer -d 5";
               tooltip-format = "Source: {desc}\nVolume: {volume}%\nClick: Open PipeWire Control | Right-click: Audio menu | Scroll: Volume";
@@ -248,8 +248,8 @@
             };
 
             "tray" = {
-              icon-size = 16;
-              spacing = 10;
+              icon-size = 12;
+              spacing = 16;
             };
 
             "custom/power" = {
@@ -262,7 +262,7 @@
         style = ''
           * {
             font-family: "JetBrainsMono Nerd Font";
-            font-size: 14px;
+            font-size: 11px;
             font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
             margin: 0px;
             padding: 0px;
@@ -360,10 +360,11 @@
           #custom-weather.showyIcyDay,
           #custom-weather.snowyIcyNight,
           #custom-weather.sunnyDay {
-          	padding-top: 4px;
-          	padding-bottom: 4px;
-          	padding-right: 8px;
-          	padding-left: 8px;
+          	padding-top: 1px;
+          	padding-bottom: 1px;
+          	padding-right: 10px;
+          	padding-left: 10px;
+          	margin: 0 1.5px;
           }
 
           #idle_inhibitor {
@@ -443,11 +444,20 @@
             background-color: @red;
           }
 
-          #tray > .passive {
-            -gtk-icon-effect: dim;
+          #tray {
+            color: @text;
+            padding: 1px 10px;
+            margin: 0 1.5px;
           }
+          
+          #tray > .passive {
+            -gtk-icon-effect: none;
+            color: @text;
+          }
+          
           #tray > .needs-attention {
-            -gtk-icon-effect: highlight;
+            -gtk-icon-effect: none;
+            color: @text;
           }
 
           #keyboard-state {
@@ -456,53 +466,71 @@
 
           #workspaces button {
               box-shadow: none;
-          	text-shadow: none;
-              padding: 0px;
-              border-radius: 9px;
-              padding-left: 6px;
-              padding-right: 6px;
-              animation: gradient_f 20s ease-in infinite;
-              transition: all 0.5s cubic-bezier(.55,-0.68,.48,1.682);
+              text-shadow: none;
+              padding: 1px 8px;
+              margin: 0 1px;
+              border-radius: 6px;
+              color: @overlay1;
+              background-color: transparent;
+              border: 1px solid transparent;
+              transition: all 0.2s ease-in-out;
+              font-weight: normal;
+          }
+          
+          #workspaces button:first-child {
+              margin-left: 3px;
+          }
+          
+          #workspaces button:last-child {
+              margin-right: 1px;
           }
 
           #workspaces button:hover {
-          	border-radius: 10px;
-          	color: @overlay0;
-          	background-color: @surface0;
-           	padding-left: 4px;
-              padding-right: 4px;
-              animation: gradient_f 20s ease-in infinite;
-              transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+              color: @text;
+              background-color: @surface1;
+              border: none;
           }
 
           #workspaces button.persistent {
-          	color: @surface1;
-          	border-radius: 10px;
+              color: @overlay0;
+              background-color: transparent;
           }
 
           /* Workspaces with windows (occupied) */
           #workspaces button.occupied {
-          	color: @peach;
-          	border-radius: 10px;
-              padding-left: 8px;
-              padding-right: 8px;
-              transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+              color: @blue;
+              background-color: @surface0;
+              border: none;
+              font-weight: 500;
           }
 
-          /* Active workspace - same color as occupied but with straight underline */
+          /* Active workspace - clearly distinct */
           #workspaces button.active {
-          	color: @peach;
-            	border-radius: 10px 10px 0px 0px;
-              padding-left: 10px;
-              padding-right: 10px;
-              border-bottom: 2px solid @peach;
-              animation: gradient_f 20s ease-in infinite;
-              transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+              color: @text;
+              background-color: @blue;
+              border: none;
+              border-radius: 0px;
+              font-weight: bold;
+              text-shadow: none;
+              opacity: 1;
+              padding: 1px 8px;
+              margin: 0px;
           }
 
           #workspaces button.urgent {
-          	color: @red;
-           	border-radius: 0px;
+              color: @theme_base_color;
+              background-color: @red;
+              border: 1px solid @red;
+              animation: urgent-pulse 1s ease-in-out infinite alternate;
+          }
+
+          @keyframes urgent-pulse {
+              from { 
+                  opacity: 1;
+              }
+              to { 
+                  opacity: 0.6;
+              }
           }
 
           #taskbar button.active {
@@ -540,7 +568,11 @@
 
           #custom-power {
             color: @red;
-            padding: 4px 10px;
+            background-color: transparent;
+            border-left: 1px solid @blue;
+            padding: 1px 12px 1px 21px;
+            margin: 0 1.5px;
+            margin-left: 16px;
           }
 
           #custom-updater {

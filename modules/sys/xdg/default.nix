@@ -44,23 +44,15 @@ in
           };
           enable = true;
           defaultApplications = {
-            "text/html" = [ "firefox.desktop" ];
             "text/plain" = [ "code.desktop" ];
             "text/markdown" = [ "code.desktop" ];
             "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
             "application/pdf" = [ "okular.desktop" ];
-            "applications/x-www-browser" = [ "firefox.desktop" ];
-            "x-scheme-handler/about" = [ "firefox.desktop" ];
-            "x-scheme-handler/http" = [ "firefox.desktop" ];
-            "x-scheme-handler/https" = [ "firefox.desktop" ];
-            "x-scheme-handler/mailto" = [ "firefox.desktop" ];
             "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
             "x-scheme-handler/postman" = [ "Postman.desktop" ];
-            # "x-scheme-handler/unknown" = [ "firefox.desktop" ];
             "x-scheme-handler/slack" = [ "slack.desktop" ];
             # "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
-            "x-scheme-handler/webcal" = [ "firefox.desktop" ];
-            "x-scheme-handler/terminal" = [ "blackbox.desktop" ];
+            "x-scheme-handler/terminal" = [ "ghostty.desktop" ];
             # Image files
             "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
             "image/png" = [ "org.gnome.Loupe.desktop" ];

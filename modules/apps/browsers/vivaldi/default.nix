@@ -6,16 +6,22 @@
   ...
 }:
 let
-  cfg = config.apps.vivaldi;
+  cfg = config.apps.browsers.vivaldi;
 in
 {
 
   options = {
-    apps.vivaldi = {
+    apps.browsers.vivaldi = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable vivaldi browser.";
+      };
+
+      setAsDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set Vivaldi as the default browser";
       };
     };
 
@@ -178,15 +184,18 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
 
-      # home.sessionVariables.BROWSER = "${defaultApplication}";
+      home.sessionVariables = lib.mkIf cfg.setAsDefault {
+        BROWSER = "vivaldi";
+      };
 
-      # xdg.mimeApps.defaultApplications = {
-      #   "text/html" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/http" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/https" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/about" = "${defaultApplication}.desktop";
-      #   "x-scheme-handler/unknown" = "${defaultApplication}.desktop";
-      # };
+      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
+        "text/html" = "vivaldi-stable.desktop";
+        "x-scheme-handler/http" = "vivaldi-stable.desktop";
+        "x-scheme-handler/https" = "vivaldi-stable.desktop";
+        "x-scheme-handler/about" = "vivaldi-stable.desktop";
+        "x-scheme-handler/unknown" = "vivaldi-stable.desktop";
+        "applications/x-www-browser" = "vivaldi-stable.desktop";
+      };
 
       # force chromium to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer
       # home.file.".config/chromium-flags.conf".text = ''

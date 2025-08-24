@@ -1,7 +1,7 @@
 { config, lib, pkgs, user-settings, zen-browser, ... }:
 
 let
-  cfg = config.apps.zen-browser;
+  cfg = config.apps.browsers.zen-browser;
   
   # Theme colors handled by stylix - access through config.lib.stylix if needed
   accentColor = if config.stylix.enable 
@@ -9,7 +9,7 @@ let
                 else "#78aeed"; # fallback
 in
 {
-  options.apps.zen-browser = {
+  options.apps.browsers.zen-browser = {
     enable = lib.mkEnableOption "Zen Browser";
     
     setAsDefault = lib.mkOption {

@@ -10,7 +10,7 @@ let
   cfg = config.desktops.tiling.hyprland;
   inherit (lib) getExe getExe';
 
-  terminal = "kitty";
+  terminal = "ghostty";
   terminalFileManager = "ranger";
   browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
@@ -132,7 +132,7 @@ in
       libsecret
       blueman
       papirus-folders
-# hyprshell managed by Home Manager module
+      # hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
     ];
@@ -154,11 +154,6 @@ in
       dconf.enable = true;
       stylix-theme.enable = true;
       xdg.enable = true;
-    };
-
-    programs.nautilus-open-any-terminal = {
-      enable = true;
-      terminal = "kitty";
     };
 
     ##### Home Manager Config options #####

@@ -17,6 +17,14 @@ in {
 
     home-manager.users."${user-settings.user.username}" = {
       home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
+      
+      # Deploy subagents to ~/.claude/agents/
+      home.file.".claude/agents/rusty.md".source = ./agents/rusty.md;
+      home.file.".claude/agents/francis.md".source = ./agents/francis.md;
+      home.file.".claude/agents/trinity.md".source = ./agents/trinity.md;
+      home.file.".claude/agents/parker.md".source = ./agents/parker.md;
+      home.file.".claude/agents/gopher.md".source = ./agents/gopher.md;
+      home.file.".claude/agents/kong.md".source = ./agents/kong.md;
       home.file.".claude/commands/commit.md".text = ''
         ---
         description: Create conventional commits with emoji and optional push, tagging, or GitHub releases

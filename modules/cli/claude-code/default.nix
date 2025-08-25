@@ -18,6 +18,11 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
       
+      home.file.".claude/settings.json".text = builtins.toJSON {
+        cleanupPeriodDays = 15;
+        includeCoAuthoredBy = false;
+      };
+
       # Deploy subagents to ~/.claude/agents/
       home.file.".claude/agents/rusty.md".source = ./agents/rusty.md;
       home.file.".claude/agents/francis.md".source = ./agents/francis.md;

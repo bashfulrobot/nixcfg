@@ -473,7 +473,7 @@
               color: @overlay1;
               background-color: transparent;
               border: 1px solid transparent;
-              transition: all 0.2s ease-in-out;
+              transition: none;
               font-weight: normal;
           }
           

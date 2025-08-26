@@ -40,6 +40,9 @@ in
 
   config = lib.mkIf cfg.enable {
     home-manager.users."${user-settings.user.username}" = {
+      # Enable backups for conflicting files
+      home.enableNixpkgsReleaseCheck = false;
+      home.file.".mozilla/firefox/profiles.ini".force = true;
       # Configure stylix for Firefox theming
       stylix.targets.firefox = {
         profileNames = [ "default" ];
@@ -54,6 +57,7 @@ in
 
       programs.firefox = {
         enable = true;
+        package = pkgs.unstable.firefox;
         profiles.default = {
           id = 0;
           isDefault = true;
@@ -67,8 +71,16 @@ in
             # Enable custom CSS loading
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
-            # Enable Ctrl+Tab visual switcher with thumbnails
-            "browser.ctrlTab.recentlyUsedOrder" = true;
+            # Enable vertical tabs (newer Firefox feature)
+            "sidebar.verticalTabs" = true;
+            "sidebar.revamp" = true;
+
+            # Enable sidebar expand on hover
+            #"sidebar.visibility" = "always-show";
+            #"sidebar.main.tools" = "history";
+
+            # Sidebar animation settings
+            "sidebar.animation.duration-ms" = 200;
 
             # Basic privacy and usability settings - keeping minimal as requested
             # "browser.startup.homepage" = "about:home";

@@ -52,7 +52,6 @@ in
       unstable.curl
       unstable.spotifywm # adds proper window class to official client
       unstable.spotify # official
-      unstable.spot # gtk spotify player
     ];
 
     home-manager.users."${user-settings.user.username}" = {

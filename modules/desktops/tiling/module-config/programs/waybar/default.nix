@@ -61,8 +61,8 @@
               return-type = "json";
               exec-if = "which swaync-client";
               exec = "swaync-client -swb";
-              on-click = "sleep 0.1 && swaync-client -t -sw";
-              on-click-right = "sleep 0.1 && swaync-client -d -sw";
+              on-click = "swaync-client -t -sw";
+              on-click-right = "swaync-client -d -sw";
               escape = true;
             };
 
@@ -249,7 +249,7 @@
               };
               scroll-step = 5;
               on-click = "pwvucontrol &";
-              on-click-right = "bash -c 'selected=$(printf \"🔧 Open PipeWire Control\\n🎤 Switch to Shure MV7\\n🎧 Switch to rempods (AirPods)\\n🎧 Switch to earmuffs\\n🔊 Switch to Speakers\\n🎤🎧 Mixed Mode (MV7 + rempods)\\n🎤🎧 Mixed Mode (MV7 + earmuffs)\\n📋 List Audio Devices\\n🔇 Toggle Output Mute\\n🎤 Toggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {width: 450px;}\"); case \"$selected\" in \"🔧 Open PipeWire Control\") pwvucontrol & ;; \"🎤 Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎤 Switched to Shure MV7\" ;; \"🎧 Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎧 Switched to rempods\" ;; \"🎧 Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🎧 Switched to earmuffs\" ;; \"🔊 Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"🔊 Switched to speakers\" ;; \"🎤🎧 Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"🎤🎧 Mixed mode: MV7 + rempods\" ;; \"🎤🎧 Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"🎤🎧 Mixed mode: MV7 + earmuffs\" ;; \"📋 List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"🔇 Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"🔇 Output mute toggled\" ;; \"🎤 Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"🎤 Input mute toggled\" ;; esac'";
+              on-click-right = "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'";
               on-scroll-up = "pamixer -i 5";
               on-scroll-down = "pamixer -d 5";
               tooltip-format = "Source: {desc}\nVolume: {volume}%\nClick: Open PipeWire Control | Right-click: Audio menu | Scroll: Volume";
@@ -268,7 +268,7 @@
               format-charging = " {capacity}%";
               format-plugged = " {capacity}%";
               format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
-              on-click = "bash -c 'current=$(powerprofilesctl get 2>/dev/null || echo \"balanced\"); performance_option=\"🚀 Performance\"; balanced_option=\"⚖️ Balanced\"; powersaver_option=\"🔋 Power Saver\"; case \"$current\" in \"performance\") performance_option=\"🚀 Performance ✓\"; ;; \"balanced\") balanced_option=\"⚖️ Balanced ✓\"; ;; \"power-saver\") powersaver_option=\"🔋 Power Saver ✓\"; ;; esac; selected=$(printf \"%s\\n%s\\n%s\" \"$performance_option\" \"$balanced_option\" \"$powersaver_option\" | rofi -dmenu -p \"Power Profile\" -theme-str \"window {width: 300px;}\"); case \"$selected\" in *\"Performance\"*) powerprofilesctl set performance; notify-send \"🚀 Power Profile\" \"Switched to Performance mode\" -t 3000; ;; *\"Balanced\"*) powerprofilesctl set balanced; notify-send \"⚖️ Power Profile\" \"Switched to Balanced mode\" -t 3000; ;; *\"Power Saver\"*) powerprofilesctl set power-saver; notify-send \"🔋 Power Profile\" \"Switched to Power Saver mode\" -t 3000; ;; esac'";
+              on-click = "bash -c 'current=$(powerprofilesctl get 2>/dev/null || echo \"balanced\"); performance_option=\"Performance\"; balanced_option=\"Balanced\"; powersaver_option=\"Power Saver\"; case \"$current\" in \"performance\") performance_option=\"Performance ✓\"; ;; \"balanced\") balanced_option=\"Balanced ✓\"; ;; \"power-saver\") powersaver_option=\"Power Saver ✓\"; ;; esac; selected=$(printf \"%s\\n%s\\n%s\" \"$performance_option\" \"$balanced_option\" \"$powersaver_option\" | rofi -dmenu -p \"Power Profile\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in *\"Performance\"*) powerprofilesctl set performance; notify-send \"Power Profile\" \"Switched to Performance mode\" -t 3000; ;; *\"Balanced\"*) powerprofilesctl set balanced; notify-send \"Power Profile\" \"Switched to Balanced mode\" -t 3000; ;; *\"Power Saver\"*) powerprofilesctl set power-saver; notify-send \"Power Profile\" \"Switched to Power Saver mode\" -t 3000; ;; esac'";
               tooltip-format = "Battery: {capacity}% | Time: {time} | Click for power profile";
             };
 
@@ -288,7 +288,7 @@
 
             "custom/power" = {
               format = "{}";
-              on-click = "bash -c 'selected=$(printf \"🔁 Reboot\\n⏸️ Suspend\\n🔌 Shutdown\\n🚪 Logout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {width: 250px;}\"); case \"$selected\" in *\"Reboot\"*) systemctl reboot; ;; *\"Suspend\"*) systemctl suspend; ;; *\"Shutdown\"*) systemctl poweroff; ;; *\"Logout\"*) hyprctl dispatch exit 0; ;; esac'";
+              on-click = "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") hyprctl dispatch exit 0; ;; esac'";
               tooltip-format = "Power Options (click for menu)";
             };
           }
@@ -640,7 +640,7 @@
           #custom-system-gear {
               color: @overlay1;
               font-size: 14px;
-              padding: 2px 8px;
+              padding: 2px 8px 2px 12px;
               margin: 0 1.5px;
               margin-right: 12px;
               border-radius: 6px;

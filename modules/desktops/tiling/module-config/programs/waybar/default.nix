@@ -275,15 +275,6 @@
             "tray" = {
               icon-size = 16;
               spacing = 16;
-              icons = {
-                "slack" = "${./icons/slack.svg}";
-                "Slack" = "${./icons/slack.svg}";
-                "zoom" = "${./icons/zoom.svg}";
-                "Zoom" = "${./icons/zoom.svg}";
-                "us.zoom.Zoom" = "${./icons/zoom.svg}";
-                "todoist" = "${./icons/todoist.svg}";
-                "Todoist" = "${./icons/todoist.svg}";
-              };
             };
 
             "custom/power" = {

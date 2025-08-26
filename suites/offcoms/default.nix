@@ -32,14 +32,19 @@ in
     };
 
     apps = {
-      browsers.firefox.enable = false;
+      browsers.firefox = {
+        enable = true;
+        setAsDefault = true;
+      };
       browsers.chrome-based-browser.enable = false;
       browsers.google-chrome.enable = false;
       browsers.brave.enable = false;
       browsers.vivaldi.enable = false;
-      browsers.zen-browser.enable = true;
-      browsers.zen-browser.setAsDefault = true;
-      
+      browsers.zen-browser = {
+        enable = false;
+        setAsDefault = false;
+      };
+
       one-password.enable = true;
       obsidian.enable = true;
       gcal-br.enable = false;

@@ -10,9 +10,9 @@
           positionX = "center";
           positionY = "top";
           cssPriority = "user";
-          control-center-margin-top = 22;
+          control-center-margin-top = 50;
           control-center-margin-bottom = 2;
-          control-center-margin-right = 1;
+          control-center-margin-right = 200;
           control-center-margin-left = 0;
           notification-icon-size = 64;
           notification-body-image-height = 128;
@@ -21,8 +21,8 @@
           timeout-low = 6;
           timeout-critical = 0;
           fit-to-screen = true;
-          control-center-width = 400;
-          control-center-height = 915;
+          control-center-width = 550;
+          control-center-height = 450;
           notification-window-width = 375;
           keyboard-shortcuts = true;
           image-visibility = "when-available";
@@ -31,12 +31,9 @@
           hide-on-action = true;
           script-fail-notify = true;
           widgets = [
-            "title"
+            "title" 
             "dnd"
             "menubar#desktop"
-            "volume"
-            "backlight"
-            "mpris"
             "notifications"
           ];
           widget-config = {
@@ -258,11 +255,11 @@
 
           .control-center {
             background: @theme_base_color;
-            border-radius: 15px;
-            border: 0px solid @selected;
-            box-shadow: 0 0 10px 0 rgba(0,0,0,.80);
-            margin: 10px;
-            padding: 4px;
+            border-radius: 8px 8px 12px 12px;
+            border: 1px solid @blue;
+            box-shadow: 0 4px 20px 0 rgba(0,0,0,.60);
+            margin: 0px;
+            padding: 8px;
           }
 
           /* .right.overlay-indicator { */
@@ -306,11 +303,11 @@
 
           .notification-row {
             outline: none;
-            transition: all 1s ease;
+            transition: all 0.2s ease;
             background: @theme_bg_color;
             border: 0px solid @theme_unfocused_bg_color;
-            margin: 10px 5px 0px 5px;
-            border-radius: 14px;
+            margin: 6px 4px 0px 4px;
+            border-radius: 8px;
             /* box-shadow: 0px 0px 4px black; */
             /* background: alpha(currentColor, 0.05); */
           }
@@ -341,19 +338,20 @@
 
           /*** Widgets ***/
 
-          /* Title widget */
+          /* Title widget - compact for dropdown */
           .widget-title {
             margin: 0px;
             background: @theme_bg_color;
-            border-radius: 4px 4px 0px 0px;
+            border-radius: 6px 6px 0px 0px;
             /* border: 1px solid @surface1; */
             border-bottom: none;
+            min-height: 40px;
           }
 
           .widget-title > label {
-            margin: 18px 10px;
-            font-size: 20px;
-            font-weight: 500;
+            margin: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
           }
 
           .widget-title > button {

@@ -50,6 +50,7 @@ in
       gcal-br.enable = false;
       gmail-br.enable = false;
       br-drive.enable = false;
+      zoom-us.enable = false;
     };
 
     cli = {

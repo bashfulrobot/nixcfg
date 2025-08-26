@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- Simple video camera icon for Zoom -->
+  <rect x="2" y="5" width="8" height="6" rx="1" fill="#ffffff"/>
+  <polygon points="10,6 14,4 14,12 10,10" fill="#ffffff"/>
+  <circle cx="5" cy="7" r="1" fill="#333333"/>
+</svg>

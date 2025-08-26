@@ -25,6 +25,7 @@ in
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/swaync
+    ../module-config/programs/swayosd
     # ../module-config/programs/dunst
   ];
 
@@ -74,6 +75,92 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TimeoutStopSec = 10;
+        };
+      };
+      
+      privacy-monitor = 
+        let
+          privacy-monitor-script = pkgs.writeShellScript "privacy-monitor" ''
+            #!/usr/bin/env bash
+            # Privacy monitoring script for desktop notifications
+            # Monitors camera, microphone, and screen sharing access
+
+            CACHE_DIR="/tmp/privacy-monitor"
+            mkdir -p "$CACHE_DIR"
+
+            CAMERA_FILE="$CACHE_DIR/camera"
+            MIC_FILE="$CACHE_DIR/mic"
+            SCREEN_FILE="$CACHE_DIR/screen"
+
+            # Function to check camera usage
+            check_camera() {
+                if ${pkgs.lsof}/bin/lsof /dev/video* 2>/dev/null | grep -v COMMAND | head -1 >/dev/null; then
+                    if [[ ! -f "$CAMERA_FILE" ]]; then
+                        touch "$CAMERA_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "🔴 Camera Access" -b "An application is accessing your camera" --urgency critical
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(f38ba8)" "🔴 Camera is being accessed"
+                    fi
+                else
+                    if [[ -f "$CAMERA_FILE" ]]; then
+                        rm "$CAMERA_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Camera Access Ended" -b "Camera access has stopped"
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Camera access ended"
+                    fi
+                fi
+            }
+
+            # Function to check microphone usage (via PulseAudio)
+            check_microphone() {
+                if ${pkgs.pulseaudio}/bin/pactl list source-outputs 2>/dev/null | grep -q "Source Output"; then
+                    if [[ ! -f "$MIC_FILE" ]]; then
+                        touch "$MIC_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "🎤 Microphone Access" -b "An application is accessing your microphone" --urgency critical
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(f9e2af)" "🎤 Microphone is being accessed"
+                    fi
+                else
+                    if [[ -f "$MIC_FILE" ]]; then
+                        rm "$MIC_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Microphone Access Ended" -b "Microphone access has stopped"
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Microphone access ended"
+                    fi
+                fi
+            }
+
+            # Function to check screen sharing (via active screen capture sessions)
+            check_screenshare() {
+                if ${pkgs.procps}/bin/pgrep -f "grim|grimblast|wf-recorder|obs" >/dev/null 2>&1; then
+                    if [[ ! -f "$SCREEN_FILE" ]]; then
+                        touch "$SCREEN_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "📺 Screen Sharing Active" -b "Screen recording/sharing is active" --urgency critical
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(cba6f7)" "📺 Screen sharing is active"
+                    fi
+                else
+                    if [[ -f "$SCREEN_FILE" ]]; then
+                        rm "$SCREEN_FILE"
+                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Screen Sharing Ended" -b "Screen sharing has stopped"
+                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Screen sharing ended"
+                    fi
+                fi
+            }
+
+            # Main monitoring loop
+            while true; do
+                check_camera
+                check_microphone
+                check_screenshare
+                sleep 2
+            done
+          '';
+        in {
+        description = "Privacy Monitor - Camera/Microphone/Screenshare notifications";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${privacy-monitor-script}";
+          Restart = "always";
+          RestartSec = 3;
         };
       };
     };
@@ -132,6 +219,11 @@ in
       libsecret
       blueman
       papirus-folders
+      # Packages for swayosd custom indicators
+      swayosd
+      lm_sensors
+      procps
+      wirelesstools
       # hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
@@ -355,6 +447,7 @@ in
             enable_swallow = true;
             vfr = true; # always keep on
             vrr = 1; # enable variable refresh rate (0=off, 1=on, 2=fullscreen only)
+            focus_on_activate = true; # allow notifications to focus apps when clicked
           };
           xwayland.force_zero_scaling = false;
           gestures = {
@@ -475,15 +568,79 @@ in
 
             # Removed resize bindings - moved to submap
 
-            # Functional keybinds
-            ",XF86MonBrightnessDown,exec,brightnessctl set 2%-"
-            ",XF86MonBrightnessUp,exec,brightnessctl set +2%"
-            ",XF86AudioLowerVolume,exec,pamixer -d 2"
-            ",XF86AudioRaiseVolume,exec,pamixer -i 2"
+            # Functional keybinds with swayosd
+            ",XF86MonBrightnessDown,exec,swayosd-client --brightness lower"
+            ",XF86MonBrightnessUp,exec,swayosd-client --brightness raise"
+            ",XF86AudioLowerVolume,exec,swayosd-client --output-volume lower"
+            ",XF86AudioRaiseVolume,exec,swayosd-client --output-volume raise"
           ];
           bind =
             let
               autoclicker = pkgs.callPackage ../module-config/scripts/autoclicker.nix { };
+              swayosd-custom = pkgs.writeShellScript "swayosd-custom" ''
+                # Custom swayosd indicators script
+                # Usage: ./swayosd-custom.sh <command> [args]
+
+                case "$1" in
+                  "battery")
+                    # Show battery level as progress bar
+                    battery_level=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1)
+                    if [[ -n "$battery_level" ]]; then
+                      ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$battery_level"
+                    fi
+                    ;;
+                  
+                  "microphone-volume")
+                    # Show microphone volume level
+                    mic_volume=$(${pkgs.pamixer}/bin/pamixer --default-source --get-volume 2>/dev/null || echo "0")
+                    ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$mic_volume"
+                    ;;
+                  
+                  "cpu-temp")
+                    # Show CPU temperature as progress (scaled to 0-100)
+                    temp=$(${pkgs.lm_sensors}/bin/sensors 2>/dev/null | grep -i "core 0" | awk '{print $3}' | tr -d '+°C' | cut -d'.' -f1)
+                    if [[ -n "$temp" && "$temp" =~ ^[0-9]+$ ]]; then
+                      # Scale temperature: 30°C = 0%, 80°C = 100%
+                      scaled_temp=$(( (temp - 30) * 2 ))
+                      [[ $scaled_temp -lt 0 ]] && scaled_temp=0
+                      [[ $scaled_temp -gt 100 ]] && scaled_temp=100
+                      ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$scaled_temp"
+                    fi
+                    ;;
+                  
+                  "memory-usage")
+                    # Show memory usage percentage
+                    mem_usage=$(${pkgs.procps}/bin/free | grep "Mem:" | awk '{printf "%.0f", $3/$2 * 100}')
+                    ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$mem_usage"
+                    ;;
+                  
+                  "wifi-strength")
+                    # Show WiFi signal strength
+                    wifi_strength=$(${pkgs.wirelesstools}/bin/iwconfig 2>/dev/null | grep "Signal level" | sed 's/.*Signal level=\([0-9-]*\).*/\1/' | head -1)
+                    if [[ -n "$wifi_strength" ]]; then
+                      # Convert dBm to percentage (rough approximation)
+                      # -30 dBm = 100%, -90 dBm = 0%
+                      percentage=$(( (wifi_strength + 90) * 100 / 60 ))
+                      [[ $percentage -lt 0 ]] && percentage=0
+                      [[ $percentage -gt 100 ]] && percentage=100
+                      ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$percentage"
+                    fi
+                    ;;
+                  
+                  "disk-usage")
+                    # Show disk usage for specified path (default: home directory)
+                    path="''${2:-$HOME}"
+                    disk_usage=$(${pkgs.coreutils}/bin/df "$path" | awk 'NR==2 {print int($5)}' | tr -d '%')
+                    ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$disk_usage"
+                    ;;
+                  
+                  *)
+                    echo "Usage: $0 {battery|microphone-volume|cpu-temp|memory-usage|wifi-strength|disk-usage [path]}"
+                    echo "Custom swayosd progress indicators for system monitoring"
+                    exit 1
+                    ;;
+                esac
+              '';
             in
             [
               # Keybinds help menu
@@ -548,12 +705,24 @@ in
 
               # Functional keybinds
               ",xf86Sleep, exec, systemctl suspend" # Put computer into sleep mode
-              ",XF86AudioMicMute,exec,pamixer --default-source -t" # mute mic
-              ",XF86AudioMute,exec,pamixer -t" # mute audio
-              ",XF86AudioPlay,exec,playerctl play-pause" # Play/Pause media
-              ",XF86AudioPause,exec,playerctl play-pause" # Play/Pause media
-              ",xf86AudioNext,exec,playerctl next" # go to next media
-              ",xf86AudioPrev,exec,playerctl previous" # go to previous media
+              ",XF86AudioMicMute,exec,swayosd-client --input-volume mute-toggle" # mute mic
+              ",XF86AudioMute,exec,swayosd-client --output-volume mute-toggle" # mute audio
+              ",XF86AudioPlay,exec,swayosd-client --player-status play-pause" # Play/Pause media with OSD
+              ",XF86AudioPause,exec,swayosd-client --player-status play-pause" # Play/Pause media with OSD
+              ",xf86AudioNext,exec,swayosd-client --player-status next" # go to next media with OSD
+              ",xf86AudioPrev,exec,swayosd-client --player-status previous" # go to previous media with OSD
+
+              # Keyboard lock indicators with OSD
+              ",Caps_Lock,exec,swayosd-client --caps-lock toggle" # Show Caps Lock status
+              ",Num_Lock,exec,swayosd-client --num-lock toggle" # Show Num Lock status
+
+              # Custom system monitoring with swayosd
+              "$mainMod, F1, exec, ${swayosd-custom} battery" # Show battery level
+              "$mainMod, F2, exec, ${swayosd-custom} memory-usage" # Show memory usage
+              "$mainMod, F3, exec, ${swayosd-custom} cpu-temp" # Show CPU temperature
+              "$mainMod, F4, exec, ${swayosd-custom} disk-usage" # Show disk usage
+              "$mainMod SHIFT, F1, exec, ${swayosd-custom} microphone-volume" # Show mic volume
+              "$mainMod SHIFT, F2, exec, ${swayosd-custom} wifi-strength" # Show WiFi strength
 
               # ",xf86AudioNext,exec,${../module-config/scripts/MediaCtrl.sh} next" # go to next media
               # ",xf86AudioPrev,exec,${../module-config/scripts/MediaCtrl.sh} previous" # go to previous media

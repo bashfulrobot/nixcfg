@@ -80,7 +80,7 @@ in
       # Communications & AI
       # inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support - temporarily disabled due to hash mismatch
 
-      unstable.zoom-us
+      #unstable.zoom-us
 
       # # IM
       # fractal # Matrix Client
@@ -110,6 +110,7 @@ in
 
     services.flatpak.packages = [
       "net.xmind.XMind" # Mindmapping
+      "us.zoom.Zoom" # Zoom Desktop
     ];
   };
 }

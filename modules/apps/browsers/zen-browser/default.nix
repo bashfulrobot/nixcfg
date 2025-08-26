@@ -56,6 +56,20 @@ in
         user_pref("browser.theme.content-theme", 0);
         user_pref("browser.theme.toolbar-theme", 0);
       '';
+        } // lib.optionalAttrs config.apps.one-password.enable {
+          # 1Password native messaging manifest for Zen Browser
+          # Based on Firefox structure since Zen is Firefox-based
+          ".zen/native-messaging-hosts/com.1password.1password.json".text = builtins.toJSON {
+            name = "com.1password.1password";
+            description = "1Password BrowserSupport";
+            path = "/run/wrappers/bin/1Password-BrowserSupport";
+            type = "stdio";
+            allowed_extensions = [
+              "{d634138d-c276-4fc8-924b-40a0ea21d284}"  # 1Password X - Password Manager
+              "{0a75d802-9aed-41e7-8daa-24c067386e82}"  # 1Password Legacy extension
+              "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}"  # 1Password Beta extension
+            ];
+          };
         };
       };
 

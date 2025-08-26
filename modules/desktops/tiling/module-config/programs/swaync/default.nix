@@ -7,7 +7,7 @@
         enable = true;
         settings = {
           "$schema" = "/etc/xdg/swaync/configSchema.json";
-          positionX = "right";
+          positionX = "center";
           positionY = "top";
           cssPriority = "user";
           control-center-margin-top = 22;
@@ -18,9 +18,9 @@
           notification-body-image-height = 128;
           notification-body-image-width = 200;
           timeout = 6;
-          timeout-low = 3;
+          timeout-low = 6;
           timeout-critical = 0;
-          fit-to-screen = false;
+          fit-to-screen = true;
           control-center-width = 400;
           control-center-height = 915;
           notification-window-width = 375;
@@ -117,15 +117,9 @@
             };
           };
           notification-visibility = {
-            spotify = {
+            "*" = {
               state = "enabled";
-              urgency = "Low";
-              app-name = "Spotify";
-            };
-            youtube-music = {
-              state = "enabled";
-              urgency = "Low";
-              app-name = "com.github.th_ch.youtube_music";
+              urgency = "Normal";
             };
           };
         };

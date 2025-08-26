@@ -25,9 +25,8 @@
             margin-bottom = 0;
 
             modules-left = ["hyprland/workspaces" "mpris"];
-            # modules-center = ["clock" "custom/notification"];
-            modules-center = ["clock"];
-            modules-right = ["group/system-info" "custom/notification" "custom/power"];
+            modules-center = ["custom/notification" "clock"];
+            modules-right = ["group/system-info" "custom/power"];
 
             "group/system-info" = {
               orientation = "inherit";
@@ -570,8 +569,8 @@
           #custom-power {
               color: @red;
               border-left: 1px solid @blue;
-              padding: 2px 12px 2px 21px;
-              margin-left: 16px;
+              padding: 2px 8px 2px 12px;
+              margin-left: 12px;
               border-radius: 0 6px 6px 0;
               transition: all 0.2s ease-in-out;
           }

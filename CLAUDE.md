@@ -263,3 +263,5 @@ The repository uses an **auto-import** system (`lib/autoimport.nix`) that recurs
 - **Standard Lint**: `just lint [target]` works but without tab completion (direct justfile command)
 - **Targeted File Check**: Use `jcheck <tab>` for syntax checking specific files with tab completion
 - Both `jlint` and `just lint` do the same thing, but `jlint` provides tab completion for file paths
+
+- always remember this doc as the valid niri flake options. https://github.com/sodiboo/niri-flake/blob/main/docs.md

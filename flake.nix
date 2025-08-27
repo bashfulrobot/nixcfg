@@ -46,13 +46,16 @@
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-zoom = {
+      url = "github:nixos/nixpkgs/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73";
+    };
   };
 
   # --- outputs function receives all inputs as parameters
   # inputs@{...} syntax captures all inputs in a variable called inputs
   # self refers to the flake itself
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak, flake-utils, claude-desktop
-    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, ... }:
+    , disko, nixos-hardware, nixos-hardware-fork, nixvim, opnix, hyprflake, zen-browser, stylix, nixpkgs-zoom, ... }:
     let
       # --- Creates an overlay that makes the unstable nixpkgs available under pkgs.unstable
       overlay-unstable = final: prev: {

@@ -197,6 +197,14 @@ in
       # withUWSM = true;
     };
 
+    # Configure XDG Desktop Portals for better app compatibility
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk # Fallback for better app compatibility
+      ];
+    };
+
     environment.systemPackages = with pkgs; [
       pinentry-all # gpg passphrase prompting
       nautilus-open-any-terminal # open terminal(s) in nautilus

@@ -1,0 +1,203 @@
+# Hyprland Module Audit - Missing Features from GNOME Module
+
+## 1. Modular Service Enabling Patterns
+
+- [ ] Add tiered enable options (core, addons, ux)
+  - [ ] desktops.hyprland.core.enable (basic window manager + essential services)
+  - [ ] desktops.hyprland.addons.enable (waybar, rofi, notifications, etc.)
+  - [ ] desktops.hyprland.ux.enable (custom scripts, privacy monitor, etc.)
+- [ ] Create dependency chain where main enable automatically enables core services
+
+## 2. Package Management Improvements
+
+- [ ] Implement package grouping system
+  - [ ] Group packages into logical categories (core, ui-tools, media, system-utils)
+  - [ ] Create separate package lists for different feature sets
+- [ ] Add excludePackages option
+  - [ ] environment.hyprland.excludePackages = mkOption { ... }
+  - [ ] Implement utils.removePackagesByName helper function
+  - [ ] Allow users to opt-out of specific packages without overriding entire lists
+
+## 3. Session Configuration Enhancements
+
+- [ ] Add sessionPath option for additional packages
+  - [ ] Similar to GNOME's services.xserver.desktopManager.gnome.sessionPath
+  - [ ] Allow extending session search paths for extensions/plugins
+- [ ] Implement proper environment variable management at system level
+  - [ ] Move critical env vars from home-manager to system level
+  - [ ] Use environment.extraInit for dynamic path construction
+- [ ] Add session debug option
+  - [ ] environment.sessionVariables.HYPRLAND_SESSION_DEBUG support
+
+## 4. Integration Pattern Improvements
+
+- [ ] Add declarative XDG portal configuration
+  - [ ] xdg.portal.extraPortals for Hyprland-specific portals
+  - [ ] xdg.portal.configPackages integration
+- [ ] Improve service integration patterns
+  - [ ] Use mkDefault more consistently for optional services
+  - [ ] Add proper service dependency management
+- [ ] Add hardware integration options
+  - [ ] services.geoclue2 integration for location services
+  - [ ] services.colord.enable for color management
+  - [ ] services.power-profiles-daemon integration
+
+## 5. System Service Configuration
+
+- [ ] Extract privacy-monitor into separate derivation/module
+  - [ ] Create desktops.hyprland.privacyMonitor.enable option
+  - [ ] Move shell script to proper package derivation
+- [ ] Add flashback/compatibility mode support
+  - [ ] Support for running with different window managers
+  - [ ] Custom session definitions
+- [ ] Improve systemd service definitions
+  - [ ] Use systemd.packages instead of manual service definitions where appropriate
+  - [ ] Better service ordering and dependencies
+
+## 6. Environment Variables and Paths
+
+- [ ] Consolidate environment variable management
+  - [ ] Move system-critical vars to system level
+  - [ ] Keep user preference vars in home-manager
+- [ ] Add proper path management
+  - [ ] environment.pathsToLink for theme/extension paths
+  - [ ] XDG_DATA_DIRS management for applications
+- [ ] Implement NIX_GSETTINGS_OVERRIDES_DIR equivalent for Hyprland
+
+## 7. User Experience Features
+
+- [ ] Add default configuration options
+  - [ ] Default wallpaper/theme settings
+  - [ ] Default application associations
+  - [ ] Sensible defaults for new users
+- [ ] Implement settings override system
+  - [ ] extraHyprlandConfig option for user overrides
+  - [ ] Configuration package system similar to GSettings
+- [ ] Add accessibility support
+  - [ ] Screen reader integration
+  - [ ] High contrast theme options
+  - [ ] Keyboard navigation enhancements
+
+## 8. Documentation and Metadata
+
+- [ ] Add meta section with maintainers and documentation
+- [ ] Create comprehensive module documentation
+- [ ] Add example configurations
+- [ ] Document integration patterns for extensions
+
+## 9. Testing and Quality Improvements
+
+- [ ] Add module tests similar to GNOME module
+- [ ] Implement configuration validation
+- [ ] Add deprecation warnings for old options
+- [ ] Create migration guides
+
+## 10. Login, Keyring, and Authentication Services (GRANULAR)
+
+### 10.1. PAM Service Configuration Issues
+- [ ] **CRITICAL: Incomplete PAM coverage**
+  - [ ] Current: Only gdm, gdm-password, login have enableGnomeKeyring = true
+  - [ ] Missing: sudo, su, passwd, other-user login scenarios
+  - [ ] Add security.pam.services.sudo.enableGnomeKeyring = true
+  - [ ] Add security.pam.services.su.enableGnomeKeyring = true
+  - [ ] Consider security.pam.services.hyprlock.enableGnomeKeyring = true
+- [ ] **PAM Service Ordering and Dependencies**
+  - [ ] Current PAM setup may not properly handle session startup order
+  - [ ] Research GNOME module's security.pam.services.gnome-flashback configuration
+  - [ ] Ensure keyring unlocks before other services need it
+
+### 10.2. Polkit Authentication Agent Issues
+- [ ] **CRITICAL: Duplicate/Conflicting Polkit Agents**
+  - [ ] Line 395: "polkit-agent-helper-1" in exec-once (generic agent)
+  - [ ] Line 52-64: hyprpolkitagent systemd service (Hyprland-specific agent)
+  - [ ] These two agents may conflict or cause authentication confusion
+  - [ ] Remove "polkit-agent-helper-1" from exec-once, rely on systemd service
+- [ ] **Polkit Service Integration**
+  - [ ] Missing: security.polkit.enable = true (should be explicit)
+  - [ ] Current setup relies on implicit polkit enabling
+  - [ ] Add proper polkit configuration validation
+
+### 10.3. Keyring Service Architecture Problems
+- [ ] **Keyring Service Conflicts and Management**
+  - [ ] Line 171: systemd.user.services.gnome-keyring-daemon.enable = false
+  - [ ] Line 68-80: Custom gnome-keyring-ssh service definition
+  - [ ] This approach bypasses NixOS keyring management completely
+  - [ ] Consider using services.gnome.gnome-keyring.enable = true instead
+- [ ] **SSH Agent Integration Issues**
+  - [ ] Custom SSH component service may not integrate with PAM unlock
+  - [ ] SSH_AUTH_SOCK environment variable set manually (line 362)
+  - [ ] Missing proper SSH key loading integration with keyring unlock
+- [ ] **Keyring Secrets vs SSH Component Split**
+  - [ ] Current: PAM unlocks secrets, separate service handles SSH
+  - [ ] Better: Use services.gnome.gnome-keyring.enable with proper component config
+  - [ ] Need services.gnome.gnome-keyring.components = ["secrets" "ssh" "pkcs11"]
+
+### 10.4. D-Bus and Session Service Issues
+- [ ] **D-Bus Service Configuration**
+  - [ ] Current: services.dbus.enable = true (basic)
+  - [ ] Missing: services.xserver.updateDbusEnvironment = true
+  - [ ] Missing: Proper D-Bus session integration for authentication
+- [ ] **XDG Portal Integration Missing**
+  - [ ] No xdg.portal.enable = true
+  - [ ] Missing xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ]
+  - [ ] Authentication dialogs may not work properly in some applications
+
+### 10.5. Session Management and Security
+- [ ] **Session Target Dependencies**
+  - [ ] All services use "graphical-session.target" but no validation of target
+  - [ ] Missing proper session ordering (keyring → polkit → other services)
+  - [ ] Need Before/After directives to ensure proper startup sequence
+- [ ] **Runtime Directory and Permissions**
+  - [ ] Line 255: XDG_RUNTIME_DIR set manually in environment.variables
+  - [ ] This may not be sufficient for proper session management
+  - [ ] Need proper systemd-logind integration
+
+### 10.6. Security Service Dependencies Missing
+- [ ] **Core Security Services Not Enabled**
+  - [ ] Missing: security.rtkit.enable = mkDefault true (for audio privileges)
+  - [ ] Missing: services.accounts-daemon.enable = true (for user account management)
+  - [ ] Missing: services.upower.enable = config.powerManagement.enable
+  - [ ] These affect authentication and permission flows
+- [ ] **Hardware Security Integration**
+  - [ ] Missing: services.hardware.bolt.enable = mkDefault true (Thunderbolt security)
+  - [ ] Missing: services.udisks2.enable = true (disk mounting permissions)
+  - [ ] These affect device authentication and mounting
+
+### 10.7. Authentication Flow and User Experience
+- [ ] **Authentication Dialog Configuration**
+  - [ ] gcr_4 package included but no proper gcr configuration
+  - [ ] SSH_ASKPASS points to gcr4-ssh-askpass but may not integrate with keyring
+  - [ ] Need proper gcr/libsecret integration configuration
+- [ ] **Credential Storage and Access**
+  - [ ] SIGNAL_PASSWORD_STORE points to gnome-libsecret (good)
+  - [ ] But no validation that libsecret can access unlocked keyring
+  - [ ] Need proper secret service D-Bus integration
+
+### 10.8. Service Startup and Dependency Resolution
+- [ ] **Service Ordering Issues**
+  - [ ] Keyring SSH service: Type = "forking" may not wait for proper startup
+  - [ ] Polkit agent: No explicit dependency on D-Bus being ready
+  - [ ] Privacy monitor: No dependency on notification services being ready
+- [ ] **Failure Recovery**
+  - [ ] Services have Restart = "on-failure" but no proper dependency restart
+  - [ ] If keyring fails, dependent services should be restarted
+  - [ ] Need BindsTo or Requisite directives for critical dependencies
+
+## 11. Advanced Features (Consider for Future)
+
+- [ ] Multi-monitor configuration management
+- [ ] Workspace-specific application launching
+- [ ] Integration with NixOS specializations
+- [ ] Backup/restore configuration system
+- [ ] Remote desktop support similar to gnome-remote-desktop
+- [ ] Better integration with nixos-generate-config
+
+## Priority Assessment:
+**CRITICAL**: Item 10 (authentication security issues)
+HIGH: Items 1, 2, 6, 7 (core functionality and UX)
+MEDIUM: Items 3, 4, 5 (integration and services)
+LOW: Items 8, 9, 11 (documentation and advanced features)
+
+---
+Generated: $(date)
+Comparison based on: NixOS GNOME module (nixos-25.05 branch)

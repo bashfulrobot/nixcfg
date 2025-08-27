@@ -17,7 +17,10 @@
 
   # Enable gnome desktop
   desktops.gnome.enable = true;
-  desktops.tiling.hyprland.enable = true;
+  desktops.tiling = {
+    hyprland.enable = false;
+    niri.enable  = true;
+  };
 
   apps = {
     claude-desktop.enable = true;

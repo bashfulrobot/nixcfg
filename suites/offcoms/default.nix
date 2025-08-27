@@ -51,6 +51,7 @@ in
       gmail-br.enable = false;
       br-drive.enable = false;
       zoom-us.enable = false;
+      zoom-flatpak.enable = true;
     };
 
     cli = {
@@ -111,7 +112,6 @@ in
 
     services.flatpak.packages = [
       "net.xmind.XMind" # Mindmapping
-      "us.zoom.Zoom" # Zoom Desktop
     ];
   };
 }

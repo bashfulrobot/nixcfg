@@ -1,3 +1,4 @@
+# https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/x11/desktop-managers/gnome.nix
 {
   user-settings,
   pkgs,
@@ -77,8 +78,8 @@ in
           TimeoutStopSec = 10;
         };
       };
-      
-      privacy-monitor = 
+
+      privacy-monitor =
         let
           privacy-monitor-script = pkgs.writeShellScript "privacy-monitor" ''
             #!/usr/bin/env bash
@@ -151,18 +152,19 @@ in
                 sleep 2
             done
           '';
-        in {
-        description = "Privacy Monitor - Camera/Microphone/Screenshare notifications";
-        wantedBy = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        after = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${privacy-monitor-script}";
-          Restart = "always";
-          RestartSec = 3;
+        in
+        {
+          description = "Privacy Monitor - Camera/Microphone/Screenshare notifications";
+          wantedBy = [ "graphical-session.target" ];
+          wants = [ "graphical-session.target" ];
+          after = [ "graphical-session.target" ];
+          serviceConfig = {
+            Type = "simple";
+            ExecStart = "${privacy-monitor-script}";
+            Restart = "always";
+            RestartSec = 3;
+          };
         };
-      };
     };
 
     # Disable the default NixOS keyring service to prevent conflicts
@@ -175,15 +177,17 @@ in
       xserver = {
         enable = true;
         displayManager = {
-          # sddm = {
-          #   enable = true;
-          #   wayland.enable = true;
-          # };
           gdm = {
             enable = true;
             wayland = true;
           };
         };
+        # Configure keymap in X11
+        xkb = {
+          layout = "us";
+          variant = "";
+        };
+        excludePackages = [ pkgs.xterm ];
       };
       blueman.enable = true;
     };
@@ -194,6 +198,9 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      pinentry-all # gpg passphrase prompting
+      nautilus-open-any-terminal # open terminal(s) in nautilus
+      file-roller # GNOME archive manager
       hyprpaper
       seahorse
       hyprpicker
@@ -224,6 +231,11 @@ in
       lm_sensors
       procps
       wirelesstools
+      # Icon theme support for notifications
+      hicolor-icon-theme
+      shared-mime-info
+      desktop-file-utils
+      gtk3.out # for gtk-update-icon-cache
       # hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
@@ -248,8 +260,44 @@ in
       xdg.enable = true;
     };
 
+    system.activationScripts.script.text = ''
+      mkdir -p /var/lib/AccountsService/{icons,users}
+      cp ${user-settings.user.home}/dev/nix/nixcfg/modules/desktops/gnome/.face /var/lib/AccountsService/icons/${user-settings.user.username}
+      echo -e "[User]\nIcon=/var/lib/AccountsService/icons/${user-settings.user.username}\n" > /var/lib/AccountsService/users/${user-settings.user.username}
+
+      chown root:root /var/lib/AccountsService/users/${user-settings.user.username}
+      chmod 0600 /var/lib/AccountsService/users/${user-settings.user.username}
+
+      chown root:root /var/lib/AccountsService/icons/${user-settings.user.username}
+      chmod 0444 /var/lib/AccountsService/icons/${user-settings.user.username}
+
+      # Update icon caches for proper notification icons in lock screen
+      if [ -x "${pkgs.gtk3.out}/bin/gtk-update-icon-cache" ]; then
+        for theme_dir in /run/current-system/sw/share/icons/*; do
+          if [ -d "$theme_dir" ]; then
+            echo "Updating icon cache for $(basename "$theme_dir")"
+            ${pkgs.gtk3.out}/bin/gtk-update-icon-cache -f -t "$theme_dir" 2>/dev/null || true
+          fi
+        done
+        # Also update user-specific icon cache
+        if [ -d "${user-settings.user.home}/.local/share/icons" ]; then
+          for user_theme_dir in ${user-settings.user.home}/.local/share/icons/*; do
+            if [ -d "$user_theme_dir" ]; then
+              echo "Updating user icon cache for $(basename "$user_theme_dir")"
+              ${pkgs.gtk3.out}/bin/gtk-update-icon-cache -f -t "$user_theme_dir" 2>/dev/null || true
+            fi
+          done
+        fi
+      fi
+    '';
+
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
+
+      # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/13?u=brnix
+      # home.file.".gnupg/gpg-agent.conf".text = ''
+      #   pinentry-program /run/current-system/sw/bin/pinentry
+      # '';
 
       home.pointerCursor = {
         name = lib.mkDefault "Bibata-Modern-Classic";
@@ -589,13 +637,13 @@ in
                       ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$battery_level"
                     fi
                     ;;
-                  
+
                   "microphone-volume")
                     # Show microphone volume level
                     mic_volume=$(${pkgs.pamixer}/bin/pamixer --default-source --get-volume 2>/dev/null || echo "0")
                     ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$mic_volume"
                     ;;
-                  
+
                   "cpu-temp")
                     # Show CPU temperature as progress (scaled to 0-100)
                     temp=$(${pkgs.lm_sensors}/bin/sensors 2>/dev/null | grep -i "core 0" | awk '{print $3}' | tr -d '+°C' | cut -d'.' -f1)
@@ -607,13 +655,13 @@ in
                       ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$scaled_temp"
                     fi
                     ;;
-                  
+
                   "memory-usage")
                     # Show memory usage percentage
                     mem_usage=$(${pkgs.procps}/bin/free | grep "Mem:" | awk '{printf "%.0f", $3/$2 * 100}')
                     ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$mem_usage"
                     ;;
-                  
+
                   "wifi-strength")
                     # Show WiFi signal strength
                     wifi_strength=$(${pkgs.wirelesstools}/bin/iwconfig 2>/dev/null | grep "Signal level" | sed 's/.*Signal level=\([0-9-]*\).*/\1/' | head -1)
@@ -626,14 +674,14 @@ in
                       ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$percentage"
                     fi
                     ;;
-                  
+
                   "disk-usage")
                     # Show disk usage for specified path (default: home directory)
                     path="''${2:-$HOME}"
                     disk_usage=$(${pkgs.coreutils}/bin/df "$path" | awk 'NR==2 {print int($5)}' | tr -d '%')
                     ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$disk_usage"
                     ;;
-                  
+
                   *)
                     echo "Usage: $0 {battery|microphone-volume|cpu-temp|memory-usage|wifi-strength|disk-usage [path]}"
                     echo "Custom swayosd progress indicators for system monitoring"
@@ -892,6 +940,7 @@ in
           workspace=special,monitor:
         '';
       };
+
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";

@@ -50,7 +50,10 @@ in
       gcal-br.enable = false;
       gmail-br.enable = false;
       br-drive.enable = false;
-      zoom-us.enable = false;
+      zoom-us = {
+        enable = false;
+        downgrade = false;
+      };
       zoom-flatpak.enable = true;
     };
 

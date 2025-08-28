@@ -20,13 +20,16 @@ Super + Shift + Space   Launch Alpaca AI chat
 Super + Q           Close window
 Super + Shift + Q   Quit niri
 Super + F           Fullscreen window
-Ctrl + Shift + Space    Toggle window floating
+Super + W           Toggle window floating
+Ctrl + Shift + Space    Toggle window floating (alt)
 
 ━━━ FOCUS MOVEMENT ━━━
 Super + ↑/↓         Focus window up/down
 Super + ←/→         Focus column left/right
 Super + K/J         Focus window up/down (vim)
 Super + H/L         Focus column left/right (vim)
+Super + Tab         Focus next window
+Super + Shift + Tab Focus previous window
 Ctrl + ↓           Toggle overview
 
 ━━━ WINDOW MOVEMENT ━━━
@@ -38,6 +41,7 @@ Super + .           Expel window from column
 ━━━ COLUMN/WINDOW SIZING ━━━
 Super + R           Switch preset column width
 Super + Shift + R   Switch preset window height
+Super + O           Reset column to 50% width
 
 ━━━ WORKSPACE MANAGEMENT ━━━
 Super + 1-9         Focus workspace 1-9
@@ -80,7 +84,7 @@ Super + ?           Show this help (you are here!)
 
 ━━━ SUPPORTING PROGRAMS ━━━
 • fuzzel - Application launcher & dmenu
-• ghostty - Terminal emulator
+• ghostty - Terminal emulator  
 • bemoji - Emoji picker
 • nautilus - File manager
 • swaync - Notification center
@@ -92,6 +96,13 @@ Super + ?           Show this help (you are here!)
 • playerctl - Media control
 • brightnessctl - Brightness control
 • blueman-applet - Bluetooth manager
+
+━━━ ENHANCED FEATURES ━━━
+• Smart window rules for PiP & KDE apps
+• Adaptive input acceleration profiles
+• Per-window keyboard layout tracking
+• Organized Screenshots folder
+• Suspend on lid close (not poweroff)
 
 Press Escape to close
 EOF

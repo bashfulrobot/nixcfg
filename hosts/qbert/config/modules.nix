@@ -15,11 +15,11 @@
     timezone.enable = true;
   };
 
-  # Enable gnome desktop
-  desktops.gnome.enable = true;
+  # Desktop configuration - using niri as primary
+  desktops.gnome.enable = false;
   desktops.tiling = {
     hyprland.enable = false;
-    niri.enable  = true;
+    niri.enable = true;
   };
 
   apps = {

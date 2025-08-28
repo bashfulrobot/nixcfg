@@ -1,4 +1,4 @@
-{ user-settings, ... }:
+{ user-settings, lib, ... }:
 
 {
   home-manager.users."${user-settings.user.username}" = {
@@ -6,12 +6,11 @@
       enable = true;
       settings = {
         main = {
-          font = "JetBrainsMonoNL Nerd Font Mono";
-          show-actions = "yes";
+          font = lib.mkForce "JetBrainsMonoNL Nerd Font Mono";
           width = 64;
           tabs = 4;
-          exit-on-keyboard-focus-loss = "yes";
         };
+        # Add other sections like colors, etc.
       };
     };
   };

@@ -30,6 +30,11 @@ in
           QT_QPA_PLATFORM = "wayland";
           XDG_CURRENT_DESKTOP = "niri";
           XDG_SESSION_TYPE = "wayland";
+          # Better app compatibility
+          NIXOS_OZONE_WL = "1";
+          MOZ_ENABLE_WAYLAND = "1";
+          QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+          NIRI_SESSION = "1";
         };
 
         spawn-at-startup = [
@@ -109,6 +114,7 @@ in
         input = {
           keyboard = {
             numlock = true;
+            track-layout = "window";
           };
           focus-follows-mouse = {
             enable = true;
@@ -120,9 +126,12 @@ in
             click-method = "clickfinger";
             dwt = true;
             disabled-on-external-mouse = true;
+            accel-profile = "adaptive";
+            scroll-method = "two-finger";
           };
           mouse = {
             natural-scroll = true;
+            accel-profile = "adaptive";
           };
         };
 
@@ -136,6 +145,9 @@ in
         };
 
         prefer-no-csd = true;
+
+        # Screenshot configuration
+        screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
 
         animations = {
           slowdown = 0.6;
@@ -181,7 +193,7 @@ in
             action = {
               spawn = [
                 "systemctl"
-                "poweroff"
+                "suspend"
               ];
             };
           };
@@ -277,6 +289,30 @@ in
               };
               draw-behind-window = true;
             };
+          }
+          # Additional advanced window rules
+          {
+            matches = [{ app-id = "^org\\.kde\\..*"; }];
+            default-column-width = { proportion = 0.75; };
+          }
+          {
+            matches = [
+              { title = "^(Picture.in.Picture|PiP).*"; }
+              { title = "^Picture-in-Picture$"; }
+            ];
+            open-floating = true;
+            geometry-corner-radius = {
+              top-left = 8.0;
+              top-right = 8.0; 
+              bottom-left = 8.0;
+              bottom-right = 8.0;
+            };
+          }
+          {
+            matches = [
+              { app-id = "^(pavucontrol|blueman-manager)$"; }
+            ];
+            open-floating = true;
           }
         ];
 
@@ -611,6 +647,22 @@ in
           "Super+question" = {
             action = {
               spawn = [ "niri-keybinds-help" ];
+            };
+          };
+          
+          # Additional shortcuts for better workflow
+          "Super+W" = {
+            action.toggle-window-floating = { };
+          };
+          "Super+Tab" = {
+            action.focus-window-down = { };
+          };
+          "Super+Shift+Tab" = {
+            action.focus-window-up = { };
+          };
+          "Super+O" = {
+            action = {
+              set-column-width = { proportion = 0.5; };
             };
           };
         };

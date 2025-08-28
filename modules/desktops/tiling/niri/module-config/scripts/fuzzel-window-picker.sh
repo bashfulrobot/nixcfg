@@ -1,3 +1,2 @@
-#!/bin/sh
-windows=$(niri msg -j windows)
-niri msg action focus-window --id $(echo "$windows" | jq ".[$(echo "$windows" | jq -r 'map("\(.title // .app_id)\u0000icon\u001f\(.app_id)") | .[]' | fuzzel -d --index)].id")
+#!/usr/bin/env bash
+niri msg windows | ${pkgs.jq} -r '.[] | "\(.id) \(.app_id // .title)"' | fuzzel --dmenu | cut -d' ' -f1 | xargs -r niri msg window focus --id

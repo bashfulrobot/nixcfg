@@ -6,8 +6,8 @@
 }:
 let
 
-  # Niri scripts
-  niriScripts = import ./scripts.nix { inherit pkgs; };
+  # Niri scripts (imported from scripts/default.nix)
+  niriScripts = import ../scripts pkgs;
 
   # Fonts for Niri environment
   niriFonts = with pkgs; [
@@ -31,10 +31,12 @@ let
     wl-clipboard
     grim
     slurp
+    hyprpicker
 
     # Idle and lock
     hypridle
     swaylock
+    hyprlock
 
     # OSD
     swayosd
@@ -44,28 +46,38 @@ let
 
     # File manager
     nautilus
+    nemo
 
     # System tools
     pavucontrol
     brightnessctl
     blueman
+    
+    # Media controls
+    playerctl
+    pulseaudio  # for pactl
 
     # Session management
     greetd.tuigreet
 
     # Required for scripts
     jq
+    
+    # AI chat (if available) - assuming it's declared elsewhere
+    # alpaca / com.jeffser.Alpaca
   ];
 
 in
 {
   imports = [
-    ./fuzzel
-    ./waybar
-    ./swaync
-    ./hypridle
     ./cliphist
+    ./fuzzel
+    ./hypridle
+    ./niri
+    ./swaync
     ./swayosd
+    ./waybar
+
   ];
 
   environment.systemPackages = niriPackages ++ niriScripts ++ niriFonts;

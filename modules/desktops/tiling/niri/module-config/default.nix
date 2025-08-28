@@ -1,8 +1,10 @@
 { lib, config, ... }:
 {
   imports = [
-    ./portal.nix
+    ./env
+    ./portals
     ./programs
-    ./theme.nix
+    ./services
+    ./theme
   ];
 }

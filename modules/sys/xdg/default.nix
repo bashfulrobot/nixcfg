@@ -22,6 +22,11 @@ in
     environment.systemPackages = with pkgs; [ unstable.xdg-utils ];
     # Enable xdg
     xdg = {
+      portal = {
+        enable = true;
+        xdgOpenUsePortal = true;
+      };
+
       mime.enable = true;
       autostart.enable = true;
       icons.enable = true;

@@ -41,7 +41,6 @@ Super + .           Expel window from column
 ━━━ COLUMN/WINDOW SIZING ━━━
 Super + R           Switch preset column width
 Super + Shift + R   Switch preset window height
-Super + O           Reset column to 50% width
 
 ━━━ WORKSPACE MANAGEMENT ━━━
 Super + 1-9         Focus workspace 1-9
@@ -66,6 +65,12 @@ Super + Print       Screenshot screen
 Super + Shift + S   Screenshot area (select)
 Super + Shift + Print   Screenshot screen (alt)
 
+━━━ SCREENCASTING ━━━
+Super + Shift + W   Toggle windowed fullscreen
+Super + Shift + C   Set window as cast target
+Super + Shift + M   Set monitor as cast target
+Super + Shift + Esc Clear cast target
+
 ━━━ MEDIA CONTROLS ━━━
 XF86AudioPlay/Pause     Play/pause with OSD
 XF86AudioNext          Next track with OSD
@@ -76,8 +81,20 @@ XF86AudioRaiseVolume   Raise volume with OSD
 XF86AudioLowerVolume   Lower volume with OSD
 
 ━━━ BRIGHTNESS ━━━
-XF86MonBrightnessUp    Increase brightness
-XF86MonBrightnessDown  Decrease brightness
+XF86MonBrightnessUp    Increase brightness with OSD
+XF86MonBrightnessDown  Decrease brightness with OSD
+
+━━━ LOCK STATUS ━━━
+Caps_Lock              Show Caps Lock status
+Num_Lock               Show Num Lock status
+
+━━━ SYSTEM MONITORING ━━━
+Super + F1             Show battery level
+Super + F2             Show memory usage
+Super + F3             Show CPU temperature
+Super + F4             Show disk usage
+Super + Shift + F1     Show microphone volume
+Super + Shift + F2     Show WiFi signal strength
 
 ━━━ HELP ━━━
 Super + ?           Show this help (you are here!)
@@ -109,18 +126,13 @@ EOF
 )
 
 # Display the shortcuts using fuzzel as a non-interactive display
+# Note: Colors are handled automatically by Stylix theming
 echo "$SHORTCUTS" | fuzzel --dmenu \
     --prompt="Niri Shortcuts:" \
     --no-fuzzy \
     --no-icons \
     --width=80 \
     --lines=50 \
-    --font="JetBrains Mono:size=10" \
-    --background-color="1e1e2eff" \
-    --text-color="cdd6f4ff" \
-    --match-color="f38ba8ff" \
-    --selection-color="313244ff" \
-    --selection-text-color="f9e2afff" \
+    --font="JetBrainsMono Nerd Font Mono:size=12" \
     --border-width=2 \
-    --border-color="89b4faff" \
     --line-height=18

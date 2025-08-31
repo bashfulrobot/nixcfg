@@ -1,0 +1,368 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * ===========================================================================*/
+
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+    font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
+    margin: 0px;
+    padding: 0px;
+}
+
+window#waybar {
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    background: transparent;
+    border-radius: 10px;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+tooltip {
+    border-radius: 8px;
+}
+
+tooltip label {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+/* --- Module Container Styling --- */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: @theme_base_color;
+    border: 1px solid @blue;
+    padding: 0 15px;
+    border-radius: 10px;
+}
+
+.modules-center {
+    border: 0.5px solid @overlay0;
+    padding: 0 10px;
+}
+
+/* --- Generic Module Styling --- */
+#workspaces,
+#idle_inhibitor,
+#mpris,
+#clock,
+#pulseaudio,
+#battery,
+#tray {
+    padding: 1px 10px;
+    margin: 0 1.5px;
+}
+
+/* --- Specific Module Styling --- */
+
+/* -- Workspaces -- */
+#workspaces button {
+    box-shadow: none;
+    text-shadow: none;
+    padding: 1px 8px;
+    margin: 0 1px;
+    border-radius: 6px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in-out;
+    font-weight: normal;
+}
+
+#workspaces button .workspace-label {
+    color: @overlay1; /* Default text color */
+}
+
+#workspaces button:hover {
+    background-color: @surface1;
+    border: none;
+}
+
+#workspaces button:hover .workspace-label {
+    color: @text;
+}
+
+#workspaces button.persistent .workspace-label {
+    color: @overlay0;
+}
+
+#workspaces button.occupied {
+    background-color: @surface0;
+    font-weight: 500;
+}
+
+#workspaces button.occupied .workspace-label {
+    color: @blue;
+}
+
+#workspaces button.active {
+    background-color: @blue;
+    border-radius: 0px;
+    font-weight: bold;
+}
+
+#workspaces button.active .workspace-label {
+    color: @text;
+}
+
+#workspaces button.urgent {
+    background-color: @red;
+    animation: urgent-pulse 1s ease-in-out infinite alternate;
+}
+
+#workspaces button.urgent .workspace-label {
+    color: @theme_base_color;
+}
+
+@keyframes urgent-pulse {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+}
+
+@keyframes attention-pulse {
+    from { opacity: 1.0; }
+    to { opacity: 0.6; }
+}
+
+/* -- Other Modules -- */
+#idle_inhibitor {
+    color: @overlay1;
+    transition: color 0.3s ease-in-out;
+}
+
+#idle_inhibitor:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#idle_inhibitor.activated {
+    color: @green;
+    font-weight: 500;
+}
+
+#idle_inhibitor.deactivated {
+    color: @overlay0;
+    opacity: 0.7;
+}
+
+#battery {
+    color: @green;
+    transition: all 0.3s ease-in-out;
+    border-radius: 6px;
+    padding: 2px 8px;
+}
+
+#battery:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#battery.good {
+    color: @green;
+}
+
+#battery.warning {
+    color: @yellow;
+    font-weight: 500;
+}
+
+#battery.critical {
+    color: @red;
+    font-weight: bold;
+}
+
+#battery.charging {
+    color: @blue;
+    background-color: @surface0;
+}
+
+#clock {
+    color: @yellow;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
+    padding: 2px 8px;
+}
+
+#clock:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#mpris {
+    color: @pink;
+    font-style: italic;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
+    padding: 2px 8px;
+}
+
+#mpris:hover {
+    background-color: @surface1;
+    color: @text;
+    font-style: normal;
+}
+
+#mpris.paused {
+    color: @overlay1;
+    opacity: 0.8;
+}
+
+#mpris.playing {
+    color: @pink;
+    font-weight: 500;
+}
+
+#tray {
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#tray:hover {
+    background-color: @surface1;
+}
+
+#tray > .passive:hover {
+    color: @text;
+}
+
+#tray > .active:hover {
+    color: @text;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+    opacity: 0.7;
+}
+
+#tray > .active {
+    -gtk-icon-effect: none;
+    opacity: 1.0;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    color: @yellow;
+    animation: attention-pulse 1.5s ease-in-out infinite alternate;
+}
+
+#custom-notification {
+    color: @overlay1;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin: 0 1.5px;
+}
+
+#custom-notification:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#custom-power {
+    color: @red;
+    border-left: 1px solid @blue;
+    padding: 2px 8px 2px 12px;
+    margin-left: 12px;
+    border-radius: 0 6px 6px 0;
+    transition: all 0.2s ease-in-out;
+}
+
+#custom-power:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#pulseaudio {
+    color: @lavender;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
+    padding: 2px 8px;
+}
+
+#pulseaudio:hover {
+    background-color: @surface1;
+    color: @text;
+}
+
+#pulseaudio.muted {
+    color: @red;
+    background-color: @surface0;
+}
+
+#pulseaudio.bluetooth {
+    color: @pink;
+    background-color: @surface0;
+}
+
+#pulseaudio.source-muted {
+    color: @orange;
+    font-style: italic;
+}
+
+/* -- Group Styling -- */
+group#system-info {
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.system-drawer {
+    padding: 2px 8px;
+    margin: 0 1.5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.system-drawer:first-child {
+    border-radius: 6px 0 0 6px;
+}
+
+.system-drawer:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.system-drawer:only-child {
+    border-radius: 6px;
+}
+
+group#system-info:hover .system-drawer {
+    background-color: @surface1;
+}
+
+#custom-system-gear {
+    color: @overlay1;
+    font-size: 14px;
+    padding: 2px 8px 2px 12px;
+    margin: 0 1.5px;
+    margin-right: 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+#custom-system-gear:hover {
+    color: @text;
+    background-color: @surface1;
+}
+
+/* -- Animations -- */
+@keyframes blink {
+    to {
+        color: @surface0;
+    }
+}
+
+#battery.critical:not(.charging) {
+    background-color: @red;
+    color: @theme_base_color;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    box-shadow: inset 0 -3px transparent;
+}

@@ -110,25 +110,39 @@
         };
       };
 
-      waybar = {
-        Unit = {
-          Description = "Waybar for niri";
-          Documentation = "https://github.com/Alexays/Waybar/wiki";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session-pre.target" ];
-        };
 
+      swww = {
+        Unit = {
+          Description = "Efficient animated wallpaper daemon for wayland";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
         Service = {
           Type = "simple";
           ExecCondition = "${pkgs.bash}/bin/bash -c 'pgrep -x niri'";
-          ExecStart = "${pkgs.waybar}/bin/waybar";
-          ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+          ExecStart = ''
+            ${pkgs.swww}/bin/swww-daemon
+          '';
+          ExecStop = "${pkgs.swww}/bin/swww kill";
           Restart = "on-failure";
-          RestartSec = "1s";
         };
+      };
 
-        Install = {
-          WantedBy = [ "graphical-session.target" ];
+      niri-wallpaper = {
+        Unit = {
+          Description = "Set wallpaper for niri using swww";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "swww.service" ];
+          Requires = [ "swww.service" ];
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecCondition = "${pkgs.bash}/bin/bash -c 'pgrep -x niri'";
+          ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # Wait for swww daemon to be ready
+          ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.swww}/bin/swww img ${config.sys.wallpapers.getWallpaper config.sys.stylix-theme.wallpaperType} --transition-type fade --transition-duration 1'";
         };
       };
 

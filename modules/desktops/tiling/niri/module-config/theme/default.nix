@@ -1,6 +1,7 @@
 { lib, config, user-settings, pkgs, ... }:
 {
   sys = {
+    wallpapers.enable = true;
     stylix-theme.enable = true;
   };
 

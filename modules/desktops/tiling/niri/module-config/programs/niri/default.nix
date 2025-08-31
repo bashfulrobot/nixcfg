@@ -9,6 +9,7 @@
 }:
 let
   makeCommand = command: { command = [ command ]; };
+  settingsJson = builtins.fromJSON (builtins.readFile ./settings/settings.json);
 
 in
 {
@@ -39,6 +40,8 @@ in
 
         spawn-at-startup = [
           (makeCommand "blueman-applet")
+          (makeCommand "swww img ${config.sys.wallpapers.getWallpaper "personal"}")
+          (makeCommand "xwayland-satellite")
         ];
 
         outputs = {
@@ -158,21 +161,21 @@ in
         };
 
         layout = {
-          gaps = 16;
+          gaps = 8;
 
           border.enable = true;
 
-          center-focused-column = "on-overflow";
+          center-focused-column = "never";
 
           struts = {
-            left = 64;
-            right = 64;
-            top = 4;
-            bottom = 4;
+            left = 8;
+            right = 8;
+            top = 8;
+            bottom = 8;
           };
 
           default-column-width = {
-            proportion = 0.5;
+            proportion = 1.0;
           };
 
           preset-column-widths = [
@@ -240,11 +243,17 @@ in
           {
             matches = [
               { app-id = "code"; }
-              { app-id = "com.mitchellh.ghostty"; }
             ];
             open-on-workspace = "Code";
             open-focused = true;
             open-maximized = true;
+          }
+          {
+            matches = [
+              { app-id = "com.mitchellh.ghostty"; }
+            ];
+            open-focused = true;
+            open-maximized = false;
           }
           {
             matches = [
@@ -278,6 +287,13 @@ in
             matches = [
               { is-floating = false; }
             ];
+            geometry-corner-radius = {
+              top-left = 10.0;
+              top-right = 10.0;
+              bottom-right = 10.0;
+              bottom-left = 10.0;
+            };
+            clip-to-geometry = true;
             shadow = {
               enable = true;
               color = "#00000060";
@@ -303,16 +319,23 @@ in
             open-floating = true;
             geometry-corner-radius = {
               top-left = 8.0;
-              top-right = 8.0; 
+              top-right = 8.0;
               bottom-left = 8.0;
               bottom-right = 8.0;
             };
+            clip-to-geometry = true;
           }
           {
             matches = [
               { app-id = "^(pavucontrol|blueman-manager)$"; }
             ];
             open-floating = true;
+          }
+          {
+            matches = [{ is-focused = true; }];
+          }
+          {
+            matches = [{ is-focused = false; }];
           }
         ];
 
@@ -360,7 +383,6 @@ in
               spawn = [ "${lib.getExe pkgs.nautilus}" ];
             };
           };
-
           "Super+P" = {
             action = {
               spawn = [ "${lib.getExe pkgs.hyprpicker}" ];
@@ -439,7 +461,7 @@ in
           "Super+Shift+Right" = {
             action.move-column-right = { };
           };
-          
+
           # Vim-style navigation
           "Super+K" = {
             action.focus-window-up = { };
@@ -541,128 +563,181 @@ in
           "Super+Shift+Print" = {
             action.screenshot = { };
           };
-          "XF86MonBrightnessUp" = {
-            action = {
-              spawn = [
-                "brightnessctl"
-                "s"
-                "10%+"
-              ];
-            };
-          };
-          "XF86MonBrightnessDown" = {
-            action = {
-              spawn = [
-                "brightnessctl"
-                "s"
-                "10%-"
-              ];
-            };
-          };
-          
-          # Media controls with OSD
+
+          # Media controls with proper SwayOSD integration
           "XF86AudioPlay" = {
             action = {
               spawn = [
-                "bash" 
-                "-c"
-                "playerctl play-pause && swayosd-client --output-volume $(playerctl status)"
+                "swayosd-client"
+                "--player-status"
+                "play-pause"
               ];
             };
           };
           "XF86AudioPause" = {
             action = {
               spawn = [
-                "bash"
-                "-c" 
-                "playerctl play-pause && swayosd-client --output-volume $(playerctl status)"
+                "swayosd-client"
+                "--player-status"
+                "play-pause"
               ];
             };
           };
           "XF86AudioNext" = {
             action = {
               spawn = [
-                "bash"
-                "-c"
-                "playerctl next && swayosd-client --output-volume 'Next Track'"
+                "swayosd-client"
+                "--player-status"
+                "next"
               ];
             };
           };
           "XF86AudioPrev" = {
             action = {
               spawn = [
-                "bash"
-                "-c"
-                "playerctl previous && swayosd-client --output-volume 'Previous Track'"
+                "swayosd-client"
+                "--player-status"
+                "previous"
               ];
             };
           };
-          "XF86AudioMute" = {
-            action = {
-              spawn = [
-                "bash"
-                "-c"
-                "pactl set-sink-mute @DEFAULT_SINK@ toggle && swayosd-client --output-volume mute-toggle"
-              ];
-            };
-          };
+
+          # Volume controls with OSD
           "XF86AudioRaiseVolume" = {
             action = {
               spawn = [
-                "bash"
-                "-c"
-                "pactl set-sink-volume @DEFAULT_SINK@ +5% && swayosd-client --output-volume raise"
+                "swayosd-client"
+                "--output-volume"
+                "raise"
               ];
             };
           };
           "XF86AudioLowerVolume" = {
             action = {
               spawn = [
-                "bash"
-                "-c" 
-                "pactl set-sink-volume @DEFAULT_SINK@ -5% && swayosd-client --output-volume lower"
+                "swayosd-client"
+                "--output-volume"
+                "lower"
+              ];
+            };
+          };
+          "XF86AudioMute" = {
+            action = {
+              spawn = [
+                "swayosd-client"
+                "--output-volume"
+                "mute-toggle"
               ];
             };
           };
           "XF86AudioMicMute" = {
             action = {
               spawn = [
-                "bash"
-                "-c"
-                "pactl set-source-mute @DEFAULT_SOURCE@ toggle && swayosd-client --input-volume mute-toggle"
+                "swayosd-client"
+                "--input-volume"
+                "mute-toggle"
               ];
             };
           };
-          "Super+Alt+L" = {
+
+          # Brightness controls with OSD
+          "XF86MonBrightnessUp" = {
             action = {
-              spawn = [ "hyprlock" ];
-            };
-            allow-inhibiting = false;
-          };
-          "Super+Shift+L" = {
-            action.power-off-monitors = { };
-          };
-          
-          # Help system
-          "Super+question" = {
-            action = {
-              spawn = [ "niri-keybinds-help" ];
+              spawn = [
+                "swayosd-client"
+                "--brightness"
+                "raise"
+              ];
             };
           };
-          
-          # Additional shortcuts for better workflow
-          "Super+W" = {
-            action.toggle-window-floating = { };
-          };
-          "Super+Tab" = {
-            action.focus-window-down = { };
-          };
-          "Super+Shift+Tab" = {
-            action.focus-window-up = { };
-          };
-          "Super+O" = {
+          "XF86MonBrightnessDown" = {
             action = {
-              set-column-width = { proportion = 0.5; };
+              spawn = [
+                "swayosd-client"
+                "--brightness"
+                "lower"
+              ];
+            };
+          };
+
+          "Num_Lock" = {
+            action = {
+              spawn = [
+                "swayosd-client"
+                "--num-lock"
+                "toggle"
+              ];
+            };
+          };
+
+          # Custom system monitoring with swayosd
+          "Super+F1" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "battery"
+              ];
+            };
+          };
+          "Super+F2" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "memory-usage"
+              ];
+            };
+          };
+          "Super+F3" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "cpu-temp"
+              ];
+            };
+          };
+          "Super+F4" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "disk-usage"
+              ];
+            };
+          };
+          "Super+Shift+F1" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "microphone-volume"
+              ];
+            };
+          };
+          "Super+Shift+F2" = {
+            action = {
+              spawn = [
+                "swayosd-custom"
+                "wifi-strength"
+              ];
+            };
+          };
+
+          # Screencasting controls
+          "Super+Shift+W" = {
+            action.toggle-windowed-fullscreen = { };
+          };
+          "Super+Shift+C" = {
+            action.set-dynamic-cast-window = { };
+          };
+          "Super+Shift+M" = {
+            action.set-dynamic-cast-monitor = { };
+          };
+          "Super+Shift+Escape" = {
+            action.clear-dynamic-cast-target = { };
+          };
+
+          # Keyboard shortcuts help menu
+          "Super+Shift+Slash" = {
+            action = {
+              spawn = [ "${pkgs.bash}/bin/bash" "/home/dustin/dev/nix/nixcfg/modules/desktops/tiling/module-config/scripts/niri-shortcuts-menu.sh" ];
             };
           };
         };

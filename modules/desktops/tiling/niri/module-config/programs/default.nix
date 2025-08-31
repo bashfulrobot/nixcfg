@@ -6,8 +6,11 @@
 }:
 let
 
-  # Niri scripts (imported from scripts/default.nix)
-  niriScripts = import ../scripts pkgs;
+  # Niri-specific scripts from shared tiling scripts location  
+  niriScripts = [
+    (pkgs.writeShellScriptBin "fuzzel-window-picker" (builtins.readFile ../../../module-config/scripts/fuzzel-window-picker.sh))
+    (pkgs.writeShellScriptBin "niri-keybinds-help" (builtins.readFile ../../../module-config/scripts/niri-keybinds-help.sh))
+  ];
 
   # Fonts for Niri environment
   niriFonts = with pkgs; [
@@ -32,6 +35,7 @@ let
     grim
     slurp
     hyprpicker
+    swww
 
     # Idle and lock
     hypridle
@@ -63,6 +67,9 @@ let
     # Required for scripts
     jq
     
+    # X11 app support
+    xwayland-satellite
+    
     # AI chat (if available) - assuming it's declared elsewhere
     # alpaca / com.jeffser.Alpaca
   ];
@@ -76,7 +83,6 @@ in
     ./niri
     ./swaync
     ./swayosd
-    ./waybar
 
   ];
 

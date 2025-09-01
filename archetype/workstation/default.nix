@@ -55,6 +55,7 @@ in {
 
     hw = {
       audio.enable = true;
+      bluetooth.enable = true;
       firmware.enable = true;
     };
 

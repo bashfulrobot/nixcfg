@@ -390,7 +390,6 @@ in
             #"[workspace special silent] ${browser} --private-window"
             #"[workspace special silent] ${terminal}"
 
-            "waybar"
             "swaync"
             "nm-applet --indicator"
             "blueman-applet"

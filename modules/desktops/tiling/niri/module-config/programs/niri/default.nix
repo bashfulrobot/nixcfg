@@ -106,7 +106,7 @@ in
           };
           touchpad = {
             tap = true;
-            natural-scroll = true;
+            natural-scroll = false;
             click-method = "clickfinger";
             dwt = true;
             disabled-on-external-mouse = true;
@@ -114,7 +114,7 @@ in
             scroll-method = "two-finger";
           };
           mouse = {
-            natural-scroll = true;
+            natural-scroll = false;
             accel-profile = "adaptive";
           };
         };

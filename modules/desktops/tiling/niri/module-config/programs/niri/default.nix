@@ -172,6 +172,7 @@ in
           ];
         };
 
+
         switch-events = {
           lid-close = {
             action = {

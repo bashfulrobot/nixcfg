@@ -155,7 +155,7 @@
             "niri/workspaces" = {
               disable-scroll = true;
               all-outputs = true;
-              active-only = false;
+              active-only = true;
               on-click = "activate";
             };
             "niri/window" = {

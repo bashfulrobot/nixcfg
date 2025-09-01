@@ -94,25 +94,6 @@ in
           };
         };
 
-        # Nix attribute sets are ordered alphabetically when evaludated,
-        # so we use 01/02/etc to force the order of workspaces; which Niri
-        # relies on to determine the order of workspaces.
-        workspaces = {
-          "01" = {
-            name = "Web";
-            open-on-output = "DP-1";
-          };
-
-          "02" = {
-            name = "Code";
-            open-on-output = "DP-2";
-          };
-
-          "03" = {
-            name = "Chat";
-            open-on-output = "DP-1";
-          };
-        };
 
         input = {
           keyboard = {
@@ -505,6 +486,9 @@ in
           "Super+9" = {
             action.focus-workspace = 9;
           };
+          "Super+0" = {
+            action.focus-workspace = 10;
+          };
           "Super+Shift+1" = {
             action.move-column-to-workspace = 1;
           };
@@ -531,6 +515,9 @@ in
           };
           "Super+Shift+9" = {
             action.move-column-to-workspace = 9;
+          };
+          "Super+Shift+0" = {
+            action.move-column-to-workspace = 10;
           };
           "Super+F" = {
             action.fullscreen-window = { };

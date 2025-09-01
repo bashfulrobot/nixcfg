@@ -10,6 +10,9 @@ let
   niriScripts = [
     (pkgs.writeShellScriptBin "fuzzel-window-picker" (builtins.readFile ../../../module-config/scripts/fuzzel-window-picker.sh))
     (pkgs.writeShellScriptBin "niri-keybinds-help" (builtins.readFile ../../../module-config/scripts/niri-keybinds-help.sh))
+    (pkgs.writeShellScriptBin "waybar-cava" (builtins.readFile ../../../module-config/scripts/WaybarCava.sh))
+    (pkgs.writeShellScriptBin "gpuinfo" (builtins.readFile ../../../module-config/scripts/gpuinfo.sh))
+    (pkgs.writeShellScriptBin "keyboardswitch" (builtins.readFile ../../../module-config/scripts/keyboardswitch.sh))
   ];
 
   # Fonts for Niri environment

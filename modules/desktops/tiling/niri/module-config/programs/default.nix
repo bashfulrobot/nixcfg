@@ -6,7 +6,7 @@
 }:
 let
 
-  # Niri-specific scripts from shared tiling scripts location  
+  # Niri-specific scripts from shared tiling scripts location
   niriScripts = [
     (pkgs.writeShellScriptBin "fuzzel-window-picker" (builtins.readFile ../../../module-config/scripts/fuzzel-window-picker.sh))
     (pkgs.writeShellScriptBin "niri-keybinds-help" (builtins.readFile ../../../module-config/scripts/niri-keybinds-help.sh))
@@ -50,6 +50,11 @@ let
 
     # Authentication agent
     polkit_gnome
+    seahorse
+
+    # Keyring and secret management
+    gcr_4 # GCR 4.x for modern keyring password prompts
+    libsecret # Secret storage API
 
     # File manager
     nautilus
@@ -59,7 +64,7 @@ let
     pavucontrol
     brightnessctl
     blueman
-    
+
     # Media controls
     playerctl
     pulseaudio  # for pactl
@@ -69,10 +74,10 @@ let
 
     # Required for scripts
     jq
-    
+
     # X11 app support
     xwayland-satellite
-    
+
     # AI chat (if available) - assuming it's declared elsewhere
     # alpaca / com.jeffser.Alpaca
   ];

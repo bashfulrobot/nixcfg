@@ -17,6 +17,12 @@
       XDG_SESSION_TYPE = "wayland";
       WLR_NO_HARDWARE_CURSORS = "1";
       ELECTRON_OZONE_PLATFORM_HINT = "auto";
+      
+      # SSH and keyring environment
+      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+      SSH_ASKPASS = "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass";
+      GNOME_KEYRING_CONTROL = "$XDG_RUNTIME_DIR/keyring";
+      SIGNAL_PASSWORD_STORE = "gnome-libsecret";
     };
   };
 }

@@ -146,6 +146,26 @@
         };
       };
 
+      # SSH key auto-loading service
+      ssh-key-loader = {
+        Unit = {
+          Description = "Auto-load SSH keys into GNOME keyring";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "gnome-keyring.service" ];
+          Requires = [ "gnome-keyring.service" ];
+        };
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecCondition = "${pkgs.bash}/bin/bash -c 'pgrep -x niri'";
+          ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # Wait for keyring to be ready
+          ExecStart = "${../../../module-config/scripts/ssh-add-keys.sh}";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
+      };
+
     };
   };
 

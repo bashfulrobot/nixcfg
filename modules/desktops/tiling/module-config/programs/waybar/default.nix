@@ -1,125 +1,15 @@
-{ user-settings, pkgs, lib, config, ... }:
-
-let
-  # Determine which workspace module to use based on enabled desktop
-  workspaceModule = 
-    if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
-    else if config.desktops.tiling.niri.enable then "niri/workspaces"  
-    else "hyprland/workspaces"; # fallback
-
-  # Workspace module configuration
-  workspaceConfig = 
-    if config.desktops.tiling.hyprland.enable then {
-      "hyprland/workspaces" = {
-        disable-scroll = true;
-        all-outputs = true;
-        active-only = false;
-        on-click = "activate";
-        show-special = false;
-      };
-      "hyprland/window" = {
-        format = "  {}";
-        separate-outputs = true;
-        rewrite = {
-          "harvey@hyprland =(.*)" = "$1 ";
-          "(.*) — Mozilla Firefox" = "$1 󰈹";
-          "(.*)Mozilla Firefox" = " Firefox 󰈹";
-          "(.*) - Visual Studio Code" = "$1 󰨞";
-          "(.*)Visual Studio Code" = "Code 󰨞";
-          "(.*) — Dolphin" = "$1 󰉋";
-          "(.*)Spotify" = "Spotify 󰓇";
-          "(.*)Spotify Premium" = "Spotify 󰓇";
-          "(.*)Steam" = "Steam 󰓓";
-        };
-        max-length = 1000;
-      };
-      "hyprland/language" = {
-        format = "{short}"; # can use {short} and {variant}
-        on-click = "../scripts/keyboardswitch.sh";
-      };
-    }
-    else if config.desktops.tiling.niri.enable then {
-      "niri/workspaces" = {
-        disable-scroll = true;
-        all-outputs = true;
-        active-only = false;
-        on-click = "activate";
-      };
-      "niri/window" = {
-        "separate-outputs" = true;
-        icon = true;
-        format = " ";
-      };
-    }
-    else {
-      "hyprland/workspaces" = {
-        disable-scroll = true;
-        all-outputs = true;
-        active-only = false;
-        on-click = "activate";
-        show-special = false;
-      };
-      "hyprland/window" = {
-        format = "  {}";
-        separate-outputs = true;
-        rewrite = {
-          "harvey@hyprland =(.*)" = "$1 ";
-          "(.*) — Mozilla Firefox" = "$1 󰈹";
-          "(.*)Mozilla Firefox" = " Firefox 󰈹";
-          "(.*) - Visual Studio Code" = "$1 󰨞";
-          "(.*)Visual Studio Code" = "Code 󰨞";
-          "(.*) — Dolphin" = "$1 󰉋";
-          "(.*)Spotify" = "Spotify 󰓇";
-          "(.*)Spotify Premium" = "Spotify 󰓇";
-          "(.*)Steam" = "Steam 󰓓";
-        };
-        max-length = 1000;
-      };
-      "hyprland/language" = {
-        format = "{short}"; # can use {short} and {variant}
-        on-click = "../scripts/keyboardswitch.sh";
-      };
-    };
-
-  # Power command based on desktop
-  powerCommand = 
-    if config.desktops.tiling.hyprland.enable then 
-      "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") hyprctl dispatch exit 0; ;; esac'"
-    else if config.desktops.tiling.niri.enable then
-      "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | fuzzel -d); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") niri msg action quit; ;; esac'"
-    else
-      "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") hyprctl dispatch exit 0; ;; esac'";
-
-  # Audio command based on desktop
-  audioCommand = 
-    if config.desktops.tiling.hyprland.enable then
-      "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'"
-    else if config.desktops.tiling.niri.enable then
-      "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | fuzzel -d); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; notify-send \"Audio\" \"Switched to Shure MV7\" -t 3000 ;; \"Switch to rempods (AirPods)\") rempods; notify-send \"Audio\" \"Switched to rempods\" -t 3000 ;; \"Switch to earmuffs\") earmuffs; notify-send \"Audio\" \"Switched to earmuffs\" -t 3000 ;; \"Switch to Speakers\") speakers; notify-send \"Audio\" \"Switched to speakers\" -t 3000 ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; notify-send \"Audio\" \"Mixed mode: MV7 + rempods\" -t 3000 ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; notify-send \"Audio\" \"Mixed mode: MV7 + earmuffs\" -t 3000 ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; notify-send \"Audio\" \"Output mute toggled\" -t 2000 ;; \"Toggle Input Mute\") pamixer --default-source -t; notify-send \"Audio\" \"Input mute toggled\" -t 2000 ;; esac'"
-    else
-      "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'";
-
-  # Systemd config based on desktop
-  systemdConfig = 
-    if config.desktops.tiling.niri.enable then {
-      enable = lib.mkForce true;
-      target = "graphical-session.target";
-    }
-    else {
-      enable = false;
-      target = "graphical-session.target";
-    };
-
-in
-{
+{pkgs, config, lib, ...}: {
   fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
   home-manager.sharedModules = [
     (_: {
       programs.waybar = {
         enable = true;
-        systemd = systemdConfig;
+        systemd = {
+          enable = false;
+          target = "graphical-session.target";
+        };
         settings = [
-          ({
+          {
             layer = "top";
             position = "top";
             mode = "dock"; # Fixes fullscreen issues
@@ -134,7 +24,12 @@ in
             margin-right = 10;
             margin-bottom = 0;
 
-            modules-left = [workspaceModule "mpris"];
+            modules-left = [
+              (if config.desktops.tiling.niri.enable then "niri/workspaces" 
+               else if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
+               else "hyprland/workspaces")  # fallback
+              "mpris"
+            ];
             modules-center = ["custom/notification" "clock"];
             modules-right = ["group/system-info" "custom/power"];
 
@@ -145,7 +40,9 @@ in
                 children-class = "system-drawer";
                 transition-left-to-right = false;
               };
-              modules = ["custom/system-gear" "idle_inhibitor" "pulseaudio" "tray"];
+              modules = ["custom/system-gear" "idle_inhibitor" "network" "bluetooth" "pulseaudio"] 
+                        ++ (lib.optionals (builtins.pathExists /sys/class/power_supply) ["battery"]) 
+                        ++ ["tray"];
             };
 
             "custom/system-gear" = {
@@ -159,14 +56,14 @@ in
               tooltip = false;
               format = "{icon}";
               format-icons = {
-                notification = "<span foreground='red'><sup></sup></span>";
-                none = "";
-                dnd-notification = "<span foreground='red'><sup></sup></span>";
-                dnd-none = "";
-                inhibited-notification = "<span foreground='red'><sup></sup></span>";
-                inhibited-none = "";
-                dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
-                dnd-inhibited-none = "";
+                notification = "<span foreground='red'><sup></sup></span>";
+                none = "";
+                dnd-notification = "<span foreground='red'><sup></sup></span>";
+                dnd-none = "";
+                inhibited-notification = "<span foreground='red'><sup></sup></span>";
+                inhibited-none = "";
+                dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+                dnd-inhibited-none = "";
               };
               return-type = "json";
               exec-if = "which swaync-client";
@@ -177,13 +74,13 @@ in
             };
 
             "custom/colour-temperature" = {
-              format = "{} ";
+              format = "{} ";
               exec = "wl-gammarelay-rs watch {t}";
               on-scroll-up = "busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateTemperature n +100";
               on-scroll-down = "busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateTemperature n -100";
             };
             "custom/cava_mviz" = {
-              exec = "../scripts/WaybarCava.sh";
+              exec = "/run/current-system/sw/bin/waybar-cava";
               format = "";
             };
             "cava" = {
@@ -198,16 +95,16 @@ in
               on-click = "playerctl play-pause";
             };
             "custom/gpuinfo" = {
-              exec = "../scripts/gpuinfo.sh";
+              exec = "/run/current-system/sw/bin/gpuinfo";
               return-type = "json";
-              format = " {}";
+              format = " {}";
               interval = 5; # once every 5 seconds
               tooltip = true;
               max-length = 1000;
             };
             "custom/icon" = {
-              # format = " ";
-              exec = "echo ' '";
+              # format = " ";
+              exec = "echo ' '";
               format = "";
             };
             "mpris" = {
@@ -216,17 +113,17 @@ in
               format-stopped = "";
               player-icons = {
                 default = "▶";
-                spotify = "";
+                spotify = "";
                 mpv = "󰐹";
                 vlc = "󰕼";
-                firefox = "";
-                chromium = "";
-                kdeconnect = "";
-                mopidy = "";
+                firefox = "";
+                chromium = "";
+                kdeconnect = "";
+                mopidy = "";
               };
               status-icons = {
                 paused = "⏸";
-                playing = "";
+                playing = "";
               };
               ignored-players = ["firefox" "chromium"];
               max-length = 35;
@@ -240,15 +137,55 @@ in
               hwmon-path = "/sys/class/hwmon/hwmon5/temp1_input";
               critical-threshold = 83;
               format = "{icon} {temperatureC}°C";
-              format-icons = ["" "" ""];
+              format-icons = ["" "" ""];
               interval = 10;
+            };
+            "hyprland/language" = {
+              format = "{short}"; # can use {short} and {variant}
+              on-click = "/run/current-system/sw/bin/keyboardswitch";
+            };
+            "hyprland/workspaces" = {
+              disable-scroll = true;
+              all-outputs = true;
+              active-only = false;
+              on-click = "activate";
+              show-special = false;
+            };
+
+            "niri/workspaces" = {
+              disable-scroll = true;
+              all-outputs = true;
+              active-only = false;
+              on-click = "activate";
+            };
+            "niri/window" = {
+              "separate-outputs" = true;
+              icon = true;
+              format = " ";
+            };
+
+            "hyprland/window" = {
+              format = "  {}";
+              separate-outputs = true;
+              rewrite = {
+                "harvey@hyprland =(.*)" = "$1 ";
+                "(.*) — Mozilla Firefox" = "$1 󰈹";
+                "(.*)Mozilla Firefox" = " Firefox 󰈹";
+                "(.*) - Visual Studio Code" = "$1 󰨞";
+                "(.*)Visual Studio Code" = "Code 󰨞";
+                "(.*) — Dolphin" = "$1 󰉋";
+                "(.*)Spotify" = "Spotify 󰓇";
+                "(.*)Spotify Premium" = "Spotify 󰓇";
+                "(.*)Steam" = "Steam 󰓓";
+              };
+              max-length = 1000;
             };
 
             "idle_inhibitor" = {
               format = "{icon}";
               format-icons = {
                 activated = "󰥔";
-                deactivated = "";
+                deactivated = "";
               };
             };
 
@@ -290,29 +227,46 @@ in
               format-alt = "󰾅 {used}GB";
               max-length = 10;
               tooltip = true;
-              tooltip-format = " {used:.1f}GB/{total:.1f}GB";
+              tooltip-format = " {used:.1f}GB/{total:.1f}GB";
             };
 
             "backlight" = {
               format = "{icon} {percent}%";
-              format-icons = ["" "" "" "" "" "" "" "" ""];
+              format-icons = ["" "" "" "" "" "" "" "" ""];
               on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
               on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
             };
 
             "network" = {
-              on-click = "ghostty --class floating-terminal nmtui";
+              on-click = "ghostty --class=floating-terminal -e nmtui";
               # "interface" = "wlp2*"; # (Optional) To force the use of this interface
               format-wifi = "󰤨 Wi-Fi";
-              # format-wifi = " {bandwidthDownBits}  {bandwidthUpBits}";
+              # format-wifi = " {bandwidthDownBits}  {bandwidthUpBits}";
               # format-wifi = "󰤨 {essid}";
-              format-ethernet = "󱘖 Wired";
-              # format-ethernet = " {bandwidthDownBits}  {bandwidthUpBits}";
+              format-ethernet = "󱘖";
+              # format-ethernet = " {bandwidthDownBits}  {bandwidthUpBits}";
               format-linked = "󱘖 {ifname} (No IP)";
               format-disconnected = "󰤮 Off";
               # format-disconnected = "󰤮 Disconnected";
               format-alt = "󰤨 {signalStrength}%";
-              tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
+              tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
+            };
+
+            "bluetooth" = {
+              format = "{icon}";
+              format-alt = "{icon}";
+              format-icons = {
+                enabled = "󰂯";
+                disabled = "󰂲";
+              };
+              format-connected = "󰂱";
+              format-connected-battery = "󰂱";
+              tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+              tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+              tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+              tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+              on-click = "blueman-manager &";
+              on-click-right = "rfkill toggle bluetooth";
             };
 
             "pulseaudio" = {
@@ -329,7 +283,7 @@ in
               };
               scroll-step = 5;
               on-click = "pwvucontrol &";
-              on-click-right = audioCommand;
+              on-click-right = "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'";
               on-scroll-up = "pamixer -i 5";
               on-scroll-down = "pamixer -d 5";
               tooltip-format = "Source: {desc}\nVolume: {volume}%\nClick: Open PipeWire Control | Right-click: Audio menu | Scroll: Volume";
@@ -358,13 +312,432 @@ in
             };
 
             "custom/power" = {
-              format = "{}";
-              on-click = powerCommand;
+              format = "{}";
+              on-click = "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") hyprctl dispatch exit 0; ;; esac'";
               tooltip-format = "Power Options (click for menu)";
             };
-          } // workspaceConfig)
+          }
         ];
-        style = builtins.readFile ./style.css;
+        style = ''
+          /* =============================================================================
+           *
+           * Waybar configuration
+           *
+           * ===========================================================================*/
+
+          * {
+              font-family: "JetBrainsMono Nerd Font";
+              font-size: 11px;
+              font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
+              margin: 0px;
+              padding: 0px;
+          }
+
+          window#waybar {
+              transition-property: background-color;
+              transition-duration: 0.5s;
+              background: transparent;
+              border-radius: 10px;
+          }
+
+          window#waybar.hidden {
+              opacity: 0.2;
+          }
+
+          tooltip {
+              border-radius: 8px;
+          }
+
+          tooltip label {
+              margin-right: 5px;
+              margin-left: 5px;
+          }
+
+          /* --- Module Container Styling --- */
+          .modules-left,
+          .modules-center,
+          .modules-right {
+              background: @theme_base_color;
+              border: 1px solid @blue;
+              padding: 0 15px;
+              border-radius: 10px;
+          }
+
+          .modules-center {
+              border: 0.5px solid @overlay0;
+              padding: 0 10px;
+          }
+
+          /* --- Generic Module Styling --- */
+          #workspaces,
+          #idle_inhibitor,
+          #mpris,
+          #clock,
+          #network,
+          #bluetooth,
+          #pulseaudio,
+          #battery,
+          #tray {
+              padding: 1px 10px;
+              margin: 0 1.5px;
+          }
+
+          /* --- Specific Module Styling --- */
+
+          /* -- Workspaces -- */
+          #workspaces button {
+              box-shadow: none;
+              text-shadow: none;
+              padding: 1px 8px;
+              margin: 0 1px;
+              border-radius: 6px;
+              background-color: transparent;
+              border: 1px solid transparent;
+              transition: all 0.2s ease-in-out;
+              font-weight: normal;
+          }
+
+          #workspaces button .workspace-label {
+              color: @overlay1; /* Default text color */
+          }
+
+          #workspaces button:hover {
+              background-color: @surface1;
+              border: none;
+          }
+
+          #workspaces button:hover .workspace-label {
+              color: @text;
+          }
+
+          #workspaces button.persistent .workspace-label {
+              color: @overlay0;
+          }
+
+          #workspaces button.occupied {
+              background-color: @surface0;
+              font-weight: 500;
+          }
+
+          #workspaces button.occupied .workspace-label {
+              color: @blue;
+          }
+
+          #workspaces button.active {
+              background-color: @blue;
+              border-radius: 0px;
+              font-weight: bold;
+          }
+
+          #workspaces button.active .workspace-label {
+              color: @text;
+          }
+
+          #workspaces button.urgent {
+              background-color: @red;
+              animation: urgent-pulse 1s ease-in-out infinite alternate;
+          }
+
+          #workspaces button.urgent .workspace-label {
+              color: @theme_base_color;
+          }
+
+          @keyframes urgent-pulse {
+              from { opacity: 1; }
+              to { opacity: 0.6; }
+          }
+
+          @keyframes attention-pulse {
+              from { opacity: 1.0; }
+              to { opacity: 0.6; }
+          }
+
+          /* -- Other Modules -- */
+          #idle_inhibitor {
+              color: @overlay1;
+              transition: color 0.3s ease-in-out;
+          }
+
+          #idle_inhibitor:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #idle_inhibitor.activated {
+              color: @green;
+              font-weight: 500;
+          }
+
+          #idle_inhibitor.deactivated {
+              color: @overlay0;
+              opacity: 0.7;
+          }
+
+          #battery {
+              color: @green;
+              transition: all 0.3s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #battery:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #battery.good {
+              color: @green;
+          }
+
+          #battery.warning {
+              color: @yellow;
+              font-weight: 500;
+          }
+
+          #battery.critical {
+              color: @red;
+              font-weight: bold;
+          }
+
+          #battery.charging {
+              color: @blue;
+              background-color: @surface0;
+          }
+
+          #clock {
+              color: @yellow;
+              font-weight: 500;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #clock:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #mpris {
+              color: @pink;
+              font-style: italic;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #mpris:hover {
+              background-color: @surface1;
+              color: @text;
+              font-style: normal;
+          }
+
+          #mpris.paused {
+              color: @overlay1;
+              opacity: 0.8;
+          }
+
+          #mpris.playing {
+              color: @pink;
+              font-weight: 500;
+          }
+
+          #tray {
+              padding: 2px 8px;
+              border-radius: 6px;
+              transition: background-color 0.2s ease-in-out;
+          }
+
+          #tray:hover {
+              background-color: @surface1;
+          }
+
+          #tray > .passive:hover {
+              color: @text;
+          }
+
+          #tray > .active:hover {
+              color: @text;
+          }
+
+          #tray > .passive {
+              -gtk-icon-effect: dim;
+              opacity: 0.7;
+          }
+
+          #tray > .active {
+              -gtk-icon-effect: none;
+              opacity: 1.0;
+          }
+
+          #tray > .needs-attention {
+              -gtk-icon-effect: highlight;
+              color: @yellow;
+              animation: attention-pulse 1.5s ease-in-out infinite alternate;
+          }
+
+          #custom-notification {
+              color: @overlay1;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+              margin: 0 1.5px;
+          }
+
+          #custom-notification:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #custom-power {
+              color: @red;
+              border-left: 1px solid @blue;
+              padding: 2px 8px 2px 12px;
+              margin-left: 12px;
+              border-radius: 0 6px 6px 0;
+              transition: all 0.2s ease-in-out;
+          }
+
+          #custom-power:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #pulseaudio {
+              color: @lavender;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #pulseaudio:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #pulseaudio.muted {
+              color: @red;
+              background-color: @surface0;
+          }
+
+          #pulseaudio.bluetooth {
+              color: @pink;
+              background-color: @surface0;
+          }
+
+          #pulseaudio.source-muted {
+              color: @orange;
+              font-style: italic;
+          }
+
+          #bluetooth {
+              color: @blue;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #bluetooth:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #bluetooth.disabled {
+              color: @overlay0;
+              opacity: 0.6;
+          }
+
+          #bluetooth.connected {
+              color: @green;
+              background-color: @surface0;
+          }
+
+          #network {
+              color: @green;
+              transition: all 0.2s ease-in-out;
+              border-radius: 6px;
+              padding: 2px 8px;
+          }
+
+          #network:hover {
+              background-color: @surface1;
+              color: @text;
+          }
+
+          #network.disconnected {
+              color: @red;
+              opacity: 0.8;
+          }
+
+          #network.linked {
+              color: @yellow;
+          }
+
+          #network.ethernet {
+              color: @blue;
+          }
+
+          /* -- Group Styling -- */
+          group#system-info {
+              border-radius: 6px;
+              transition: all 0.2s ease-in-out;
+          }
+
+          .system-drawer {
+              padding: 2px 8px;
+              margin: 0 1.5px;
+              transition: all 0.2s ease-in-out;
+          }
+
+          .system-drawer:first-child {
+              border-radius: 6px 0 0 6px;
+          }
+
+          .system-drawer:last-child {
+              border-radius: 0 6px 6px 0;
+          }
+
+          .system-drawer:only-child {
+              border-radius: 6px;
+          }
+
+          group#system-info:hover .system-drawer {
+              background-color: @surface1;
+          }
+
+          #custom-system-gear {
+              color: @overlay1;
+              font-size: 14px;
+              padding: 2px 8px 2px 12px;
+              margin: 0 1.5px;
+              margin-right: 12px;
+              border-radius: 6px;
+              transition: all 0.2s ease-in-out;
+          }
+
+          #custom-system-gear:hover {
+              color: @text;
+              background-color: @surface1;
+          }
+
+          /* -- Animations -- */
+          @keyframes blink {
+              to {
+                  color: @surface0;
+              }
+          }
+
+          #battery.critical:not(.charging) {
+              background-color: @red;
+              color: @theme_base_color;
+              animation-name: blink;
+              animation-duration: 0.5s;
+              animation-timing-function: linear;
+              animation-iteration-count: infinite;
+              animation-direction: alternate;
+              box-shadow: inset 0 -3px transparent;
+          }
+
+        '';
       };
     })
   ];

@@ -8,6 +8,9 @@
 }:
 let
   cfg = config.desktops.gnome.extensions;
+
+  # Local extension builds
+  unite-shell = pkgs.callPackage ../build/unite-shell.nix {};
 in
 {
 
@@ -31,7 +34,12 @@ in
       gnomeExtensions.media-controls
       gnomeExtensions.appindicator
       gnomeExtensions.user-themes
+      gnomeExtensions.undecorate
+      gnomeExtensions.hide-top-bar
+      gnomeExtensions.rounded-window-corners-reborn
+      unite-shell # Local build
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
+      xorg.xprop # Required by unite-shell
     ];
 
     home-manager.users."${user-settings.user.username}" = {
@@ -49,15 +57,15 @@ in
             "appindicatorsupport@rgcjonas.gmail.com"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "tilingshell@ferrarodomenico.com"
+            "hidetopbar@mathieu.bidon.ca"
+            "undecorate@sun.wxg@gmail.com"
+            "rounded-window-corners@fxgn"
+            "unite@hardpixel.eu"
           ];
 
           # Disabled extensions
           disabled-extensions = [
-            "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "window-calls@domandoman.xyz"
-            "forge@jmmaranan.com"
-            "space-bar@luchrioh"
-
           ];
         };
 
@@ -67,6 +75,32 @@ in
           mediacontrols-show-popup-menu = [ "<Shift><Control><Alt>m" ];
         };
 
+        "org/gnome/shell/extensions/hidetopbar" = {
+         mouse-sensitive = true;
+         keep-round-corners = true;
+         enable-intellihide = false;
+         enable-active-window = false;
+        };
+
+        "org/gnome/shell/extensions/rounded-window-corners-reborn" = {
+          enable-preferences-entry = true;
+          settings-version = mkUint32 7;
+          tweak-kitty-terminal = true;
+        };
+
+        "org/gnome/shell/extensions/unite" = {
+          autofocus-windows = false;
+          greyscale-tray-icons = true;
+          hide-window-titlebars = "maximized";
+          notifications-position = "center";
+          reduce-panel-spacing = false;
+          show-appmenu-button = false;
+          show-desktop-name = false;
+          show-legacy-tray = true;
+          show-window-buttons = "never";
+          show-window-title = "never";
+          use-activities-text = false;
+        };
 
         "org/gnome/shell/extensions/tilingshell" = {
           enable-blur-selected-tilepreview = true;
@@ -115,6 +149,18 @@ in
 
       };
 
+    };
+
+    # Set complex dconf settings via systemd user service
+    systemd.user.services.rounded-corners-dconf = {
+      description = "Set rounded window corners dconf settings";
+      wantedBy = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/rounded-window-corners-reborn/global-rounded-corner-settings \"{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.0>, 'enabled': <true>}\"";
+      };
     };
 
   };

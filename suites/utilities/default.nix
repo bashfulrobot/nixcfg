@@ -22,6 +22,7 @@ in
     cli = { };
 
     apps = {
+      satty.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -33,7 +34,6 @@ in
       #solaar # Linux manager for many Logitech keyboards, mice
       # junction # default app selector
       kooha # Screen recorder for x11/Wayland
-      satty # annotation
       gcolor3
       # ydotool # xdotool alternative. window automation
       tcpdump

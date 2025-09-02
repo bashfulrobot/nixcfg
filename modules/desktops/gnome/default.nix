@@ -145,7 +145,8 @@ in {
 
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          # accent-color and fonts managed by stylix
+          accent-color = "slate";
+          # fonts managed by stylix
 
           # Font rendering settings
           font-hinting = "full";

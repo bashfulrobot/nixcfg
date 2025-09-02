@@ -41,10 +41,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # niri = {
+    #   url = "github:sodiboo/niri-flake";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     opnix.url = "github:brizzbuzz/opnix";
     # hyprflake = {
     #   url = "github:bashfulrobot/hyprflake";
@@ -79,7 +79,7 @@
       nixos-hardware,
       nixos-hardware-fork,
       nixvim,
-      niri,
+      # niri,
       opnix,
       # hyprflake,
       zen-browser,
@@ -131,8 +131,8 @@
           users."${user-settings.user.username}" = {
             imports = [
               opnix.homeManagerModules.default
-              niri.homeModules.niri
-              niri.homeModules.stylix
+              # niri.homeModules.niri
+              # niri.homeModules.stylix
             ];
           };
         };

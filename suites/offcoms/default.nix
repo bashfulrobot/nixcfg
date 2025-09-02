@@ -59,7 +59,7 @@ in
 
     cli = {
       note.enable = true;
-      espanso.enable = true;
+      espanso.enable = false;
       claude-code.enable = true;
       flameshot.enable = false;
     };

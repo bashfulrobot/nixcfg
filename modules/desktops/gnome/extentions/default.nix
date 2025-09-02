@@ -31,13 +31,15 @@ in
       gnomeExtensions.media-controls
       gnomeExtensions.appindicator
       gnomeExtensions.user-themes
-      gnomeExtensions.just-perfection
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
     ];
 
     home-manager.users."${user-settings.user.username}" = {
       dconf.settings = with inputs.home-manager.lib.hm.gvariant; {
+
         "org/gnome/shell" = {
+          # temp - tshoot
+          disable-user-extensions = false;
           # Enabled extensions
           enabled-extensions = [
             "caffeine@patapon.info"
@@ -47,7 +49,6 @@ in
             "appindicatorsupport@rgcjonas.gmail.com"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "tilingshell@ferrarodomenico.com"
-            "just-perfection-desktop@just-perfection"
           ];
 
           # Disabled extensions
@@ -56,6 +57,7 @@ in
             "window-calls@domandoman.xyz"
             "forge@jmmaranan.com"
             "space-bar@luchrioh"
+
           ];
         };
 
@@ -65,42 +67,6 @@ in
           mediacontrols-show-popup-menu = [ "<Shift><Control><Alt>m" ];
         };
 
-        "org/gnome/shell/extensions/just-perfection" = {
-          accent-color-icon = false;
-          accessibility-menu = false;
-          activities-button = true;
-          animation = mkUint32 0;
-          background-menu = true;
-          controls-manager-spacing-size = mkUint32 0;
-          dash = true;
-          dash-icon-size = mkUint32 0;
-          double-super-to-appgrid = true;
-          invert-calendar-column-items = true;
-          keyboard-layout = false;
-          max-displayed-search-results = mkUint32 0;
-          osd = true;
-          panel = true;
-          panel-in-overview = true;
-          quick-settings-airplane-mode = false;
-          ripple-box = true;
-          search = true;
-          show-apps-button = true;
-          startup-status = mkUint32 0;
-          support-notifier-showed-version = 34;
-          support-notifier-type = mkUint32 0;
-          theme = true;
-          weather = false;
-          window-demands-attention-focus = false;
-          window-maximized-on-create = false;
-          window-picker-icon = true;
-          window-preview-caption = true;
-          window-preview-close-button = true;
-          workspace = true;
-          workspace-background-corner-size = mkUint32 0;
-          workspace-popup = true;
-          workspace-switcher-size = mkUint32 0;
-          workspaces-in-app-grid = true;
-        };
 
         "org/gnome/shell/extensions/tilingshell" = {
           enable-blur-selected-tilepreview = true;

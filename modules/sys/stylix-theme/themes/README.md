@@ -1,0 +1,3 @@
+- <https://nix-community.github.io/stylix/configuration.html>
+- <https://github.com/tinted-theming/schemes/blob/spec-0.11/base16/README.md>
+- <https://tinted-theming.github.io/tinted-gallery/>

@@ -7,6 +7,11 @@ in
 {
   options.sys.stylix-theme = {
     enable = lib.mkEnableOption "Stylix system-wide theming";
+    useWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to extract colors from wallpaper (true) or use handmade scheme (false)";
+    };
     wallpaperType = lib.mkOption {
       type = lib.types.enum [ "personal" "professional" ];
       default = "personal";
@@ -18,9 +23,6 @@ in
     stylix = {
       enable = true;
       autoEnable = true;  # Let stylix auto-detect available applications
-      
-      # Extract colors from wallpaper
-      image = wallpaperPath;
       
       # Force dark theme to match desktop
       polarity = "dark";
@@ -63,7 +65,14 @@ in
       
       # Disable Plymouth targeting to avoid missing theme files
       targets.plymouth.enable = lib.mkForce false;
-    };
+    } // (if cfg.useWallpaper then {
+      # Extract colors from wallpaper
+      image = wallpaperPath;
+    } else {
+      # Use handmade base16 scheme but still set wallpaper
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/${user-settings.theme.handmade-scheme}.yaml";
+      image = wallpaperPath;
+    });
 
     # Install necessary packages for stylix functionality
     environment.systemPackages = with pkgs; [

@@ -13,6 +13,7 @@
         "personal-wallpaper": "robot-bar.png",
         "professional-wallpaper": "robot-bar-kong.png",
         "personal-plymouth-background": "robot-bar.png",
-        "professional-plymouth-background": "400px-kong-logo-tsp.png"
+        "professional-plymouth-background": "400px-kong-logo-tsp.png",
+        "handmade-scheme": "gruvbox-dark-medium"
     }
 }

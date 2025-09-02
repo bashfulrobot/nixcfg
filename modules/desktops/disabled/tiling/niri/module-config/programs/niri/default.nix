@@ -39,7 +39,7 @@ in
         };
 
         spawn-at-startup = [
-          (makeCommand "blueman-applet")
+          #(makeCommand "blueman-applet")
           (makeCommand "swww img ${config.sys.wallpapers.getWallpaper "personal"}")
           (makeCommand "xwayland-satellite")
         ];

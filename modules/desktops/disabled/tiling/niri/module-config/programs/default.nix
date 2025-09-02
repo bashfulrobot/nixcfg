@@ -63,7 +63,7 @@ let
     # System tools
     pavucontrol
     brightnessctl
-    blueman
+    #blueman
 
     # Media controls
     playerctl

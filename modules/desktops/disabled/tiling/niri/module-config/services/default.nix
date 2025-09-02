@@ -58,7 +58,7 @@
         enable = true;
       };
       blueman-applet = {
-        enable = true;
+        enable = false;
       };
     };
 

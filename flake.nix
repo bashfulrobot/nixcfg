@@ -97,8 +97,16 @@
         };
       };
 
+      # --- Fix for Tailscale sandbox build issues
+      overlay-tailscale-fix = final: prev: {
+        tailscale = prev.tailscale.overrideAttrs (oldAttrs: {
+          doCheck = false;
+        });
+      };
+
       workstationOverlays = [
         overlay-unstable
+        overlay-tailscale-fix
       ];
 
       # Pre-compute JSON files once for better performance

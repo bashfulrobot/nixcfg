@@ -232,18 +232,37 @@ themes:
     @echo "🎨 Available base16 themes ($(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | wc -l') total):"
     @nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort'
 
-# Interactive theme selector using fuzzel
+# Interactive theme selector with auto-detection
 [group('info')]
 theme-select:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "🎨 Select a base16 theme..."
-    selected=$(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort' | fuzzel --dmenu --prompt "Theme: ")
+    
+    # Create theme list
+    themes=$(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort')
+    
+    # Use appropriate selector tool
+    if command -v fuzzel >/dev/null && [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+        # Use fuzzel for tiling WMs (Hyprland, Niri, etc.)
+        selected=$(echo "$themes" | fuzzel --dmenu --prompt "Theme: " 2>/dev/null || echo "")
+    elif command -v fzf >/dev/null; then
+        # Use fzf for GNOME and other environments
+        selected=$(echo "$themes" | fzf --prompt="Theme: " --height=20 --reverse --border || echo "")
+    else
+        echo "❌ No theme selector available"
+        echo "💡 Rebuild system to install dependencies: just build"
+        echo "💡 For now, use: just themes (to list) and just set-theme <name>"
+        exit 1
+    fi
+    
     if [[ -n "$selected" ]]; then
         echo "✨ Selected theme: $selected"
         echo "📝 To use this theme, update settings/settings.json:"
         echo "   \"handmade-scheme\": \"$selected\""
         echo "💡 Or run: just set-theme $selected"
+    else
+        echo "❌ No theme selected"
     fi
 
 # Set theme in settings.json and optionally rebuild

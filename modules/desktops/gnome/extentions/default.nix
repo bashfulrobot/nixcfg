@@ -36,7 +36,7 @@ in
       gnomeExtensions.user-themes
       gnomeExtensions.undecorate
       gnomeExtensions.hide-top-bar
-      gnomeExtensions.rounded-window-corners-reborn
+      unstable.gnomeExtensions.rounded-window-corners-reborn
       unite-shell # Local build
       pulseaudio # pactl needed for gnomeExtensions.quick-settings-audio-panel
       xorg.xprop # Required by unite-shell
@@ -60,12 +60,13 @@ in
             "hidetopbar@mathieu.bidon.ca"
             "undecorate@sun.wxg@gmail.com"
             "rounded-window-corners-reborn@yilozt"
-            "unite@hardpixel.eu"
+
           ];
 
           # Disabled extensions
           disabled-extensions = [
             "window-calls@domandoman.xyz"
+            "unite@hardpixel.eu"
           ];
         };
 
@@ -100,6 +101,7 @@ in
           show-window-buttons = "never";
           show-window-title = "never";
           use-activities-text = false;
+          extend-left-box = false;
         };
 
         "org/gnome/shell/extensions/tilingshell" = {

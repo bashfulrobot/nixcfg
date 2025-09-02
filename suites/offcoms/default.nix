@@ -96,7 +96,7 @@ in
       # element-desktop # Matrix Client
 
       # Email
-      unstable.meli # terminal email client
+      meli # terminal email client
       gmailctl # cli to write gmail filters as code
       # thunderbird # email client
       # unstable.evolutionWithPlugins

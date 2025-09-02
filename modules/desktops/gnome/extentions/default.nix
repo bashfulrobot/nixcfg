@@ -59,7 +59,7 @@ in
             "tilingshell@ferrarodomenico.com"
             "hidetopbar@mathieu.bidon.ca"
             "undecorate@sun.wxg@gmail.com"
-            "rounded-window-corners@fxgn"
+            "rounded-window-corners-reborn@yilozt"
             "unite@hardpixel.eu"
           ];
 

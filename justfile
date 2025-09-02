@@ -129,6 +129,7 @@ test:
 build trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
+    {{justfile_directory()}}/helpers/fix-gtk-css.sh
     git add -A
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
@@ -145,6 +146,7 @@ build trace="false":
 rebuild trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
+    {{justfile_directory()}}/helpers/fix-gtk-css.sh
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
         sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace
@@ -164,12 +166,18 @@ vm:
 upgrade:
     #!/usr/bin/env bash
     set -euo pipefail
+    {{justfile_directory()}}/helpers/fix-gtk-css.sh
     echo "⬆️  Upgrading system..."
     cp flake.lock flake.lock-backup-{{timestamp}}
     nix flake update
     sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
 
 # === Maintenance Commands ===
+# Fix GTK CSS file conflicts with home-manager
+[group('maintenance')]
+fix-gtk:
+    @{{justfile_directory()}}/helpers/fix-gtk-css.sh
+
 # Quick garbage collection (5 days)
 [group('maintenance')]
 clean:

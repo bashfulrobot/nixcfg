@@ -144,6 +144,13 @@ in
 
         };
 
+        "org/gnome/shell/extensions/rounded-window-corners-reborn" = {
+          enable-preferences-entry = true;
+          settings-version = mkUint32 7;
+          skip-libadwaita-app = true;
+          tweak-kitty-terminal = true;
+        };
+
       };
 
     };

@@ -38,6 +38,7 @@ in {
       nautilus-open-any-terminal # open terminal(s) in nautilus
       file-roller # GNOME archive manager - core desktop component
       gnome-screenshot # Re-adding since flameshot doesn't work in Wayland
+      fuzzel # Wayland-native application launcher and dmenu replacement
       # Icon theme support for notifications
       hicolor-icon-theme
       shared-mime-info

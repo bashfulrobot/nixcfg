@@ -232,6 +232,52 @@ themes:
     @echo "🎨 Available base16 themes ($(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | wc -l') total):"
     @nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort'
 
+# Interactive theme selector using fuzzel
+[group('info')]
+theme-select:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🎨 Select a base16 theme..."
+    selected=$(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort' | fuzzel --dmenu --prompt "Theme: ")
+    if [[ -n "$selected" ]]; then
+        echo "✨ Selected theme: $selected"
+        echo "📝 To use this theme, update settings/settings.json:"
+        echo "   \"handmade-scheme\": \"$selected\""
+        echo "💡 Or run: just set-theme $selected"
+    fi
+
+# Set theme in settings.json and optionally rebuild
+[group('info')]
+set-theme theme rebuild="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    
+    # Validate theme exists
+    if ! nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//"' | grep -q "^{{theme}}$"; then
+        echo "❌ Theme '{{theme}}' not found. Run 'just themes' to see available themes."
+        exit 1
+    fi
+    
+    echo "🎨 Setting theme to: {{theme}}"
+    
+    # Update settings.json
+    if command -v jq >/dev/null; then
+        jq '.theme."handmade-scheme" = "{{theme}}"' settings/settings.json > settings/settings.json.tmp
+        mv settings/settings.json.tmp settings/settings.json
+        echo "✅ Updated settings/settings.json"
+    else
+        echo "⚠️  jq not available. Please manually update settings/settings.json:"
+        echo "   \"handmade-scheme\": \"{{theme}}\""
+    fi
+    
+    # Optionally rebuild
+    if [[ "{{rebuild}}" == "true" ]]; then
+        echo "🔄 Rebuilding system..."
+        just build
+    else
+        echo "💡 Run 'just build' to apply the new theme"
+    fi
+
 # Update hardware firmware
 [group('info')]
 firmware:

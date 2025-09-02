@@ -16,11 +16,11 @@
   };
 
   # Desktop configuration - using niri as primary
-  desktops.gnome.enable = false;
-  desktops.tiling = {
-    hyprland.enable = false;
-    niri.enable = true;
-  };
+  desktops.gnome.enable = true;
+  # desktops.tiling = {
+  #   hyprland.enable = false;
+  #   niri.enable = false ;
+  # };
 
   apps = {
     claude-desktop.enable = true;

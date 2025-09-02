@@ -5,4 +5,4 @@ Bugs:
 - workspace behaviour is not how I want it. Want to be able to use 1-10 at any time
 - want my fuzzel shortcut to execute on "enter"
 - want my waybar rc menus to match the theme
-- zoom screensharing
+- zoom screensharing`

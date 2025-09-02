@@ -226,6 +226,12 @@ sysinfo:
     @echo "💻 System Information:"
     @nix shell github:NixOS/nixpkgs#nix-info --extra-experimental-features 'nix-command flakes' --command nix-info -m
 
+# List available base16 color schemes for stylix
+[group('info')]
+themes:
+    @echo "🎨 Available base16 themes ($(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | wc -l') total):"
+    @nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort'
+
 # Update hardware firmware
 [group('info')]
 firmware:

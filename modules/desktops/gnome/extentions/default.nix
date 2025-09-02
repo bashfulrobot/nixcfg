@@ -153,7 +153,7 @@ in
 
     };
 
-    # Set complex dconf settings via systemd user service
+    # Set complex dconf settings via systemd user service with delay
     systemd.user.services.rounded-corners-dconf = {
       description = "Set rounded window corners dconf settings";
       wantedBy = [ "graphical-session.target" ];
@@ -161,7 +161,17 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/rounded-window-corners-reborn/global-rounded-corner-settings \"{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.0>, 'enabled': <true>}\"";
+        ExecStart = pkgs.writeShellScript "rounded-corners-setup" ''
+          # Wait for GNOME Shell and extension to be ready
+          sleep 5
+          
+          # Check if extension schema exists before writing
+          if ${pkgs.dconf}/bin/dconf list /org/gnome/shell/extensions/rounded-window-corners-reborn/ &>/dev/null; then
+            ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/rounded-window-corners-reborn/global-rounded-corner-settings "{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.0>, 'enabled': <true>}"
+          else
+            echo "Rounded corners extension schema not found, skipping configuration"
+          fi
+        '';
       };
     };
 

@@ -3,8 +3,8 @@
 
 {
   # Fix for Tailscale sandbox build issues
-  # Issue: portlist tests fail accessing /proc/net/tcp in sandboxed builds  
-  # TODO: Remove once https://github.com/tailscale/tailscale/issues/xyz is fixed
+  # Issue: portlist tests fail accessing /proc/net/tcp in sandboxed builds
+  # TODO: Remove once https://github.com/tailscale/tailscale/issues/xyz is fixed (need to find or file)
   tailscale-sandbox-fix = final: prev: {
     tailscale = prev.tailscale.overrideAttrs (oldAttrs: {
       doCheck = false;

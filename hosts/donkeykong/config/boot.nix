@@ -3,9 +3,10 @@
 {
   boot = {
     # Use latest kernel for newer hardware support
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [ "quiet" "splash" ];
-    
+
     loader = {
       systemd-boot = {
         enable = true;
@@ -15,9 +16,9 @@
       };
       efi.canTouchEfiVariables = true;
     };
-    
+
     kernelModules = [ "usb" "xhci_hcd" "btusb" "bluetooth" ];
   };
-  
+
   # LUKS configuration is handled entirely by disko.nix
 }

@@ -1,4 +1,4 @@
-Bugs:
+Niri Bugs:
 
 - OSD shows nothing for caps lock
 - gears icon css unbalanced

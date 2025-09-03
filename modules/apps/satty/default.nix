@@ -1,9 +1,16 @@
-{ user-settings, pkgs, config, lib, ... }:
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.apps.satty;
   inherit (config.lib.stylix) colors;
 
-in {
+in
+{
 
   options = {
     apps.satty.enable = lib.mkOption {
@@ -40,10 +47,6 @@ in {
         save-after-copy = false
         # Hide toolbars by default
         default-hide-toolbars = false
-        # Experimental: whether window focus shows/hides toolbars. This does not affect initial state of toolbars, see default-hide-toolbars.
-        focus-toggles-toolbars = false
-        # Fill shapes by default
-        default-fill-shapes = false
         # The primary highlighter to use, the other is accessible by holding CTRL at the start of a highlight [possible values: block, freehand]
         primary-highlighter = "block"
         # Disable notifications

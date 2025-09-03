@@ -16,7 +16,21 @@ timestamp := `date +%Y-%m-%d_%H-%M-%S`
 # === Help ===
 # Show available recipes
 default:
+    @echo "📋 NixOS Configuration Management Commands"
+    @echo "=========================================="
     @just --list --unsorted
+    @echo ""
+    @echo "🔧 Commands with Parameters:"
+    @echo "  build [trace=true]         - Add trace=true for detailed debugging"
+    @echo "  rebuild [trace=true]       - Add trace=true for detailed debugging"  
+    @echo "  log [days=7]               - Show commits from last N days"
+    @echo "  lint [target=.]            - Lint specific file/directory (use jlint for tab completion)"
+    @echo "  pkg-search <query>         - Search for packages"
+    @echo ""
+    @echo "💡 Pro Tips:"
+    @echo "  • Use 'jlint <tab>' and 'jcheck <tab>' for file completion"
+    @echo "  • Run 'just <command>' to see what each command does"
+    @echo "  • Common workflow: just check → just build → just rebuild"
 
 # === Development Commands ===
 # Fast syntax validation without building
@@ -28,27 +42,7 @@ check:
     git add -A
     nix flake check --show-trace
 
-# Quick syntax check without building or evaluation
-[group('dev')]
-syntax:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "⚡ Quick syntax check..."
-    nix flake check --no-build 2>/dev/null || echo "❌ Syntax issues detected"
 
-# Fast evaluation check (validates options without building packages)
-[group('dev')]
-eval-check:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "🔍 Quick evaluation check..."
-    git add -A
-    if nix eval .#nixosConfigurations.{{hostname}}.config --quiet >/dev/null 2>&1; then
-        echo "✅ Configuration evaluates successfully"
-    else
-        echo "❌ Configuration evaluation failed"
-        nix eval .#nixosConfigurations.{{hostname}}.config --quiet 2>&1 | head -20
-    fi
 
 # Fast check of changed nix files only  
 [group('dev')]
@@ -122,7 +116,7 @@ test:
     set -euo pipefail
     echo "🧪 Testing build (dry run)..."
     git add -A
-    sudo nixos-rebuild dry-build --fast --impure --flake {{host_flake}}
+    nh os build --dry
 
 # Development rebuild with optional trace
 [group('dev')]
@@ -134,10 +128,10 @@ build trace="false":
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
         just clean-full
-        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
+        nh os switch --show-trace 2>&1 | tee {{trace_log}}
     else
         echo "🔧 Development rebuild..."
-        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}}
+        nh os switch
     fi
 
 # === Production Commands ===
@@ -149,17 +143,17 @@ rebuild trace="false":
     {{justfile_directory()}}/helpers/fix-gtk-css.sh
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
-        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace
+        nh os switch --show-trace
     else
         echo "🚀 Production rebuild..."
-        sudo nixos-rebuild switch --impure --flake {{host_flake}}
+        nh os switch
     fi
 
 # Build VM for testing
 [group('dev')]
 vm:
     @echo "🖥️  Building VM..."
-    @sudo nixos-rebuild build-vm --fast --impure --flake {{host_flake}} --show-trace
+    @nh os build-vm --show-trace
 
 # Full system upgrade
 [group('prod')]
@@ -170,7 +164,7 @@ upgrade:
     echo "⬆️  Upgrading system..."
     cp flake.lock flake.lock-backup-{{timestamp}}
     nix flake update
-    sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
+    nh os switch --update --show-trace
 
 # === Maintenance Commands ===
 # Fix GTK CSS file conflicts with home-manager
@@ -182,13 +176,13 @@ fix-gtk:
 [group('maintenance')]
 clean:
     @echo "🧹 Cleaning packages older than 5 days..."
-    @sudo nix-collect-garbage --delete-older-than 5d
+    @nh clean all --keep-since 5d
 
 # Full garbage collection
 [group('maintenance')]
 clean-full:
     @echo "🧹 Full garbage collection..."
-    @sudo nix-collect-garbage -d
+    @nh clean all --keep 1 --keep-since 0h
 
 # Update nix database for comma tool
 [group('maintenance')]
@@ -240,70 +234,7 @@ themes:
     @echo "🎨 Available base16 themes ($(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | wc -l') total):"
     @nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort'
 
-# Interactive theme selector with auto-detection
-[group('info')]
-theme-select:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "🎨 Select a base16 theme..."
-    
-    # Create theme list
-    themes=$(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort')
-    
-    # Use appropriate selector tool
-    if command -v fuzzel >/dev/null && [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-        # Use fuzzel for tiling WMs (Hyprland, Niri, etc.)
-        selected=$(echo "$themes" | fuzzel --dmenu --prompt "Theme: " 2>/dev/null || echo "")
-    elif command -v fzf >/dev/null; then
-        # Use fzf for GNOME and other environments
-        selected=$(echo "$themes" | fzf --prompt="Theme: " --height=20 --reverse --border || echo "")
-    else
-        echo "❌ No theme selector available"
-        echo "💡 Rebuild system to install dependencies: just build"
-        echo "💡 For now, use: just themes (to list) and just set-theme <name>"
-        exit 1
-    fi
-    
-    if [[ -n "$selected" ]]; then
-        echo "✨ Selected theme: $selected"
-        echo "📝 To use this theme, update settings/settings.json:"
-        echo "   \"handmade-scheme\": \"$selected\""
-        echo "💡 Or run: just set-theme $selected"
-    else
-        echo "❌ No theme selected"
-    fi
 
-# Set theme in settings.json and optionally rebuild
-[group('info')]
-set-theme theme rebuild="false":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    
-    # Validate theme exists
-    if ! nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//"' | grep -q "^{{theme}}$"; then
-        echo "❌ Theme '{{theme}}' not found. Run 'just themes' to see available themes."
-        exit 1
-    fi
-    
-    echo "🎨 Setting theme to: {{theme}}"
-    
-    # Update settings.json
-    if command -v jq >/dev/null; then
-        jq '.theme."handmade-scheme" = "{{theme}}"' settings/settings.json > settings/settings.json.tmp
-        mv settings/settings.json.tmp settings/settings.json
-        echo "✅ Updated settings/settings.json"
-    else
-        echo "⚠️  jq not available. Please manually update settings/settings.json:"
-        echo "   \"handmade-scheme\": \"{{theme}}\""
-    fi
-    
-    # Optionally rebuild
-    if [[ "{{rebuild}}" == "true" ]]; then
-        echo "🔄 Rebuilding system..."
-        just build
-    else
-        echo "💡 Run 'just build' to apply the new theme"
-    fi
 
 # Update hardware firmware
 [group('info')]
@@ -323,13 +254,6 @@ log days="7":
     echo "===================="
     git log --since="{{days}} days ago" --pretty=format:"%h - %an: %s (%cr)" --graph
 
-# Reset to remote origin
-[group('git')]
-reset-origin:
-    @echo "🔄 Resetting to origin/main..."
-    @git fetch
-    @git reset --hard origin/main
-    @git pull
 
 # Hard reset with cleanup
 [group('git')]
@@ -341,6 +265,24 @@ reset-hard:
     @git pull
 
 # === Helper Commands ===
+# Enhanced package search functionality
+[group('helpers')]
+pkg-search query:
+    @echo "🔍 Searching for packages: {{query}}"
+    @nh search {{query}}
+
+# System rollback functionality  
+[group('helpers')]
+rollback:
+    @echo "⏪ Rolling back system..."
+    @nh os rollback
+
+# Show system generations
+[group('helpers')]
+generations:
+    @echo "📜 System generations:"
+    @nh os info
+
 # Full rebuild cycle with reboot
 [group('helpers')]
 rebuild-reboot:
@@ -363,8 +305,6 @@ inspect:
 
 # === Workflow Aliases ===
 alias c := check
-alias s := syntax
-alias e := eval-check
 alias d := check-diff
 alias t := test
 alias b := build

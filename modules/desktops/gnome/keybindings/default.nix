@@ -5,7 +5,7 @@ let
   # Generic browser toggle script that works with any browser
   toggleBrowserScript = pkgs.writeShellApplication {
     name = "toggle-browser";
-    runtimeInputs = [ pkgs.wtype pkgs.procps ];
+    runtimeInputs = [ pkgs.wtype pkgs.procps pkgs.dex ];
     text = ''
       # Use BROWSER environment variable or default to google-chrome-stable
       BROWSER_CMD="''${BROWSER:-google-chrome-stable}"
@@ -15,14 +15,16 @@ let
       
       # Check if browser is running
       if pgrep -x "$BROWSER_PROCESS" > /dev/null; then
-        # Browser is running - focus it first, then send Super+Q to close window
-        $BROWSER_CMD &
-        sleep 0.3
-        # Send Super+Q to close the window
-        wtype -M logo -k q
+        # Browser is running - send Super+Q to close window
+        wtype -M logo q -m logo
       else
-        # Browser is not running - launch it
-        $BROWSER_CMD &
+        # Browser is not running - launch it using desktop file for proper behavior
+        if [ "$BROWSER_PROCESS" = "google-chrome-stable" ]; then
+          dex /run/current-system/sw/share/applications/google-chrome.desktop
+        else
+          # Fallback to direct command if no desktop file mapping known
+          $BROWSER_CMD &
+        fi
       fi
     '';
   };
@@ -38,9 +40,10 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # Add the browser toggle script and wtype for Wayland input to system packages
+    # Add the browser toggle script, wtype for Wayland input, and dex for desktop file launching
     environment.systemPackages = with pkgs; [
       wtype
+      dex
       toggleBrowserScript
     ];
 

@@ -261,7 +261,7 @@ in {
         };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17" = {
-          binding = "<Alt><Super>b";
+          binding = "<Super><Alt>b";
           command = "toggle-browser";
           name = "Toggle Browser Visibility";
         };

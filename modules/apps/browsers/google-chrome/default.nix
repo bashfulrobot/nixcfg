@@ -30,14 +30,14 @@ in
       programs.chromium = {
         enable = true;
         package = pkgs.google-chrome;
-        extensions = [
-          # 1password
-          "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
-          # ublock origin
-          "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-          # dark reader
-          "eimadpbcbfnmbkopoojfekhnkhdbieeh"
-        ];
+        # extensions = [
+        #   # 1password
+        #   "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
+        #   # ublock origin
+        #   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+        #   # dark reader
+        #   "eimadpbcbfnmbkopoojfekhnkhdbieeh"
+        # ];
       };
 
       home.sessionVariables = lib.mkIf cfg.setAsDefault {

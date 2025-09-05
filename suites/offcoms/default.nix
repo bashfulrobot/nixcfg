@@ -34,10 +34,13 @@ in
     apps = {
       browsers.firefox = {
         enable = true;
-        setAsDefault = true;
+        setAsDefault = false;
       };
       browsers.chrome-based-browser.enable = false;
-      browsers.google-chrome.enable = false;
+      browsers.google-chrome = {
+        enable = true;
+        setAsDefault = true;
+      };
       browsers.brave.enable = false;
       browsers.vivaldi.enable = false;
       browsers.zen-browser = {

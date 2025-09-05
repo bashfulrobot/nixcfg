@@ -72,7 +72,7 @@ in
         wayland-protocols
       ];
 
-    buildInputs = buildInputs;
+    inherit buildInputs;
 
     dontConfigure = true;
     dontStrip = !strip;

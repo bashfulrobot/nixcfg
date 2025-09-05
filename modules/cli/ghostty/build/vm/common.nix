@@ -23,16 +23,16 @@
     '';
   };
 
-  users.mutableUsers = false;
-
-  users.groups.ghostty = {};
-
-  users.users.ghostty = {
-    description = "Ghostty";
-    group = "ghostty";
-    extraGroups = ["wheel"];
-    isNormalUser = true;
-    initialPassword = "ghostty";
+  users = {
+    mutableUsers = false;
+    groups.ghostty = {};
+    users.ghostty = {
+      description = "Ghostty";
+      group = "ghostty";
+      extraGroups = ["wheel"];
+      isNormalUser = true;
+      initialPassword = "ghostty";
+    };
   };
 
   environment.etc = {
@@ -55,29 +55,12 @@
     enable = true;
   };
 
-  services.dbus = {
-    enable = true;
-  };
-
-  services.displayManager = {
-    autoLogin = {
-      user = "ghostty";
-    };
-  };
-
-  services.libinput = {
-    enable = true;
-  };
-
-  services.qemuGuest = {
-    enable = true;
-  };
-
-  services.spice-vdagentd = {
-    enable = true;
-  };
-
-  services.xserver = {
-    enable = true;
+  services = {
+    dbus.enable = true;
+    displayManager.autoLogin.user = "ghostty";
+    libinput.enable = true;
+    qemuGuest.enable = true;
+    spice-vdagentd.enable = true;
+    xserver.enable = true;
   };
 }

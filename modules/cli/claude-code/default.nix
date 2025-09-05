@@ -16,21 +16,22 @@ in {
     ];
 
     home-manager.users."${user-settings.user.username}" = {
-      home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
-      
-      home.file.".claude/settings.json".text = builtins.toJSON {
-        cleanupPeriodDays = 15;
-        includeCoAuthoredBy = false;
-      };
+      home.file = {
+        ".claude/CLAUDE.md".source = ./CLAUDE.md;
+        
+        ".claude/settings.json".text = builtins.toJSON {
+          cleanupPeriodDays = 15;
+          includeCoAuthoredBy = false;
+        };
 
-      # Deploy subagents to ~/.claude/agents/
-      home.file.".claude/agents/rusty.md".source = ./agents/rusty.md;
-      home.file.".claude/agents/francis.md".source = ./agents/francis.md;
-      home.file.".claude/agents/trinity.md".source = ./agents/trinity.md;
-      home.file.".claude/agents/parker.md".source = ./agents/parker.md;
-      home.file.".claude/agents/gopher.md".source = ./agents/gopher.md;
-      home.file.".claude/agents/kong.md".source = ./agents/kong.md;
-      home.file.".claude/commands/commit.md".text = ''
+        # Deploy subagents to ~/.claude/agents/
+        ".claude/agents/rusty.md".source = ./agents/rusty.md;
+        ".claude/agents/francis.md".source = ./agents/francis.md;
+        ".claude/agents/trinity.md".source = ./agents/trinity.md;
+        ".claude/agents/parker.md".source = ./agents/parker.md;
+        ".claude/agents/gopher.md".source = ./agents/gopher.md;
+        ".claude/agents/kong.md".source = ./agents/kong.md;
+        ".claude/commands/commit.md".text = ''
         ---
         description: Create conventional commits with emoji and optional push, tagging, or GitHub releases
         allowed-tools: ["Bash", "Grep", "Read"]
@@ -132,7 +133,8 @@ in {
         Arguments: $ARGUMENTS
 
         Always analyze staged changes first, split into atomic commits if needed, then apply the 3 supported argument flags.
-      '';
+        '';
+      };
 
       programs.fish.shellAbbrs = {
         cc = {

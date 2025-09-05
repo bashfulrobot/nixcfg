@@ -27,11 +27,11 @@ in
         ];
 
         users.groups.ghostty = {
-          gid = gid;
+          inherit gid;
         };
 
         users.users.ghostty = {
-          uid = uid;
+          inherit uid;
         };
 
         system.stateVersion = nixpkgs.lib.trivial.release;

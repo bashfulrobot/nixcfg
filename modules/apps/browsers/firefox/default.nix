@@ -41,18 +41,19 @@ in
   config = lib.mkIf cfg.enable {
     home-manager.users."${user-settings.user.username}" = {
       # Enable backups for conflicting files
-      home.enableNixpkgsReleaseCheck = false;
-      home.file.".mozilla/firefox/profiles.ini".force = true;
+      home = {
+        enableNixpkgsReleaseCheck = false;
+        file.".mozilla/firefox/profiles.ini".force = true;
+        sessionVariables = lib.mkIf cfg.setAsDefault {
+          BROWSER = "firefox";
+        };
+      };
       # Configure stylix for Firefox theming
       stylix.targets.firefox = {
         profileNames = [ "default" ];
         # Optional: enable additional theming features
         # colorTheme.enable = true;
         # firefoxGnomeTheme.enable = true;
-      };
-
-      home.sessionVariables = lib.mkIf cfg.setAsDefault {
-        BROWSER = "firefox";
       };
 
       programs.firefox = {

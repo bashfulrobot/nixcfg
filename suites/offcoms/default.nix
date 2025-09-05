@@ -32,20 +32,22 @@ in
     };
 
     apps = {
-      browsers.firefox = {
-        enable = true;
-        setAsDefault = false;
-      };
-      browsers.chrome-based-browser.enable = false;
-      browsers.google-chrome = {
-        enable = true;
-        setAsDefault = true;
-      };
-      browsers.brave.enable = false;
-      browsers.vivaldi.enable = false;
-      browsers.zen-browser = {
-        enable = false;
-        setAsDefault = false;
+      browsers = {
+        firefox = {
+          enable = true;
+          setAsDefault = false;
+        };
+        chrome-based-browser.enable = false;
+        google-chrome = {
+          enable = true;
+          setAsDefault = true;
+        };
+        brave.enable = false;
+        vivaldi.enable = false;
+        zen-browser = {
+          enable = false;
+          setAsDefault = false;
+        };
       };
 
       one-password.enable = true;

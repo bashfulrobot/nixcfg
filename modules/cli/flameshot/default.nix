@@ -13,22 +13,24 @@ let
 
 in {
   options = {
-    cli.flameshot.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable flameshot screenshot tool.";
-    };
+    cli.flameshot = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable flameshot screenshot tool.";
+      };
 
-    cli.flameshot.x11Support = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable X11 support for flameshot (disables wayland support).";
-    };
+      x11Support = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable X11 support for flameshot (disables wayland support).";
+      };
 
-    cli.flameshot.waylandSupport = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable Wayland support for flameshot (disabled when x11Support is true).";
+      waylandSupport = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable Wayland support for flameshot (disabled when x11Support is true).";
+      };
     };
   };
 

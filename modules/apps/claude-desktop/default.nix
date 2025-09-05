@@ -1,7 +1,7 @@
 { user-settings, pkgs, config, lib, inputs, ... }:
 let 
   cfg = config.apps.claude-desktop;
-  system = pkgs.system;  # Get system from flake-utils via pkgs
+  inherit (pkgs) system;  # Get system from flake-utils via pkgs
   
 in {
   options = {

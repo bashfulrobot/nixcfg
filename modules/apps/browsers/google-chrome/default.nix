@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.apps.browsers.google-chrome;
+  browserExecutable = "google-chrome-stable";
 in
 {
   options = {

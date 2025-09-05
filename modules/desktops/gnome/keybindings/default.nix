@@ -1,5 +1,31 @@
 { user-settings, lib, config, pkgs, inputs, ... }:
-let cfg = config.desktops.gnome.keybindings;
+let 
+  cfg = config.desktops.gnome.keybindings;
+  
+  # Generic browser toggle script that works with any browser
+  toggleBrowserScript = pkgs.writeShellApplication {
+    name = "toggle-browser";
+    runtimeInputs = [ pkgs.wtype pkgs.procps ];
+    text = ''
+      # Use BROWSER environment variable or default to google-chrome-stable
+      BROWSER_CMD="''${BROWSER:-google-chrome-stable}"
+      
+      # Extract just the executable name for pgrep
+      BROWSER_PROCESS=$(basename "$BROWSER_CMD")
+      
+      # Check if browser is running
+      if pgrep -x "$BROWSER_PROCESS" > /dev/null; then
+        # Browser is running - focus it first, then send Super+Q to close window
+        $BROWSER_CMD &
+        sleep 0.3
+        # Send Super+Q to close the window
+        wtype -M logo -k q
+      else
+        # Browser is not running - launch it
+        $BROWSER_CMD &
+      fi
+    '';
+  };
 in {
 
   options = {
@@ -12,8 +38,11 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # environment.systemPackages = with pkgs; [
-    #  ];
+    # Add the browser toggle script and wtype for Wayland input to system packages
+    environment.systemPackages = with pkgs; [
+      wtype
+      toggleBrowserScript
+    ];
 
     desktops.gnome = { keybindings.display-custom-keybindings.enable = true; };
 
@@ -103,6 +132,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17/"
           ];
         };
 
@@ -225,6 +255,12 @@ in {
           binding = "<Super><Alt>s";
           command = "toggle-slack";
           name = "Toggle Slack Visibility";
+        };
+
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17" = {
+          binding = "<Alt><Super>b";
+          command = "toggle-browser";
+          name = "Toggle Browser Visibility";
         };
 
         # Forge Extensions Keybindings

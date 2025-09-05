@@ -1,33 +1,6 @@
 { user-settings, lib, config, pkgs, inputs, ... }:
 let 
   cfg = config.desktops.gnome.keybindings;
-  
-  # Generic browser toggle script that works with any browser
-  toggleBrowserScript = pkgs.writeShellApplication {
-    name = "toggle-browser";
-    runtimeInputs = [ pkgs.wtype pkgs.procps pkgs.dex ];
-    text = ''
-      # Use BROWSER environment variable or default to google-chrome-stable
-      BROWSER_CMD="''${BROWSER:-google-chrome-stable}"
-      
-      # Extract just the executable name for pgrep
-      BROWSER_PROCESS=$(basename "$BROWSER_CMD")
-      
-      # Check if browser is running
-      if pgrep -x "$BROWSER_PROCESS" > /dev/null; then
-        # Browser is running - send Super+Q to close window
-        ${pkgs.wtype}/bin/wtype -M logo q -m logo
-      else
-        # Browser is not running - launch it using desktop file for proper behavior
-        if [ "$BROWSER_PROCESS" = "google-chrome-stable" ]; then
-          ${pkgs.dex}/bin/dex /run/current-system/sw/share/applications/google-chrome.desktop
-        else
-          # Fallback to direct command if no desktop file mapping known
-          $BROWSER_CMD &
-        fi
-      fi
-    '';
-  };
 in {
 
   options = {
@@ -40,12 +13,9 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # Add the browser toggle script, wtype for Wayland input, and dex for desktop file launching
-    environment.systemPackages = with pkgs; [
-      wtype
-      dex
-      toggleBrowserScript
-    ];
+    # environment.systemPackages = with pkgs; [
+    #   # No additional packages needed for direct app launch keybindings  
+    # ];
 
     desktops.gnome = { keybindings.display-custom-keybindings.enable = true; };
 
@@ -136,6 +106,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom18/"
           ];
         };
 
@@ -256,14 +227,20 @@ in {
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16" = {
           binding = "<Super><Alt>s";
-          command = "toggle-slack";
-          name = "Toggle Slack Visibility";
+          command = "slack";
+          name = "Launch Slack";
         };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17" = {
           binding = "<Super><Alt>b";
-          command = "toggle-browser";
-          name = "Toggle Browser Visibility";
+          command = "google-chrome-stable";
+          name = "Launch Chrome Browser";
+        };
+
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom18" = {
+          binding = "<Super><Alt>t";
+          command = "todoist";
+          name = "Launch Todoist";
         };
 
         # Forge Extensions Keybindings

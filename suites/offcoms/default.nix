@@ -58,6 +58,7 @@ in
         downgrade = false;
       };
       zoom-flatpak.enable = true;
+      slack.enable = true;
     };
 
     cli = {
@@ -92,7 +93,6 @@ in
 
       # # IM
       # fractal # Matrix Client
-      unstable.slack # instant messaging
       whatsapp-for-linux # instant messaging
       unstable.signal-desktop # instant messaging
       unstable.zulip

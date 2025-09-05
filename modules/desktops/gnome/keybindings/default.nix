@@ -102,6 +102,7 @@ in {
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16/"
           ];
         };
 
@@ -218,6 +219,12 @@ in {
           binding = "<Control><Alt>p";
           command = "flameshot gui";
           name = "Flameshot Screenshot GUI";
+        };
+
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16" = {
+          binding = "<Super><Alt>s";
+          command = "toggle-slack";
+          name = "Toggle Slack Visibility";
         };
 
         # Forge Extensions Keybindings

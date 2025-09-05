@@ -35,9 +35,10 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # Install Slack and toggle script
+    # Install Slack, wtype for Wayland input, and toggle script
     environment.systemPackages = with pkgs; [
       unstable.slack
+      wtype
       toggleSlackScript
     ];
   };

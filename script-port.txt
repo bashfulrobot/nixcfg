@@ -1,0 +1,188 @@
+# Script Package Library Porting Guide
+
+## Status
+✅ **Library Created:** `lib/make-script-packages/` with comprehensive documentation  
+✅ **First Implementation:** `modules/cli/audio-switch/` successfully ported  
+🔄 **Ready for Additional Ports:** Several candidates identified  
+
+## Porting Instructions
+
+### Quick Steps for Simple Cases
+1. **Identify Pattern:** Look for multiple `pkgs.writeShellScriptBin` calls in a single module
+2. **Extract Scripts:** Create `./scripts/` directory, move script content to `.sh` files  
+3. **Replace Code:** Use `makeScriptPackages` library call
+4. **Test:** Verify commands still work after rebuild
+
+### Detailed Process
+
+#### 1. Pre-Port Analysis
+```bash
+# Check current module structure
+ls -la modules/path/to/module/
+
+# Look for script patterns
+grep -r "writeShellScriptBin\|writeShellApplication" modules/path/to/module/
+```
+
+#### 2. Create Scripts Directory (if needed)
+```bash
+mkdir -p modules/path/to/module/scripts/
+```
+
+#### 3. Extract Script Content
+For each script in the module:
+- Create `scriptname.sh` file in `./scripts/`
+- Copy script content (without the surrounding Nix code)
+- Make executable: `chmod +x scripts/scriptname.sh`
+
+#### 4. Update Module Code
+```nix
+# Before (example pattern)
+let
+  script1 = pkgs.writeShellScriptBin "script1" (builtins.readFile ./scripts/script1.sh);
+  script2 = pkgs.writeShellScriptBin "script2" (builtins.readFile ./scripts/script2.sh);
+in {
+  environment.systemPackages = [ script1 script2 ];
+}
+
+# After
+let
+  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
+  scripts = makeScriptPackages {
+    scriptsDir = ./scripts;
+    scripts = [ "script1" "script2" ];
+  };
+in {
+  environment.systemPackages = scripts.packages;
+  programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable 
+    scripts.fishShellAbbrs;
+}
+```
+
+#### 5. Test After Port
+```bash
+# Rebuild and test
+just build
+which script1 script2  # Verify commands exist
+script1               # Test functionality
+```
+
+## Candidate Modules for Porting
+
+### High Priority (Simple Patterns)
+
+#### 1. **Individual sys/scripts modules** 
+**Location:** `modules/sys/scripts/*/default.nix`  
+**Pattern:** Each contains single `writeShellApplication`  
+**Effort:** Could consolidate into single `sys/scripts` module using library  
+**Scripts to Port:**
+- `get_wm_class` - Window class detection utility
+- `toggle-cursor-size` - GNOME cursor size toggle  
+- `temp-zoom` - Temporary zoom functionality
+- `gmail-url` - Gmail URL handler
+- `hw-scan` - Hardware scanning utility
+- `restic` - Backup management script
+- `copy-icons` - Icon copying utility
+- `init-bootstrap` - System initialization
+
+**Approach:** Create `modules/sys/scripts/default.nix` that consolidates all individual scripts.
+
+#### 2. **modules/cli/spotify/default.nix**
+**Location:** `modules/cli/spotify/default.nix`  
+**Pattern:** Contains `ncspot-save-playing` script  
+**Effort:** 15 minutes  
+**Current:** Single `writeShellApplication` embedded in module  
+**Port Process:**
+1. Create `modules/cli/spotify/scripts/ncspot-save-playing.sh`
+2. Extract script content to file
+3. Replace with library call
+
+### Medium Priority (More Complex)
+
+#### 3. **Disabled Tiling Scripts** 
+**Location:** `modules/desktops/disabled/tiling/module-config/scripts/`  
+**Pattern:** 30+ shell scripts for tiling window managers  
+**Effort:** 1-2 hours (currently disabled, lower priority)  
+**Scripts Include:**
+- `audio-source-menu.sh` - Audio source selection
+- `batterynotify.sh` - Battery notifications
+- `brightnesscontrol.sh` - Brightness control
+- `gamemode.sh` - Gaming mode toggle
+- `power-profile-*.sh` - Power profile management
+- `screenshot.sh` - Screenshot utilities
+- Many more...
+
+**Note:** These are in `disabled/` directory, suggesting they're not currently active.
+
+### Low Priority (Different Patterns)
+
+#### 4. **Hyprland Module**
+**Location:** `modules/desktops/disabled/tiling/hyprland/default.nix`  
+**Pattern:** Uses `writeShellScript` (not ScriptBin)  
+**Note:** Different from library's target pattern, may not benefit
+
+## Recommended Porting Order
+
+### Phase 1: Individual sys/scripts (High Impact)
+1. **Create consolidated sys/scripts module** - Replace 8 individual modules with one
+2. **Benefits:** Eliminates significant boilerplate, easier to manage
+3. **Time:** 2-3 hours total
+
+### Phase 2: Simple additions (Quick wins)  
+1. **Port spotify module** - Single script, easy test
+2. **Time:** 15 minutes
+
+### Phase 3: Complex disabled modules (Optional)
+1. **Tiling scripts** - Only if tiling window managers are re-enabled
+2. **Time:** 1-2 hours when needed
+
+## Implementation Notes
+
+### For writeShellApplication vs writeShellScriptBin
+The library uses `writeShellScriptBin`. If porting from `writeShellApplication`:
+- `writeShellApplication` includes `runtimeInputs` for dependencies
+- May need to add dependencies to module's `environment.systemPackages`
+- Check if any scripts have `runtimeInputs` that need preservation
+
+### For sys/scripts consolidation
+Current structure:
+```
+modules/sys/scripts/
+├── get_wm_class/default.nix
+├── toggle-cursor-size/default.nix
+├── temp-zoom/default.nix
+└── ...
+```
+
+Proposed structure after port:
+```
+modules/sys/scripts/
+├── default.nix (consolidated module using library)
+└── scripts/
+    ├── get_wm_class.sh
+    ├── toggle-cursor-size.sh
+    ├── temp-zoom.sh
+    └── ...
+```
+
+### Testing Checklist
+After each port:
+- [ ] `just check` - Syntax validation
+- [ ] `just build` - Dry build test  
+- [ ] `which <script-name>` - Command availability
+- [ ] Test actual script functionality
+- [ ] Fish abbreviations work (if using fish)
+
+## Benefits After Full Porting
+
+- **Reduced Boilerplate:** ~70% less code in script-heavy modules
+- **Easier Maintenance:** Single place to add new scripts
+- **Consistent Fish Integration:** Automatic abbreviations
+- **Better Organization:** Clear separation of script logic from Nix packaging
+- **Error Prevention:** Can't forget to add scripts to packages or abbreviations
+
+## References
+
+- **Library Documentation:** `lib/make-script-packages/README.md`
+- **Example Implementation:** `modules/cli/audio-switch/default.nix`
+- **Pattern Examples:** Search for `writeShellScriptBin` or `writeShellApplication` in modules

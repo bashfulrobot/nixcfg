@@ -16,11 +16,11 @@ let
       # Check if browser is running
       if pgrep -x "$BROWSER_PROCESS" > /dev/null; then
         # Browser is running - send Super+Q to close window
-        wtype -M logo q -m logo
+        ${pkgs.wtype}/bin/wtype -M logo q -m logo
       else
         # Browser is not running - launch it using desktop file for proper behavior
         if [ "$BROWSER_PROCESS" = "google-chrome-stable" ]; then
-          dex /run/current-system/sw/share/applications/google-chrome.desktop
+          ${pkgs.dex}/bin/dex /run/current-system/sw/share/applications/google-chrome.desktop
         else
           # Fallback to direct command if no desktop file mapping known
           $BROWSER_CMD &

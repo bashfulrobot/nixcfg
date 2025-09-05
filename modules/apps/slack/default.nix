@@ -10,10 +10,10 @@ let
       # Check if Slack is running
       if pgrep -x "slack" > /dev/null; then
         # Slack is running - send Super+Q to close window (will minimize to tray if configured)
-        wtype -M logo q -m logo
+        ${pkgs.wtype}/bin/wtype -M logo q -m logo
       else
         # Slack is not running - launch it using desktop file for proper behavior
-        dex /run/current-system/sw/share/applications/slack.desktop
+        ${pkgs.dex}/bin/dex /run/current-system/sw/share/applications/slack.desktop
       fi
     '';
   };

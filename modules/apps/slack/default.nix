@@ -9,11 +9,11 @@ let
     text = ''
       # Check if Slack is running
       if pgrep -x "slack" > /dev/null; then
-        # Slack is running - focus it first, then send Alt+F4 to close window (goes to tray)
+        # Slack is running - focus it first, then send Super+Q to close window (goes to tray)
         slack &
         sleep 0.3
-        # Send Alt+F4 to close the window (will minimize to tray if configured)
-        wtype -M alt -k F4
+        # Send Super+Q to close the window (will minimize to tray if configured)
+        wtype -M logo -k q
       else
         # Slack is not running - launch it
         slack &

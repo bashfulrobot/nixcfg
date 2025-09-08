@@ -28,6 +28,7 @@ in
       kong-calendar.enable = true;
       kongfluence.enable = true;
       sfdc.enable = true;
+      gemini-pro.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

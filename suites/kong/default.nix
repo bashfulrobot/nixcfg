@@ -26,7 +26,7 @@ in
       kong-email.enable = true;
       kong-drive.enable = true;
       kong-calendar.enable = true;
-      kong-confluence.enable = true;
+      kongfluence.enable = true;
       sfdc.enable = true;
     };
 

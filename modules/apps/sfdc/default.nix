@@ -9,11 +9,11 @@ let
 
   # I temp create an app in brave to download all the icons, then I place then in the correct folder
   sfdcApp = makeDesktopApp {
-    name = "SFDC";
-    url = "https://sysdig.lightning.force.com/lightning/r/Account/001j000000xlClCAAU/view";
-    binary = "${pkgs.chromium}/bin/chromium";
+    name = "Sfdc";
+    url = "https://kong.lightning.force.com/lightning/r/Dashboard/01ZPJ000004TcSb2AK/view?queryScope=userFolders";
+    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
     # myStartupWMClass = "chrome-sysdig.lightning.force.com__lightning_r_Account_001j000000xlClCAAU_view-Default";
-    myStartupWMClass = "chromium-browser";
+    myStartupWMClass = "google-chrome-kong.lightning.force.com__lightning_r_Dashboard_01ZPJ000004TcSb2AK_view-Default";
 
     iconSizes = [ "16" "32" "48" "64" "96" "128" "180" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use

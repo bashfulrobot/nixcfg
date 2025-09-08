@@ -141,15 +141,23 @@ create_branded_icons() {
         local target_icon="$TARGET_ICONS_DIR/${size}.png"
         
         if [[ -f "$source_icon" ]]; then
-            echo "  Processing ${size}x${size} icon..."
+            # Get actual dimensions of the source icon
+            local actual_dimensions
+            actual_dimensions=$(nix-shell -p imagemagick --run "identify -format '%wx%h' '$source_icon'")
+            local actual_width actual_height
+            actual_width=${actual_dimensions%x*}
+            actual_height=${actual_dimensions#*x}
             
-            # Calculate overlay size based on fraction using nix-shell
+            echo "  Processing ${actual_width}x${actual_height} icon..."
+            
+            # Calculate overlay size based on smaller dimension to ensure it fits
+            local base_size=$(( actual_width < actual_height ? actual_width : actual_height ))
             local overlay_size
-            overlay_size=$(nix-shell -p bc --run "echo \"$size * $OVERLAY_FRACTION\" | bc -l | xargs printf \"%.0f\"")
+            overlay_size=$(nix-shell -p bc --run "echo \"$base_size * $OVERLAY_FRACTION\" | bc -l | xargs printf \"%.0f\"")
             
-            # Position at bottom right corner
-            local x_pos=$((size - overlay_size))
-            local y_pos=$((size - overlay_size))
+            # Position at bottom right corner based on actual dimensions
+            local x_pos=$((actual_width - overlay_size))
+            local y_pos=$((actual_height - overlay_size))
             
             # Use nix-shell to ensure ImageMagick is available
             nix-shell -p imagemagick bc --run "
@@ -159,7 +167,7 @@ create_branded_icons() {
                     -composite '$target_icon'
             " 2>/dev/null
             
-            echo "    ✓ Generated ${size}x${size} with ${overlay_size}x${overlay_size} overlay"
+            echo "    ✓ Generated ${actual_width}x${actual_height} with ${overlay_size}x${overlay_size} overlay at position +${x_pos}+${y_pos}"
         else
             echo "    ⚠ Warning: Source icon $source_icon not found"
         fi

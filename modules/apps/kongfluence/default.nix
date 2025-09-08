@@ -1,7 +1,7 @@
 { user-settings, config, pkgs, lib, makeDesktopItem, ... }:
 
 let
-  cfg = config.apps.konfluence;
+  cfg = config.apps.kongfluence;
 
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
@@ -19,7 +19,7 @@ let
 in {
 
   options = {
-    apps.konfluence.enable = lib.mkOption {
+    apps.kongfluence.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable the Kong Confluence app.";

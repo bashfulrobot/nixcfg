@@ -26,6 +26,9 @@ default:
     @echo "  log [days=7]               - Show commits from last N days"
     @echo "  lint [target=.]            - Lint specific file/directory (use jlint for tab completion)"
     @echo "  pkg-search <query>         - Search for packages"
+    @echo "  brand-icons <source> <target> - Create branded icons (e.g. gmail-br kong-email)"
+    @echo "  backup-icons <app>         - Backup app icons before branding"
+    @echo "  restore-icons <app>        - Restore original icons from backup"
     @echo ""
     @echo "💡 Pro Tips:"
     @echo "  • Use 'jlint <tab>' and 'jcheck <tab>' for file completion"
@@ -302,6 +305,30 @@ inspect:
     @echo "nix eval .#nixosConfigurations.{{hostname}}.options.services --json"
     @echo "================================"
     @if [ -f helpers/nix-repl.sh ]; then helpers/nix-repl.sh; fi
+
+# === Branded Icons ===
+# Create branded work icons with Kong overlay (1/4 corner, pristine sources)
+[group('branding')]
+brand-icons source_app target_app:
+    @echo "🎨 Creating branded {{target_app}} from {{source_app}}..."
+    @./helpers/create-branded-icons.sh helpers/pristine-icons/work-overlay-logo.png {{source_app}} {{target_app}} 0.5 --pristine
+
+# Backup app icons to pristine folder before branding
+[group('branding')]
+backup-icons app_name:
+    @echo "💾 Backing up {{app_name}} icons..."
+    @./helpers/backup-icons.sh {{app_name}}
+
+# List all apps and their backup status
+[group('branding')]
+list-icons:
+    @./helpers/backup-icons.sh --list
+
+# Restore original icons from backup
+[group('branding')]
+restore-icons app_name:
+    @echo "🔄 Restoring {{app_name}} from backup..."
+    @./helpers/backup-icons.sh --restore {{app_name}}
 
 # === Workflow Aliases ===
 alias c := check

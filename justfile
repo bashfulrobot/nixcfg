@@ -131,7 +131,7 @@ build trace="false":
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
         just clean-full
-        nh os switch --show-trace 2>&1 | tee {{trace_log}}
+        nh os switch -- --show-trace 2>&1 | tee {{trace_log}}
     else
         echo "🔧 Development rebuild..."
         nh os switch
@@ -146,7 +146,7 @@ rebuild trace="false":
     {{justfile_directory()}}/helpers/fix-gtk-css.sh
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
-        nh os switch --show-trace
+        nh os switch -- --show-trace
     else
         echo "🚀 Production rebuild..."
         nh os switch
@@ -156,18 +156,22 @@ rebuild trace="false":
 [group('dev')]
 vm:
     @echo "🖥️  Building VM..."
-    @nh os build-vm --show-trace
+    @nh os build-vm -- --show-trace
 
 # Full system upgrade
 [group('prod')]
-upgrade:
+upgrade trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
     {{justfile_directory()}}/helpers/fix-gtk-css.sh
     echo "⬆️  Upgrading system..."
     cp flake.lock flake.lock-backup-{{timestamp}}
     nix flake update
-    nh os switch --update --show-trace
+    if [[ "{{trace}}" == "true" ]]; then
+        nh os switch --update -- --show-trace
+    else
+        nh os switch --update
+    fi
 
 # === Maintenance Commands ===
 # Fix GTK CSS file conflicts with home-manager

@@ -52,9 +52,9 @@ in
 
       one-password.enable = true;
       obsidian.enable = true;
-      gcal-br.enable = false;
-      gmail-br.enable = false;
-      br-drive.enable = false;
+      br-gcal.enable = true;
+      br-gmail.enable = true;
+      br-drive.enable = true;
       zoom-us = {
         enable = false;
         downgrade = false;

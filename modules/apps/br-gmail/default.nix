@@ -2,19 +2,19 @@
 { user-settings, config, pkgs, lib, makeDesktopItem, ... }:
 
 let
-  cfg = config.apps.gcal-br;
+  cfg = config.apps.br-gmail;
 
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
   # I temp create an app in brave to download all the icons, then I place then in the correct folder
-  gcalBashfulrobotApp = makeDesktopApp {
-    name = "Bashfulrobot Calendar";
-    url = "https://calendar.google.com/calendar/u/0";
+  gmailBashfulrobotApp = makeDesktopApp {
+    name = "Bashfulrobot Mail";
+    url = "https://mail.google.com/mail/u/0/#inbox";
     binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    # myStartupWMClass = "chrome-calendar.google.com__calendar_u_0-Default";
-    myStartupWMClass = "google-chrome-calendar.google.com__calendar_u_0-Default";
-    iconSizes = [ "32" "48" "64" "96" "128" "256" "512" ];
+    # myStartupWMClass = "chrome-mail.google.com__mail_u_0_-Default";
+    myStartupWMClass = "chrome-mail.google.com__mail_u_0_-Default";
+    iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
@@ -24,17 +24,17 @@ let
 in {
 
   options = {
-    apps.gcal-br.enable = lib.mkOption {
+    apps.br-gmail.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable the Bashfulrobot Google Calendar app.";
+      description = "Enable the Bashfulrobot Google Mail app.";
     };
   };
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ gcalBashfulrobotApp.desktopItem ]
-      ++ gcalBashfulrobotApp.icons;
+    environment.systemPackages = [ gmailBashfulrobotApp.desktopItem ]
+      ++ gmailBashfulrobotApp.icons;
 
     # home-manager.users."${user-settings.user.username}" = {
 

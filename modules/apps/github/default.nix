@@ -13,7 +13,7 @@ let
     url = "https://github.com/bashfulrobot/nixcfg";
     binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
     # myStartupWMClass = "chrome-github.com__bashfulrobot_nixcfg-Default";
-    myStartupWMClass = "google-chrome-github.com__bashfulrobot_nixcfg-Default";
+    myStartupWMClass = "chrome-github.com__bashfulrobot_nixcfg-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

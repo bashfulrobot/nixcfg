@@ -1,0 +1,8 @@
+modules/apps/br-drive modules/apps/br-gcal modules/apps/br-gmail modules/apps/gemini-pro modules/apps/github       │
+│   modules/apps/github-code-search modules/apps/hm-search modules/apps/kong-calendar modules/apps/kong-drive                   │
+│   modules/apps/kong-email modules/apps/kongfluence modules/apps/nixos-discourse modules/apps/nixos-wiki                       │
+│   modules/apps/nixpkgs-search modules/apps/sfdc
+
+- update class names.
+- sfdc needs a transparent base icon
+- kong claendar has a gmail icon instead of the calendar icon, needs overlay generated again

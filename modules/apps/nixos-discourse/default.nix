@@ -13,7 +13,7 @@ let
     url = "https://discourse.nixos.org/";
     binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
     # myStartupWMClass = "chrome-discourse.nixos.org__-Default";
-    myStartupWMClass = "google-chrome-discourse.nixos.org__-Default";
+    myStartupWMClass = "chrome-discourse.nixos.org__-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

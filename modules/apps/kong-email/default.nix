@@ -7,10 +7,10 @@ let
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
   kongEmailApp = makeDesktopApp {
-    name = "Kong Email";
+    name = "Kong Mail";
     url = "https://mail.google.com/mail/u/1/#search/is%3Aunread+in%3Ainbox";
     binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "google-chrome-mail.google.com__mail_u_1_-Default";
+    myStartupWMClass = "chrome-mail.google.com__mail_u_1_-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

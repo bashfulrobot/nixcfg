@@ -10,7 +10,7 @@ let
     name = "Gemini Pro";
     url = "https://gemini.google.com/u/1/app";
     binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "google-chrome-gemini.google.com__u_1_app-Default";
+    myStartupWMClass = "chrome-gemini.google.com__u_1_app-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

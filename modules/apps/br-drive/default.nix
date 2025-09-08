@@ -9,8 +9,8 @@ let
   brDriveApp = makeDesktopApp {
     name = "BR Drive";
     url = "https://drive.google.com/drive/u/0/my-drive";
-    binary = "${pkgs.chromium}/bin/chromium";
-    myStartupWMClass = "chromium-browser";
+    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    myStartupWMClass = "google-chrome-drive.google.com__drive_u_0_my-drive-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256"];
     iconPath = ./icons;
     useAppFlag = true;

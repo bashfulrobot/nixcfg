@@ -143,7 +143,7 @@ in {
           expansion = "claude -p \"%\"";
         };
         # Claude Code slash command shortcuts
-        ccommit = "claude /commit";
+        ccommit = "claude -p '/commit --push'";
       };
     };
   };

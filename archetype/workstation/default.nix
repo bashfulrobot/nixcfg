@@ -34,6 +34,7 @@ in {
       offcoms.enable = true;
       terminal.enable = true;
       utilities.enable = true;
+      kong.enable = true;
     };
 
     sys = {

@@ -27,6 +27,10 @@ in
       kong-drive.enable = true;
       kong-calendar.enable = true;
       kongfluence.enable = true;
+      kong-docs.enable = true;
+      new-kong-doc.enable = true;
+      new-kong-sheet.enable = true;
+      new-kong-slide.enable = true;
       sfdc.enable = true;
       gemini-pro.enable = true;
     };

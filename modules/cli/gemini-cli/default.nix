@@ -2,7 +2,7 @@
 let
   cfg = config.cli.gemini-cli;
   # The content of the commit.md file, with the Gemini CLI integration part removed.
-  commit-prompt = '''
+  commit-prompt = ''
     ---
     description: Create conventional commits with emoji and optional push, tagging, or GitHub releases
     allowed-tools: ["Bash", "Grep", "Read"]
@@ -88,7 +88,7 @@ let
     Arguments: $ARGUMENTS
 
     Always analyze staged changes first, split into atomic commits if needed, then apply the 3 supported argument flags.
-  ''';
+  '';
 in
 {
   options = {
@@ -108,11 +108,11 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
       home.file = {
-        ".gemini/commands/commit.toml".text = '''
-          prompt = """
-          ${commit-prompt}
-          """
-        ''';
+        ".gemini/commands/commit.toml".text = ''
+prompt = """
+${commit-prompt}
+"""
+        '';
       };
 
       programs.fish.shellAbbrs = {

@@ -43,6 +43,7 @@ in
       opencommit.enable = true;
       helix.enable = true;
       claude-code.enable = true;
+      gemini-cli.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -60,7 +61,6 @@ in
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
       unstable.helix # text editor
-      unstable.gemini-cli # Gemini CLI client
       unstable.netlify-cli # Netlify CLI tool
       unstable.fx # Terminal JSON viewer
     ];

@@ -23,6 +23,11 @@ in
 
     apps = {
       # crowdstrike.enable = true;
+      kong-email.enable = true;
+      kong-drive.enable = true;
+      kong-calendar.enable = true;
+      kong-confluence.enable = true;
+      sfdc.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

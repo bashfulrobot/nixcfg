@@ -21,5 +21,25 @@ in {
       desktopManager.cosmic.xwayland.enable = true;
     };
 
+    # COSMIC configuration files
+    home-manager.users."${user-settings.user.username}" = {
+      xdg.configFile = {
+        # Autotile configuration for COSMIC Comp
+        "cosmic/com.system76.CosmicComp/v1/autotile".text = ''
+          true
+        '';
+        
+        # Active hint configuration for COSMIC Comp
+        "cosmic/com.system76.CosmicComp/v1/active_hint".text = ''
+          true
+        '';
+        
+        # Autotile behavior configuration for COSMIC Comp
+        "cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = ''
+          PerWorkspace
+        '';
+      };
+    };
+
   };
 }

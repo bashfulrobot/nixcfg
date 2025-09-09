@@ -11,6 +11,8 @@ in {
 
   config = lib.mkIf cfg.enable {
 
+    sys.stylix-theme.enable = true;
+
     services = {
       desktopManager.cosmic.enable = true;
       displayManager.cosmic-greeter.enable = true;

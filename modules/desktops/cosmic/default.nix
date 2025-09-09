@@ -38,6 +38,20 @@ in {
         "cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = ''
           PerWorkspace
         '';
+        
+        # Input touchpad configuration for COSMIC Comp
+        "cosmic/com.system76.CosmicComp/v1/input_touchpad".text = ''
+          (
+              state: Enabled,
+              click_method: Some(Clickfinger),
+              tap_config: Some((
+                  enabled: true,
+                  button_map: Some(LeftRightMiddle),
+                  drag: true,
+                  drag_lock: false,
+              )),
+          )
+        '';
       };
     };
 

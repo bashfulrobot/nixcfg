@@ -61,10 +61,6 @@
     nixpkgs-zoom = {
       url = "github:nixos/nixpkgs/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73";
     };
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   # --- outputs function receives all inputs as parameters
@@ -89,7 +85,6 @@
       zen-browser,
       stylix,
       nixpkgs-zoom,
-      nixos-cosmic,
       ...
     }:
     let
@@ -123,7 +118,6 @@
         nixvim.nixosModules.nixvim
         opnix.nixosModules.default
         stylix.nixosModules.stylix
-        nixos-cosmic.nixosModules.default
       ];
 
       serverModules = [

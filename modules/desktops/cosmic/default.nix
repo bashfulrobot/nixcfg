@@ -11,19 +11,10 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    nix.settings = {
-      substituters = [ "https://cosmic.cachix.org/" ];
-      trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
-    };
-
+    # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
-    # COSMIC utilities configuration
-    environment.sessionVariables.COSMIC_DATA_CONTROL_ENABLED = "1";
-    
-    systemd.packages = [ pkgs.observatory ];
-    systemd.services.monitord.wantedBy = [ "multi-user.target" ];
-
+    # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
       desktopManager.cosmic.enable = true;
       displayManager.cosmic-greeter.enable = true;

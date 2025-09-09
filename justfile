@@ -220,6 +220,13 @@ lint target=".":
         fi
     fi
 
+# Monitor COSMIC settings changes in real-time
+[group('dev')]
+cosmic-monitor:
+    @echo "👁️  Monitoring COSMIC settings changes..."
+    @echo "Press Ctrl+C to stop"
+    @inotifywait -m -r -e create,modify,moved_to ~/.config/cosmic
+
 # === System Info ===
 # Show kernel and boot info
 [group('info')]

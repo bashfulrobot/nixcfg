@@ -1,6 +1,15 @@
-{ user-settings, pkgs, config, lib, inputs, ... }:
-let cfg = config.desktops.cosmic;
-in {
+{
+  user-settings,
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}:
+let
+  cfg = config.desktops.cosmic;
+in
+{
   options = {
     desktops.cosmic.enable = lib.mkOption {
       type = lib.types.bool;
@@ -10,6 +19,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+
+    # System packages
+    environment.systemPackages = with pkgs; [
+      inotify-tools # used to observe file changes when learning where settings are stored.
+    ];
 
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
@@ -28,17 +42,17 @@ in {
         "cosmic/com.system76.CosmicComp/v1/autotile".text = ''
           true
         '';
-        
+
         # Active hint configuration for COSMIC Comp
         "cosmic/com.system76.CosmicComp/v1/active_hint".text = ''
           true
         '';
-        
+
         # Autotile behavior configuration for COSMIC Comp
         "cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = ''
           PerWorkspace
         '';
-        
+
         # Input touchpad configuration for COSMIC Comp
         "cosmic/com.system76.CosmicComp/v1/input_touchpad".text = ''
           (

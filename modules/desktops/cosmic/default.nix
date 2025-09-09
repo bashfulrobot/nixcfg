@@ -44,6 +44,12 @@ in {
           (
               state: Enabled,
               click_method: Some(Clickfinger),
+              scroll_config: Some((
+                  method: Some(TwoFinger),
+                  natural_scroll: None,
+                  scroll_button: None,
+                  scroll_factor: None,
+              )),
               tap_config: Some((
                   enabled: true,
                   button_map: Some(LeftRightMiddle),

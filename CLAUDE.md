@@ -265,3 +265,34 @@ The repository uses an **auto-import** system (`lib/autoimport.nix`) that recurs
 - Both `jlint` and `just lint` do the same thing, but `jlint` provides tab completion for file paths
 
 - always remember this doc as the valid niri flake options. https://github.com/sodiboo/niri-flake/blob/main/docs.md
+
+### Feature Flag System
+
+The repository uses a feature flag system at `~/.config/nix-flags/` to enable conditional behavior in build scripts:
+
+- **Location**: `~/.config/nix-flags/`
+- **Purpose**: Allow justfile commands to conditionally run features only when enabled
+- **Implementation**: NixOS modules create flag files using home-manager's `home.file` option
+
+#### Current Flag Files
+
+- `gnome-enabled` - Created when `desktops.gnome.enable = true`
+  - Enables GTK CSS fixes in `just build`, `just rebuild`, and `just upgrade`
+
+#### Usage Pattern
+
+**In NixOS modules** (create flag file):
+```nix
+home-manager.users."${user-settings.user.username}" = {
+  home.file.".config/nix-flags/feature-name".text = "";
+};
+```
+
+**In justfile** (check for flag):
+```bash
+if [[ -f "$HOME/.config/nix-flags/feature-name" ]]; then
+  # Run feature-specific commands
+fi
+```
+
+This system provides clean, declarative feature detection for build scripts without complex configuration parsing.

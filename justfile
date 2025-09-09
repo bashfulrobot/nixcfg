@@ -126,7 +126,9 @@ test:
 build trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
-    {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
+        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    fi
     git add -A
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
@@ -143,7 +145,9 @@ build trace="false":
 rebuild trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
-    {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
+        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    fi
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
         nh os switch -- --show-trace
@@ -163,7 +167,9 @@ vm:
 upgrade trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
-    {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
+        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+    fi
     echo "⬆️  Upgrading system..."
     cp flake.lock flake.lock-backup-{{timestamp}}
     nix flake update

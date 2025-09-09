@@ -106,6 +106,9 @@ in {
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {
 
+      # Create GNOME flag file for build scripts
+      home.file.".config/nix-flags/gnome-enabled".text = "";
+
       # https://discourse.nixos.org/t/cant-get-gnupg-to-work-no-pinentry/15373/13?u=brnix
       home.file.".gnupg/gpg-agent.conf".text = ''
         pinentry-program /run/current-system/sw/bin/pinentry

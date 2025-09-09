@@ -33,9 +33,30 @@ in
     sys.stylix-theme.enable = true;
 
     # Enable GCR SSH agent for SSH key management (COSMIC doesn't start SSH agent automatically)
+    # TODO: Replace with services.gnome.gcr-ssh-agent.enable = true when upgrading to unstable
+    # Manual implementation of gcr-ssh-agent service (will be available in nixos-unstable)
     systemd.user.sockets.gcr-ssh-agent = {
-      enable = true;
+      description = "GCR SSH Agent socket";
       wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "%t/gcr/ssh";
+        FileDescriptorName = "ssh";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
+    };
+
+    systemd.user.services.gcr-ssh-agent = {
+      description = "GCR SSH Agent";
+      requires = [ "gcr-ssh-agent.socket" ];
+      after = [ "gcr-ssh-agent.socket" ];
+      # Prevent GCR from autostarting ssh-agent
+      environment.GSK_SSH_AUTH_SOCK = "";
+      serviceConfig = {
+        ExecStart = "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass --socket";
+        StandardInput = "socket";
+        StandardOutput = "null";
+      };
     };
 
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)

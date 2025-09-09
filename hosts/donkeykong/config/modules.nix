@@ -22,8 +22,11 @@
   };
 
   # Enable desktop environments
-  desktops.gnome.enable = true;
-  # desktops.tiling.hyprland.enable = false;
+  desktops = {
+    cosmic.enable = true;
+    gnome.enable = false;
+  # tiling.hyprland.enable = false;
+  };
 
   apps = {
     # claude-desktop.enable = true; # Temporarily disabled due to hash mismatch

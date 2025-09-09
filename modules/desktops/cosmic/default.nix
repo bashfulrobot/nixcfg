@@ -23,10 +23,20 @@ in
     # System packages
     environment.systemPackages = with pkgs; [
       inotify-tools # used to observe file changes when learning where settings are stored.
+      gnome-keyring
+      libsecret
+      gcr_4 # GCR 4.x for modern keyring password prompts
+      seahorse # GUI keyring manager
     ];
 
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
+
+    # Enable GCR SSH agent for SSH key management (COSMIC doesn't start SSH agent automatically)
+    systemd.user.sockets.gcr-ssh-agent = {
+      enable = true;
+      wantedBy = [ "sockets.target" ];
+    };
 
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
@@ -37,6 +47,11 @@ in
 
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {
+      # SSH agent environment variables (GCR SSH agent socket)
+      home.sessionVariables = {
+        SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
+      };
+
       xdg.configFile = {
         # Autotile configuration for COSMIC Comp
         "cosmic/com.system76.CosmicComp/v1/autotile".text = ''

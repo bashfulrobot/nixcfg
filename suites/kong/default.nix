@@ -33,6 +33,8 @@ in
       new-kong-slide.enable = true;
       sfdc.enable = true;
       gemini-pro.enable = true;
+      lucidchart.enable = true;
+      avanti.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

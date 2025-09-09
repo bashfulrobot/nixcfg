@@ -32,32 +32,9 @@ in
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
-    # Enable GCR SSH agent for SSH key management (COSMIC doesn't start SSH agent automatically)
+    # Enable SSH agent with GCR askpass for keyring integration
     # TODO: Replace with services.gnome.gcr-ssh-agent.enable = true when upgrading to unstable
-    # Manual implementation of gcr-ssh-agent service (will be available in nixos-unstable)
-    systemd.user.sockets.gcr-ssh-agent = {
-      description = "GCR SSH Agent socket";
-      wantedBy = [ "sockets.target" ];
-      socketConfig = {
-        ListenStream = "%t/gcr/ssh";
-        FileDescriptorName = "ssh";
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
-    };
-
-    systemd.user.services.gcr-ssh-agent = {
-      description = "GCR SSH Agent";
-      requires = [ "gcr-ssh-agent.socket" ];
-      after = [ "gcr-ssh-agent.socket" ];
-      # Prevent GCR from autostarting ssh-agent
-      environment.GSK_SSH_AUTH_SOCK = "";
-      serviceConfig = {
-        ExecStart = "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass --socket";
-        StandardInput = "socket";
-        StandardOutput = "null";
-      };
-    };
+    programs.ssh.startAgent = true;
 
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
@@ -68,9 +45,9 @@ in
 
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {
-      # SSH agent environment variables (GCR SSH agent socket)
+      # SSH askpass environment variable (use GCR for keyring integration)
       home.sessionVariables = {
-        SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
+        SSH_ASKPASS = "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass";
       };
 
       xdg.configFile = {

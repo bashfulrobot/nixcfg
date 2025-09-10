@@ -20,6 +20,12 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # COSMIC binary cache for faster package downloads
+    nix.settings = {
+      substituters = [ "https://9lore.cachix.org" ];
+      trusted-public-keys = [ "9lore.cachix.org-1:rSfq0fVxS3j9w5eJMvpf7pFf8zJ9PZvjUJR8+/wBXE8=" ];
+    };
+
     # System packages
     environment.systemPackages = with pkgs; [
       inotify-tools # used to observe file changes when learning where settings are stored.

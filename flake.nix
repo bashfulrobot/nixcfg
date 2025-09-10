@@ -61,6 +61,9 @@
     nixpkgs-zoom = {
       url = "github:nixos/nixpkgs/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73";
     };
+    cosmic-unstable = {
+      url = "github:ninelore/nixpkgs-cosmic-unstable";
+    };
   };
 
   # --- outputs function receives all inputs as parameters
@@ -85,6 +88,7 @@
       zen-browser,
       stylix,
       nixpkgs-zoom,
+      cosmic-unstable,
       ...
     }:
     let
@@ -118,6 +122,7 @@
         nixvim.nixosModules.nixvim
         opnix.nixosModules.default
         stylix.nixosModules.stylix
+        cosmic-unstable.nixosModules.default
       ];
 
       serverModules = [

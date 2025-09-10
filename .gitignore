@@ -5,3 +5,4 @@ prompt.txt
 git-crypt-key
 ssh-keys/
 reference/
+*-debug.log

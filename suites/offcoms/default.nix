@@ -21,7 +21,7 @@ in
   config = lib.mkIf cfg.enable {
 
     programs = {
-      # Some programs need SUID wrappers, can be configured further or are
+      # Some programs need SUID wrapper, can be configured further or are
       # started in user sessions.
       # mtr.enable = true;
       # gnupg.agent = {
@@ -40,10 +40,13 @@ in
         chrome-based-browser.enable = false;
         google-chrome = {
           enable = true;
-          setAsDefault = true;
+          setAsDefault = false;
         };
         brave.enable = false;
-        vivaldi.enable = false;
+        vivaldi = {
+          enable = true;
+          setAsDefault = true;
+        };
         zen-browser = {
           enable = false;
           setAsDefault = false;

@@ -1,12 +1,35 @@
 { pkgs, lib, makeDesktopItem, ... }:
-
+#  https://peter.sh/experiments/chromium-command-line-switches/
 let
-  makeDesktopApp = { name, url, binary, myStartupWMClass, iconSizes, iconPath, useAppFlag ? true }:
+  makeDesktopApp = { name, url, binary, myStartupWMClass, iconSizes, iconPath, useAppFlag ? true, enableLogging ? false }:
     let
       desktopName =
         lib.strings.toLower (lib.strings.replaceStrings [ " " ] [ "_" ] name);
       scriptPath = pkgs.writeShellScriptBin desktopName ''
-        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode --new-window --enable-features=WaylandWindowDecorations ${if useAppFlag then "--app=${url}" else "${url}"}
+        ${if enableLogging then ''
+        # Log file in nixcfg repo root
+        LOGFILE="/home/dustin/dev/nix/nixcfg/${desktopName}-debug.log"
+        
+        echo "Starting ${name} at $(date)" >> "$LOGFILE"
+        echo "Command: ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}" >> "$LOGFILE"
+        
+        # Run with standard flags
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
+        
+        # Store PID and wait
+        PID=$!
+        echo "Process ID: $PID" >> "$LOGFILE"
+        wait $PID
+        EXIT_CODE=$?
+        echo "Process exited with code: $EXIT_CODE at $(date)" >> "$LOGFILE"
+        
+        # If crashed, also log to console
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo "❌ ${name} crashed with exit code $EXIT_CODE. See log: $LOGFILE" >&2
+        fi
+        '' else ''
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}
+        ''}
       '';
       desktopItem = makeDesktopItem {
         type = "Application";

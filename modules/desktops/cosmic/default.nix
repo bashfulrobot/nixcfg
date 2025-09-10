@@ -38,16 +38,6 @@ in
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
-    # Disable standard SSH agent - will use GNOME Keyring SSH component instead
-    programs.ssh.startAgent = false;
-
-    # Override GNOME Keyring to include SSH component for password save prompts
-    systemd.user.services.gnome-keyring-daemon = {
-      serviceConfig.ExecStart = lib.mkForce [
-        "" # Clear the original ExecStart
-        "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --foreground --components=secrets,ssh"
-      ];
-    };
 
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {

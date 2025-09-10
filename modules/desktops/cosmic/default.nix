@@ -32,9 +32,16 @@ in
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
-    # Enable SSH agent with GCR askpass for keyring integration
-    # TODO: Replace with services.gnome.gcr-ssh-agent.enable = true when upgrading to unstable
-    programs.ssh.startAgent = true;
+    # Disable standard SSH agent - will use GNOME Keyring SSH component instead
+    programs.ssh.startAgent = false;
+
+    # Override GNOME Keyring to include SSH component for password save prompts
+    systemd.user.services.gnome-keyring-daemon = {
+      serviceConfig.ExecStart = lib.mkForce [
+        "" # Clear the original ExecStart
+        "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --foreground --components=secrets,ssh"
+      ];
+    };
 
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
@@ -45,9 +52,9 @@ in
 
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {
-      # SSH askpass environment variable (use GCR for keyring integration)
+      # SSH environment - use GNOME Keyring SSH socket
       home.sessionVariables = {
-        SSH_ASKPASS = "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass";
+        SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
       };
 
       xdg.configFile = {

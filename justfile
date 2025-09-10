@@ -127,7 +127,7 @@ build trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
-        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+        {{justfile_directory()}}/extras/helpers/fix-gtk-css.sh
     fi
     git add -A
     if [[ "{{trace}}" == "true" ]]; then
@@ -146,7 +146,7 @@ rebuild trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
-        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+        {{justfile_directory()}}/extras/helpers/fix-gtk-css.sh
     fi
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
@@ -168,7 +168,7 @@ upgrade trace="false":
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -f "$HOME/.config/nix-flags/gnome-enabled" ]]; then
-        {{justfile_directory()}}/helpers/fix-gtk-css.sh
+        {{justfile_directory()}}/extras/helpers/fix-gtk-css.sh
     fi
     echo "⬆️  Upgrading system..."
     cp flake.lock flake.lock-backup-{{timestamp}}
@@ -183,7 +183,7 @@ upgrade trace="false":
 # Fix GTK CSS file conflicts with home-manager
 [group('maintenance')]
 fix-gtk:
-    @{{justfile_directory()}}/helpers/fix-gtk-css.sh
+    @{{justfile_directory()}}/extras/helpers/fix-gtk-css.sh
 
 # Quick garbage collection (5 days)
 [group('maintenance')]
@@ -321,31 +321,31 @@ inspect:
     @echo "nix eval .#nixosConfigurations.{{hostname}}.config.users.users --json"
     @echo "nix eval .#nixosConfigurations.{{hostname}}.options.services --json"
     @echo "================================"
-    @if [ -f helpers/nix-repl.sh ]; then helpers/nix-repl.sh; fi
+    @if [ -f extras/helpers/nix-repl.sh ]; then extras/helpers/nix-repl.sh; fi
 
 # === Branded Icons ===
 # Create branded work icons with Kong overlay (1/4 corner, pristine sources)
 [group('branding')]
 brand-icons source_app target_app:
     @echo "🎨 Creating branded {{target_app}} from {{source_app}}..."
-    @./helpers/create-branded-icons.sh helpers/pristine-icons/work-overlay-logo.png {{source_app}} {{target_app}} 0.5 --pristine
+    @./extras/helpers/create-branded-icons.sh extras/helpers/pristine-icons/work-overlay-logo.png {{source_app}} {{target_app}} 0.5 --pristine
 
 # Backup app icons to pristine folder before branding
 [group('branding')]
 backup-icons app_name:
     @echo "💾 Backing up {{app_name}} icons..."
-    @./helpers/backup-icons.sh {{app_name}}
+    @./extras/helpers/backup-icons.sh {{app_name}}
 
 # List all apps and their backup status
 [group('branding')]
 list-icons:
-    @./helpers/backup-icons.sh --list
+    @./extras/helpers/backup-icons.sh --list
 
 # Restore original icons from backup
 [group('branding')]
 restore-icons app_name:
     @echo "🔄 Restoring {{app_name}} from backup..."
-    @./helpers/backup-icons.sh --restore {{app_name}}
+    @./extras/helpers/backup-icons.sh --restore {{app_name}}
 
 # === Workflow Aliases ===
 alias c := check

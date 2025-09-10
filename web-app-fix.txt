@@ -1,8 +1,0 @@
-modules/apps/br-drive modules/apps/br-gcal modules/apps/br-gmail modules/apps/gemini-pro modules/apps/github       │
-│   modules/apps/github-code-search modules/apps/hm-search modules/apps/kong-calendar modules/apps/kong-drive                   │
-│   modules/apps/kong-email modules/apps/kongfluence modules/apps/nixos-discourse modules/apps/nixos-wiki                       │
-│   modules/apps/nixpkgs-search modules/apps/sfdc
-
-- confirm updated class names are accurate
-- sfdc needs a transparent base icon. I just added one at helpers/pristine-icons/sfdc/sfdc.png, so it needs to have many resized first (ie 16.png, 32.png, etc) for the clean ones, then the sfdc module needs a new set created with the work overlay.
-- kong claendar has a gmail icon instead of the calendar icon, needs overlay generated again with hte proper base icon.

@@ -1,5 +1,9 @@
 # nixcfg
 
+# STATUS/
+
+- I refactor frequently.
+
 Nix/NixOS configuration for multiple systems with declarative, modular approach.
 
 ## Status

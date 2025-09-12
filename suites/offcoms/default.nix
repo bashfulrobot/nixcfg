@@ -34,12 +34,12 @@ in
     apps = {
       browsers = {
         firefox = {
-          enable = true;
+          enable = false;
           setAsDefault = false;
         };
         chrome-based-browser.enable = false;
         google-chrome = {
-          enable = true;
+          enable = false;
           setAsDefault = false;
         };
         brave.enable = false;
@@ -59,10 +59,10 @@ in
       br-gmail.enable = true;
       br-drive.enable = true;
       zoom-us = {
-        enable = false;
+        enable = true;
         downgrade = false;
       };
-      zoom-flatpak.enable = true;
+      zoom-flatpak.enable = false;
       slack.enable = true;
     };
 

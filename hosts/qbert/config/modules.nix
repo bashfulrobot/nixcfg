@@ -15,12 +15,15 @@
     timezone.enable = true;
   };
 
-  # Desktop configuration - using niri as primary
-  desktops.gnome.enable = true;
-  # desktops.tiling = {
+  # Desktop configuration - testing hash fix in custom COSMIC build
+  desktops = {
+    gnome.enable = false;
+    cosmic.enable = true;
+    # tiling = {
   #   hyprland.enable = false;
   #   niri.enable = false ;
   # };
+  };
 
   apps = {
     claude-desktop.enable = true;
@@ -28,5 +31,10 @@
       enable = true;
       host.qbert = true;
     };
+  };
+
+  dev = {
+    nix.enable = true;
+    cachix.enable = true;
   };
 }

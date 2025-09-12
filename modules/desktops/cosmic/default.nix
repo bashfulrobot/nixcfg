@@ -8,6 +8,12 @@
 }:
 let
   cfg = config.desktops.cosmic;
+  
+  # Import our custom COSMIC build module
+  cosmicBuild = import ./build { 
+    inherit pkgs lib;
+    fetchFromGitHub = pkgs.fetchFromGitHub;
+  };
 in
 {
   options = {
@@ -19,11 +25,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    
+    # Enable dev.cachix for personal cache functionality
+    dev.cachix.enable = true;
 
-    # COSMIC binary cache for faster package downloads
+    # COSMIC binary cache for faster package downloads  
     nix.settings = {
-      substituters = [ "https://9lore.cachix.org" ];
-      trusted-public-keys = [ "9lore.cachix.org-1:rSfq0fVxS3j9w5eJMvpf7pFf8zJ9PZvjUJR8+/wBXE8=" ];
+      substituters = cosmicBuild.binaryCache.substituters ++ [ "https://bashfulrobot.cachix.org" ];
+      trusted-public-keys = cosmicBuild.binaryCache.trusted-public-keys ++ [ "bashfulrobot.cachix.org-1:dV0OEgd/ccYivTMyL8nsIE4nmlSZs+X30bTrvgPL7rg=" ];
     };
 
     # System packages
@@ -42,6 +51,9 @@ in
     environment.sessionVariables = {
       # Help applications find MIME associations and desktop files
       XDG_DATA_DIRS = [ "$XDG_DATA_DIRS" "/run/current-system/sw/share" ];
+      # Ensure proper COSMIC desktop identification
+      XDG_CURRENT_DESKTOP = "COSMIC";
+      XDG_SESSION_DESKTOP = "cosmic";
     };
 
     # Enable stylix theming support
@@ -55,6 +67,15 @@ in
       desktopManager.cosmic.xwayland.enable = true;
     };
 
+    # Exclude specific COSMIC packages if needed
+    environment.cosmic.excludePackages = with pkgs; [
+      # cosmic-edit
+      # cosmic-player
+    ];
+
+    # Apply our custom COSMIC overlay with pinned package versions
+    nixpkgs.overlays = [ cosmicBuild.cosmicOverlay ];
+
     # Configure xdg-desktop-portal for proper URL handling
     # COSMIC portal doesn't support AppChooser interface, so use GTK backend
     # Note: xdg.portal.enable and extraPortals are already configured by the COSMIC service
@@ -65,6 +86,9 @@ in
 
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {
+      # Create feature flag for COSMIC
+      home.file.".config/nix-flags/cosmic-enabled".text = "";
+
       # SSH environment - use GNOME Keyring SSH socket
       home.sessionVariables = {
         SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";

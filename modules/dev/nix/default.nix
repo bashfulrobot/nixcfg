@@ -24,6 +24,7 @@ in {
       nixd # nix language server
       nix-prefetch-github # Get sha256 info for GitHub
       unstable.nh # nix helper - rebuilds, etc
+      cachix # Binary cache client for pushing/pulling packages
     ];
     home-manager.users."${user-settings.user.username}" = {
 

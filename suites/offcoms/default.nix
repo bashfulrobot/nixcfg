@@ -111,7 +111,7 @@ in
       # mailspring # email client
       #geary # email reader
 
-      # pandoc # document converter
+      pandoc # document converter
       # lan-mouse # software kvm
 
       # Static Site Generation

@@ -20,6 +20,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "zen";
+
     # Install Zen Browser
     environment.systemPackages = [
       zen-browser.packages.${pkgs.system}.default
@@ -73,12 +76,16 @@ in
         };
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "zen.desktop";
-        "x-scheme-handler/http" = "zen.desktop";
-        "x-scheme-handler/https" = "zen.desktop";
-        "x-scheme-handler/about" = "zen.desktop";
-        "x-scheme-handler/unknown" = "zen.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "zen.desktop" ];
+          "x-scheme-handler/http" = [ "zen.desktop" ];
+          "x-scheme-handler/https" = [ "zen.desktop" ];
+          "x-scheme-handler/about" = [ "zen.desktop" ];
+          "x-scheme-handler/unknown" = [ "zen.desktop" ];
+          "applications/x-www-browser" = [ "zen.desktop" ];
+        };
       };
     };
   };

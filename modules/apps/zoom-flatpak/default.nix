@@ -26,39 +26,76 @@ in
 
     services.flatpak.overrides = {
       "us.zoom.Zoom" = {
-        # Context.sockets = [ "wayland" "fallback-x11" "pulseaudio" ];
-        # Context.devices = [ "dri" ];
-        # Context.features = [ "devel" ];
-        # Context.filesystems = [
-        #   "xdg-documents"
-        #   "xdg-pictures"
-        #   "xdg-videos"
-        #   "xdg-desktop"
-        #   "xdg-download"
-        # ];
-        # Context.shared = [ "network" "ipc" ];
-        # Context.talks = [
-        #   "org.freedesktop.Notifications"
-        #   "org.freedesktop.ScreenSaver"
-        #   "org.freedesktop.PowerManagement.Inhibit"
-        #   "org.freedesktop.portal.Desktop"
-        #   "org.freedesktop.portal.Screenshot"
-        #   "org.freedesktop.portal.ScreenCast"
-        # ];
-        # Context.owns = [
-        #   "org.gnome.*"
+        Context.filesystems = [
+          "/etc/profiles/per-user/${user-settings.user.username}:ro"
+        ];
+        Context.shared = [ "network" ];  # Ensure network sharing
+        Context.talks = [
+          "org.freedesktop.portal.Desktop"  # Desktop portal access
+          "org.freedesktop.portal.Documents"  # Document portal access
+          "org.freedesktop.impl.portal.desktop.cosmic"  # COSMIC desktop portal
+          "org.freedesktop.impl.portal.desktop.gtk"  # GTK desktop portal
+        ];
+        # Context.system-talks = [
+        #   "org.freedesktop.portal.Desktop"  # System-level portal access
         # ];
         Environment = {
-          XDG_CURRENT_DESKTOP = "gnome";
+          PATH = "/etc/profiles/per-user/${user-settings.user.username}/bin:/app/bin:/usr/bin";
+          # BROWSER is now set by individual browser modules when setAsDefault = true
+          XDG_CURRENT_DESKTOP = "COSMIC";  # Use COSMIC instead of GNOME
         };
       };
     };
 
     home-manager.users."${user-settings.user.username}" = {
-      xdg.mimeApps.defaultApplications = {
-        "x-scheme-handler/zoom" = "us.zoom.Zoom.desktop";
-        "x-scheme-handler/zoommtg" = "us.zoom.Zoom.desktop";
-        "x-scheme-handler/zoomus" = "us.zoom.Zoom.desktop";
+      # COMMENTED OUT FOR TESTING: Custom desktop file creation
+      # # Create local desktop file to ensure proper MIME handling
+      # # This replicates the manual fix from forum posts
+      # home.file.".local/share/applications/us.zoom.Zoom.desktop".text = ''
+      #   [Desktop Entry]
+      #   Name=Zoom
+      #   Comment=Zoom Video Conference
+      #   GenericName=Zoom Client for Linux
+      #   Exec=flatpak run --branch=stable --arch=x86_64 --command=zoom --file-forwarding us.zoom.Zoom @@u %U @@
+      #   Icon=us.zoom.Zoom
+      #   Terminal=false
+      #   Type=Application
+      #   StartupNotify=true
+      #   Categories=Network;InstantMessaging;VideoConference;Telephony;
+      #   MimeType=x-scheme-handler/zoommtg;x-scheme-handler/zoomus;x-scheme-handler/tel;x-scheme-handler/callto;x-scheme-handler/zoomphonecall;application/x-zoom
+      #   X-KDE-Protocols=zoommtg;zoomus;tel;callto;zoomphonecall;
+      #   StartupWMClass=zoom
+      #   X-Flatpak-Tags=proprietary;
+      #   X-Flatpak=us.zoom.Zoom
+      # '';
+
+      # COMMENTED OUT FOR TESTING: Desktop database update
+      # # Ensure desktop database is updated for protocol handlers
+      # home.activation.updateDesktopDatabase = lib.mkAfter ''
+      #   $DRY_RUN_CMD ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
+      # '';
+
+      # KEPT: Original + associations.added (helpful for overall MIME handling)
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "x-scheme-handler/zoom" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoommtg" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomus" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomphonecall" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomauthenticator" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/tel" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/callto" = [ "us.zoom.Zoom.desktop" ];
+        };
+        associations.added = {
+          "x-scheme-handler/zoom" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoommtg" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomus" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomphonecall" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/zoomauthenticator" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/tel" = [ "us.zoom.Zoom.desktop" ];
+          "x-scheme-handler/callto" = [ "us.zoom.Zoom.desktop" ];
+        };
       };
 
       # xdg.configFile."zoomus.conf".text = ''

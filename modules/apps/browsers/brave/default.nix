@@ -38,6 +38,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "brave";
+
     home-manager.users."${user-settings.user.username}" = {
       programs.chromium = {
         enable = true;
@@ -179,13 +182,16 @@ in
         };
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "brave-browser.desktop";
-        "x-scheme-handler/http" = "brave-browser.desktop";
-        "x-scheme-handler/https" = "brave-browser.desktop";
-        "x-scheme-handler/about" = "brave-browser.desktop";
-        "x-scheme-handler/unknown" = "brave-browser.desktop";
-        "applications/x-www-browser" = "brave-browser.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/http" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/https" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/about" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
+          "applications/x-www-browser" = [ "brave-browser.desktop" ];
+        };
       };
     };
   };

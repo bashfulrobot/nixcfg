@@ -39,6 +39,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "firefox";
+
     home-manager.users."${user-settings.user.username}" = {
       # Enable backups for conflicting files
       home = {
@@ -90,15 +93,18 @@ in
         };
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "firefox.desktop";
-        "x-scheme-handler/http" = "firefox.desktop";
-        "x-scheme-handler/https" = "firefox.desktop";
-        "x-scheme-handler/about" = "firefox.desktop";
-        "x-scheme-handler/unknown" = "firefox.desktop";
-        "x-scheme-handler/mailto" = "firefox.desktop";
-        "x-scheme-handler/webcal" = "firefox.desktop";
-        "applications/x-www-browser" = "firefox.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "firefox.desktop" ];
+          "x-scheme-handler/http" = [ "firefox.desktop" ];
+          "x-scheme-handler/https" = [ "firefox.desktop" ];
+          "x-scheme-handler/about" = [ "firefox.desktop" ];
+          "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+          "x-scheme-handler/mailto" = [ "firefox.desktop" ];
+          "x-scheme-handler/webcal" = [ "firefox.desktop" ];
+          "applications/x-www-browser" = [ "firefox.desktop" ];
+        };
       };
     };
   };

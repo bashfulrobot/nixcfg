@@ -28,6 +28,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "vivaldi";
 
     environment.systemPackages = with pkgs; [
       (unstable.vivaldi.override {
@@ -188,13 +190,16 @@ in
         BROWSER = "vivaldi";
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "vivaldi-stable.desktop";
-        "x-scheme-handler/http" = "vivaldi-stable.desktop";
-        "x-scheme-handler/https" = "vivaldi-stable.desktop";
-        "x-scheme-handler/about" = "vivaldi-stable.desktop";
-        "x-scheme-handler/unknown" = "vivaldi-stable.desktop";
-        "applications/x-www-browser" = "vivaldi-stable.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "vivaldi-stable.desktop" ];
+          "x-scheme-handler/http" = [ "vivaldi-stable.desktop" ];
+          "x-scheme-handler/https" = [ "vivaldi-stable.desktop" ];
+          "x-scheme-handler/about" = [ "vivaldi-stable.desktop" ];
+          "x-scheme-handler/unknown" = [ "vivaldi-stable.desktop" ];
+          "applications/x-www-browser" = [ "vivaldi-stable.desktop" ];
+        };
       };
 
       # force chromium to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer

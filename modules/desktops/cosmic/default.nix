@@ -35,6 +35,15 @@ in
       seahorse # GUI keyring manager
     ];
 
+    # Enhance XDG data discovery for better MIME/application integration
+    # Based on GNOME's approach but adapted for COSMIC's minimal philosophy
+    # This helps resolve issues with default application selection (e.g., Zoom SSO browser choice)
+    # by ensuring applications can properly discover MIME associations and desktop files
+    environment.sessionVariables = {
+      # Help applications find MIME associations and desktop files
+      XDG_DATA_DIRS = [ "$XDG_DATA_DIRS" "/run/current-system/sw/share" ];
+    };
+
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
@@ -46,11 +55,25 @@ in
       desktopManager.cosmic.xwayland.enable = true;
     };
 
+    # Configure xdg-desktop-portal for proper URL handling
+    # COSMIC portal doesn't support AppChooser interface, so use GTK backend
+    # Note: xdg.portal.enable and extraPortals are already configured by the COSMIC service
+    xdg.portal.config.cosmic = {
+      default = [ "cosmic" "gtk" ];
+      "org.freedesktop.impl.portal.AppChooser" = [ "gtk" ];
+    };
+
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {
       # SSH environment - use GNOME Keyring SSH socket
       home.sessionVariables = {
         SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+        # Ensure browsers can find desktop portal for URL handling
+        XDG_CURRENT_DESKTOP = "COSMIC";
+        # Ensure proper desktop integration for applications
+        XDG_SESSION_DESKTOP = "cosmic";
+        # Help applications find the correct desktop portals
+        XDG_SESSION_TYPE = "wayland";
       };
 
       xdg.configFile = {

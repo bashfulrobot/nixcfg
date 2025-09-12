@@ -36,8 +36,6 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
       xdg = {
-        # Force overwrite to prevent app conflicts
-        configFile."mimeapps.list".force = true;
 
         # desktopEntries.librewolf = {
         #   name = "LibreWolf";

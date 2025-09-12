@@ -65,6 +65,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault defaultApplication;
 
     environment.systemPackages = with pkgs; [
       # chromiumPackage
@@ -225,13 +227,16 @@ in
         BROWSER = "${defaultApplication}";
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "${defaultApplication}.desktop";
-        "x-scheme-handler/http" = "${defaultApplication}.desktop";
-        "x-scheme-handler/https" = "${defaultApplication}.desktop";
-        "x-scheme-handler/about" = "${defaultApplication}.desktop";
-        "x-scheme-handler/unknown" = "${defaultApplication}.desktop";
-        "applications/x-www-browser" = "${defaultApplication}.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "${defaultApplication}.desktop" ];
+          "x-scheme-handler/http" = [ "${defaultApplication}.desktop" ];
+          "x-scheme-handler/https" = [ "${defaultApplication}.desktop" ];
+          "x-scheme-handler/about" = [ "${defaultApplication}.desktop" ];
+          "x-scheme-handler/unknown" = [ "${defaultApplication}.desktop" ];
+          "applications/x-www-browser" = [ "${defaultApplication}.desktop" ];
+        };
       };
 
       # force chromium to use wayland - https://skerit.com/en/make-electron-applications-use-the-wayland-renderer

@@ -27,6 +27,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Configure Zoom Flatpak to use this browser when set as default
+    services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "google-chrome-stable";
+
     home-manager.users."${user-settings.user.username}" = {
       programs.chromium = {
         enable = true;
@@ -45,13 +48,16 @@ in
         BROWSER = "google-chrome-stable";
       };
 
-      xdg.mimeApps.defaultApplications = lib.mkIf cfg.setAsDefault {
-        "text/html" = "google-chrome.desktop";
-        "x-scheme-handler/http" = "google-chrome.desktop";
-        "x-scheme-handler/https" = "google-chrome.desktop";
-        "x-scheme-handler/about" = "google-chrome.desktop";
-        "x-scheme-handler/unknown" = "google-chrome.desktop";
-        "applications/x-www-browser" = "google-chrome.desktop";
+      xdg.mimeApps = lib.mkIf cfg.setAsDefault {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/http" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/https" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/about" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
+          "applications/x-www-browser" = [ "google-chrome.desktop" ];
+        };
       };
     };
   };

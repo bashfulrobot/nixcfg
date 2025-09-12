@@ -43,6 +43,12 @@ in
         # };
         mimeApps = {
           associations = {
+            removed = {
+              "application/pdf" = [ "draw.desktop" "libreoffice-draw.desktop" "org.libreoffice.LibreOffice.draw.desktop" ];
+            };
+            added = {
+              "application/pdf" = [ "okular.desktop" ];
+            };
             # added = { "x-scheme-handler/tg" = "org.telegram.desktop.desktop"; };
           };
           enable = true;

@@ -8,9 +8,9 @@
 }:
 let
   cfg = config.desktops.cosmic;
-  
+
   # Import our custom COSMIC build module
-  cosmicBuild = import ./build { 
+  cosmicBuild = import ./build {
     inherit pkgs lib;
     fetchFromGitHub = pkgs.fetchFromGitHub;
   };
@@ -25,11 +25,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    
+
     # Enable dev.cachix for personal cache functionality
     dev.cachix.enable = true;
 
-    # COSMIC binary cache for faster package downloads  
+    # COSMIC binary cache for faster package downloads
     nix.settings = {
       substituters = cosmicBuild.binaryCache.substituters ++ [ "https://bashfulrobot.cachix.org" ];
       trusted-public-keys = cosmicBuild.binaryCache.trusted-public-keys ++ [ "bashfulrobot.cachix.org-1:dV0OEgd/ccYivTMyL8nsIE4nmlSZs+X30bTrvgPL7rg=" ];
@@ -59,7 +59,6 @@ in
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
-
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
       desktopManager.cosmic.enable = true;
@@ -73,7 +72,7 @@ in
       # cosmic-player
     ];
 
-    # Apply our custom COSMIC overlay with pinned package versions
+    # Apply our custom COSMIC overlay with pinned package versions (nightly builds available for fixes I need. TODO: Will remove once the beta releases are out)
     nixpkgs.overlays = [ cosmicBuild.cosmicOverlay ];
 
     # Configure xdg-desktop-portal for proper URL handling
@@ -83,6 +82,19 @@ in
       default = [ "cosmic" "gtk" ];
       "org.freedesktop.impl.portal.AppChooser" = [ "gtk" ];
     };
+
+    # Setup user profile picture in AccountsService
+    system.activationScripts.setupFaceFile.text = ''
+      mkdir -p /var/lib/AccountsService/{icons,users}
+      cp ${./.face} /var/lib/AccountsService/icons/${user-settings.user.username}
+      echo -e "[User]\nIcon=/var/lib/AccountsService/icons/${user-settings.user.username}\n" > /var/lib/AccountsService/users/${user-settings.user.username}
+
+      chown root:root /var/lib/AccountsService/users/${user-settings.user.username}
+      chmod 0600 /var/lib/AccountsService/users/${user-settings.user.username}
+
+      chown root:root /var/lib/AccountsService/icons/${user-settings.user.username}
+      chmod 0444 /var/lib/AccountsService/icons/${user-settings.user.username}
+    '';
 
     # COSMIC configuration files
     home-manager.users."${user-settings.user.username}" = {

@@ -50,7 +50,6 @@ in
       unstable.librespot
       ncspot-save-playing
       unstable.curl
-      unstable.spotifywm # adds proper window class to official client
       unstable.spotify # official
     ];
 

@@ -67,10 +67,11 @@ in
     };
 
     # Exclude specific COSMIC packages if needed
-    environment.cosmic.excludePackages = with pkgs; [
-      # cosmic-edit
-      # cosmic-player
-    ];
+    # TODO: Available as of 25.11 but not in 25.05
+    # environment.cosmic.excludePackages = with pkgs; [
+    #   # cosmic-edit
+    #   # cosmic-player
+    # ];
 
     # Apply our custom COSMIC overlay with pinned package versions (nightly builds available for fixes I need. TODO: Will remove once the beta releases are out)
     nixpkgs.overlays = [ cosmicBuild.cosmicOverlay ];

@@ -257,6 +257,10 @@ cosmic-cache:
     
     echo "✅ COSMIC packages pushed to bashfulrobot cache successfully!"
     echo "🔗 Your cache: https://bashfulrobot.cachix.org"
+    
+    # Clean up result symlink
+    echo "🧹 Cleaning up result symlink..."
+    rm -f result
 
 # === System Info ===
 # Show kernel and boot info

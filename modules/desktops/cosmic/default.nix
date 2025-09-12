@@ -31,8 +31,8 @@ in
 
     # COSMIC binary cache for faster package downloads
     nix.settings = {
-      substituters = cosmicBuild.binaryCache.substituters ++ [ "https://bashfulrobot.cachix.org" ];
-      trusted-public-keys = cosmicBuild.binaryCache.trusted-public-keys ++ [ "bashfulrobot.cachix.org-1:dV0OEgd/ccYivTMyL8nsIE4nmlSZs+X30bTrvgPL7rg=" ];
+      substituters = [ "https://bashfulrobot.cachix.org" ];
+      trusted-public-keys = [ "bashfulrobot.cachix.org-1:dV0OEgd/ccYivTMyL8nsIE4nmlSZs+X30bTrvgPL7rg=" ];
     };
 
     # System packages

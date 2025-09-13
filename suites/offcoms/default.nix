@@ -58,10 +58,7 @@ in
       br-gcal.enable = true;
       br-gmail.enable = true;
       br-drive.enable = true;
-      zoom-us = {
-        enable = true;
-        downgrade = false;
-      };
+      zoom-us.enable = true;
       zoom-flatpak.enable = false;
       slack.enable = true;
     };

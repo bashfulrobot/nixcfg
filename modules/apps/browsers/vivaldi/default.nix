@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.apps.browsers.vivaldi;
+  inherit (config.lib.stylix) colors;
 in
 {
 
@@ -38,10 +39,8 @@ in
         enableWidevine = true; # Seen some reports that can cause a crash
         commandLineArgs = [
           "--ozone-platform=wayland"
-          "--enable-features=WaylandWindowDecorations"
           "--ozone-platform-hint=auto"
-          "--enable-features=WaylandWindowDecorations"
-
+          "--enable-features=WaylandWindowDecorations,AllowCSSModification"
         ];
       })
     ];
@@ -199,6 +198,207 @@ in
           "x-scheme-handler/about" = [ "vivaldi-stable.desktop" ];
           "x-scheme-handler/unknown" = [ "vivaldi-stable.desktop" ];
           "applications/x-www-browser" = [ "vivaldi-stable.desktop" ];
+        };
+      };
+
+      # Generate Vivaldi theme settings.json files with Stylix colors
+      home.file = lib.mkIf (config.stylix.enable or false) {
+        "dev/nix/nixcfg/extras/helpers/vivaldi-theme/generated/stylix-dark-settings.json" = {
+          text = builtins.toJSON {
+            accentFromPage = false;
+            accentOnWindow = true;
+            accentSaturationLimit = 1;
+            alpha = 1;
+            backgroundImage = "";
+            backgroundPosition = "stretch";
+            blur = 0;
+            buttons = {
+              Back = "Back.svg";
+              BreakMode = "BreakMode.svg";
+              CalendarStatus = "CalendarStatus.svg";
+              CaptureImages = "CaptureImages.svg";
+              Clock = "Clock.svg";
+              DownloadButton = "DownloadButton.svg";
+              Extensions = "Extensions.svg";
+              FastForward = "FastForward.svg";
+              Forward = "Forward.svg";
+              Home = "Home.svg";
+              ImagesToggle = "ImagesToggle.svg";
+              MailBack = "MailBack.svg";
+              MailCompose = "MailCompose.svg";
+              MailForward = "MailForward.svg";
+              MailMsgArchive = "MailMsgArchive.svg";
+              MailMsgArchiveRestore = "MailMsgArchiveRestore.svg";
+              MailMsgAttach = "MailMsgAttach.svg";
+              MailMsgDiscard = "MailMsgDiscard.svg";
+              MailMsgEdit = "MailMsgEdit.svg";
+              MailMsgFlag = "MailMsgFlag.svg";
+              MailMsgForward = "MailMsgForward.svg";
+              MailMsgLabel = "MailMsgLabel.svg";
+              MailMsgMove = "MailMsgMove.svg";
+              MailMsgReply = "MailMsgReply.svg";
+              MailMsgReplyToAll = "MailMsgReplyToAll.svg";
+              MailMsgSend = "MailMsgSend.svg";
+              MailMsgShowHeaders = "MailMsgShowHeaders.svg";
+              MailMsgSpam = "MailMsgSpam.svg";
+              MailMsgSpamRestore = "MailMsgSpamRestore.svg";
+              MailMsgStatusRead = "MailMsgStatusRead.svg";
+              MailMsgStatusUnread = "MailMsgStatusUnread.svg";
+              MailMsgTrash = "MailMsgTrash.svg";
+              MailMsgTrashRestore = "MailMsgTrashRestore.svg";
+              MailReload = "MailReload.svg";
+              MailRenderingMethod = "MailRenderingMethod.svg";
+              MailRenderingMethodText = "MailRenderingMethodText.svg";
+              MailStatus = "MailStatus.svg";
+              MailViewLayout = "MailViewLayout.svg";
+              MailViewThreading = "MailViewThreading.svg";
+              PageActions = "PageActions.svg";
+              PanelBookmarks = "PanelBookmarks.svg";
+              PanelCalendar = "PanelCalendar.svg";
+              PanelContacts = "PanelContacts.svg";
+              PanelDownloads = "PanelDownloads.svg";
+              PanelFeeds = "PanelFeeds.svg";
+              PanelHistory = "PanelHistory.svg";
+              PanelMail = "PanelMail.svg";
+              PanelNotes = "PanelNotes.svg";
+              PanelReadingList = "PanelReadingList.svg";
+              PanelSession = "PanelSession.svg";
+              PanelTasks = "PanelTasks.svg";
+              PanelToggle = "PanelToggle.svg";
+              PanelTranslate = "PanelTranslate.svg";
+              PanelWeb = "PanelWeb.svg";
+              PanelWindow = "PanelWindow.svg";
+              Proxy = "Proxy.svg";
+              ReadingList = "ReadingList.svg";
+              Reload = "Reload.svg";
+              Rewind = "Rewind.svg";
+              SearchField = "SearchField.svg";
+              Settings = "Settings.svg";
+              Stop = "Stop.svg";
+              SyncStatus = "SyncStatus.svg";
+              SyncedTabs = "SyncedTabs.svg";
+              TabsTrash = "TabsTrash.svg";
+              TilingToggle = "TilingToggle.svg";
+              UpdateButton = "UpdateButton.svg";
+              WorkspaceButton = "WorkspaceButton.svg";
+            };
+            colorAccentBg = "#${colors.base02}";
+            colorBg = "#${colors.base00}";
+            colorFg = "#${colors.base05}";
+            colorHighlightBg = "#${colors.base0D}";
+            colorWindowBg = "#${colors.base01}";
+            contrast = 0;
+            dimBlurred = false;
+            engineVersion = 1;
+            id = "e0f07456-2784-463f-9bd7-1ba84e1da52d";
+            name = "Stylix Dark";
+            preferSystemAccent = false;
+            radius = 6;
+            simpleScrollbar = false;
+            transparencyTabBar = false;
+            transparencyTabs = false;
+            url = "";
+            version = 1;
+          };
+        };
+
+        "dev/nix/nixcfg/extras/helpers/vivaldi-theme/generated/stylix-light-settings.json" = {
+          text = builtins.toJSON {
+            accentFromPage = false;
+            accentOnWindow = true;
+            accentSaturationLimit = 1;
+            alpha = 1;
+            backgroundImage = "";
+            backgroundPosition = "stretch";
+            blur = 0;
+            buttons = {
+              Back = "Back.svg";
+              BreakMode = "BreakMode.svg";
+              CalendarStatus = "CalendarStatus.svg";
+              CaptureImages = "CaptureImages.svg";
+              Clock = "Clock.svg";
+              DownloadButton = "DownloadButton.svg";
+              Extensions = "Extensions.svg";
+              FastForward = "FastForward.svg";
+              Forward = "Forward.svg";
+              Home = "Home.svg";
+              ImagesToggle = "ImagesToggle.svg";
+              MailBack = "MailBack.svg";
+              MailCompose = "MailCompose.svg";
+              MailForward = "MailForward.svg";
+              MailMsgArchive = "MailMsgArchive.svg";
+              MailMsgArchiveRestore = "MailMsgArchiveRestore.svg";
+              MailMsgAttach = "MailMsgAttach.svg";
+              MailMsgDiscard = "MailMsgDiscard.svg";
+              MailMsgEdit = "MailMsgEdit.svg";
+              MailMsgFlag = "MailMsgFlag.svg";
+              MailMsgForward = "MailMsgForward.svg";
+              MailMsgLabel = "MailMsgLabel.svg";
+              MailMsgMove = "MailMsgMove.svg";
+              MailMsgReply = "MailMsgReply.svg";
+              MailMsgReplyToAll = "MailMsgReplyToAll.svg";
+              MailMsgSend = "MailMsgSend.svg";
+              MailMsgShowHeaders = "MailMsgShowHeaders.svg";
+              MailMsgSpam = "MailMsgSpam.svg";
+              MailMsgSpamRestore = "MailMsgSpamRestore.svg";
+              MailMsgStatusRead = "MailMsgStatusRead.svg";
+              MailMsgStatusUnread = "MailMsgStatusUnread.svg";
+              MailMsgTrash = "MailMsgTrash.svg";
+              MailMsgTrashRestore = "MailMsgTrashRestore.svg";
+              MailReload = "MailReload.svg";
+              MailRenderingMethod = "MailRenderingMethod.svg";
+              MailRenderingMethodText = "MailRenderingMethodText.svg";
+              MailStatus = "MailStatus.svg";
+              MailViewLayout = "MailViewLayout.svg";
+              MailViewThreading = "MailViewThreading.svg";
+              PageActions = "PageActions.svg";
+              PanelBookmarks = "PanelBookmarks.svg";
+              PanelCalendar = "PanelCalendar.svg";
+              PanelContacts = "PanelContacts.svg";
+              PanelDownloads = "PanelDownloads.svg";
+              PanelFeeds = "PanelFeeds.svg";
+              PanelHistory = "PanelHistory.svg";
+              PanelMail = "PanelMail.svg";
+              PanelNotes = "PanelNotes.svg";
+              PanelReadingList = "PanelReadingList.svg";
+              PanelSession = "PanelSession.svg";
+              PanelTasks = "PanelTasks.svg";
+              PanelToggle = "PanelToggle.svg";
+              PanelTranslate = "PanelTranslate.svg";
+              PanelWeb = "PanelWeb.svg";
+              PanelWindow = "PanelWindow.svg";
+              Proxy = "Proxy.svg";
+              ReadingList = "ReadingList.svg";
+              Reload = "Reload.svg";
+              Rewind = "Rewind.svg";
+              SearchField = "SearchField.svg";
+              Settings = "Settings.svg";
+              Stop = "Stop.svg";
+              SyncStatus = "SyncStatus.svg";
+              SyncedTabs = "SyncedTabs.svg";
+              TabsTrash = "TabsTrash.svg";
+              TilingToggle = "TilingToggle.svg";
+              UpdateButton = "UpdateButton.svg";
+              WorkspaceButton = "WorkspaceButton.svg";
+            };
+            colorAccentBg = "#${colors.base06}";
+            colorBg = "#ffffff";
+            colorFg = "#${colors.base02}";
+            colorHighlightBg = "#${colors.base0B}";
+            colorWindowBg = "#${colors.base07}";
+            contrast = 1;
+            dimBlurred = false;
+            engineVersion = 1;
+            id = "b4846bbc-2df4-46d4-b9ab-76e3837c3fea";
+            name = "Stylix Light";
+            preferSystemAccent = true;
+            radius = 4;
+            simpleScrollbar = false;
+            transparencyTabBar = false;
+            transparencyTabs = false;
+            url = "";
+            version = 1;
+          };
         };
       };
 

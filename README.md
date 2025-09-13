@@ -102,6 +102,51 @@ The bootstrap process automatically:
 
 See [CLAUDE.md](./CLAUDE.md) for detailed development documentation, commands, and architecture information.
 
+## Vivaldi Theme Integration
+
+The Vivaldi browser module automatically generates themes that match your Stylix color scheme:
+
+### Theme Management
+
+1. **Theme Generation**: On each system rebuild, settings.json files are updated with current Stylix colors in:
+   - `extras/helpers/vivaldi-theme/stylix-dark/settings.json` (Dark theme)
+   - `extras/helpers/vivaldi-theme/stylix-light/settings.json` (Light theme)
+
+2. **Building Import Files**: 
+   ```bash
+   cd extras/helpers/vivaldi-theme
+   ./build-themes.sh
+   ```
+   This creates `stylix-dark.zip` and `stylix-light.zip` for import into Vivaldi.
+
+3. **Importing Themes**:
+   - Open Vivaldi → Settings → Appearance → Themes
+   - Click "Import Theme" 
+   - Select the appropriate .zip file
+   - Apply the imported theme
+
+4. **Theme Scheduling**: For automatic light/dark switching:
+   - Go to Vivaldi Settings → Appearance → Themes
+   - Set "Light Theme" to "Stylix Light (Auto-generated)"
+   - Set "Dark Theme" to "Stylix Dark (Auto-generated)" 
+   - Enable "Schedule" and configure your preferred times
+
+### Color Mapping
+
+**Dark Theme**:
+- Background: `base00` (deepest background)
+- Window Background: `base01` (panels, sidebars)
+- Accent Background: `base02` (subtle highlights)
+- Text: `base05` (main text)
+- Highlight: `base0D` (blue accent for selections)
+
+**Light Theme**:
+- Background: `base07` (lightest background)
+- Window Background: `base06` (light panels)
+- Accent Background: `base0D` (blue accent)
+- Text: `base02` (dark text)
+- Highlight: `base0D` (consistent accent)
+
 ## Related Projects
 
 - **[firefox-custom-css](https://github.com/bashfulrobot/firefox-custom-css)** - Standalone Firefox CSS theme with GNOME-style rounded corners. Reference for customizing the Firefox module in this repository.

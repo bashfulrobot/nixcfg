@@ -16,6 +16,10 @@ let
   };
 in
 {
+  imports = [
+    ./module-config/cosmic-settings.nix
+  ];
+
   options = {
     desktops.cosmic.enable = lib.mkOption {
       type = lib.types.bool;
@@ -113,42 +117,6 @@ in
         XDG_SESSION_TYPE = "wayland";
       };
 
-      xdg.configFile = {
-        # Autotile configuration for COSMIC Comp
-        "cosmic/com.system76.CosmicComp/v1/autotile".text = ''
-          true
-        '';
-
-        # Active hint configuration for COSMIC Comp
-        "cosmic/com.system76.CosmicComp/v1/active_hint".text = ''
-          true
-        '';
-
-        # Autotile behavior configuration for COSMIC Comp
-        "cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = ''
-          PerWorkspace
-        '';
-
-        # Input touchpad configuration for COSMIC Comp
-        "cosmic/com.system76.CosmicComp/v1/input_touchpad".text = ''
-          (
-              state: Enabled,
-              click_method: Some(Clickfinger),
-              scroll_config: Some((
-                  method: Some(TwoFinger),
-                  natural_scroll: None,
-                  scroll_button: None,
-                  scroll_factor: None,
-              )),
-              tap_config: Some((
-                  enabled: true,
-                  button_map: Some(LeftRightMiddle),
-                  drag: true,
-                  drag_lock: false,
-              )),
-          )
-        '';
-      };
     };
 
   };

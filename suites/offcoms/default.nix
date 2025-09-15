@@ -61,6 +61,7 @@ in
       zoom-us.enable = true;
       zoom-flatpak.enable = false;
       slack.enable = true;
+      signal.enable = true;
     };
 
     cli = {
@@ -96,7 +97,6 @@ in
       # # IM
       # fractal # Matrix Client
       whatsapp-for-linux # instant messaging
-      unstable.signal-desktop # instant messaging
       unstable.zulip
       # element-desktop # Matrix Client
 

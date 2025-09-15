@@ -19,6 +19,39 @@ let
     "--enable-features=VaapiVideoEncoder"
     "--disable-features=UseChromeOSDirectVideoDecoder"
   ];
+
+  # Create a custom Brave desktop item with Wayland optimizations
+  braveDesktopItem = pkgs.makeDesktopItem {
+    name = "brave-browser";
+    desktopName = "Brave Web Browser";
+    genericName = "Web Browser";
+    comment = "Access the Internet";
+    exec = "brave ${lib.concatStringsSep " " waylandFlags} %U";
+    icon = "brave-browser";
+    type = "Application";
+    startupNotify = true;
+    terminal = false;
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
+      "text/html"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/ftp"
+      "x-scheme-handler/about"
+      "x-scheme-handler/unknown"
+    ];
+    startupWMClass = "brave-browser";
+    actions = {
+      new-window = {
+        name = "New Window";
+        exec = "brave ${lib.concatStringsSep " " waylandFlags} --new-window";
+      };
+      new-private-window = {
+        name = "New Incognito Window";  
+        exec = "brave ${lib.concatStringsSep " " waylandFlags} --incognito";
+      };
+    };
+  };
 in
 {
   options = {
@@ -40,6 +73,9 @@ in
   config = lib.mkIf cfg.enable {
     # Configure Zoom Flatpak to use this browser when set as default
     services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "brave";
+
+    # Install Brave and the custom desktop file
+    environment.systemPackages = [ braveDesktopItem ];
 
     home-manager.users."${user-settings.user.username}" = {
       programs.chromium = {
@@ -142,36 +178,6 @@ in
         })
       ];
 
-      # Override desktop file for proper Wayland execution
-      xdg.desktopEntries.brave-browser = {
-        name = "Brave Web Browser";
-        genericName = "Web Browser";
-        comment = "Access the Internet";
-        exec = "brave ${lib.concatStringsSep " " waylandFlags} %U";
-        startupNotify = true;
-        terminal = false;
-        icon = "brave-browser";
-        type = "Application";
-        categories = [ "Network" "WebBrowser" ];
-        mimeType = [
-          "text/html"
-          "x-scheme-handler/http"
-          "x-scheme-handler/https"
-          "x-scheme-handler/ftp"
-          "x-scheme-handler/about"
-          "x-scheme-handler/unknown"
-        ];
-        actions = {
-          new-window = {
-            name = "New Window";
-            exec = "brave ${lib.concatStringsSep " " waylandFlags} --new-window";
-          };
-          new-private-window = {
-            name = "New Incognito Window";
-            exec = "brave ${lib.concatStringsSep " " waylandFlags} --incognito";
-          };
-        };
-      };
 
       xdg.mimeApps = lib.mkIf cfg.setAsDefault {
         enable = true;

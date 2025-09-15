@@ -21,6 +21,10 @@
         true
       '';
 
+      "cosmic/com.system76.CosmicTerm/v1/show_headerbar".text = ''
+        false
+      '';
+
       # COSMIC Edit configurations
       "cosmic/com.system76.CosmicEdit/v1/word_wrap".text = ''
         true

@@ -42,10 +42,13 @@ in
           enable = false;
           setAsDefault = false;
         };
-        brave.enable = false;
-        vivaldi = {
+        brave = {
           enable = true;
           setAsDefault = true;
+        };
+        vivaldi = {
+          enable = false;
+          setAsDefault = false;
         };
         zen-browser = {
           enable = false;

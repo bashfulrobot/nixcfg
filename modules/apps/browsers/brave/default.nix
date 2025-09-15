@@ -163,9 +163,9 @@ in
       };
 
       # Create Wayland-optimized flags config files
-      home.file = {
-        ".config/brave-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
-        ".config/electron-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
+      xdg.configFile = {
+        "brave-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
+        "electron-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
       };
 
       home.sessionVariables = lib.mkMerge [

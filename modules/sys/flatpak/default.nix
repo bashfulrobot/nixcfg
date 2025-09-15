@@ -14,6 +14,10 @@ in {
 
     # Enable Flatpaks
     services.flatpak.enable = true;
+    
+    # Fix xdg-open mimetype handling with Flatpak installed
+    # This prevents xdg-open from using portal system and breaking URL associations
+    xdg.portal.xdgOpenUsePortal = false;
 
     # enable updates at system activation (default false)
     # services.flatpak.update.onActivation = true;
@@ -29,11 +33,8 @@ in {
     #   name = "flathub-beta"; location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
     # }];
 
-    # services.flatpak.packages = [
-      # {
-      #   appId = "com.brave.Browser";
-      #   origin = "flathub";
-      # }
-    # ];
+    services.flatpak.packages = [
+      "com.github.tchx84.Flatseal"  # Flatpak permission manager
+    ];
   };
 }

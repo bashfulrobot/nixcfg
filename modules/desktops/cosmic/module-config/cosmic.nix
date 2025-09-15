@@ -112,6 +112,37 @@
       "cosmic/com.system76.CosmicFiles/v1/show_details".text = ''
         false
       '';
+
+      # COSMIC Panel autohide configuration
+      "cosmic/com.system76.CosmicPanel.Panel/v1/autohide".text = ''
+        Some((
+            wait_time: 1000,
+            transition_time: 200,
+            handle_size: 4,
+        ))
+      '';
+
+      "cosmic/com.system76.CosmicPanel.Panel/v1/exclusive_zone".text = ''
+        false
+      '';
+
+      "cosmic/com.system76.CosmicPanel.Panel/v1/opacity".text = ''
+        1.0
+      '';
+
+      # COSMIC Toolkit window controls - minimal interface
+      "cosmic/com.system76.CosmicTk/v1/show_maximize".text = ''
+        false
+      '';
+
+      "cosmic/com.system76.CosmicTk/v1/show_minimize".text = ''
+        false
+      '';
+
+      # COSMIC Panel border radius
+      "cosmic/com.system76.CosmicPanel.Panel/v1/border_radius".text = ''
+        8
+      '';
     };
   };
 }

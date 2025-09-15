@@ -128,7 +128,19 @@ in
       '';
 
       "cosmic/com.system76.CosmicTheme.Dark/v1/active_hint".text = ''
-        2
+        1
+      '';
+
+      # COSMIC Dark Theme corner radii configuration
+      "cosmic/com.system76.CosmicTheme.Dark/v1/corner_radii".text = ''
+        (
+            radius_0: (0.0, 0.0, 0.0, 0.0),
+            radius_xs: (2.0, 2.0, 2.0, 2.0),
+            radius_s: (8.0, 8.0, 8.0, 8.0),
+            radius_m: (8.0, 8.0, 8.0, 8.0),
+            radius_l: (8.0, 8.0, 8.0, 8.0),
+            radius_xl: (8.0, 8.0, 8.0, 8.0),
+        )
       '';
     };
   };

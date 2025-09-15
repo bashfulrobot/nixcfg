@@ -8,65 +8,9 @@ let
   wallpaperPath = "${user-settings.user.home}/Pictures/wallpapers/${user-settings.theme.personal-wallpaper}";
 in
 {
-  # COSMIC configuration files
+  # COSMIC Appearance and Theme Configuration
   home-manager.users."${user-settings.user.username}" = {
     xdg.configFile = {
-      # Autotile configuration for COSMIC Comp
-      "cosmic/com.system76.CosmicComp/v1/autotile".text = ''
-        true
-      '';
-
-      # Active hint configuration for COSMIC Comp
-      "cosmic/com.system76.CosmicComp/v1/active_hint".text = ''
-        true
-      '';
-
-      # Autotile behavior configuration for COSMIC Comp
-      "cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = ''
-        PerWorkspace
-      '';
-
-      # Input touchpad configuration for COSMIC Comp
-      "cosmic/com.system76.CosmicComp/v1/input_touchpad".text = ''
-        (
-            state: Enabled,
-            click_method: Some(Clickfinger),
-            scroll_config: Some((
-                method: Some(TwoFinger),
-                natural_scroll: None,
-                scroll_button: None,
-                scroll_factor: None,
-            )),
-            tap_config: Some((
-                enabled: true,
-                button_map: Some(LeftRightMiddle),
-                drag: true,
-                drag_lock: false,
-            )),
-        )
-      '';
-
-      # Input default configuration for COSMIC Comp
-      "cosmic/com.system76.CosmicComp/v1/input_default".text = ''
-        (
-            libinput_config: (
-                click_method: None,
-                scroll_config: Some((
-                    method: Some(TwoFinger),
-                    natural_scroll: Some(false),
-                    scroll_button: None,
-                    scroll_factor: Some(1.0),
-                )),
-                tap_config: Some((
-                    enabled: false,
-                    button_map: None,
-                    drag: false,
-                    drag_lock: false,
-                )),
-            ),
-        )
-      '';
-
       # Wallpaper configuration for COSMIC Settings
       "cosmic/com.system76.CosmicSettings.Wallpaper/v1/custom-images".text = wallpaperPath;
 
@@ -136,27 +80,55 @@ in
         (srgb: (red: 0.980392, green: 0.721569, blue: 0.423529, alpha: 1.0))
       '';
 
-      # Time applet configuration - enable 24-hour military time
-      "cosmic/com.system76.CosmicAppletTime/v1/military_time".text = ''
-        true
+      # COSMIC Toolkit interface configurations
+      "cosmic/com.system76.CosmicTk/v1/interface_density".text = ''
+        Spacious
       '';
 
-      # COSMIC Terminal configurations
-      "cosmic/com.system76.CosmicTerm/v1/font_name".text = ''
-        "JetBrainsMono Nerd Font Mono"
+      "cosmic/com.system76.CosmicTk/v1/header_size".text = ''
+        Spacious
       '';
 
-      "cosmic/com.system76.CosmicTerm/v1/font_size".text = ''
-        18
+      "cosmic/com.system76.CosmicTk/v1/interface_font".text = ''
+        (
+            family: "Noto Sans",
+            weight: Normal,
+            stretch: Normal,
+            style: Normal,
+        )
       '';
 
-      "cosmic/com.system76.CosmicTerm/v1/use_bright_bold".text = ''
-        true
+      "cosmic/com.system76.CosmicTk/v1/monospace_font".text = ''
+        (
+            family: "JetBrainsMonoNL Nerd Font Mono",
+            weight: Normal,
+            stretch: Normal,
+            style: Normal,
+        )
       '';
-    } // lib.optionalAttrs (!config.sys.power.enable) {
-      # Desktop-only power settings (not for laptops)
-      xdg.configFile."cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = ''
-        Some(7200000)
+
+      # COSMIC Dark Theme spacing and layout configurations
+      "cosmic/com.system76.CosmicTheme.Dark/v1/spacing".text = ''
+        (
+            space_none: 4,
+            space_xxxs: 8,
+            space_xxs: 12,
+            space_xs: 16,
+            space_s: 24,
+            space_m: 32,
+            space_l: 48,
+            space_xl: 64,
+            space_xxl: 128,
+            space_xxxl: 160,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/gaps".text = ''
+        (0, 15)
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/active_hint".text = ''
+        2
       '';
     };
   };

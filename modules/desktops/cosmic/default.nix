@@ -17,7 +17,7 @@ let
 in
 {
   imports = [
-    ./module-config/cosmic-settings.nix
+    ./module-config
   ];
 
   options = {

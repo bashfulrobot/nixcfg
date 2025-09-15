@@ -11,9 +11,9 @@ let
   nixosSearchApp = makeDesktopApp {
     name = "Nixpkgs Search";
     url = "https://search.nixos.org/packages";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    binary = "${pkgs.unstable.brave}/bin/brave";
     # myStartupWMClass = "chrome-search.nixos.org__packages-Default";
-    myStartupWMClass = "chrome-search.nixos.org__packages-Default";
+    myStartupWMClass = "brave-search.nixos.org__packages-Default";
     iconSizes = [ "16" "32" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

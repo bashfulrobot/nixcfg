@@ -9,8 +9,8 @@ let
   kongDriveApp = makeDesktopApp {
     name = "Kong Drive";
     url = "https://drive.google.com/drive/u/1/my-drive";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "chrome-drive.google.com__drive_u_1_my-drive-Default";
+    binary = "${pkgs.unstable.brave}/bin/brave";
+    myStartupWMClass = "brave-drive.google.com__drive_u_1_my-drive-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256"];
     iconPath = ./icons;
     useAppFlag = true;

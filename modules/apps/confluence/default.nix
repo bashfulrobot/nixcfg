@@ -11,9 +11,9 @@ let
   confluenceSysdigApp = makeDesktopApp {
     name = "Confluence";
     url = "https://sysdig.atlassian.net/wiki/spaces/~62200ee98a4bb60068f21eea/overview";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    binary = "${pkgs.unstable.brave}/bin/brave";
     # myStartupWMClass = "chrome-sysdig.atlassian.net__wiki_spaces_~62200ee98a4bb60068f21eea_overview-Default";
-    myStartupWMClass = "google-chrome-sysdig.atlassian.net__wiki_spaces_~62200ee98a4bb60068f21eea_overview-Default";
+    myStartupWMClass = "brave-sysdig.atlassian.net__wiki_spaces_~62200ee98a4bb60068f21eea_overview-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

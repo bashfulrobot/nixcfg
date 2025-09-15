@@ -9,8 +9,8 @@ let
   kongEmailApp = makeDesktopApp {
     name = "Kong Mail";
     url = "https://mail.google.com/mail/u/1/#search/is%3Aunread+in%3Ainbox";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "chrome-mail.google.com__mail_u_1_-Default";
+    binary = "${pkgs.unstable.brave}/bin/brave";
+    myStartupWMClass = "brave-mail.google.com__mail_u_1_-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

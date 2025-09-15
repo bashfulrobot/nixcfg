@@ -9,8 +9,8 @@ let
   kongfluenceApp = makeDesktopApp {
     name = "Kongfluence";
     url = "https://konghq.atlassian.net/wiki/spaces/KCX/overview";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "google-chrome-konghq.atlassian.net__wiki_spaces_KCX_overview-Default";
+    binary = "${pkgs.unstable.brave}/bin/brave";
+    myStartupWMClass = "brave-konghq.atlassian.net__wiki_spaces_KCX_overview-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     iconPath = ./icons;
     useAppFlag = true;

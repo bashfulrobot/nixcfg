@@ -10,8 +10,8 @@ let
   newKongSheetApp = makeDesktopApp {
     name = "New Kong Sheet";
     url = "https://sheets.new/2";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "chrome-sheets.new__2-Default";
+    binary = "${pkgs.unstable.brave}/bin/brave";
+    myStartupWMClass = "brave-sheets.new__2-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

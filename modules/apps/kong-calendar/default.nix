@@ -9,8 +9,8 @@ let
   kongCalendarApp = makeDesktopApp {
     name = "Kong Calendar";
     url = "https://calendar.google.com/calendar/u/1/r";
-    binary = "${pkgs.google-chrome}/bin/google-chrome-stable";
-    myStartupWMClass = "chrome-calendar.google.com__calendar_u_1_r-Default";
+    binary = "${pkgs.unstable.brave}/bin/brave";
+    myStartupWMClass = "brave-calendar.google.com__calendar_u_1_r-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

@@ -140,6 +140,19 @@ in
       "cosmic/com.system76.CosmicAppletTime/v1/military_time".text = ''
         true
       '';
+
+      # COSMIC Terminal configurations
+      "cosmic/com.system76.CosmicTerm/v1/font_name".text = ''
+        "JetBrainsMono Nerd Font Mono"
+      '';
+
+      "cosmic/com.system76.CosmicTerm/v1/font_size".text = ''
+        18
+      '';
+
+      "cosmic/com.system76.CosmicTerm/v1/use_bright_bold".text = ''
+        true
+      '';
     } // lib.optionalAttrs (!config.sys.power.enable) {
       # Desktop-only power settings (not for laptops)
       xdg.configFile."cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = ''

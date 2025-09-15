@@ -19,39 +19,6 @@ let
     "--enable-features=VaapiVideoEncoder"
     "--disable-features=UseChromeOSDirectVideoDecoder"
   ];
-
-  # Create a custom Brave desktop item with Wayland optimizations
-  braveDesktopItem = pkgs.makeDesktopItem {
-    name = "brave-browser";
-    desktopName = "Brave Web Browser";
-    genericName = "Web Browser";
-    comment = "Access the Internet";
-    exec = "brave ${lib.concatStringsSep " " waylandFlags} %U";
-    icon = "brave-browser";
-    type = "Application";
-    startupNotify = true;
-    terminal = false;
-    categories = [ "Network" "WebBrowser" ];
-    mimeTypes = [
-      "text/html"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-    ];
-    startupWMClass = "brave-browser";
-    actions = {
-      new-window = {
-        name = "New Window";
-        exec = "brave ${lib.concatStringsSep " " waylandFlags} --new-window";
-      };
-      new-private-window = {
-        name = "New Incognito Window";  
-        exec = "brave ${lib.concatStringsSep " " waylandFlags} --incognito";
-      };
-    };
-  };
 in
 {
   options = {
@@ -74,94 +41,10 @@ in
     # Configure Zoom Flatpak to use this browser when set as default
     services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault "brave";
 
-    # Install Brave and the custom desktop file
-    environment.systemPackages = [ braveDesktopItem ];
+    # Install Brave browser
+    environment.systemPackages = with pkgs; [ unstable.brave ];
 
     home-manager.users."${user-settings.user.username}" = {
-      programs.chromium = {
-        enable = true;
-        package = pkgs.unstable.brave;
-        commandLineArgs = waylandFlags;
-        extensions = [
-          # pushover
-          #"fcmngfmocgakhjghfmgbbhlkenccgpdh"
-          # bookmark search
-          #"cofpegcepiccpobikjoddpmmocficdjj"
-          # kagi search
-          # "cdglnehniifkbagbbombnjghhcihifij"
-          # Just Read
-          "dgmanlpmmkibanfdgjocnabmcaclkmod"
-          # 1password
-          "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
-          # dark reader
-          "eimadpbcbfnmbkopoojfekhnkhdbieeh"
-          # ublock origin (though Brave has built-in ad blocking)
-          "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-          # tactiq
-          #"fggkaccpbmombhnjkjokndojfgagejfb"
-          # okta
-          "glnpjglilkicbckjpbgcfkogebgllemb"
-          # grammarly
-          "kbfnbcaeplbcioakkpcpgfkobkghlhen"
-          # simplify
-          "pbmlfaiicoikhdbjagjbglnbfcbcojpj"
-          # todoist
-          "jldhpllghnbhlbpcmnajkpdmadaolakh"
-          # Loom video recording
-          # "liecbddmkiiihnedobmlmillhodjkdmb"
-          # Privacy Badger
-          #"pkehgijcmpdhfbdbbnkijodmdjhbjlgp"
-          # Checker Plus for Mail
-          "oeopbcgkkoapgobdbedcemjljbihmemj"
-          # Checker Plus for Cal
-          "hkhggnncdpfibdhinjiegagmopldibha"
-          # Google docs offline
-          "ghbmnnjooekpmoecnnnilnnbdlolhkhi"
-          # Markdown downloader
-          "pcmpcfapbekmbjjkdalcgopdkipoggdi"
-          # obsidian clipper
-          #"mphkdfmipddgfobjhphabphmpdckgfhb"
-          # URL/Tab Manager
-          "egiemoacchfofdhhlfhkdcacgaopncmi"
-          # Mail message URL
-          "bcelhaineggdgbddincjkdmokbbdhgch"
-          # Catppuccin Github icons
-          #"lnjaiaapbakfhlbjenjkhffcdpoompki"
-          # Glean browser extension
-          # "cfpdompphcacgpjfbonkdokgjhgabpij" # overrides my speed dial extention
-          # gnome extention plugin
-          "gphhapmejobijbbhgpjhcjognlahblep"
-          # copy to clipboard
-          "miancenhdlkbmjmhlginhaaepbdnlllc"
-          # Speed dial extention
-          "jpfpebmajhhopeonhlcgidhclcccjcik"
-          # Raindrop
-          "ldgfbffkinooeloadekpmfoklnobpien"
-          # email tracking for work
-          #"pgbdljpkijehgoacbjpolaomhkoffhnl"
-          # zoom
-          #"kgjfgplpablkjnlkjmjdecgdpfankdle"
-          # Floccus Bookmark Sync
-          #"fnaicdffflnofjppbagibeoednhnbjhg"
-          # Travel Arrow
-          #"coplmfnphahpcknbchcehdikbdieognn"
-          # xbrowsersync
-          # "lcbjdhceifofjlpecfpeimnnphbcjgnc"
-          # tineye
-          # "haebnnbpedcbhciplfhjjkbafijpncjl"
-          # Gainsight Assist
-          # "kbiepllbcbandmpckhoejbgcaddcpbno"
-          # Material Theme Dark (blue-grey)
-          # "paoafodbgcjnmijjepmpgnlhnogaahme"
-          # Material Theme Dark (black)
-          # "bokiaeofleahagjcmcodjofilfdnoblk"
-          # Adguard AdBlocker
-          "bgnkhhnnamicmpeenaelnjfhikgbkllg"
-          # Dracula theme
-          # "gfapcejdoghpoidkfodoiiffaaibpaem"
-        ];
-      };
-
       # Create Wayland-optimized flags config files
       xdg.configFile = {
         "brave-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;
@@ -177,7 +60,6 @@ in
           BROWSER = "brave";
         })
       ];
-
 
       xdg.mimeApps = lib.mkIf cfg.setAsDefault {
         enable = true;

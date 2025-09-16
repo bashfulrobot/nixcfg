@@ -22,7 +22,7 @@ default:
     @echo ""
     @echo "🔧 Commands with Parameters:"
     @echo "  build [trace=true]         - Add trace=true for detailed debugging"
-    @echo "  rebuild [trace=true]       - Add trace=true for detailed debugging"  
+    @echo "  rebuild [trace=true]       - Add trace=true for detailed debugging"
     @echo "  log [days=7]               - Show commits from last N days"
     @echo "  lint [target=.]            - Lint specific file/directory (use jlint for tab completion)"
     @echo "  cosmic-cache               - Build and push COSMIC packages to personal cache"
@@ -46,30 +46,28 @@ check:
     git add -A
     nix flake check --show-trace
 
-
-
-# Fast check of changed nix files only  
+# Fast check of changed nix files only
 [group('dev')]
 check-diff:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "⚡ Checking changed nix files..."
-    
+
     # Get changed .nix files (working tree + staged)
-    changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
+changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
     staged_files=$(git diff --cached --name-only 2>/dev/null | grep '\.nix$' || true)
     all_changed=$(echo -e "$changed_files\n$staged_files" | sort | uniq | grep -v '^$' || true)
-    
+
     if [[ -z "$all_changed" ]]; then
-        echo "✅ No changed .nix files"
+    echo "✅ No changed .nix files"
         exit 0
     fi
-    
+
     echo "📁 Changed files:"
-    echo "$all_changed" | sed 's/^/  /'
-    
+echo "$all_changed" | sed 's/^/  /'
+
     # Quick syntax check on each file
-    echo "🔍 Syntax check..."
+echo "🔍 Syntax check..."
     failed_files=""
     while IFS= read -r file; do
         if [[ -f "$file" ]]; then
@@ -78,15 +76,15 @@ check-diff:
             fi
         fi
     done <<< "$all_changed"
-    
+
     if [[ -n "$failed_files" ]]; then
-        echo "❌ Syntax errors in:"
+    echo "❌ Syntax errors in:"
         echo -e "$failed_files" | sed 's/^/  /'
         exit 1
     fi
-    
+
     # Quick eval test - only if files are in critical paths
-    critical_paths="flake.nix modules/ suites/ hosts/"
+critical_paths="flake.nix modules/ suites/ hosts/"
     needs_eval=false
     while IFS= read -r file; do
         for path in $critical_paths; do
@@ -96,9 +94,9 @@ check-diff:
             fi
         done
     done <<< "$all_changed"
-    
+
     if [[ "$needs_eval" == "true" ]]; then
-        echo "🔍 Checking options and missing imports..."
+    echo "🔍 Checking options and missing imports..."
         # Try targeted evals to catch missing options quickly
         if timeout 8 nix eval .#nixosConfigurations.{{hostname}}.options --quiet >/dev/null 2>&1; then
             echo "✅ All options available"
@@ -110,7 +108,7 @@ check-diff:
     else
         echo "✅ No critical files changed, skipping option check"
     fi
-    
+
     echo "✅ All checks passed"
 
 # Dry run build test
@@ -120,7 +118,7 @@ test:
     set -euo pipefail
     echo "🧪 Testing build (dry run)..."
     git add -A
-    nh os build --dry
+    sudo nixos-rebuild dry-build --fast --impure --flake {{host_flake}}
 
 # Development rebuild with optional trace
 [group('dev')]
@@ -134,10 +132,10 @@ build trace="false":
     if [[ "{{trace}}" == "true" ]]; then
         echo "🔧 Development rebuild with trace..."
         just clean-full
-        nh os switch -- --show-trace 2>&1 | tee {{trace_log}}
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}} --show-trace 2>&1 | tee {{trace_log}}
     else
         echo "🔧 Development rebuild..."
-        nh os switch
+        sudo nixos-rebuild switch --fast --impure --flake {{host_flake}}
     fi
 
 # === Production Commands ===
@@ -151,17 +149,17 @@ rebuild trace="false":
     fi
     if [[ "{{trace}}" == "true" ]]; then
         echo "🚀 Production rebuild with trace..."
-        nh os switch -- --show-trace
+        sudo nixos-rebuild switch --impure --flake {{host_flake}} --show-trace
     else
         echo "🚀 Production rebuild..."
-        nh os switch
+        sudo nixos-rebuild switch --impure --flake {{host_flake}}
     fi
 
 # Build VM for testing
 [group('dev')]
 vm:
     @echo "🖥️  Building VM..."
-    @nh os build-vm -- --show-trace
+    @sudo nixos-rebuild build-vm --fast --impure --flake {{host_flake}} --show-trace
 
 # Full system upgrade
 [group('prod')]
@@ -175,9 +173,9 @@ upgrade trace="false":
     cp flake.lock flake.lock-backup-{{timestamp}}
     nix flake update
     if [[ "{{trace}}" == "true" ]]; then
-        nh os switch --update -- --show-trace
+        sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}} --show-trace
     else
-        nh os switch --update
+        sudo nixos-rebuild switch --impure --upgrade --flake {{host_flake}}
     fi
 
 # === Maintenance Commands ===
@@ -190,13 +188,13 @@ fix-gtk:
 [group('maintenance')]
 clean:
     @echo "🧹 Cleaning packages older than 5 days..."
-    @nh clean all --keep-since 5d
+    @sudo nix-collect-garbage --delete-older-than 5d
 
 # Full garbage collection
 [group('maintenance')]
 clean-full:
     @echo "🧹 Full garbage collection..."
-    @nh clean all --keep 1 --keep-since 0h
+    @sudo nix-collect-garbage -d
 
 # Update nix database for comma tool
 [group('maintenance')]
@@ -240,26 +238,26 @@ cosmic-cache:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "🚀 Building and pushing COSMIC packages to bashfulrobot cache..."
-    
+
     # Ensure cachix is available
-    if ! command -v cachix &> /dev/null; then
+if ! command -v cachix &> /dev/null; then
         echo "❌ Cachix not found. Run 'just rebuild' first to install dev tools with cachix"
         exit 1
     fi
-    
-    # Build the system configuration first  
-    echo "🔧 Building system configuration with COSMIC..."
+
+    # Build the system configuration first
+echo "🔧 Building system configuration with COSMIC..."
     nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --show-trace
-    
+
     # Use the system-wide cachix helper to push to cache
-    echo "📦 Using system cachix helper to push to bashfulrobot cache..."
+echo "📦 Using system cachix helper to push to bashfulrobot cache..."
     push-to-bashfulrobot-cache ./result
-    
+
     echo "✅ COSMIC packages pushed to bashfulrobot cache successfully!"
-    echo "🔗 Your cache: https://bashfulrobot.cachix.org"
-    
+echo "🔗 Your cache: https://bashfulrobot.cachix.org"
+
     # Clean up result symlink
-    echo "🧹 Cleaning up result symlink..."
+echo "🧹 Cleaning up result symlink..."
     rm -f result
 
 # === System Info ===
@@ -283,8 +281,6 @@ themes:
     @echo "🎨 Available base16 themes ($(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | wc -l') total):"
     @nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort'
 
-
-
 # Update hardware firmware
 [group('info')]
 firmware:
@@ -303,7 +299,6 @@ log days="7":
     echo "===================="
     git log --since="{{days}} days ago" --pretty=format:"%h - %an: %s (%cr)" --graph
 
-
 # Hard reset with cleanup
 [group('git')]
 reset-hard:
@@ -318,19 +313,7 @@ reset-hard:
 [group('helpers')]
 pkg-search query:
     @echo "🔍 Searching for packages: {{query}}"
-    @nh search {{query}}
-
-# System rollback functionality  
-[group('helpers')]
-rollback:
-    @echo "⏪ Rolling back system..."
-    @nh os rollback
-
-# Show system generations
-[group('helpers')]
-generations:
-    @echo "📜 System generations:"
-    @nh os info
+    @nix search nixpkgs {{query}}
 
 # Full rebuild cycle with reboot
 [group('helpers')]

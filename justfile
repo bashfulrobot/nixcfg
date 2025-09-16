@@ -54,7 +54,7 @@ check-diff:
     echo "⚡ Checking changed nix files..."
 
     # Get changed .nix files (working tree + staged)
-changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
+    changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
     staged_files=$(git diff --cached --name-only 2>/dev/null | grep '\.nix$' || true)
     all_changed=$(echo -e "$changed_files\n$staged_files" | sort | uniq | grep -v '^$' || true)
 
@@ -64,10 +64,10 @@ changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
     fi
 
     echo "📁 Changed files:"
-echo "$all_changed" | sed 's/^/  /'
+    echo "$all_changed" | sed 's/^/  /'
 
     # Quick syntax check on each file
-echo "🔍 Syntax check..."
+    echo "🔍 Syntax check..."
     failed_files=""
     while IFS= read -r file; do
         if [[ -f "$file" ]]; then
@@ -78,13 +78,13 @@ echo "🔍 Syntax check..."
     done <<< "$all_changed"
 
     if [[ -n "$failed_files" ]]; then
-    echo "❌ Syntax errors in:"
+        echo "❌ Syntax errors in:"
         echo -e "$failed_files" | sed 's/^/  /'
         exit 1
     fi
 
     # Quick eval test - only if files are in critical paths
-critical_paths="flake.nix modules/ suites/ hosts/"
+    critical_paths="flake.nix modules/ suites/ hosts/"
     needs_eval=false
     while IFS= read -r file; do
         for path in $critical_paths; do
@@ -96,7 +96,7 @@ critical_paths="flake.nix modules/ suites/ hosts/"
     done <<< "$all_changed"
 
     if [[ "$needs_eval" == "true" ]]; then
-    echo "🔍 Checking options and missing imports..."
+        echo "🔍 Checking options and missing imports..."
         # Try targeted evals to catch missing options quickly
         if timeout 8 nix eval .#nixosConfigurations.{{hostname}}.options --quiet >/dev/null 2>&1; then
             echo "✅ All options available"
@@ -240,24 +240,24 @@ cosmic-cache:
     echo "🚀 Building and pushing COSMIC packages to bashfulrobot cache..."
 
     # Ensure cachix is available
-if ! command -v cachix &> /dev/null; then
+    if ! command -v cachix &> /dev/null; then
         echo "❌ Cachix not found. Run 'just rebuild' first to install dev tools with cachix"
         exit 1
     fi
 
     # Build the system configuration first
-echo "🔧 Building system configuration with COSMIC..."
+    echo "🔧 Building system configuration with COSMIC..."
     nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --show-trace
 
     # Use the system-wide cachix helper to push to cache
-echo "📦 Using system cachix helper to push to bashfulrobot cache..."
+    echo "📦 Using system cachix helper to push to bashfulrobot cache..."
     push-to-bashfulrobot-cache ./result
 
     echo "✅ COSMIC packages pushed to bashfulrobot cache successfully!"
-echo "🔗 Your cache: https://bashfulrobot.cachix.org"
+    echo "🔗 Your cache: https://bashfulrobot.cachix.org"
 
     # Clean up result symlink
-echo "🧹 Cleaning up result symlink..."
+    echo "🧹 Cleaning up result symlink..."
     rm -f result
 
 # === System Info ===

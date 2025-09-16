@@ -4,6 +4,7 @@
   lib,
   ...
 }:
+
 {
   # COSMIC Core Desktop Configuration
   home-manager.users."${user-settings.user.username}" = {
@@ -130,6 +131,19 @@
         1.0
       '';
 
+      # COSMIC Panel layout and spacing
+      "cosmic/com.system76.CosmicPanel.Panel/v1/margin".text = ''
+        4
+      '';
+
+      "cosmic/com.system76.CosmicPanel.Panel/v1/padding".text = ''
+        0
+      '';
+
+      "cosmic/com.system76.CosmicPanel.Panel/v1/autohover_delay_ms".text = ''
+        Some(500)
+      '';
+
       # COSMIC Toolkit window controls - minimal interface
       "cosmic/com.system76.CosmicTk/v1/show_maximize".text = ''
         false
@@ -142,6 +156,13 @@
       # COSMIC Panel border radius
       "cosmic/com.system76.CosmicPanel.Panel/v1/border_radius".text = ''
         8
+      '';
+
+      # COSMIC Panel entries configuration
+      "cosmic/com.system76.CosmicPanel/v1/entries".text = ''
+        [
+            "Panel",
+        ]
       '';
     };
   };

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  wallpaperPath = "${user-settings.user.home}/Pictures/wallpapers/${user-settings.theme.personal-wallpaper}";
+  wallpaperPath = config.sys.wallpapers.getWallpaper "professional";
   inherit (config.lib.stylix) colors;
   
   # Helper function to convert hex color to decimal rgba

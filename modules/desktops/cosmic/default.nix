@@ -63,6 +63,9 @@ in
     # Enable stylix theming support
     sys.stylix-theme.enable = true;
 
+    # Enable wallpapers system for COSMIC
+    sys.wallpapers.enable = true;
+
     # Enable COSMIC Desktop Environment (NixOS 25.05+ native support)
     services = {
       desktopManager.cosmic.enable = true;

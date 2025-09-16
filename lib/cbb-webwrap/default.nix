@@ -11,10 +11,10 @@ let
         LOGFILE="/home/dustin/dev/nix/nixcfg/${desktopName}-debug.log"
         
         echo "Starting ${name} at $(date)" >> "$LOGFILE"
-        echo "Command: ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}" >> "$LOGFILE"
+        echo "Command: ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--profile-directory=WebApp-${desktopName} --app=${url}" else "${url}"}" >> "$LOGFILE"
         
         # Run with standard flags
-        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--profile-directory=WebApp-${desktopName} --app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
         
         # Store PID and wait
         PID=$!
@@ -28,7 +28,7 @@ let
           echo "❌ ${name} crashed with exit code $EXIT_CODE. See log: $LOGFILE" >&2
         fi
         '' else ''
-        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--profile-directory=WebApp-${desktopName} --app=${url}" else "${url}"}
         ''}
       '';
       desktopItem = makeDesktopItem {

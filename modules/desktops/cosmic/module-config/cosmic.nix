@@ -164,6 +164,142 @@
             "Panel",
         ]
       '';
+
+      # COSMIC Theme Mode Configuration
+      "cosmic/com.system76.CosmicTheme.Mode/v1/auto_switch".text = ''
+        true
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Mode/v1/is_dark".text = ''
+        true
+      '';
+
+      # COSMIC Dark Theme Configuration
+      "cosmic/com.system76.CosmicTheme.Dark/v1/accent".text = ''
+        (
+            red: 0.4941176470588235,
+            green: 0.7843137254901961,
+            blue: 0.9607843137254902,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/accent_button".text = ''
+        (
+            red: 0.4941176470588235,
+            green: 0.7843137254901961,
+            blue: 0.9607843137254902,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/background".text = ''
+        (
+            red: 0.06666666666666667,
+            green: 0.06666666666666667,
+            blue: 0.06666666666666667,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/button".text = ''
+        (
+            red: 0.16862745098039217,
+            green: 0.16862745098039217,
+            blue: 0.16862745098039217,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/destructive".text = ''
+        (
+            red: 0.9372549019607843,
+            green: 0.3137254901960784,
+            blue: 0.3137254901960784,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/destructive_button".text = ''
+        (
+            red: 0.9372549019607843,
+            green: 0.3137254901960784,
+            blue: 0.3137254901960784,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/link_button".text = ''
+        (
+            red: 0.4941176470588235,
+            green: 0.7843137254901961,
+            blue: 0.9607843137254902,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/icon_button".text = ''
+        (
+            red: 0.9372549019607843,
+            green: 0.9372549019607843,
+            blue: 0.9372549019607843,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/primary".text = ''
+        (
+            red: 0.13333333333333333,
+            green: 0.13333333333333333,
+            blue: 0.13333333333333333,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/secondary".text = ''
+        (
+            red: 0.20392156862745098,
+            green: 0.20392156862745098,
+            blue: 0.20392156862745098,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/success".text = ''
+        (
+            red: 0.5647058823529412,
+            green: 0.7647058823529411,
+            blue: 0.4745098039215686,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/text_button".text = ''
+        (
+            red: 0.9372549019607843,
+            green: 0.9372549019607843,
+            blue: 0.9372549019607843,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/warning".text = ''
+        (
+            red: 0.9568627450980393,
+            green: 0.7019607843137254,
+            blue: 0.3411764705882353,
+            alpha: 1.0,
+        )
+      '';
+
+      "cosmic/com.system76.CosmicTheme.Dark/v1/warning_button".text = ''
+        (
+            red: 0.9568627450980393,
+            green: 0.7019607843137254,
+            blue: 0.3411764705882353,
+            alpha: 1.0,
+        )
+      '';
     };
   };
 }

@@ -63,33 +63,6 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
 
-      # Daemon for managing long running shell commands
-      services.pueue = {
-        enable = true;
-        settings = {
-          client = {
-            restart_in_place = false;
-            read_local_logs = true;
-            show_confirmation_questions = false;
-            show_expanded_aliases = false;
-            dark_mode = false;
-            max_status_lines = null;
-            status_time_format = "%H:%M:%S";
-            status_datetime_format = ''
-              %Y-%m-%d
-              %H:%M:%S'';
-          };
-          daemon = {
-            pause_group_on_failure = false;
-            pause_all_on_failure = false;
-            callback_log_lines = 10;
-          };
-          shared = {
-            use_unix_socket = true;
-          };
-        };
-      };
-
       programs = {
         # nix-search-tv = {
         #   enable = true;

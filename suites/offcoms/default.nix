@@ -75,6 +75,10 @@ in
 
       # PDF
 
+      # Annotation
+      unstable.gromit-mpx # on-screen annotation tool
+      unstable.annotator # image annotation tool
+
       # evince # pdf viewer
       # texliveSmall # get pdflatex
       # pdf-sign # pdf signing utility

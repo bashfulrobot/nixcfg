@@ -18,6 +18,14 @@
                       Ctrl,
                       Alt,
                   ],
+                  key: "a",
+                  description: Some("Annotate"),
+              ): Spawn("com.github.phase1geo.annotator"),
+              (
+                  modifiers: [
+                      Ctrl,
+                      Alt,
+                  ],
                   key: "p",
               ): System(Screenshot),
           }

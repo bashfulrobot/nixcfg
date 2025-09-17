@@ -13,9 +13,6 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # Configure home-manager to backup conflicting files
-    home-manager.backupFileExtension = "bak";
-
     home-manager.users."${user-settings.user.username}" = {
       # Home Manager needs a bit of information about you and the
       # paths it should manage.

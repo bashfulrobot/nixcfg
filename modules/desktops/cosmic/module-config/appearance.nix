@@ -65,6 +65,36 @@ in
             style: Normal,
         )
       '';
+
+      # COSMIC Theme Mode Configuration
+      "cosmic/com.system76.CosmicTheme.Mode/v1/auto_switch" = {
+        text = ''
+          false
+        '';
+        force = true;
+      };
+
+      "cosmic/com.system76.CosmicTheme.Mode/v1/is_dark" = {
+        text = ''
+          true
+        '';
+        force = true;
+      };
+
+      # COSMIC Toolkit window controls - minimal interface
+      "cosmic/com.system76.CosmicTk/v1/show_maximize" = {
+        text = ''
+          false
+        '';
+        force = true;
+      };
+
+      "cosmic/com.system76.CosmicTk/v1/show_minimize" = {
+        text = ''
+          false
+        '';
+        force = true;
+      };
     };
 
     # Stylix theme integration - generate COSMIC themes from stylix colors for build script

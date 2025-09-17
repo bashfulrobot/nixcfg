@@ -8,10 +8,14 @@
   # COSMIC Desktop Environment Configuration
   # Import all COSMIC configuration modules
   imports = [
-    ./cosmic.nix
     ./appearance.nix
-    ./applications.nix
+    ./cosmic-edit.nix
+    ./cosmic-files.nix
+    ./cosmic-terminal.nix
+    ./dock.nix
     ./hw-settings.nix
+    ./panel.nix
     ./shortcuts.nix
+    ./tiling.nix
   ];
 }

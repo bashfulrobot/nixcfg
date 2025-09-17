@@ -64,12 +64,6 @@ in
     home-manager.users."${user-settings.user.username}" = {
 
       programs = {
-        # nix-search-tv = {
-        #   enable = true;
-        #   enableBashIntegration = true;
-        #   enableFishIntegration = true;
-        #   enableZshIntegration = true;
-        # };
         autojump = {
           enable = false;
           enableFishIntegration = true;
@@ -91,12 +85,6 @@ in
         bat = {
           enable = true;
         };
-
-        # navi = {
-        #   enable = true;
-        #   enableBashIntegration = true;
-        #   enableFishIntegration = true;
-        # };
 
         carapace = {
           enable = true;

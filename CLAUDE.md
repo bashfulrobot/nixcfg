@@ -182,7 +182,7 @@ This is a comprehensive NixOS configuration repository for Dustin Krysak, managi
 
 ### Flake Structure
 
-- **Inputs**: Primary nixos-unstable channel, home-manager, hardware configs, specialized tools (hyprflake, stylix, zen-browser, etc.)
+- **Inputs**: Primary nixos-unstable channel, home-manager, hardware configs, specialized tools (hyprflake, stylix, etc.)
 - **Systems**: Three main configurations (donkeykong/qbert as workstations, srv as server)
 - **Overlays**: Unstable packages available under `pkgs.unstable`
 - **specialArgs**: User settings, secrets, and isWorkstation flag passed to all modules
@@ -264,7 +264,7 @@ The repository uses an **auto-import** system (`lib/autoimport.nix`) that recurs
 - **Targeted File Check**: Use `jcheck <tab>` for syntax checking specific files with tab completion
 - Both `jlint` and `just lint` do the same thing, but `jlint` provides tab completion for file paths
 
-- always remember this doc as the valid niri flake options. https://github.com/sodiboo/niri-flake/blob/main/docs.md
+- always remember this doc as the valid niri flake options. <https://github.com/sodiboo/niri-flake/blob/main/docs.md>
 
 ### Feature Flag System
 
@@ -277,11 +277,12 @@ The repository uses a feature flag system at `~/.config/nix-flags/` to enable co
 #### Current Flag Files
 
 - `gnome-enabled` - Created when `desktops.gnome.enable = true`
-  - Enables GTK CSS fixes in `just build`, `just rebuild`, and `just upgrade`
+    - Enables GTK CSS fixes in `just build`, `just rebuild`, and `just upgrade`
 
 #### Usage Pattern
 
 **In NixOS modules** (create flag file):
+
 ```nix
 home-manager.users."${user-settings.user.username}" = {
   home.file.".config/nix-flags/feature-name".text = "";
@@ -289,6 +290,7 @@ home-manager.users."${user-settings.user.username}" = {
 ```
 
 **In justfile** (check for flag):
+
 ```bash
 if [[ -f "$HOME/.config/nix-flags/feature-name" ]]; then
   # Run feature-specific commands

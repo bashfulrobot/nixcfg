@@ -37,15 +37,7 @@
     #   url = "github:sodiboo/niri-flake";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    opnix.url = "github:brizzbuzz/opnix";
-    # hyprflake = {
-    #   url = "github:bashfulrobot/hyprflake";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
     stylix = {
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -70,9 +62,7 @@
       disko,
       nixos-hardware,
       # niri,
-      opnix,
       # hyprflake,
-      zen-browser,
       stylix,
       nixpkgs-zoom,
       ...
@@ -105,7 +95,6 @@
         nix-flatpak.nixosModules.nix-flatpak
         home-manager.nixosModules.home-manager
         disko.nixosModules.disko
-        opnix.nixosModules.default
         stylix.nixosModules.stylix
       ];
 
@@ -122,7 +111,6 @@
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {
             imports = [
-              opnix.homeManagerModules.default
               # niri.homeModules.niri
               # niri.homeModules.stylix
             ];
@@ -162,7 +150,6 @@
               secrets
               nixpkgs-unstable
               isWorkstation
-              zen-browser
               ;
           };
           system = "x86_64-linux";

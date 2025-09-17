@@ -50,10 +50,7 @@ in
           enable = false;
           setAsDefault = false;
         };
-        zen-browser = {
-          enable = false;
-          setAsDefault = false;
-        };
+
       };
 
       one-password.enable = true;

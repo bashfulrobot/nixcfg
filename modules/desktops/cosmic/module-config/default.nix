@@ -12,5 +12,6 @@
     ./appearance.nix
     ./applications.nix
     ./hw-settings.nix
+    ./shortcuts.nix
   ];
 }

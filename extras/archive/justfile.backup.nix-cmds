@@ -50,26 +50,26 @@ eval-check:
         nix eval .#nixosConfigurations.{{hostname}}.config --quiet 2>&1 | head -20
     fi
 
-# Fast check of changed nix files only  
+# Fast check of changed nix files only
 [group('dev')]
 check-diff:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "⚡ Checking changed nix files..."
-    
+
     # Get changed .nix files (working tree + staged)
     changed_files=$(git diff --name-only HEAD 2>/dev/null | grep '\.nix$' || true)
     staged_files=$(git diff --cached --name-only 2>/dev/null | grep '\.nix$' || true)
     all_changed=$(echo -e "$changed_files\n$staged_files" | sort | uniq | grep -v '^$' || true)
-    
+
     if [[ -z "$all_changed" ]]; then
         echo "✅ No changed .nix files"
         exit 0
     fi
-    
+
     echo "📁 Changed files:"
     echo "$all_changed" | sed 's/^/  /'
-    
+
     # Quick syntax check on each file
     echo "🔍 Syntax check..."
     failed_files=""
@@ -80,13 +80,13 @@ check-diff:
             fi
         fi
     done <<< "$all_changed"
-    
+
     if [[ -n "$failed_files" ]]; then
         echo "❌ Syntax errors in:"
         echo -e "$failed_files" | sed 's/^/  /'
         exit 1
     fi
-    
+
     # Quick eval test - only if files are in critical paths
     critical_paths="flake.nix modules/ suites/ hosts/"
     needs_eval=false
@@ -98,7 +98,7 @@ check-diff:
             fi
         done
     done <<< "$all_changed"
-    
+
     if [[ "$needs_eval" == "true" ]]; then
         echo "🔍 Checking options and missing imports..."
         # Try targeted evals to catch missing options quickly
@@ -112,7 +112,7 @@ check-diff:
     else
         echo "✅ No critical files changed, skipping option check"
     fi
-    
+
     echo "✅ All checks passed"
 
 # Dry run build test
@@ -246,13 +246,13 @@ theme-select:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "🎨 Select a base16 theme..."
-    
+
     # Create theme list
     themes=$(nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//" | sort')
-    
+
     # Use appropriate selector tool
     if command -v fuzzel >/dev/null && [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-        # Use fuzzel for tiling WMs (Hyprland, Niri, etc.)
+        # Use fuzzel for tiling WMs (Hyprland, etc.)
         selected=$(echo "$themes" | fuzzel --dmenu --prompt "Theme: " 2>/dev/null || echo "")
     elif command -v fzf >/dev/null; then
         # Use fzf for GNOME and other environments
@@ -263,7 +263,7 @@ theme-select:
         echo "💡 For now, use: just themes (to list) and just set-theme <name>"
         exit 1
     fi
-    
+
     if [[ -n "$selected" ]]; then
         echo "✨ Selected theme: $selected"
         echo "📝 To use this theme, update settings/settings.json:"
@@ -278,15 +278,15 @@ theme-select:
 set-theme theme rebuild="false":
     #!/usr/bin/env bash
     set -euo pipefail
-    
+
     # Validate theme exists
     if ! nix-shell -p base16-schemes --run 'ls /nix/store/*base16-schemes*/share/themes/ | sed "s/.yaml$//"' | grep -q "^{{theme}}$"; then
         echo "❌ Theme '{{theme}}' not found. Run 'just themes' to see available themes."
         exit 1
     fi
-    
+
     echo "🎨 Setting theme to: {{theme}}"
-    
+
     # Update settings.json
     if command -v jq >/dev/null; then
         jq '.theme."handmade-scheme" = "{{theme}}"' settings/settings.json > settings/settings.json.tmp
@@ -296,7 +296,7 @@ set-theme theme rebuild="false":
         echo "⚠️  jq not available. Please manually update settings/settings.json:"
         echo "   \"handmade-scheme\": \"{{theme}}\""
     fi
-    
+
     # Optionally rebuild
     if [[ "{{rebuild}}" == "true" ]]; then
         echo "🔄 Rebuilding system..."

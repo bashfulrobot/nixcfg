@@ -12,9 +12,6 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
-    nixos-hardware-fork = {
-      url = "github:bashfulrobot/nixos-hardware/master";
-    };
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
     };
@@ -77,7 +74,6 @@
       claude-desktop,
       disko,
       nixos-hardware,
-      nixos-hardware-fork,
       nixvim,
       # niri,
       opnix,

@@ -39,7 +39,6 @@ in
     cli = {
       direnv.enable = true;
       git.enable = true;
-      nixvim.enable = false;
       opencommit.enable = true;
       helix.enable = true;
       claude-code.enable = true;

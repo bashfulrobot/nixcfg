@@ -3,7 +3,6 @@
 {
   imports = [
     # Common modules
-    ../../modules/cli/nixvim
     ../../modules/cli/fish
     ../../modules/cli/starship
     ../../modules/cli/tailscale

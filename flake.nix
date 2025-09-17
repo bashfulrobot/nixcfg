@@ -33,11 +33,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      # url = "github:nix-community/nixvim/nixos-25.05";
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # niri = {
     #   url = "github:sodiboo/niri-flake";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -74,7 +69,6 @@
       claude-desktop,
       disko,
       nixos-hardware,
-      nixvim,
       # niri,
       opnix,
       # hyprflake,
@@ -111,14 +105,12 @@
         nix-flatpak.nixosModules.nix-flatpak
         home-manager.nixosModules.home-manager
         disko.nixosModules.disko
-        nixvim.nixosModules.nixvim
         opnix.nixosModules.default
         stylix.nixosModules.stylix
       ];
 
       serverModules = [
         home-manager.nixosModules.home-manager
-        nixvim.nixosModules.nixvim
         disko.nixosModules.disko
       ];
 

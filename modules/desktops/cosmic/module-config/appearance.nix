@@ -16,8 +16,25 @@ in
   # COSMIC Appearance and Theme Configuration
   home-manager.users."${user-settings.user.username}" = {
     xdg.configFile = {
-      # Wallpaper configuration for COSMIC Settings
-      "cosmic/com.system76.CosmicSettings.Wallpaper/v1/custom-images".text = wallpaperPath;
+      # Add wallpaper to custom images list (JSON array format)
+      "cosmic/com.system76.CosmicSettings.Wallpaper/v1/custom-images".text = ''
+        [
+            "${wallpaperPath}",
+        ]
+      '';
+
+      # Set the actual wallpaper background
+      "cosmic/com.system76.CosmicBackground/v1/all".text = ''
+        (
+            output: "all",
+            source: Path("${wallpaperPath}"),
+            filter_by_theme: true,
+            rotation_frequency: 300,
+            filter_method: Lanczos,
+            scaling_mode: Zoom,
+            sampling_method: Alphanumeric,
+        )
+      '';
 
       # COSMIC Toolkit interface configurations
       "cosmic/com.system76.CosmicTk/v1/interface_density".text = ''

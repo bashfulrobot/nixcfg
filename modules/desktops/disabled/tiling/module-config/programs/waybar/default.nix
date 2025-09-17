@@ -25,8 +25,7 @@
             margin-bottom = 0;
 
             modules-left = [
-              (if config.desktops.tiling.niri.enable then "niri/workspaces" 
-               else if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
+              (if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
                else "hyprland/workspaces")  # fallback
               "mpris"
             ];
@@ -40,8 +39,8 @@
                 children-class = "system-drawer";
                 transition-left-to-right = false;
               };
-              modules = ["custom/system-gear" "idle_inhibitor" "network" "bluetooth" "pulseaudio"] 
-                        ++ (lib.optionals (builtins.pathExists /sys/class/power_supply) ["battery"]) 
+              modules = ["custom/system-gear" "idle_inhibitor" "network" "bluetooth" "pulseaudio"]
+                        ++ (lib.optionals (builtins.pathExists /sys/class/power_supply) ["battery"])
                         ++ ["tray"];
             };
 
@@ -150,18 +149,6 @@
               active-only = false;
               on-click = "activate";
               show-special = false;
-            };
-
-            "niri/workspaces" = {
-              disable-scroll = true;
-              all-outputs = true;
-              active-only = true;
-              on-click = "activate";
-            };
-            "niri/window" = {
-              "separate-outputs" = true;
-              icon = true;
-              format = " ";
             };
 
             "hyprland/window" = {

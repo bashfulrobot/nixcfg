@@ -21,7 +21,6 @@
     cosmic.enable = true;
     # tiling = {
   #   hyprland.enable = false;
-  #   niri.enable = false ;
   # };
   };
 

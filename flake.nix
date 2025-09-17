@@ -33,17 +33,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # niri = {
-    #   url = "github:sodiboo/niri-flake";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     stylix = {
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixpkgs-zoom = {
-      url = "github:nixos/nixpkgs/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73";
     };
   };
 
@@ -61,10 +54,7 @@
       claude-desktop,
       disko,
       nixos-hardware,
-      # niri,
-      # hyprflake,
       stylix,
-      nixpkgs-zoom,
       ...
     }:
     let
@@ -111,8 +101,6 @@
           extraSpecialArgs = { inherit user-settings secrets inputs; };
           users."${user-settings.user.username}" = {
             imports = [
-              # niri.homeModules.niri
-              # niri.homeModules.stylix
             ];
           };
         };

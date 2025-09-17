@@ -58,7 +58,6 @@ in
       br-gcal.enable = true;
       br-gmail.enable = true;
       br-drive.enable = true;
-      zoom-us.enable = false;
       zoom-flatpak.enable = true;
       slack.enable = true;
       signal.enable = true;
@@ -91,8 +90,6 @@ in
 
       # Communications & AI
       # inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support - temporarily disabled due to hash mismatch
-
-      #unstable.zoom-us
 
       # # IM
       # fractal # Matrix Client

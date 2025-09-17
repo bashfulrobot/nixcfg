@@ -202,7 +202,7 @@ in
       enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk # Fallback for better app compatibility
-        xdg-desktop-portal-gnome # Niri claims this is needed for screensharing in some apps
+        xdg-desktop-portal-gnome
       ];
     };
 

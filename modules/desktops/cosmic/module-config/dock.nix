@@ -29,7 +29,7 @@
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/opacity" = {
         text = ''
-          1.0
+          0.0
         '';
         force = true;
       };
@@ -43,7 +43,7 @@
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/expand_to_edges" = {
         text = ''
-          true
+          false
         '';
         force = true;
       };
@@ -82,7 +82,7 @@
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/anchor_gap" = {
         text = ''
-          false
+          true
         '';
         force = true;
       };
@@ -96,14 +96,14 @@
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/border_radius" = {
         text = ''
-          0
+          160
         '';
         force = true;
       };
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/margin" = {
         text = ''
-          0
+          4
         '';
         force = true;
       };
@@ -159,7 +159,7 @@
 
       "cosmic/com.system76.CosmicPanel.Dock/v1/anchor" = {
         text = ''
-          Left
+          Bottom
         '';
         force = true;
       };

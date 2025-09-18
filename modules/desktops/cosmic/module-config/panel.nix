@@ -59,7 +59,7 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/anchor_gap" = {
         text = ''
-          true
+          false
         '';
         force = true;
       };
@@ -108,7 +108,7 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/anchor" = {
         text = ''
-          Top
+          Bottom
         '';
         force = true;
       };
@@ -149,14 +149,14 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/border_radius" = {
         text = ''
-          8
+          160
         '';
         force = true;
       };
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/margin" = {
         text = ''
-          4
+          0
         '';
         force = true;
       };

@@ -30,6 +30,10 @@
       enable = true;
       host.qbert = true;
     };
+    ollama = {
+      enable = true;
+      host.qbert = true;
+    };
   };
 
   dev = {

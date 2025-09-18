@@ -36,6 +36,7 @@ in
       kooha # Screen recorder for x11/Wayland
       gcolor3
       # ydotool # xdotool alternative. window automation
+      unstable.deja-dup # backup tool
       tcpdump
       usbutils # usb utilities like lsusb
       pciutils # list all PCI devic

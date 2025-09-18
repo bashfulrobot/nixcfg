@@ -18,6 +18,7 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
+    nixai.url = "github:olafkfreund/nix-ai-help";
     claude-desktop = {
       url = "github:k3d3/claude-desktop-linux-flake";
       inputs = {
@@ -55,6 +56,7 @@
       disko,
       nixos-hardware,
       stylix,
+      nixai,
       ...
     }:
     let

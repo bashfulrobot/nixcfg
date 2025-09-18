@@ -30,10 +30,13 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    # Install Signal and the custom desktop file
+    # Install only the custom desktop file (it references the Signal binary)
     environment.systemPackages = with pkgs; [
       unstable.signal-desktop
       signalDesktopItem
     ];
+
+    # Override the original desktop file to prevent duplicates
+    environment.etc."share/applications/signal-desktop.desktop".source = lib.mkForce "${signalDesktopItem}/share/applications/signal-desktop.desktop";
   };
 }

@@ -3,6 +3,7 @@
   pkgs,
   lib,
   user-settings,
+  inputs,
   ...
 }:
 let
@@ -26,7 +27,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      inputs.nixai.packages.${system}.default # AI-Powered NixOS Companion
+      inputs.nixai.packages.${pkgs.system}.default # AI-Powered NixOS Companion
       spacedrive # File explorer
       playonlinux # Wine frontend
       # ephemeral removed in 25.05 - archived upstream

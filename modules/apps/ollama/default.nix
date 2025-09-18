@@ -57,6 +57,7 @@ in {
     # Open WebUI for browser-based interaction
     services.open-webui = lib.mkIf cfg.openWebUI {
       enable = true;
+      port = 3000;  # Use port 3000 to avoid conflicts with Docker containers
     };
 
     # System packages for LLM development and interaction

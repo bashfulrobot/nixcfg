@@ -19,6 +19,7 @@
       url = "github:numtide/flake-utils";
     };
     nixai.url = "github:olafkfreund/nix-ai-help";
+    nix-ai-tools.url = "github:numtide/nix-ai-tools";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +50,7 @@
       nixos-hardware,
       stylix,
       nixai,
+      nix-ai-tools,
       ...
     }:
     let

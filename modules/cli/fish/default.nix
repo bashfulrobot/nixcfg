@@ -354,7 +354,7 @@ let
         echo "No matches found for pattern: $argv"
         return 1
       end
-      
+
       echo "Found matches:"
       for match in $matches
         if test -d $match
@@ -368,11 +368,11 @@ let
           echo "📄 $match"
         end
       end
-      
+
       echo
       read -P "Remove all these items? [y/N]: " -n 1 confirm
       echo
-      
+
       if test "$confirm" = "y" -o "$confirm" = "Y"
         for match in $matches
           if test -d $match
@@ -388,7 +388,7 @@ let
         echo "❌ Operation cancelled"
       end
     '';
-    
+
     jlint = ''
       if test (count $argv) -eq 0
         ${pkgs.just}/bin/just lint
@@ -396,31 +396,31 @@ let
         ${pkgs.just}/bin/just lint $argv[1]
       end
     '';
-    
+
     jcheck = ''
       if test (count $argv) -eq 0
         echo "Usage: jcheck <file.nix> [file2.nix ...]"
         echo "Example: jcheck modules/apps/firefox/default.nix"
         return 1
       end
-      
+
       echo "⚡ Syntax checking specified files..."
-      
+
       set failed_files
       set checked_count 0
-      
+
       for file in $argv
         if not test -f "$file"
           echo "❌ File not found: $file"
           set failed_files $failed_files $file
           continue
         end
-        
+
         if not string match -q "*.nix" $file
           echo "⚠️  Skipping non-nix file: $file"
           continue
         end
-        
+
         echo "  📄 $file"
         if not nix-instantiate --parse "$file" >/dev/null 2>&1
           echo "    ❌ Syntax error"
@@ -430,12 +430,12 @@ let
         end
         set checked_count (math $checked_count + 1)
       end
-      
+
       if test (count $failed_files) -gt 0
         echo "❌ Found syntax errors in "(count $failed_files)" file(s)"
         return 1
       end
-      
+
       echo "✅ All $checked_count files have valid syntax"
     '';
   };
@@ -526,7 +526,7 @@ let
     "vms"
     "yless"
     "nxb"
-    "nxr" 
+    "nxr"
     "nxu"
     "nxt"
     "kubitect"
@@ -542,7 +542,6 @@ let
     hm-logs = "sudo systemctl restart home-manager-dustin.service; journalctl -xeu home-manager-dustin.service";
     tailscale-up-lt = "sudo tailscale up --ssh --accept-dns --accept-routes --operator=$USER";
     tailscale-up-dt = "sudo tailscale up --operator=$USER --ssh --accept-dns";
-    oc = "~/.npm-packages/bin/opencommit";
     bless = "sudo xattr -r -d com.apple.quarantine";
     ncdu = "${pkgs.gdu}/bin/gdu";
     ".." = "cd ..";
@@ -697,7 +696,7 @@ in
             complete -c jlint -xa "(__fish_complete_directories)"
             complete -c jlint -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
           '';
-          
+
           ".config/fish/completions/jcheck.fish".text = ''
             # Tab completion for jcheck function - supports multiple files
             complete -c jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"

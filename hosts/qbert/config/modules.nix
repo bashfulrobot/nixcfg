@@ -25,7 +25,6 @@
   };
 
   apps = {
-    claude-desktop.enable = true;
     syncthing = {
       enable = true;
       host.qbert = true;

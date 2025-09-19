@@ -19,13 +19,6 @@
       url = "github:numtide/flake-utils";
     };
     nixai.url = "github:olafkfreund/nix-ai-help";
-    claude-desktop = {
-      url = "github:k3d3/claude-desktop-linux-flake";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,7 +45,6 @@
       home-manager,
       nix-flatpak,
       flake-utils,
-      claude-desktop,
       disko,
       nixos-hardware,
       stylix,

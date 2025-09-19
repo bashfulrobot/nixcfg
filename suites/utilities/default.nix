@@ -20,7 +20,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    cli = { };
+    cli = { claude-code-router.enable = true; };
 
     apps = {
       satty.enable = true;

@@ -20,14 +20,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    cli = { claude-code-router.enable = true; };
+    cli = { };
 
     apps = {
       satty.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
-      inputs.nixai.packages.${pkgs.system}.default # AI-Powered NixOS Companion
+
       spacedrive # File explorer
       playonlinux # Wine frontend
       # ephemeral removed in 25.05 - archived upstream

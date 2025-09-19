@@ -40,6 +40,13 @@
     cachix.enable = true;
   };
 
+  cli = {
+    restic = {
+      enable = true;
+      folderName = "qbert";
+    };
+  };
+
   suites = {
     ai.enable = true;
   };

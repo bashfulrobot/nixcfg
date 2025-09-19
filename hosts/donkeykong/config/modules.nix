@@ -33,6 +33,10 @@
     # not powerful enough for full suite.
     gemini-cli.enable = true;
     claude-code.enable = true;
+    restic = {
+      enable = true;
+      folderName = "donkeykong";
+    };
   };
 
   # apps.syncthing = {

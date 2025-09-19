@@ -1,4 +1,4 @@
-{ user-settings, lib, pkgs, config, ... }:
+{ user-settings, lib, pkgs, config, inputs, ... }:
 let
   cfg = config.cli.gemini-cli;
   # The content of the commit.md file, with the Gemini CLI integration part removed.
@@ -100,10 +100,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Assuming gemini-cli is available in unstable.
-    # If not, this will need to be adjusted.
     environment.systemPackages = with pkgs; [
-      unstable.gemini-cli
+      inputs.nix-ai-tools.packages.${pkgs.system}.gemini-cli
     ];
 
     home-manager.users."${user-settings.user.username}" = {

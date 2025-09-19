@@ -24,22 +24,17 @@ in
     environment.systemPackages = with pkgs; [
       inputs.nixai.packages.${pkgs.system}.default # AI-Powered NixOS Companion
 
-      lmstudio # Local LLMs management tool
+      #lmstudio # Local LLMs management tool
 
       # nix-ai-tools packages
-      inputs.nix-ai-tools.packages.${pkgs.system}.claude-desktop
       inputs.nix-ai-tools.packages.${pkgs.system}.backlog-md
-      inputs.nix-ai-tools.packages.${pkgs.system}.catnip
-      inputs.nix-ai-tools.packages.${pkgs.system}.goose-cli
-      inputs.nix-ai-tools.packages.${pkgs.system}.opencode
-      inputs.nix-ai-tools.packages.${pkgs.system}.qwen-code
     ];
 
     cli = {
       claude-code.enable = true;
       gemini-cli.enable = true;
-      catwalk.enable = true;
-      crush.enable = true;
+      catwalk.enable = false;
+      crush.enable = false;
     };
 
     home-manager.users."${user-settings.user.username}" = {

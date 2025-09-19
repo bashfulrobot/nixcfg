@@ -35,6 +35,7 @@ in {
       terminal.enable = true;
       utilities.enable = true;
       kong.enable = true;
+      ai.enable = true;
     };
 
     sys = {

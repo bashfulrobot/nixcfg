@@ -41,8 +41,7 @@ in
       libxslt # A C library and tools to do XSL transformations - needed in my terraform scripts
 
       # --- Backup
-      restic # backup program
-      autorestic # restic automation tool
+      # restic and autorestic moved to cli.restic module
 
       # --- Other
       ctop # container process monitoring

@@ -39,4 +39,8 @@
     nix.enable = true;
     cachix.enable = true;
   };
+
+  suites = {
+    ai.enable = true;
+  };
 }

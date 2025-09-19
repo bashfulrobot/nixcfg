@@ -28,8 +28,11 @@
   # tiling.hyprland.enable = false;
   };
 
-  apps = {
-
+  cli = {
+    # only a subset of ai tools needed on this host.
+    # not powerful enough for full suite.
+    gemini-cli.enable = true;
+    claude-code.enable = true;
   };
 
   # apps.syncthing = {

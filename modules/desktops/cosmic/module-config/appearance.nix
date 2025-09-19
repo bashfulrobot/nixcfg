@@ -5,7 +5,7 @@
   ...
 }:
 let
-  wallpaperPath = config.sys.wallpapers.getWallpaper "professional";
+  wallpaperPath = config.sys.wallpapers.getWallpaper config.sys.stylix-theme.wallpaperType;
 
   # Import theme generation functions from separate module
   themeGen = import ./theme-gen.nix { inherit config lib; };

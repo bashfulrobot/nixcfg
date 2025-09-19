@@ -1,4 +1,4 @@
-{ user-settings, lib, pkgs, config, ... }:
+{ user-settings, lib, pkgs, config, inputs, ... }:
 let 
   cfg = config.cli.claude-code;
 in {
@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.claude-code
+      inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
     ];
 
     home-manager.users."${user-settings.user.username}" = {

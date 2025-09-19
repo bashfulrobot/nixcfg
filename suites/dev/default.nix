@@ -39,10 +39,8 @@ in
     cli = {
       direnv.enable = true;
       git.enable = true;
-      opencommit.enable = true;
       helix.enable = true;
-      claude-code.enable = true;
-      gemini-cli.enable = true;
+
     };
 
     environment.systemPackages = with pkgs; [

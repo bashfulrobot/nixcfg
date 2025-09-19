@@ -4,7 +4,6 @@
   imports = [
     # Universal Modules
     ../../../modules/cli/git
-    ../../../modules/cli/opencommit
     ../../../modules/sys/ssh
     ../../../modules/sys/fonts
     ../../../modules/cli/starship
@@ -36,7 +35,6 @@
     wezterm.enable = false;
     kitty.enable = true;
     git.enable = true;
-    opencommit.enable = true;
     fish.enable = true;
     starship.enable = true;
     nixvim.enable = false;

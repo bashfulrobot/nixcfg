@@ -66,8 +66,6 @@ in
     cli = {
       note.enable = true;
       espanso.enable = false;
-      claude-code.enable = true;
-      flameshot.enable = false;
     };
 
     environment.systemPackages = with pkgs; [
@@ -91,9 +89,6 @@ in
       unstable.morgen # AI calendar - testing
       unstable.todoist-electron # task manager
       # planify
-
-      # Communications & AI
-      # inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs # AI assistant with MCP support - temporarily disabled due to hash mismatch
 
       # # IM
       # fractal # Matrix Client

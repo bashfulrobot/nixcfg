@@ -61,8 +61,9 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      restic
-      autorestic
+      unstable.restic
+      unstable.autorestic
+      unstable.backblaze-b2
     ];
 
     home-manager.users."${user-settings.user.username}" = {
@@ -146,7 +147,7 @@ global:
         Type = "oneshot";
         ExecStart = "${pkgs.writeShellScript "autorestic-backup" ''
           cd /home/${user-settings.user.username}
-          ${pkgs.autorestic}/bin/autorestic backup -a
+          ${pkgs.unstable.autorestic}/bin/autorestic backup -a
         ''}";
         User = user-settings.user.username;
       };

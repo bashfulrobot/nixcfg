@@ -71,7 +71,7 @@ in
 version: 2
 
 backends:
-  b2-${hostname}:
+  b2-${cfg.folderName}:
     type: b2
     path: 'ws-bups:${cfg.folderName}'
     env:
@@ -80,11 +80,11 @@ backends:
       RESTIC_PASSWORD: ${secrets.restic.restic_password}
 
 locations:
-  ${hostname}-home:
+  ${cfg.folderName}-backup:
     from:
 ${lib.concatMapStringsSep "\n" (path: "      - ${path}") cfg.backupPaths}
     to:
-      - b2-${hostname}
+      - b2-${cfg.folderName}
     cron: "${cfg.schedule}"
     forget: prune
     options:
@@ -107,18 +107,41 @@ global:
         (writeShellScriptBin "restic-backup" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
+          echo "Backing up all configured paths..."
           autorestic backup -a
         '')
 
         (writeShellScriptBin "restic-restore" ''
           #!/bin/sh
+          cd /home/${user-settings.user.username}
           if [ -z "$1" ]; then
-            echo "Usage: restic-restore <destination-path>"
-            echo "Example: restic-restore /tmp/restore"
+            echo "Usage: restic-restore <destination-path> [include-pattern]"
+            echo "Example: restic-restore /tmp/restore-all                    # Restore everything"
+            echo "Example: restic-restore /tmp/restore-docs Documents        # Restore only Documents folder"
+            echo "Example: restic-restore /tmp/restore-ssh .ssh              # Restore only .ssh folder"
+            echo ""
+            echo "Available folders to restore:"
+${lib.concatMapStringsSep "\n" (path: "            echo \"  - ${lib.last (lib.splitString "/" path)}\"") cfg.backupPaths}
             exit 1
           fi
+
+          DESTINATION="$1"
+          INCLUDE_PATTERN="$2"
+
+          if [ -n "$INCLUDE_PATTERN" ]; then
+            echo "Restoring files matching '$INCLUDE_PATTERN' to '$DESTINATION'..."
+            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" --include "*$INCLUDE_PATTERN*"
+          else
+            echo "Restoring all files to '$DESTINATION'..."
+            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION"
+          fi
+        '')
+
+        (writeShellScriptBin "restic-list-files" ''
+          #!/bin/sh
           cd /home/${user-settings.user.username}
-          autorestic exec -a -- restore latest --target "$1"
+          echo "Listing files in latest snapshot..."
+          autorestic exec -l ${cfg.folderName}-backup -- ls latest
         '')
 
         (writeShellScriptBin "restic-status" ''
@@ -128,7 +151,7 @@ global:
           autorestic info | grep -v -E "(B2_ACCOUNT_|RESTIC_PASSWORD|account_id|account_key)"
           echo ""
           echo "=== Recent Snapshots ==="
-          autorestic exec -a -- snapshots --last 10
+          autorestic exec -l ${cfg.folderName}-backup -- snapshots --last 10
         '')
 
         (writeShellScriptBin "restic-init" ''

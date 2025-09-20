@@ -43,7 +43,7 @@
   cli = {
     restic = {
       enable = true;
-      folderName = "qbert";
+      folderName = "tower";
       backupPaths = [
         "/home/${user-settings.user.username}/.gnupg"
         "/home/${user-settings.user.username}/.kube"

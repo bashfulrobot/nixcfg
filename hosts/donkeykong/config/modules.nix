@@ -42,7 +42,6 @@
         "/home/${user-settings.user.username}/.ssh"
         "/home/${user-settings.user.username}/Desktop"
         "/home/${user-settings.user.username}/dev"
-        "/home/${user-settings.user.username}/docker"
         "/home/${user-settings.user.username}/Documents"
         "/home/${user-settings.user.username}/Pictures"
       ];

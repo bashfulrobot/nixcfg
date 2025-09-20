@@ -1,0 +1,168 @@
+# Visual Standardization Plan for Shell Scripts and Justfiles
+# =========================================================
+
+## Current State Analysis
+
+Based on analysis of the codebase, I found the following visual formatting patterns:
+
+### Existing Formatting Patterns Found:
+
+1. **Shell Scripts - Advanced Formatting** (deploy-nixos.sh, backup-icons.sh):
+   - ANSI color variables: RED='\033[0;31m', GREEN='\033[0;32m', etc.
+   - Logging functions: log_info(), log_success(), log_warning(), log_error()
+   - Rich boxed sections for major operations
+   - Comprehensive emoji usage with semantic meaning
+
+2. **Shell Scripts - Simple Formatting** (audio-list.sh, fix-gtk-css.sh):
+   - Basic emoji prefixes: 🎤, 🔊, ✅, ❌
+   - Simple echo statements
+   - Minimal visual enhancement
+
+3. **Shell Scripts - Color Only** (rebuild.sh from tiling):
+   - Basic ANSI colors for status messages
+   - No emojis or visual structure
+
+4. **Justfile - Rich Formatting**:
+   - Extensive emoji usage with semantic grouping
+   - Boxed headers for sections (📋, 🔧, 💡)
+   - Consistent visual hierarchy
+   - Color support detection through nix-flags
+
+5. **Embedded Scripts in Nix** (restic module):
+   - Basic functionality with minimal formatting
+   - Plain text output with some echo statements
+
+## Standardization Plan
+
+### Phase 1: Core Infrastructure (ZERO functionality changes)
+1. Create shared visual components library at `extras/helpers/visual-lib.sh`
+2. Define standard color palette and emoji conventions
+3. Create reusable formatting functions
+4. Establish logging severity levels
+
+### Phase 2: Script-by-Script Migration
+1. **High-Impact Scripts First** (most visible to users):
+   - justfile recipes (enhance existing good patterns)
+   - deploy-nixos.sh (already good, minor refinements)
+   - backup-icons.sh (already good, minor refinements)
+
+2. **Development Scripts**:
+   - All scripts in `extras/helpers/`
+   - Audio switch scripts in `modules/cli/audio-switch/scripts/`
+   - Tiling WM scripts in `modules/desktops/disabled/tiling/module-config/scripts/`
+
+3. **Embedded Scripts within Nix Configurations**:
+   - Scripts within Nix `writeShellScriptBin` calls (restic module, audio-switch, etc.)
+   - Home-manager script generation within modules
+   - System service scripts defined in Nix expressions
+   - Inline scripts in justfile recipes that call Nix-generated scripts
+
+### Phase 3: Advanced Enhancements
+1. Progress indicators for long-running operations
+2. Rich help text formatting
+3. Interactive prompts with visual consistency
+4. Status reporting standardization
+
+## Technical Implementation Strategy
+
+### 1. Visual Library Functions (`extras/helpers/visual-lib.sh`)
+- Color detection and fallback handling
+- Logging functions with severity levels
+- Box drawing functions for sections
+- Progress indicators with Gum spinner support
+- Status reporting functions
+- Emoji constants with semantic naming
+- **Gum integration functions** (confirmed available: `/etc/profiles/per-user/dustin/bin/gum`)
+- Enhanced interactive prompts, menus, and styled output
+
+### 2. Migration Process Per Script Type
+
+#### A. Standalone Shell Scripts
+- Source the visual library
+- Replace hardcoded colors with standard functions
+- Standardize emoji usage per guidelines
+- Add section headers where appropriate
+- Enhance error reporting with visual cues
+- PRESERVE ALL EXISTING FUNCTIONALITY
+
+#### B. Nix-Embedded Scripts (writeShellScriptBin, etc.)
+- Create visual library function for Nix inclusion
+- Update Nix expressions to include visual library inline
+- Modify script content within Nix strings to use standard formatting
+- Ensure visual library functions work within Nix evaluation context
+- Test scripts both in development and after system rebuild
+
+### 3. Justfile Enhancements
+- Leverage existing good patterns
+- Add more visual grouping for complex operations
+- Enhance progress feedback for long-running tasks
+- Standardize parameter help formatting
+
+## Risk Mitigation
+
+1. **Zero Functionality Changes**: Each script maintains identical behavior
+2. **Backwards Compatibility**: Visual library designed to gracefully degrade
+3. **Incremental Migration**: Can be done script-by-script with no urgency
+4. **Testing Strategy**: Compare script outputs before/after for functionality
+5. **Rollback Plan**: Visual changes are additive, easily reversible
+
+## Success Metrics
+
+1. **Consistency**: All scripts use same color palette and emoji conventions
+2. **Usability**: Improved visual feedback for users during operations
+3. **Maintainability**: Centralized visual formatting reduces duplication
+4. **Accessibility**: Proper fallbacks for terminals without emoji/color support
+
+## Implementation Priority
+
+**High Priority** (User-facing, frequently used - **Gum enhancement candidates**):
+1. justfile recipes (enhance existing patterns)
+2. deploy-nixos.sh (excellent candidate for Gum menus and progress spinners)
+3. backup-icons.sh and create-branded-icons.sh (Gum confirms and progress)
+4. fix-gtk-css.sh
+5. Audio switch scripts (Gum selection menus)
+
+**Medium Priority** (Developer tools):
+1. All extras/helpers/ scripts
+2. Tiling WM utility scripts
+3. Development and testing scripts
+
+**Low Priority** (Embedded/rarely seen):
+1. Nix-embedded scripts in modules (restic, audio-switch convenience scripts)
+2. Complex tiling WM scripts in module-config directories
+3. Rofi launcher scripts
+4. System service scripts within Nix expressions
+5. Home-manager generated scripts
+
+## Timeline Estimate
+
+- **Week 1**: Create visual library with Gum integration and guidelines
+- **Week 2**: Migrate high-priority user-facing scripts (prioritize Gum candidates)
+- **Week 3**: Migrate medium-priority developer scripts
+- **Week 4**: Migrate remaining scripts and documentation
+
+## Immediate Gum Enhancement Opportunities
+
+Since Gum is confirmed available at `/etc/profiles/per-user/dustin/bin/gum`, these scripts can be enhanced immediately:
+
+### Standalone Scripts:
+1. **deploy-nixos.sh**: Replace menu selections with `gum choose`, add `gum spin` for long operations
+2. **backup-icons.sh**: Use `gum confirm` for destructive operations, `gum choose` for app selection
+3. **Audio switch scripts**: Perfect for `gum choose` selection menus instead of basic echo lists
+
+### Nix-Embedded Scripts:
+1. **Restic convenience scripts** (modules/cli/restic/default.nix):
+   - `restic-restore` script: Use `gum choose` for backend selection
+   - `restic-status` script: Add `gum style` for section headers
+   - `restic-list-files` script: Enhanced help with `gum style`
+
+2. **Audio switch module scripts** (modules/cli/audio-switch/):
+   - Replace simple echo lists with `gum choose` menus
+   - Add `gum confirm` for device switches
+
+### Special Considerations for Nix-Embedded Scripts:
+- Visual library must be embedded inline or referenced via package dependencies
+- Gum availability should be checked since it might not be in system PATH during script execution
+- Test both during development (nix-shell) and after system rebuild
+
+This approach ensures maximum visual impact with minimal risk and allows for gradual implementation without disrupting existing workflows.

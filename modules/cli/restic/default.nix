@@ -56,6 +56,20 @@ in
         };
         description = "Retention policy for backups.";
       };
+
+      localBackup = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Enable local backup target in addition to cloud backup.";
+        };
+
+        path = lib.mkOption {
+          type = lib.types.str;
+          description = "Local path for backup storage. Can be any accessible path: USB drive, network mount, second drive, etc.";
+          example = "/run/media/${user-settings.user.username}/dk-data/Restic-backups";
+        };
+      };
     };
   };
 
@@ -67,7 +81,14 @@ in
     ];
 
     home-manager.users."${user-settings.user.username}" = {
-      home.file.".autorestic.yml".text = ''
+      home.file.".autorestic.yml".text =
+        let
+          # Build list of target backends
+          targets = [ "b2-${cfg.folderName}" ] ++ lib.optional cfg.localBackup.enable "local-${cfg.folderName}";
+
+          # Generate target list for YAML
+          targetsList = lib.concatMapStringsSep "\n" (target: "      - ${target}") targets;
+        in ''
 version: 2
 
 backends:
@@ -77,14 +98,13 @@ backends:
     env:
       B2_ACCOUNT_ID: ${secrets.restic.b2_account_id}
       B2_ACCOUNT_KEY: ${secrets.restic.b2_account_key}
-      RESTIC_PASSWORD: ${secrets.restic.restic_password}
-
+      RESTIC_PASSWORD: ${secrets.restic.restic_password}${lib.optionalString cfg.localBackup.enable "\n  local-${cfg.folderName}:\n    type: local\n    path: '${cfg.localBackup.path}/${cfg.folderName}'\n    env:\n      RESTIC_PASSWORD: ${secrets.restic.restic_password}"}
 locations:
   ${cfg.folderName}-backup:
     from:
 ${lib.concatMapStringsSep "\n" (path: "      - ${path}") cfg.backupPaths}
     to:
-      - b2-${cfg.folderName}
+${targetsList}
     cron: "${cfg.schedule}"
     forget: prune
     options:
@@ -115,10 +135,17 @@ global:
           #!/bin/sh
           cd /home/${user-settings.user.username}
           if [ -z "$1" ]; then
-            echo "Usage: restic-restore <destination-path> [include-pattern]"
-            echo "Example: restic-restore /tmp/restore-all                    # Restore everything"
-            echo "Example: restic-restore /tmp/restore-docs Documents        # Restore only Documents folder"
-            echo "Example: restic-restore /tmp/restore-ssh .ssh              # Restore only .ssh folder"
+            echo "Usage: restic-restore <destination-path> [include-pattern] [backend]"
+            echo "Example: restic-restore /tmp/restore-all                           # Restore everything from cloud"
+            echo "Example: restic-restore /tmp/restore-docs Documents               # Restore only Documents folder"
+            echo "Example: restic-restore /tmp/restore-ssh .ssh                     # Restore only .ssh folder"${lib.optionalString cfg.localBackup.enable ''
+            echo "Example: restic-restore /tmp/restore-all \"\" local                # Restore from local backup"
+            echo "Example: restic-restore /tmp/restore-docs Documents local        # Restore Documents from local backup"''}
+            echo ""
+            echo "=== Current Configuration ==="
+            echo "Location: ${cfg.folderName}-backup"
+            echo "Available backends:"
+            autorestic info | grep -A 50 "Backend:" | grep "Type\|Path" | sed 's/^/  /'
             echo ""
             echo "Available folders to restore:"
 ${lib.concatMapStringsSep "\n" (path: "            echo \"  - ${lib.last (lib.splitString "/" path)}\"") cfg.backupPaths}
@@ -127,31 +154,62 @@ ${lib.concatMapStringsSep "\n" (path: "            echo \"  - ${lib.last (lib.sp
 
           DESTINATION="$1"
           INCLUDE_PATTERN="$2"
+          BACKEND="''${3:-cloud}"
+
+          # Select backend
+          if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable '' && [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
+            BACKEND_FLAG="--from local-${cfg.folderName}"
+            echo "Restoring from local backup..."
+          else
+            BACKEND_FLAG="--from b2-${cfg.folderName}"
+            echo "Restoring from cloud backup..."
+          fi
 
           if [ -n "$INCLUDE_PATTERN" ]; then
             echo "Restoring files matching '$INCLUDE_PATTERN' to '$DESTINATION'..."
-            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" --include "*$INCLUDE_PATTERN*"
+            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG --include "*$INCLUDE_PATTERN*"
           else
             echo "Restoring all files to '$DESTINATION'..."
-            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION"
+            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG
           fi
         '')
 
         (writeShellScriptBin "restic-list-files" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          echo "Listing files in latest snapshot..."
-          autorestic exec -l ${cfg.folderName}-backup -- ls latest
+          BACKEND="''${1:-cloud}"
+
+          if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable '' && [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
+            echo "Listing files in latest local snapshot..."
+            autorestic exec -b local-${cfg.folderName} -- ls latest
+          elif [ "$BACKEND" = "cloud" ]; then
+            echo "Listing files in latest cloud snapshot..."
+            autorestic exec -b b2-${cfg.folderName} -- ls latest
+          else
+            echo "Usage: restic-list-files [backend]"
+            echo ""
+            echo "=== Current Configuration ==="
+            echo "Location: ${cfg.folderName}-backup"
+            echo "Available backends:"
+            autorestic info | grep -A 50 "Backend:" | grep "Type\|Path" | sed 's/^/  /'
+          fi
         '')
 
         (writeShellScriptBin "restic-status" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          echo "=== Autorestic Status ==="
+          echo "=== Autorestic Configuration ==="
           autorestic info | grep -v -E "(B2_ACCOUNT_|RESTIC_PASSWORD|account_id|account_key)"
           echo ""
-          echo "=== Recent Snapshots ==="
-          autorestic exec -l ${cfg.folderName}-backup -- snapshots --last 10
+          echo "=== Cloud Backup Status ==="
+          autorestic exec -b b2-${cfg.folderName} -- snapshots --last 5${lib.optionalString cfg.localBackup.enable ''
+          echo ""
+          echo "=== Local Backup Status ==="
+          if [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]; then
+            autorestic exec -b local-${cfg.folderName} -- snapshots --last 5
+          else
+            echo "Local backup directory not accessible: ${cfg.localBackup.path}/${cfg.folderName}"
+          fi''}
         '')
 
         (writeShellScriptBin "restic-init" ''

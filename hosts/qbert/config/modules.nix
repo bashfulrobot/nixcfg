@@ -55,6 +55,10 @@
         "/home/${user-settings.user.username}/Documents"
         "/home/${user-settings.user.username}/Pictures"
       ];
+      localBackup = {
+        enable = true;
+        path = "/run/media/${user-settings.user.username}/dk-data/Restic-backups";
+      };
     };
   };
 

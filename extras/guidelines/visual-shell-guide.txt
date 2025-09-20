@@ -1,0 +1,494 @@
+# Visual Shell and Justfile Guidelines
+# ===================================
+
+## Color Palette Standards
+
+### ANSI Color Variables
+Use these standardized color variables in all scripts:
+
+```bash
+# Standard Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+GRAY='\033[0;37m'
+NC='\033[0m'  # No Color
+
+# Bright/Bold variants
+BRIGHT_RED='\033[1;31m'
+BRIGHT_GREEN='\033[1;32m'
+BRIGHT_YELLOW='\033[1;33m'
+BRIGHT_BLUE='\033[1;34m'
+```
+
+### Color Usage Semantics
+- **RED**: Errors, critical warnings, destructive operations
+- **GREEN**: Success, completion, positive status
+- **YELLOW**: Warnings, important notices, prompts
+- **BLUE**: Information, process descriptions, headers
+- **PURPLE**: Debug information, technical details
+- **CYAN**: File paths, URLs, code snippets
+- **GRAY**: Secondary information, metadata
+
+## Emoji Standards
+
+### Status Indicators
+- ✅ Success/Complete
+- ❌ Error/Failed
+- ⚠️  Warning/Caution
+- ℹ️  Information
+- 🔍 Search/Analyze
+- 🔧 Build/Configure
+- 🧹 Clean/Maintenance
+- 📁 File/Directory operations
+
+### Action Types
+- 🚀 Deploy/Launch
+- 🔄 Update/Refresh/Restart
+- 📦 Package/Install
+- 🗂️  Backup/Archive
+- 🔐 Security/Encryption
+- 🎨 Theme/Visual
+- 💾 Save/Store
+- 🔗 Link/Connect
+
+### System Components
+- 🐧 Kernel/Linux
+- 💻 System/Hardware
+- 🖥️  Display/Monitor
+- 🎤 Audio Input
+- 🔊 Audio Output
+- 🌐 Network
+- 📜 Logs/History
+
+### Development
+- 🧪 Test/Experiment
+- 🔍 Debug/Inspect
+- 📋 List/Inventory
+- 📊 Statistics/Summary
+- 💡 Tips/Help
+
+## Message Formatting
+
+### Standard Logging Functions
+Always use these functions for consistent output:
+
+```bash
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+log_debug() {
+    echo -e "${PURPLE}[DEBUG]${NC} $1"
+}
+```
+
+### Section Headers
+Use boxed headers for major sections:
+
+```bash
+echo "📋 Section Title"
+echo "================"
+```
+
+For sub-sections:
+```bash
+echo ""
+echo -e "${BLUE}Subsection Name${NC}"
+echo "----------------"
+```
+
+### Progress Indicators
+For operations with steps:
+```bash
+echo "🔧 Step 1/3: Doing something..."
+echo "🔧 Step 2/3: Doing another thing..."
+echo "🔧 Step 3/3: Final step..."
+```
+
+## Script Structure Standards
+
+### File Header Template
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Script: [Description of what this script does]
+# Usage: ./script-name.sh [parameters]
+# Dependencies: [list required tools]
+
+# Source visual library (when available)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/../visual-lib.sh" ]]; then
+    source "$SCRIPT_DIR/../visual-lib.sh"
+else
+    # Fallback color definitions
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
+```
+
+### Usage/Help Function Template
+```bash
+usage() {
+    cat << EOF
+📋 Script Name - Brief Description
+
+Usage: $0 [options] [arguments]
+
+Options:
+  -h, --help     Show this help message
+  -v, --verbose  Enable verbose output
+
+Arguments:
+  arg1           Description of first argument
+  arg2           Description of second argument
+
+Examples:
+  $0 example-arg             # Basic usage
+  $0 -v complex-operation    # Verbose mode
+
+EOF
+}
+```
+
+### Error Handling Template
+```bash
+# Function to handle errors gracefully
+handle_error() {
+    local exit_code=$?
+    log_error "Command failed with exit code $exit_code"
+    log_info "Script: $0, Line: $1"
+    exit $exit_code
+}
+
+# Set up error trap
+trap 'handle_error $LINENO' ERR
+```
+
+## Interactive Elements
+
+### User Prompts
+```bash
+# Yes/No prompts
+echo -e "${YELLOW}⚠️  This action will modify system files.${NC}"
+read -p "Do you want to continue? [y/N]: " confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    log_info "Operation cancelled by user"
+    exit 0
+fi
+```
+
+### Progress Feedback
+```bash
+# For long operations
+echo -n "🔄 Processing files... "
+# ... do work ...
+echo "✅ Done"
+
+# For operations with known duration
+echo "⏳ This may take a few minutes..."
+# ... do work ...
+echo "🎉 Operation completed successfully"
+```
+
+## ✨ Advanced UI Components with Charm's Gum
+
+**APPROVED**: Charm's Gum tools (https://github.com/charmbracelet/gum) are **encouraged** for enhanced interactive experiences when available.
+
+### Gum Integration Guidelines
+
+Gum provides beautiful, interactive CLI components that enhance user experience significantly. Use gum when:
+- The script benefits from rich interactive elements
+- Enhanced visual appeal improves usability
+- Multiple choice selections are needed
+- Input validation with styling is helpful
+
+#### Prerequisites Check
+Always check for gum availability and provide fallbacks:
+
+```bash
+# Check if gum is available
+if command -v gum &> /dev/null; then
+    HAS_GUM=true
+else
+    HAS_GUM=false
+    log_warning "Gum not available - using basic prompts"
+fi
+```
+
+#### Enhanced Prompts with Gum
+```bash
+# Confirm prompts with gum
+gum_confirm() {
+    if [[ "$HAS_GUM" == "true" ]]; then
+        gum confirm "$1"
+    else
+        echo -e "${YELLOW}$1${NC}"
+        read -p "Continue? [y/N]: " confirm
+        [[ "$confirm" =~ ^[Yy]$ ]]
+    fi
+}
+
+# Example usage
+if gum_confirm "⚠️  This will modify system files. Continue?"; then
+    log_info "Proceeding with operation..."
+else
+    log_info "Operation cancelled"
+    exit 0
+fi
+```
+
+#### Selection Menus with Gum
+```bash
+# Multiple choice selection
+gum_choose() {
+    if [[ "$HAS_GUM" == "true" ]]; then
+        gum choose "$@"
+    else
+        echo -e "${BLUE}Select an option:${NC}"
+        select opt in "$@"; do
+            echo "$opt"
+            break
+        done
+    fi
+}
+
+# Example usage
+system_choice=$(gum_choose "qbert (workstation)" "donkeykong (workstation)" "srv (server)" "Exit")
+```
+
+#### Input Fields with Gum
+```bash
+# Text input with validation
+gum_input() {
+    local prompt="$1"
+    local placeholder="$2"
+
+    if [[ "$HAS_GUM" == "true" ]]; then
+        gum input --placeholder="$placeholder" --prompt="$prompt "
+    else
+        read -p "$prompt: " input
+        echo "$input"
+    fi
+}
+
+# Example usage
+username=$(gum_input "Enter username" "dustin")
+```
+
+#### Progress Spinners with Gum
+```bash
+# Spinner for long operations
+gum_spin() {
+    local title="$1"
+    shift
+
+    if [[ "$HAS_GUM" == "true" ]]; then
+        gum spin --spinner dot --title "$title" -- "$@"
+    else
+        echo -n "🔄 $title... "
+        "$@"
+        echo "✅ Done"
+    fi
+}
+
+# Example usage
+gum_spin "Building system configuration" nixos-rebuild switch --flake .#hostname
+```
+
+#### Styled Output with Gum
+```bash
+# Headers and sections
+gum_style() {
+    if [[ "$HAS_GUM" == "true" ]]; then
+        gum style "$@"
+    else
+        # Fallback to echo with basic formatting
+        echo -e "${BLUE}$*${NC}"
+    fi
+}
+
+# Example usage
+gum_style --foreground 212 --border-foreground 212 --border double \
+    --align center --width 50 --margin "1 2" --padding "2 4" \
+    'NixOS System Deployment'
+```
+
+### Integration Examples
+
+#### Deploy Script Enhancement
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Check for gum
+HAS_GUM=false
+command -v gum &> /dev/null && HAS_GUM=true
+
+# Enhanced system selection
+if [[ "$HAS_GUM" == "true" ]]; then
+    gum style --foreground 212 --border-foreground 212 --border double \
+        --align center --width 50 --margin "1 2" --padding "2 4" \
+        'Available Systems'
+
+    SYSTEM_NAME=$(gum choose --limit 1 \
+        "qbert (workstation)" \
+        "donkeykong (workstation)" \
+        "srv (server)")
+else
+    echo -e "${BLUE}Available systems:${NC}"
+    echo "1) qbert (workstation)"
+    echo "2) donkeykong (workstation)"
+    echo "3) srv (server)"
+    # ... fallback selection logic
+fi
+```
+
+### Best Practices for Gum Integration
+
+1. **Always Provide Fallbacks**: Every gum command should have a plain bash equivalent
+2. **Consistent Styling**: Use consistent colors and borders across all gum components
+3. **Performance Consideration**: Check gum availability once at script start
+4. **Graceful Degradation**: Scripts should work perfectly without gum installed
+5. **Documentation**: Note gum dependency in script headers when used
+
+### Gum Components Priority
+
+**High Value** (use when available):
+- `gum confirm` - Enhanced yes/no prompts
+- `gum choose` - Selection menus
+- `gum spin` - Progress indicators for long operations
+- `gum style` - Headers and important notices
+
+**Medium Value** (nice to have):
+- `gum input` - Text input with validation
+- `gum table` - Structured data display
+- `gum log` - Styled log output
+
+**Low Priority** (specialized use cases):
+- `gum write` - Multi-line text editing
+- `gum file` - File selection
+- `gum filter` - Interactive filtering
+
+## Justfile Specific Guidelines
+
+### Recipe Documentation
+Always include emojis and clear descriptions:
+```just
+# 🔧 Build the system configuration
+build:
+    @echo "🔧 Building system configuration..."
+
+# 🧹 Clean old packages (5 days)
+clean:
+    @echo "🧹 Cleaning packages older than 5 days..."
+```
+
+### Recipe Groups
+Use consistent grouping with visual separators:
+```just
+# === Development Commands ===
+[group('dev')]
+command1:
+    # implementation
+
+# === Production Commands ===
+[group('prod')]
+command2:
+    # implementation
+```
+
+### Help Text Formatting
+```just
+default:
+    @echo "📋 Project Name - Command Center"
+    @echo "================================"
+    @just --list --unsorted
+    @echo ""
+    @echo "🔧 Commands with Parameters:"
+    @echo "  command [param=default]  - Description"
+```
+
+## Best Practices
+
+### 1. Consistency
+- Always use the same emoji for the same type of operation
+- Maintain consistent color usage across all scripts
+- Use the same formatting patterns for similar content
+
+### 2. Accessibility
+- Provide fallbacks for terminals without emoji support
+- Include text labels with all visual indicators
+- Test output in both color and monochrome terminals
+
+### 3. Information Hierarchy
+- Use section headers for major operations
+- Indent sub-operations with 2-4 spaces
+- Group related information visually
+
+### 4. User Experience
+- Show progress for operations taking >2 seconds
+- Confirm destructive operations with clear warnings
+- Provide helpful error messages with suggested solutions
+
+### 5. Maintenance
+- Keep visual formatting separate from logic when possible
+- Use functions for repeated formatting patterns
+- Document any special visual requirements
+
+## Testing Checklist
+
+Before implementing visual changes:
+- [ ] Test in terminal with emoji support
+- [ ] Test in terminal without emoji support
+- [ ] Test in terminal without color support
+- [ ] Verify no functionality changes
+- [ ] Check visual consistency with other scripts
+- [ ] Ensure proper fallback behavior
+
+## Migration Examples
+
+### Before (Simple Script)
+```bash
+#!/bin/bash
+echo "Starting backup..."
+rsync -av source/ dest/
+echo "Backup complete"
+```
+
+### After (Enhanced Script)
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}💾 Starting backup operation...${NC}"
+rsync -av source/ dest/
+echo -e "${GREEN}✅ Backup completed successfully${NC}"
+```
+
+This maintains identical functionality while adding visual polish and error handling.

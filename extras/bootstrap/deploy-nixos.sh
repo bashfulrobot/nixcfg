@@ -264,7 +264,129 @@ nix-shell -p git git-crypt wget curl --run "
         esac
         echo
     done
-    
+
+    # Restic key restoration (using autorestic with same config as modules/cli/restic)
+    echo
+    echo -e '${BLUE}Restic Key Restoration${NC}'
+    echo -e '${YELLOW}Would you like to restore SSH and GPG keys from your restic backup?${NC}'
+    echo '1) Restore SSH and GPG keys from restic backup'
+    echo '2) Skip restic restoration (use manual copies from earlier)'
+    echo
+
+    while true; do
+        read -p 'Select restoration option (1-2): ' restic_choice
+
+        case \$restic_choice in
+            1)
+                if [[ -n \"\$GIT_CRYPT_KEY_PATH\" && -f secrets/secrets.json ]]; then
+                    echo -e '${BLUE}Setting up autorestic for key restoration...${NC}'
+
+                    # Read secrets from the unlocked repo (same as modules/cli/restic/default.nix)
+                    B2_ACCOUNT_ID=\$(python3 -c \"import json; print(json.load(open('secrets/secrets.json'))['restic']['b2_account_id'])\")
+                    B2_ACCOUNT_KEY=\$(python3 -c \"import json; print(json.load(open('secrets/secrets.json'))['restic']['b2_account_key'])\")
+                    RESTIC_PASSWORD=\$(python3 -c \"import json; print(json.load(open('secrets/secrets.json'))['restic']['restic_password'])\")
+
+                    echo
+                    echo -e '${BLUE}Backup source configuration:${NC}'
+                    echo -e '${YELLOW}Enter the folder name within the B2 bucket for the backup source.${NC}'
+                    echo -e '${YELLOW}This is the folderName configured in your restic module.${NC}'
+                    echo
+                    echo 'Examples: qbert, donkeykong, srv, or any custom folder name'
+                    echo
+
+                    while true; do
+                        read -p 'Enter backup folder name: ' BACKUP_FOLDER
+
+                        if [[ -n \"\$BACKUP_FOLDER\" && \"\$BACKUP_FOLDER\" =~ ^[a-zA-Z0-9_-]+\$ ]]; then
+                            break
+                        else
+                            echo -e '${RED}Invalid folder name. Use only letters, numbers, hyphens, and underscores.${NC}'
+                        fi
+                    done
+
+                    echo -e \"${BLUE}Restoring SSH and GPG keys from '\$BACKUP_FOLDER-backup' location...${NC}\"
+                    echo -e \"${YELLOW}B2 path: ws-bups:\$BACKUP_FOLDER${NC}\"
+
+                    # Create temporary autorestic config (matching modules/cli/restic/default.nix structure)
+                    TEMP_AUTORESTIC_DIR=\"/tmp/restic-restore\"
+                    mkdir -p \"\$TEMP_AUTORESTIC_DIR\"
+
+                    cat > \"\$TEMP_AUTORESTIC_DIR/.autorestic.yml\" << EOF
+version: 2
+
+backends:
+  b2-\$BACKUP_FOLDER:
+    type: b2
+    path: 'ws-bups:\$BACKUP_FOLDER'
+    env:
+      B2_ACCOUNT_ID: \$B2_ACCOUNT_ID
+      B2_ACCOUNT_KEY: \$B2_ACCOUNT_KEY
+      RESTIC_PASSWORD: \$RESTIC_PASSWORD
+
+locations:
+  \$BACKUP_FOLDER-backup:
+    from: []
+    to:
+      - b2-\$BACKUP_FOLDER
+EOF
+
+                    # Set environment variables
+                    export B2_ACCOUNT_ID B2_ACCOUNT_KEY RESTIC_PASSWORD
+                    cd \"\$TEMP_AUTORESTIC_DIR\"
+
+                    # Restore SSH and GPG keys using --iinclude patterns
+                    echo -e '${BLUE}Restoring SSH and GPG keys...${NC}'
+                    if autorestic restore --location \"\$BACKUP_FOLDER-backup\" --to \"/tmp/restic-keys\" --iinclude \"**/.ssh\" --iinclude \"**/.gnupg\" 2>/dev/null; then
+
+                        # Find and copy SSH keys
+                        SSH_RESTORE_PATH=\$(find /tmp/restic-keys -name \".ssh\" -type d | head -1)
+                        if [[ -n \"\$SSH_RESTORE_PATH\" && -d \"\$SSH_RESTORE_PATH\" ]]; then
+                            mkdir -p /mnt/home/dustin/.ssh
+                            cp -r \"\$SSH_RESTORE_PATH\"/* /mnt/home/dustin/.ssh/
+                            chmod 700 /mnt/home/dustin/.ssh
+                            chmod 600 /mnt/home/dustin/.ssh/id_* 2>/dev/null || true
+                            chmod 644 /mnt/home/dustin/.ssh/id_*.pub 2>/dev/null || true
+                            echo -e '${GREEN}SSH keys restored from restic backup${NC}'
+                        else
+                            echo -e '${YELLOW}No SSH keys found in backup${NC}'
+                        fi
+
+                        # Find and copy GPG keys
+                        GPG_RESTORE_PATH=\$(find /tmp/restic-keys -name \".gnupg\" -type d | head -1)
+                        if [[ -n \"\$GPG_RESTORE_PATH\" && -d \"\$GPG_RESTORE_PATH\" ]]; then
+                            mkdir -p /mnt/home/dustin/.gnupg
+                            cp -r \"\$GPG_RESTORE_PATH\"/* /mnt/home/dustin/.gnupg/
+                            chmod 700 /mnt/home/dustin/.gnupg
+                            chmod -R 600 /mnt/home/dustin/.gnupg/*
+                            echo -e '${GREEN}GPG keys restored from restic backup${NC}'
+                        else
+                            echo -e '${YELLOW}No GPG keys found in backup${NC}'
+                        fi
+                    else
+                        echo -e '${YELLOW}Failed to restore keys from backup${NC}'
+                    fi
+
+                    # Cleanup
+                    rm -rf /tmp/restic-keys \"\$TEMP_AUTORESTIC_DIR\"
+                    unset B2_ACCOUNT_ID B2_ACCOUNT_KEY RESTIC_PASSWORD
+
+                    echo -e '${GREEN}Restic key restoration complete${NC}'
+                else
+                    echo -e '${RED}Cannot restore from restic without git-crypt secrets being unlocked${NC}'
+                fi
+                break
+                ;;
+            2)
+                echo -e '${YELLOW}Skipping restic restoration - using manual copies if available${NC}'
+                break
+                ;;
+            *)
+                echo -e '${RED}Invalid selection. Please enter 1 or 2.${NC}'
+                ;;
+        esac
+        echo
+    done
+
     # Generate hardware configuration
     echo -e '${BLUE}Generating hardware configuration...${NC}'
     nixos-generate-config --no-filesystems --root /mnt

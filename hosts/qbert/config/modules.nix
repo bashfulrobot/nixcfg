@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, user-settings, ... }:
 {
 
   users.default.enable = true;
@@ -44,6 +44,17 @@
     restic = {
       enable = true;
       folderName = "qbert";
+      backupPaths = [
+        "/home/${user-settings.user.username}/.gnupg"
+        "/home/${user-settings.user.username}/.kube"
+        "/home/${user-settings.user.username}/.ssh"
+        "/home/${user-settings.user.username}/.talos"
+        "/home/${user-settings.user.username}/Desktop"
+        "/home/${user-settings.user.username}/dev"
+        "/home/${user-settings.user.username}/docker"
+        "/home/${user-settings.user.username}/Documents"
+        "/home/${user-settings.user.username}/Pictures"
+      ];
     };
   };
 

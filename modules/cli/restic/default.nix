@@ -19,17 +19,7 @@ in
 
       backupPaths = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [
-          "/home/${user-settings.user.username}/.gnupg"
-          "/home/${user-settings.user.username}/.kube"
-          "/home/${user-settings.user.username}/.ssh"
-          "/home/${user-settings.user.username}/.talos"
-          "/home/${user-settings.user.username}/Desktop"
-          "/home/${user-settings.user.username}/dev"
-          "/home/${user-settings.user.username}/docker"
-          "/home/${user-settings.user.username}/Documents"
-          "/home/${user-settings.user.username}/Pictures"
-        ];
+        default = [ "/home/${user-settings.user.username}" ];
         description = "List of paths to backup.";
       };
 
@@ -61,10 +51,8 @@ in
       retentionPolicy = lib.mkOption {
         type = lib.types.attrs;
         default = {
-          keep-daily = 7;
-          keep-weekly = 4;
-          keep-monthly = 12;
-          keep-yearly = 2;
+          keep-last = 10;
+          keep-within = "30d";
         };
         description = "Retention policy for backups.";
       };
@@ -79,38 +67,36 @@ in
 
     home-manager.users."${user-settings.user.username}" = {
       home.file.".autorestic.yml".text = ''
-        version: 2
+version: 2
 
-        backends:
-          b2-${hostname}:
-            type: b2
-            path: 'ws-bups:${cfg.folderName}'
-            env:
-              B2_ACCOUNT_ID: ${secrets.restic.b2_account_id}
-              B2_ACCOUNT_KEY: ${secrets.restic.b2_account_key}
-              RESTIC_PASSWORD: ${secrets.restic.restic_password}
+backends:
+  b2-${hostname}:
+    type: b2
+    path: 'ws-bups:${cfg.folderName}'
+    env:
+      B2_ACCOUNT_ID: ${secrets.restic.b2_account_id}
+      B2_ACCOUNT_KEY: ${secrets.restic.b2_account_key}
+      RESTIC_PASSWORD: ${secrets.restic.restic_password}
 
-        locations:
-          ${hostname}-home:
-            from: ${lib.concatStringsSep " " cfg.backupPaths}
-            to:
-              - b2-${hostname}
-            cron: "${cfg.schedule}"
-            forget:
-              keep-daily: ${toString cfg.retentionPolicy.keep-daily}
-              keep-weekly: ${toString cfg.retentionPolicy.keep-weekly}
-              keep-monthly: ${toString cfg.retentionPolicy.keep-monthly}
-              keep-yearly: ${toString cfg.retentionPolicy.keep-yearly}
-            options:
-              backup:
-                exclude-file: /home/${user-settings.user.username}/.autorestic-exclude
+locations:
+  ${hostname}-home:
+    from:
+${lib.concatMapStringsSep "\n" (path: "      - ${path}") cfg.backupPaths}
+    to:
+      - b2-${hostname}
+    cron: "${cfg.schedule}"
+    forget: prune
+    options:
+      backup:
+        exclude-file: /home/${user-settings.user.username}/.autorestic-exclude
+      forget:
+        keep-last: ${toString cfg.retentionPolicy.keep-last}
+        keep-within: "${cfg.retentionPolicy.keep-within}"
 
-        global:
-          forget:
-            keep-daily: ${toString cfg.retentionPolicy.keep-daily}
-            keep-weekly: ${toString cfg.retentionPolicy.keep-weekly}
-            keep-monthly: ${toString cfg.retentionPolicy.keep-monthly}
-            keep-yearly: ${toString cfg.retentionPolicy.keep-yearly}
+global:
+  forget:
+    keep-last: ${toString cfg.retentionPolicy.keep-last}
+    keep-within: "${cfg.retentionPolicy.keep-within}"
       '';
 
       home.file.".autorestic-exclude".text = lib.concatStringsSep "\n" cfg.excludePaths;

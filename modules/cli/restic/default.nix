@@ -124,7 +124,7 @@ global:
           #!/bin/sh
           cd /home/${user-settings.user.username}
           echo "=== Autorestic Status ==="
-          autorestic info
+          autorestic info | grep -v -E "(B2_ACCOUNT_|RESTIC_PASSWORD|account_id|account_key)"
           echo ""
           echo "=== Recent Snapshots ==="
           autorestic exec -a -- snapshots --last 10

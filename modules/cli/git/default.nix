@@ -80,6 +80,7 @@ in {
           settings = {
             editor = "hx";
             git_protocol = "ssh";
+            pager = "auto";
 
             prompt = "enabled";
 

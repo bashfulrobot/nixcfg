@@ -58,6 +58,13 @@
       localBackup = {
         enable = true;
         path = "/run/media/${user-settings.user.username}/dk-data/Restic-backups";
+        mountCheck.enable = true;  # Enable prevalidation mount check
+      };
+      validation = {
+        enable = true;
+        schedule = "Sun *-*-* 23:00:00";  # Sunday 11 PM
+        type = "read-data-subset";
+        dataSubsetPercent = "10%";
       };
     };
   };

@@ -45,6 +45,12 @@
         "/home/${user-settings.user.username}/Documents"
         "/home/${user-settings.user.username}/Pictures"
       ];
+      validation = {
+        enable = true;
+        schedule = "Sun *-*-* 23:30:00";  # Sunday 11:30 PM (offset from qbert)
+        type = "basic";  # Lighter validation for laptop
+        # No dataSubsetPercent needed for basic validation
+      };
     };
   };
 

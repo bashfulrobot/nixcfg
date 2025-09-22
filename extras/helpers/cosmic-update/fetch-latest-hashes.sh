@@ -2,7 +2,8 @@
 # Fetch latest commit hashes from pop-os repositories and cache them locally
 # Usage: ./fetch-latest-hashes.sh
 
-set -euo pipefail
+set -uo pipefail
+
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CACHE_FILE="$SCRIPT_DIR/latest-hashes.json"
@@ -74,10 +75,13 @@ for i in "${!PACKAGES[@]}"; do
     pkg_name="$pkg"
     [[ "$pkg" == "xdg-desktop-portal-cosmic" ]] && pkg_name="xdg-desktop-portal-cosmic"
 
-    # Fetch latest commit with spinner and timeout
-    if latest=$(gum spin --spinner dot --title "Fetching latest commit for $pkg..." -- \
-        timeout 15 gh api "repos/pop-os/$pkg_name/commits/master" --jq '.sha' 2>/dev/null); then
+    # Handle repositories with different default branches
+    branch="master"
+    [[ "$pkg" == "cosmic-protocols" ]] && branch="main"
 
+    # Fetch latest commit with spinner
+    if latest=$(gum spin --spinner dot --title "Fetching latest commit for $pkg..." -- \
+        gh api "repos/pop-os/$pkg_name/commits/$branch" --paginate=false --jq '.sha'); then
         echo "📦 $pkg: ${latest:0:8} ✓"
         fetch_results[$i]="$latest"
         ((successful_fetches++))

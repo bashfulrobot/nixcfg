@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-protocols";
-    rev = "6254f50abc6dbfccadc6939f80e20081ab5f9d51";
+    rev = "af1997b1827ad64aab46fa31c0b77fb20d7a537a";
     hash = "sha256-gOYgz07RGZoBp2RbHn0jUGLGXH/geoch/Y27Qh+jBao=";
   };
 

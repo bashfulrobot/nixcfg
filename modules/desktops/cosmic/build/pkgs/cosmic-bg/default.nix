@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-bg";
-    rev = "6841c5aeea24422b9ab2b1ea8925c8a9153de149";
+    rev = "40254a7101b52b482f06d35a4d2eba8245814b2c";
     hash = "sha256-/DFUazerRx5np1ji20UZJAbcMq3DTFXw06aOkX0i1uc=";
   };
 

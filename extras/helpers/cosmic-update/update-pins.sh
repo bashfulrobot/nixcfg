@@ -2,7 +2,8 @@
 # Update COSMIC packages using cached hash file
 # Usage: ./update-pins.sh [--dry-run]
 
-set -euo pipefail
+set -uo pipefail
+
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
@@ -82,7 +83,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
         to_entries |
         map(select(.value != null)) |
         length
-    ' "$CACHE_FILE" 2>/dev/null || echo "0")
+    ' "$CACHE_FILE" || echo "0")
     echo "   🔄 Would update: $needed_updates package(s)"
     echo
     echo "💡 Run without --dry-run to apply updates"

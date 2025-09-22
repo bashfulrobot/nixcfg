@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
-    rev = "0c42853fa8cc9daa35b0bd85af6685f316362626";
+    rev = "57e1ea409b8ef7cd615f231f846f599021347605";
     hash = "sha256-bS4ExEF2z54V5eAQyiZgvuPJ6KSvYZXyi9pQKR2qTrE=";
   };
 

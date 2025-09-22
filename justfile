@@ -25,7 +25,6 @@ default:
     @echo "  rebuild [trace=true]       - Add trace=true for detailed debugging"
     @echo "  log [days=7]               - Show commits from last N days"
     @echo "  lint [target=.]            - Lint specific file/directory (use jlint for tab completion)"
-    @echo "  cosmic-cache               - Build and push COSMIC packages to personal cache"
     @echo "  pkg-search <query>         - Search for packages"
     @echo "  brand-icons <source> <target> - Create branded icons (e.g. gmail-br kong-email)"
     @echo "  backup-icons <app>         - Backup app icons before branding"
@@ -232,33 +231,6 @@ cosmic-monitor:
     @echo "Press Ctrl+C to stop"
     @inotifywait -m -r -e create,modify,moved_to ~/.config/cosmic
 
-# Build and push COSMIC packages to personal cache
-[group('dev')]
-cosmic-cache:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    echo "🚀 Building and pushing COSMIC packages to bashfulrobot cache..."
-
-    # Ensure cachix is available
-    if ! command -v cachix &> /dev/null; then
-        echo "❌ Cachix not found. Run 'just rebuild' first to install dev tools with cachix"
-        exit 1
-    fi
-
-    # Build the system configuration first
-    echo "🔧 Building system configuration with COSMIC..."
-    nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --show-trace
-
-    # Use the system-wide cachix helper to push to cache
-    echo "📦 Using system cachix helper to push to bashfulrobot cache..."
-    push-to-bashfulrobot-cache ./result
-
-    echo "✅ COSMIC packages pushed to bashfulrobot cache successfully!"
-    echo "🔗 Your cache: https://bashfulrobot.cachix.org"
-
-    # Clean up result symlink
-    echo "🧹 Cleaning up result symlink..."
-    rm -f result
 
 # === System Info ===
 # Show kernel and boot info

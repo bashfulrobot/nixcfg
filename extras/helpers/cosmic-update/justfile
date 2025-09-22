@@ -1,0 +1,131 @@
+# COSMIC Desktop Package Update Management
+# Run from: extras/helpers/cosmic-update/
+
+# === Settings ===
+set dotenv-load := true
+set ignore-comments := true
+set fallback := true
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# === Variables ===
+repo_root := justfile_directory() + "/../../.."
+
+# === Help ===
+# Show available commands
+default:
+    @echo "🚀 COSMIC Package Update Commands"
+    @echo "=================================="
+    @just --list --unsorted
+    @echo ""
+    @echo "📋 Typical workflow:"
+    @echo "  1. just fetch       # Get latest commits from GitHub (run when needed)"
+    @echo "  2. just check       # See what packages need updating"
+    @echo "  3. just update      # Apply cached commits to package files"
+    @echo "  4. just cache       # Build and cache packages"
+    @echo "  5. just rebuild     # Update system"
+    @echo ""
+    @echo "🚀 Quick commands:"
+    @echo "  just full-update    # Complete automated workflow"
+    @echo "  just cache-info     # Show cache file information"
+
+# === Update Commands ===
+# Fetch latest commit hashes from GitHub API
+[group('update')]
+fetch:
+    @echo "🔍 Fetching latest commits from pop-os repositories..."
+    @./fetch-latest-hashes.sh
+
+# Check what packages need updating (dry run)
+[group('update')]
+check:
+    @echo "🔍 Checking what packages need updating..."
+    @./update-pins.sh --dry-run
+
+# Apply cached commits to package files
+[group('update')]
+update:
+    @echo "🔄 Updating package pins..."
+    @./update-pins.sh
+
+# === Build Commands ===
+# Build and cache packages
+[group('build')]
+cache:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🚀 Building and caching COSMIC packages..."
+    cd {{repo_root}}
+
+    # Ensure cachix is available
+    if ! command -v cachix &> /dev/null; then
+        echo "❌ Cachix not found. Run 'just rebuild' first to install dev tools with cachix"
+        exit 1
+    fi
+
+    # Build the system configuration first
+    echo "🔧 Building system configuration with COSMIC..."
+    nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel --show-trace
+
+    # Use the system-wide cachix helper to push to cache
+    echo "📦 Using system cachix helper to push to bashfulrobot cache..."
+    push-to-bashfulrobot-cache ./result
+
+    echo "✅ COSMIC packages pushed to bashfulrobot cache successfully!"
+    echo "🔗 Your cache: https://bashfulrobot.cachix.org"
+
+    # Clean up result symlink
+    echo "🧹 Cleaning up result symlink..."
+    rm -f result
+
+# Rebuild system
+[group('build')]
+rebuild:
+    @echo "🔧 Rebuilding system..."
+    @cd {{repo_root}} && just rebuild
+
+# === Info Commands ===
+# Show cache info
+[group('info')]
+cache-info:
+    #!/usr/bin/env bash
+    if [[ -f "latest-hashes.json" ]]; then
+        fetched_at=$(jq -r '.fetched_at' latest-hashes.json)
+        echo "📁 Cache file: latest-hashes.json"
+        echo "📅 Last fetched: $fetched_at"
+        echo "📦 Packages cached: $(jq '.packages | length' latest-hashes.json)"
+    else
+        echo "❌ No cache file found. Run 'just fetch' first."
+    fi
+
+# === Workflow Commands ===
+# Complete update workflow
+[group('workflow')]
+full-update:
+    @echo "🔄 Running complete COSMIC update workflow..."
+    @echo "Step 1/4: Checking current state..."
+    @just check
+    @echo ""
+    @echo "Step 2/4: Updating package pins..."
+    @just update
+    @echo ""
+    @echo "Step 3/4: Building and caching packages..."
+    @just cache
+    @echo ""
+    @echo "Step 4/4: Rebuilding system..."
+    @just rebuild
+    @echo ""
+    @echo "✅ Complete update workflow finished!"
+
+# === Maintenance Commands ===
+# Clean old cache files
+[group('maintenance')]
+clean:
+    @echo "🧹 Cleaning old cache files..."
+    @find . -name "latest-hashes.json.bak*" -delete 2>/dev/null || true
+    @echo "✅ Cleanup complete"
+
+# === Aliases ===
+alias f := fetch
+alias c := check
+alias u := update
+alias info := cache-info

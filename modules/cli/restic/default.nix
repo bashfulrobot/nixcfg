@@ -78,6 +78,7 @@ in
       unstable.restic
       unstable.autorestic
       unstable.backblaze-b2
+      unstable.gum
     ];
 
     home-manager.users."${user-settings.user.username}" = {
@@ -127,96 +128,253 @@ global:
         (writeShellScriptBin "restic-backup" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          echo "Backing up all configured paths..."
-          autorestic backup -a
+
+          gum style --foreground 212 --border-foreground 212 --border double --align center --width 50 --margin "1 2" --padding "2 4" \
+            "🔄 Restic Backup Tool" "Starting backup process..."
+
+          gum spin --spinner dot --title "Preparing backup..." -- sleep 1
+
+          echo ""
+          gum style --foreground 156 "📂 Backup paths:"
+          ${lib.concatMapStringsSep "\n" (path: "          echo \"  • ${path}\"") cfg.backupPaths}
+
+          echo ""
+          if gum confirm "Proceed with backup?"; then
+            gum style --foreground 226 "🚀 Starting backup process..."
+            echo ""
+            gum spin --spinner globe --title "Backing up files..." -- autorestic backup -a
+            echo ""
+            gum style --foreground 46 --bold "✅ Backup completed successfully!"
+          else
+            gum style --foreground 208 "❌ Backup cancelled"
+            exit 1
+          fi
         '')
 
         (writeShellScriptBin "restic-restore" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
+
+          gum style --foreground 75 --border-foreground 75 --border double --align center --width 50 --margin "1 2" --padding "2 4" \
+            "🔄 Restic Restore Tool" "Interactive backup restoration"
+
           if [ -z "$1" ]; then
-            echo "Usage: restic-restore <destination-path> [include-pattern] [backend]"
-            echo "Example: restic-restore /tmp/restore-all                           # Restore everything from cloud"
-            echo "Example: restic-restore /tmp/restore-docs Documents               # Restore only Documents folder"
-            echo "Example: restic-restore /tmp/restore-ssh .ssh                     # Restore only .ssh folder"${lib.optionalString cfg.localBackup.enable ''
-            echo "Example: restic-restore /tmp/restore-all \"\" local                # Restore from local backup"
-            echo "Example: restic-restore /tmp/restore-docs Documents local        # Restore Documents from local backup"''}
+            gum style --foreground 208 "📋 Interactive Restore Mode"
             echo ""
-            echo "=== Current Configuration ==="
-            echo "Location: ${cfg.folderName}-backup"
-            echo "Available backends:"
-            autorestic info | grep -A 50 "Backend:" | grep "Type\|Path" | sed 's/^/  /'
+
+            # Select destination path
+            gum style --foreground 156 "📁 Choose destination method:"
+            DEST_METHOD=$(gum choose "Browse for directory" "Type custom path")
+
+            if [ "$DEST_METHOD" = "Browse for directory" ]; then
+              gum style --foreground 156 "📂 Navigate to destination directory:"
+              DESTINATION=$(gum file --directory --height 10)
+            else
+              gum style --foreground 156 "📁 Enter destination path for restore:"
+              DESTINATION=$(gum input --placeholder "/tmp/restore-data" --prompt "Destination: ")
+            fi
+
+            if [ -z "$DESTINATION" ]; then
+              gum style --foreground 196 "❌ No destination specified. Exiting."
+              exit 1
+            fi
+
+            # Show available folders
             echo ""
-            echo "Available folders to restore:"
-${lib.concatMapStringsSep "\n" (path: "            echo \"  - ${lib.last (lib.splitString "/" path)}\"") cfg.backupPaths}
-            exit 1
+            gum style --foreground 156 "📂 Available folders to restore:"
+${lib.concatMapStringsSep "\n" (path: "            echo \"  • ${lib.last (lib.splitString "/" path)}\"") cfg.backupPaths}
+
+            echo ""
+            gum style --foreground 156 "🔍 Add file patterns to filter (one at a time, empty to finish):"
+            PATTERNS=""
+            while true; do
+              PATTERN=$(gum input --placeholder "Documents, .ssh, etc. (empty to finish)" --prompt "Pattern: ")
+              if [ -z "$PATTERN" ]; then
+                break
+              fi
+              if [ -z "$PATTERNS" ]; then
+                PATTERNS="$PATTERN"
+              else
+                PATTERNS="$PATTERNS,$PATTERN"
+              fi
+              gum style --foreground 46 "✅ Added: $PATTERN"
+            done
+            INCLUDE_PATTERN="$PATTERNS"
+
+            # Select backend
+            echo ""
+            gum style --foreground 156 "🏗️ Select backup source:"
+            BACKEND=$(gum choose "cloud" ${lib.optionalString cfg.localBackup.enable "\"local\""})
+          else
+            DESTINATION="$1"
+            INCLUDE_PATTERN="$2"
+            BACKEND="''${3:-cloud}"
           fi
 
-          DESTINATION="$1"
-          INCLUDE_PATTERN="$2"
-          BACKEND="''${3:-cloud}"
+          echo ""
+          gum style --foreground 226 "Configuration Summary:"
+          echo "  📁 Destination: $DESTINATION"
+          echo "  🔍 Pattern: ''${INCLUDE_PATTERN:-\"All files\"}"
+          echo "  🏗️ Source: $BACKEND"
+
+          echo ""
+          if ! gum confirm "Proceed with restore?"; then
+            gum style --foreground 208 "❌ Restore cancelled"
+            exit 1
+          fi
 
           # Select backend
           if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable '' && [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
             BACKEND_FLAG="--from local-${cfg.folderName}"
-            echo "Restoring from local backup..."
+            gum style --foreground 75 "📂 Restoring from local backup..."
           else
             BACKEND_FLAG="--from b2-${cfg.folderName}"
-            echo "Restoring from cloud backup..."
+            gum style --foreground 75 "☁️ Restoring from cloud backup..."
           fi
 
+          echo ""
           if [ -n "$INCLUDE_PATTERN" ]; then
-            echo "Restoring files matching '$INCLUDE_PATTERN' to '$DESTINATION'..."
-            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG --include "*$INCLUDE_PATTERN*"
+            # Handle multiple patterns (comma-separated)
+            if echo "$INCLUDE_PATTERN" | grep -q ","; then
+              gum style --foreground 156 "🔍 Processing multiple patterns..."
+              # Convert comma-separated patterns to multiple --include flags
+              INCLUDE_FLAGS=""
+              IFS=','
+              for pattern in $INCLUDE_PATTERN; do
+                pattern=$(echo "$pattern" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')  # Trim whitespace
+                INCLUDE_FLAGS="$INCLUDE_FLAGS --include *$pattern*"
+              done
+              unset IFS
+              gum spin --spinner globe --title "Restoring files matching multiple patterns..." -- \
+                autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG $INCLUDE_FLAGS
+            else
+              gum spin --spinner globe --title "Restoring files matching '$INCLUDE_PATTERN'..." -- \
+                autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG --include "*$INCLUDE_PATTERN*"
+            fi
           else
-            echo "Restoring all files to '$DESTINATION'..."
-            autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG
+            gum spin --spinner globe --title "Restoring all files..." -- \
+              autorestic restore -l ${cfg.folderName}-backup --to "$DESTINATION" $BACKEND_FLAG
           fi
+
+          echo ""
+          gum style --foreground 46 --bold "✅ Restore completed successfully!"
+          gum style --foreground 156 "📁 Files restored to: $DESTINATION"
         '')
 
         (writeShellScriptBin "restic-list-files" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          BACKEND="''${1:-cloud}"
+
+          gum style --foreground 33 --border-foreground 33 --border double --align center --width 50 --margin "1 2" --padding "2 4" \
+            "📋 Restic File Listing" "Browse backup contents"
+
+          if [ -z "$1" ]; then
+            gum style --foreground 156 "🏗️ Select backup source to browse:"
+            BACKEND=$(gum choose "cloud" ${lib.optionalString cfg.localBackup.enable "\"local\""})
+          else
+            BACKEND="$1"
+          fi
+
+          echo ""
+          gum style --foreground 226 "📁 Listing files from $BACKEND backup..."
 
           if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable '' && [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
-            echo "Listing files in latest local snapshot..."
-            autorestic exec -b local-${cfg.folderName} -- ls latest
-          elif [ "$BACKEND" = "cloud" ]; then
-            echo "Listing files in latest cloud snapshot..."
-            autorestic exec -b b2-${cfg.folderName} -- ls latest
-          else
-            echo "Usage: restic-list-files [backend]"
             echo ""
-            echo "=== Current Configuration ==="
-            echo "Location: ${cfg.folderName}-backup"
-            echo "Available backends:"
-            autorestic info | grep -A 50 "Backend:" | grep "Type\|Path" | sed 's/^/  /'
+            gum spin --spinner dot --title "Fetching local snapshot contents..." -- sleep 1
+            gum style --foreground 75 "📂 Files in latest local snapshot:"
+            echo ""
+            autorestic exec -b local-${cfg.folderName} -- ls latest | gum format
+          elif [ "$BACKEND" = "cloud" ]; then
+            echo ""
+            gum spin --spinner dot --title "Fetching cloud snapshot contents..." -- sleep 1
+            gum style --foreground 75 "☁️ Files in latest cloud snapshot:"
+            echo ""
+            autorestic exec -b b2-${cfg.folderName} -- ls latest | gum format
+          else
+            gum style --foreground 196 "❌ Invalid backend specified"
+            echo ""
+            gum style --foreground 156 "Available backends:"
+            autorestic info | grep -A 50 "Backend:" | grep "Type\|Path" | sed 's/^/  /' | gum format
           fi
         '')
 
         (writeShellScriptBin "restic-status" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          echo "=== Autorestic Configuration ==="
-          autorestic info | grep -v -E "(B2_ACCOUNT_|RESTIC_PASSWORD|account_id|account_key)"
+
+          gum style --foreground 51 --border-foreground 51 --border double --align center --width 60 --margin "1 2" --padding "2 4" \
+            "📊 Restic Status Dashboard" "Backup system overview"
+
           echo ""
-          echo "=== Cloud Backup Status ==="
-          autorestic exec -b b2-${cfg.folderName} -- snapshots --last 5${lib.optionalString cfg.localBackup.enable ''
+          gum style --foreground 156 --bold "🔧 Configuration Information"
           echo ""
-          echo "=== Local Backup Status ==="
+          gum spin --spinner dot --title "Loading configuration..." -- sleep 1
+          autorestic info | grep -v -E "(B2_ACCOUNT_|RESTIC_PASSWORD|account_id|account_key)" | gum format
+
+          echo ""
+          gum style --foreground 156 --bold "☁️ Cloud Backup Status"
+          echo ""
+          gum spin --spinner globe --title "Fetching cloud snapshots..." -- sleep 1
+          autorestic exec -b b2-${cfg.folderName} -- snapshots --last 5 | gum format
+
+          ${lib.optionalString cfg.localBackup.enable ''
+          echo ""
+          gum style --foreground 156 --bold "📂 Local Backup Status"
+          echo ""
           if [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]; then
-            autorestic exec -b local-${cfg.folderName} -- snapshots --last 5
+            gum spin --spinner dot --title "Fetching local snapshots..." -- sleep 1
+            autorestic exec -b local-${cfg.folderName} -- snapshots --last 5 | gum format
           else
-            echo "Local backup directory not accessible: ${cfg.localBackup.path}/${cfg.folderName}"
+            gum style --foreground 196 "❌ Local backup directory not accessible:"
+            echo "   ${cfg.localBackup.path}/${cfg.folderName}"
           fi''}
+
+          echo ""
+          gum style --foreground 46 --bold "✅ Status check completed!"
         '')
 
         (writeShellScriptBin "restic-init" ''
           #!/bin/sh
           cd /home/${user-settings.user.username}
-          autorestic check
-          autorestic backup -a
+
+          gum style --foreground 201 --border-foreground 201 --border double --align center --width 60 --margin "1 2" --padding "2 4" \
+            "🚀 Restic Initialization" "Setup and first backup"
+
+          echo ""
+          gum style --foreground 156 "This will initialize your backup repositories and perform the first backup."
+          echo ""
+
+          if ! gum confirm "Initialize backup system?"; then
+            gum style --foreground 208 "❌ Initialization cancelled"
+            exit 1
+          fi
+
+          echo ""
+          gum style --foreground 226 --bold "🔍 Step 1: Checking repository health"
+          echo ""
+          if gum spin --spinner dot --title "Checking repositories..." -- autorestic check; then
+            gum style --foreground 46 "✅ Repository check passed"
+          else
+            gum style --foreground 196 "❌ Repository check failed"
+            exit 1
+          fi
+
+          echo ""
+          gum style --foreground 226 --bold "🔄 Step 2: Performing initial backup"
+          echo ""
+          if gum spin --spinner globe --title "Creating initial backup..." -- autorestic backup -a; then
+            echo ""
+            gum style --foreground 46 --bold "🎉 Backup system initialized successfully!"
+            echo ""
+            gum style --foreground 156 "You can now use:"
+            echo "  • restic-backup    - Create new backups"
+            echo "  • restic-restore   - Restore files"
+            echo "  • restic-status    - Check backup status"
+            echo "  • restic-list-files - Browse backup contents"
+          else
+            gum style --foreground 196 "❌ Initial backup failed"
+            exit 1
+          fi
         '')
       ];
     };
@@ -238,7 +396,7 @@ ${lib.concatMapStringsSep "\n" (path: "            echo \"  - ${lib.last (lib.sp
       description = "Autorestic backup timer";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = cfg.schedule;
+        OnCalendar = "*-*-* 02:00:00";  # Daily at 2 AM (systemd format)
         Persistent = true;
         RandomizedDelaySec = "30m";
       };

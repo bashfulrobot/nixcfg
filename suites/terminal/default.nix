@@ -24,7 +24,7 @@ in
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;
-      zellij.enable = true;
+      zellij.enable = false;
       yazi.enable = true;
       ranger.enable = true;
       foot.enable = false;

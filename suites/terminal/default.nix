@@ -24,8 +24,8 @@ in
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;
-      tmux.enable = true;
-      zellij.enable = false;
+      tmux.enable = false;
+      zellij.enable = true;
       yazi.enable = true;
       ranger.enable = true;
       foot.enable = false;

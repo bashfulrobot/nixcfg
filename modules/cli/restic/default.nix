@@ -48,6 +48,32 @@ in
         description = "Cron schedule for automatic backups (default: 2 AM daily).";
       };
 
+      validation = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Enable periodic repository validation.";
+        };
+
+        schedule = lib.mkOption {
+          type = lib.types.str;
+          default = "Sun *-*-* 23:00:00";  # 11 PM on Sundays (systemd format)
+          description = "Schedule for periodic validation checks in systemd calendar format (default: 11 PM Sundays).";
+        };
+
+        type = lib.mkOption {
+          type = lib.types.enum [ "basic" "read-data-subset" "read-data" ];
+          default = "read-data-subset";
+          description = "Type of validation: basic (fast), read-data-subset (moderate), read-data (thorough).";
+        };
+
+        dataSubsetPercent = lib.mkOption {
+          type = lib.types.str;
+          default = "10%";
+          description = "Percentage of data to verify when using read-data-subset validation.";
+        };
+      };
+
       retentionPolicy = lib.mkOption {
         type = lib.types.attrs;
         default = {
@@ -68,6 +94,14 @@ in
           type = lib.types.str;
           description = "Local path for backup storage. Can be any accessible path: USB drive, network mount, second drive, etc.";
           example = "/run/media/${user-settings.user.username}/dk-data/Restic-backups";
+        };
+
+        mountCheck = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Enable prevalidation check to ensure mount point is accessible before backup.";
+          };
         };
       };
     };
@@ -108,6 +142,15 @@ ${lib.concatMapStringsSep "\n" (path: "      - ${path}") cfg.backupPaths}
 ${targetsList}
     cron: "${cfg.schedule}"
     forget: prune
+    hooks:${lib.optionalString (cfg.localBackup.enable && cfg.localBackup.mountCheck.enable) ''
+      prevalidate:
+        - test -d "${cfg.localBackup.path}" || (echo "Local backup path not accessible at ${cfg.localBackup.path}" && exit 1)''}
+      success:
+        - mkdir -p ~/.local/var/logs/restic
+        - echo "$(date -Iseconds): SUCCESS" >> ~/.local/var/logs/restic/backup.log
+      failure:
+        - mkdir -p ~/.local/var/logs/restic
+        - echo "$(date -Iseconds): FAILED" >> ~/.local/var/logs/restic/backup.log
     options:
       backup:
         exclude-file: /home/${user-settings.user.username}/.autorestic-exclude
@@ -306,6 +349,117 @@ ${lib.concatMapStringsSep "\n" (path: "            echo \"  • ${lib.last (lib.
             "📊 Restic Status Dashboard" "Backup system overview"
 
           echo ""
+          gum style --foreground 156 --bold "🕒 Automated Backup Status"
+          echo ""
+
+          # Show last backup attempt from systemd logs
+          LAST_SYSTEMD_LOG=$(journalctl --user -u autorestic-backup.service --since "30 days ago" --no-pager -n 1 --output cat 2>/dev/null | tail -1)
+
+          if [ -n "$LAST_SYSTEMD_LOG" ]; then
+            LAST_ATTEMPT=$(journalctl --user -u autorestic-backup.service --since "30 days ago" --no-pager -n 1 --output short-iso 2>/dev/null | head -1 | cut -d' ' -f1)
+            if echo "$LAST_SYSTEMD_LOG" | grep -q "Failed\|failed\|error\|Error"; then
+              gum style --foreground 196 "❌ Last attempt: $LAST_ATTEMPT (FAILED)"
+            else
+              gum style --foreground 46 "✅ Last attempt: $LAST_ATTEMPT"
+            fi
+          else
+            gum style --foreground 208 "⚠️  No recent backup attempts found in systemd logs"
+          fi
+
+          # Show backup history from our custom log
+          if [ -f ~/.local/var/logs/restic/backup.log ]; then
+            LAST_SUCCESS=$(grep "SUCCESS" ~/.local/var/logs/restic/backup.log | tail -1 | cut -d':' -f1)
+            LAST_FAILURE=$(grep "FAILED" ~/.local/var/logs/restic/backup.log | tail -1 | cut -d':' -f1)
+
+            if [ -n "$LAST_SUCCESS" ]; then
+              gum style --foreground 46 "✅ Last successful backup: $(date -d "$LAST_SUCCESS" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_SUCCESS")"
+            else
+              gum style --foreground 208 "⚠️  No successful backups recorded yet"
+            fi
+
+            if [ -n "$LAST_FAILURE" ]; then
+              gum style --foreground 196 "❌ Last failed backup: $(date -d "$LAST_FAILURE" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_FAILURE")"
+            fi
+
+            # Show recent backup history (last 10 entries)
+            RECENT_COUNT=$(wc -l < ~/.local/var/logs/restic/backup.log 2>/dev/null || echo "0")
+            if [ "$RECENT_COUNT" -gt 0 ]; then
+              echo ""
+              gum style --foreground 156 "📋 Recent backup history (last 10):"
+              tail -10 ~/.local/var/logs/restic/backup.log | while read line; do
+                if echo "$line" | grep -q "SUCCESS"; then
+                  echo "  ✅ $line"
+                else
+                  echo "  ❌ $line"
+                fi
+              done | gum format
+            fi
+          else
+            gum style --foreground 208 "⚠️  No backup log found at ~/.local/var/logs/restic/backup.log"
+          fi
+
+          ${lib.optionalString cfg.validation.enable ''
+          echo ""
+          gum style --foreground 156 --bold "🔍 Repository Validation Status"
+          echo ""
+
+          # Show validation history from validation log
+          if [ -f ~/.local/var/logs/restic/validation.log ]; then
+            # Get last successful validation for each backend
+            LAST_CLOUD_SUCCESS=$(grep "VALIDATION_SUCCESS cloud" ~/.local/var/logs/restic/validation.log | tail -1 | cut -d':' -f1-3)
+            LAST_CLOUD_FAILURE=$(grep "VALIDATION_FAILED cloud" ~/.local/var/logs/restic/validation.log | tail -1 | cut -d':' -f1-3)
+
+            if [ -n "$LAST_CLOUD_SUCCESS" ]; then
+              gum style --foreground 46 "✅ Cloud validation (last success): $(date -d "$LAST_CLOUD_SUCCESS" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_CLOUD_SUCCESS")"
+            else
+              gum style --foreground 208 "⚠️  No successful cloud validations recorded yet"
+            fi
+
+            if [ -n "$LAST_CLOUD_FAILURE" ]; then
+              gum style --foreground 196 "❌ Cloud validation (last failure): $(date -d "$LAST_CLOUD_FAILURE" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_CLOUD_FAILURE")"
+            fi
+
+            ${lib.optionalString cfg.localBackup.enable ''
+            LAST_LOCAL_SUCCESS=$(grep "VALIDATION_SUCCESS local" ~/.local/var/logs/restic/validation.log | tail -1 | cut -d':' -f1-3)
+            LAST_LOCAL_FAILURE=$(grep "VALIDATION_FAILED local" ~/.local/var/logs/restic/validation.log | tail -1 | cut -d':' -f1-3)
+
+            if [ -n "$LAST_LOCAL_SUCCESS" ]; then
+              gum style --foreground 46 "✅ Local validation (last success): $(date -d "$LAST_LOCAL_SUCCESS" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_LOCAL_SUCCESS")"
+            else
+              gum style --foreground 208 "⚠️  No successful local validations recorded yet"
+            fi
+
+            if [ -n "$LAST_LOCAL_FAILURE" ]; then
+              gum style --foreground 196 "❌ Local validation (last failure): $(date -d "$LAST_LOCAL_FAILURE" '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null || echo "$LAST_LOCAL_FAILURE")"
+            fi''}
+
+            # Show recent validation history (last 5 entries)
+            RECENT_VALIDATION_COUNT=$(wc -l < ~/.local/var/logs/restic/validation.log 2>/dev/null || echo "0")
+            if [ "$RECENT_VALIDATION_COUNT" -gt 0 ]; then
+              echo ""
+              gum style --foreground 156 "📋 Recent validation history (last 5):"
+              tail -5 ~/.local/var/logs/restic/validation.log | while read line; do
+                if echo "$line" | grep -q "VALIDATION_SUCCESS"; then
+                  echo "  ✅ $line"
+                elif echo "$line" | grep -q "VALIDATION_FAILED"; then
+                  echo "  ❌ $line"
+                elif echo "$line" | grep -q "VALIDATION_SKIPPED"; then
+                  echo "  ⏭️  $line"
+                else
+                  echo "  📝 $line"
+                fi
+              done | gum format
+            fi
+
+            # Show validation configuration
+            echo ""
+            gum style --foreground 156 "🔧 Validation settings: ${cfg.validation.type} validation, scheduled ${cfg.validation.schedule}"
+          else
+            gum style --foreground 208 "⚠️  No validation log found at ~/.local/var/logs/restic/validation.log"
+            gum style --foreground 156 "🔧 Validation settings: ${cfg.validation.type} validation, scheduled ${cfg.validation.schedule}"
+          fi''}
+
+          echo ""
           gum style --foreground 156 --bold "🔧 Configuration Information"
           echo ""
           gum spin --spinner dot --title "Loading configuration..." -- sleep 1
@@ -399,6 +553,78 @@ ${lib.concatMapStringsSep "\n" (path: "            echo \"  • ${lib.last (lib.
         OnCalendar = "*-*-* 02:00:00";  # Daily at 2 AM (systemd format)
         Persistent = true;
         RandomizedDelaySec = "30m";
+      };
+    };
+
+    # Systemd service and timer for periodic validation
+    systemd.user.services.autorestic-validation = lib.mkIf cfg.validation.enable {
+      description = "Autorestic repository validation service";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.writeShellScript "autorestic-validation" ''
+          cd /home/${user-settings.user.username}
+
+          # Create logs directory if it doesn't exist
+          mkdir -p ~/.local/var/logs/restic
+
+          # Determine validation flags based on configuration
+          VALIDATION_FLAGS=""
+          case "${cfg.validation.type}" in
+            "basic")
+              VALIDATION_FLAGS=""
+              ;;
+            "read-data-subset")
+              VALIDATION_FLAGS="--read-data-subset ${cfg.validation.dataSubsetPercent}"
+              ;;
+            "read-data")
+              VALIDATION_FLAGS="--read-data"
+              ;;
+          esac
+
+          # Run validation on all backends and capture results
+          OVERALL_SUCCESS=true
+
+          # Validate cloud backend
+          echo "$(date -Iseconds): VALIDATION_START cloud $VALIDATION_FLAGS" >> ~/.local/var/logs/restic/validation.log
+          if ${pkgs.unstable.autorestic}/bin/autorestic exec -b b2-${cfg.folderName} -- check $VALIDATION_FLAGS; then
+            echo "$(date -Iseconds): VALIDATION_SUCCESS cloud" >> ~/.local/var/logs/restic/validation.log
+          else
+            echo "$(date -Iseconds): VALIDATION_FAILED cloud" >> ~/.local/var/logs/restic/validation.log
+            OVERALL_SUCCESS=false
+          fi
+
+          ${lib.optionalString cfg.localBackup.enable ''
+          # Validate local backend if enabled and accessible
+          if [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]; then
+            echo "$(date -Iseconds): VALIDATION_START local $VALIDATION_FLAGS" >> ~/.local/var/logs/restic/validation.log
+            if ${pkgs.unstable.autorestic}/bin/autorestic exec -b local-${cfg.folderName} -- check $VALIDATION_FLAGS; then
+              echo "$(date -Iseconds): VALIDATION_SUCCESS local" >> ~/.local/var/logs/restic/validation.log
+            else
+              echo "$(date -Iseconds): VALIDATION_FAILED local" >> ~/.local/var/logs/restic/validation.log
+              OVERALL_SUCCESS=false
+            fi
+          else
+            echo "$(date -Iseconds): VALIDATION_SKIPPED local (directory not accessible)" >> ~/.local/var/logs/restic/validation.log
+          fi''}
+
+          # Exit with appropriate code
+          if [ "$OVERALL_SUCCESS" = true ]; then
+            exit 0
+          else
+            exit 1
+          fi
+        ''}";
+        User = user-settings.user.username;
+      };
+    };
+
+    systemd.user.timers.autorestic-validation = lib.mkIf cfg.validation.enable {
+      description = "Autorestic validation timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.validation.schedule;
+        Persistent = true;
+        RandomizedDelaySec = "15m";
       };
     };
   };

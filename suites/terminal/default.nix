@@ -24,6 +24,7 @@ in
       starship.enable = true;
       bash.enable = true;
       fish.enable = true;
+      tmux.enable = true;
       zellij.enable = false;
       yazi.enable = true;
       ranger.enable = true;
@@ -78,9 +79,6 @@ in
           options = [
             "--cmd cd" # just to stop me using cd
           ];
-        };
-        tmux = {
-          enable = true;
         };
         bat = {
           enable = true;

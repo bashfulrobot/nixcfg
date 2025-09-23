@@ -36,6 +36,38 @@ in {
             pane_frames.hide_session_name = true;
           };
 
+          layouts = {
+            compact = {
+              tab_template = {
+                children = [
+                  {
+                    pane = { };
+                  }
+                ];
+                pane = {
+                  borderless = true;
+                };
+              };
+              pane_template = {
+                children = [
+                  {
+                    pane = { };
+                  }
+                ];
+                pane = {
+                  borderless = true;
+                };
+              };
+            };
+          };
+
+          plugins = {
+            compact-bar = {
+              location = "zellij:compact-bar";
+              tooltip = "F1";
+            };
+          };
+
           # TODO: Until I can figure out: https://github.com/karimould/zellij-forgot/issues/11
           # keybinds = {
           #   "shared_except \"locked\"" = {

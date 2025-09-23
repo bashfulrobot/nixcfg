@@ -10,7 +10,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ wl-clipboard ];
+    environment.systemPackages = with pkgs; [ wl-clipboard xclip ];
     # TODO: Update version periodically
 
     home-manager.users."${user-settings.user.username}" = {
@@ -22,9 +22,8 @@ in {
         settings = {
           scrollback_editor = "hx";
           copy_on_select = true;
-          copy_command = "wl-copy --primary";
-          copy_clipboard = "primary";
-          paste_command = "wl-paste --primary";
+          copy_command = "xclip -selection clipboard";
+          copy_clipboard = "system";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
           mouse_mode = true;

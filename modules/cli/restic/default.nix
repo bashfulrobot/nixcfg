@@ -147,7 +147,8 @@ ${targetsList}
         - test -d "${cfg.localBackup.path}" || (echo "❌ Local backup path not accessible at ${cfg.localBackup.path}" && exit 1)
         - mountpoint -q "${cfg.localBackup.path}" || (echo "❌ Path ${cfg.localBackup.path} is not a mounted filesystem - refusing to backup to mount point directory" && exit 1)
         - test "$(df "${cfg.localBackup.path}" --output=avail | tail -1)" -gt 10485760 || (echo "❌ Insufficient disk space on ${cfg.localBackup.path} (less than 10GB available)" && exit 1)
-''      success:
+''}
+      success:
         - mkdir -p ~/.local/var/logs/restic
         - echo "$(date -Iseconds): SUCCESS" >> ~/.local/var/logs/restic/backup.log
       failure:
@@ -556,7 +557,6 @@ ${lib.concatMapStringsSep "\n" (path: "            echo \"  • ${lib.last (lib.
           ${pkgs.unstable.autorestic}/bin/autorestic backup -a
         ''}";
         User = user-settings.user.username;
-        Group = "users";
         Group = "users";
       };
     };

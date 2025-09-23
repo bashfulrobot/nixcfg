@@ -14,7 +14,6 @@
         text = ''
           Some(([
               "com.system76.CosmicAppList",
-              "com.system76.CosmicAppletInputSources",
           ], [
               "com.system76.CosmicAppletAudio",
               "com.system76.CosmicAppletBluetooth",
@@ -45,14 +44,14 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/expand_to_edges" = {
         text = ''
-          true
+          false
         '';
         force = true;
       };
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/size" = {
         text = ''
-          S
+          M
         '';
         force = true;
       };
@@ -117,7 +116,7 @@
       # Settings that match current system values but aren't in cosmic.nix
       "cosmic/com.system76.CosmicPanel.Panel/v1/opacity" = {
         text = ''
-          1.0
+          0.50
         '';
         force = true;
       };

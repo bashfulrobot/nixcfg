@@ -21,68 +21,88 @@ This separation avoids API rate limits and allows you to control when to fetch v
 
 ## Update Process
 
-### 1. Fetch Latest Commits (Manual - Run When Needed)
+### Quick Start: Automated Workflow
 
-• **Update the hash cache:**
+For a complete automated update using cached commits:
+
+```bash
+cd extras/helpers/cosmic-update
+just full-update    # → runs check, update, cache, rebuild automatically
+```
+
+### Manual Step-by-Step Workflow
+
+The standard workflow follows these five just commands:
+
+```bash
+cd extras/helpers/cosmic-update
+
+just fetch      # → fetch latest commits from GitHub (when needed)
+just check      # → check what needs updating (dry run)
+just update     # → apply cached commits to package files
+just cache      # → build and cache packages (may require hash fixes)
+just rebuild    # → update system with new packages
+```
+
+**Note:** `just full-update` runs steps 2-5 automatically (check → update → cache → rebuild). Run `just fetch` separately when you need fresh commits from GitHub.
+
+### 1. Fetch Latest Commits (Run When Needed)
+
+```bash
+just fetch
+```
+
+Fetches the latest commits from GitHub and saves them to `latest-hashes.json`. Only run this when you want to check for new commits.
+
+### 2. Check What Needs Updating
+
+```bash
+just check
+```
+
+Shows what packages would be updated (dry run mode).
+
+### 3. Update Package Pins
+
+```bash
+just update
+```
+
+Applies cached commits to package files.
+
+### 4. Build and Cache Packages (Iterative Process)
+
+```bash
+just cache
+```
+
+**Note:** This step typically requires multiple iterations due to hash mismatches:
+
+• **Process workflow:**
   ```bash
-  cd extras/helpers/cosmic-update
-  ./fetch-latest-hashes.sh
+  just cache                                           # → fails on package A
+  ./extras/helpers/fix-cosmic-hash.sh <old-A> <new-A>
+  just cache                                           # → fails on package B
+  ./extras/helpers/fix-cosmic-hash.sh <old-B> <new-B>
+  just cache                                           # → fails on package C
+  ./extras/helpers/fix-cosmic-hash.sh <old-C> <new-C>
+  just cache                                           # → success!
   ```
 
-This fetches the latest commits from GitHub and saves them to `latest-hashes.json`. Only run this when you want to check for new commits.
-
-### 2. Update Package Pins
-
-• **Check what needs updating (dry run):**
-  ```bash
-  cd extras/helpers/cosmic-update
-  ./update-pins.sh --dry-run
-  ```
-
-• **Apply cached commits to package files:**
-  ```bash
-  cd extras/helpers/cosmic-update
-  ./update-pins.sh
-  ```
-
-### 3. Build and Cache Packages (Iterative Process)
-
-• **Start the build process:**
-  ```bash
-  just cosmic-cache
-  ```
-
-• **Fix hash mismatches (repeat as needed):**
+• **Fix hash mismatches:**
   - Build will fail with hash mismatch error
   - Note the expected hash from the error message
   - Fix the hash: `./extras/helpers/fix-cosmic-hash.sh <old-hash> <new-hash>`
-  - Run `just cosmic-cache` again
-  - **Repeat steps 2-4 until all packages build successfully**
+  - Run `just cache` again
+  - **Repeat until all packages build successfully**
 
-• **Process typically requires multiple iterations:**
-  ```bash
-  # Example workflow:
-  just cosmic-cache                                    # → fails on package A
-  ./extras/helpers/fix-cosmic-hash.sh <old-A> <new-A>
-  just cosmic-cache                                    # → fails on package B
-  ./extras/helpers/fix-cosmic-hash.sh <old-B> <new-B>
-  just cosmic-cache                                    # → fails on package C
-  ./extras/helpers/fix-cosmic-hash.sh <old-C> <new-C>
-  just cosmic-cache                                    # → success!
-  ```
+### 5. Update Your System
 
-### 4. Update Your System
+```bash
+just rebuild
+```
 
-• **Update donkeykong (or current system):**
-  ```bash
-  just rebuild
-  ```
-
-• **For other systems (like qbert), update them later:**
-  ```bash
-  # SSH to qbert and run:
-  just rebuild
-  ```
+Updates donkeykong (or current system). For other systems (like qbert), update them later by running `just rebuild` on each system.
 
 ## Files Modified
 

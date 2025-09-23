@@ -60,7 +60,10 @@ in
       br-drive.enable = true;
       zoom-flatpak.enable = true;
       slack.enable = true;
-      signal.enable = true;
+      signal = {
+        enable = true;
+        forceGnomeLibsecret = true;
+      };
     };
 
     cli = {

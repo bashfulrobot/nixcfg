@@ -44,53 +44,48 @@ in
     # Install Brave browser
     environment.systemPackages = with pkgs; [ unstable.brave ];
 
-    # Configure chromium extensions for Brave using home-manager
-    programs.chromium = {
-      enable = true;
-      package = pkgs.unstable.brave;
-      extensions = [
-        # Just Read
-        "dgmanlpmmkibanfdgjocnabmcaclkmod"
-        # 1password
-        "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
-        # dark reader
-        "eimadpbcbfnmbkopoojfekhnkhdbieeh"
-        # ublock origin
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-        # okta
-        "glnpjglilkicbckjpbgcfkogebgllemb"
-        # grammarly
-        "kbfnbcaeplbcioakkpcpgfkobkghlhen"
-        # simplify
-        "pbmlfaiicoikhdbjagjbglnbfcbcojpj"
-        # todoist
-        "jldhpllghnbhlbpcmnajkpdmadaolakh"
-        # Checker Plus for Mail
-        "oeopbcgkkoapgobdbedcemjljbihmemj"
-        # Checker Plus for Cal
-        "hkhggnncdpfibdhinjiegagmopldibha"
-        # Google docs offline
-        "ghbmnnjooekpmoecnnnilnnbdlolhkhi"
-        # Markdown downloader
-        "pcmpcfapbekmbjjkdalcgopdkipoggdi"
-        # URL/Tab Manager
-        "egiemoacchfofdhhlfhkdmokbbdhgch"
-        # Mail message URL
-        "bcelhaineggdgbddincjkdmokbbdhgch"
-        # gnome extention plugin
-        "gphhapmejobijbbhgpjhcjognlahblep"
-        # copy to clipboard
-        "miancenhdlkbmjmhlginhaaepbdnlllc"
-        # Speed dial extention
-        "jpfpebmajhhopeonhlcgidhclcccjcik"
-        # Raindrop
-        "ldgfbffkinooeloadekpmfoklnobpien"
-        # Adguard AdBlocker
-        "bgnkhhnnamicmpeenaelnjfhikgbkllg"
-      ];
-    };
-
     home-manager.users."${user-settings.user.username}" = {
+      # Configure chromium extensions for Brave using home-manager
+      programs.chromium = {
+        enable = true;
+        package = pkgs.unstable.brave;
+        extensions = [
+          # Just Read
+          "dgmanlpmmkibanfdgjocnabmcaclkmod"
+          # 1password
+          "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
+          # dark reader
+          "eimadpbcbfnmbkopoojfekhnkhdbieeh"
+          # ublock origin
+          "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+          # okta
+          "glnpjglilkicbckjpbgcfkogebgllemb"
+          # grammarly
+          "kbfnbcaeplbcioakkpcpgfkobkghlhen"
+          # simplify
+          "pbmlfaiicoikhdbjagjbglnbfcbcojpj"
+          # todoist
+          "jldhpllghnbhlbpcmnajkpdmadaolakh"
+          # Checker Plus for Mail
+          "oeopbcgkkoapgobdbedcemjljbihmemj"
+          # Checker Plus for Cal
+          "hkhggnncdpfibdhinjiegagmopldibha"
+          # Google docs offline
+          "ghbmnnjooekpmoecnnnilnnbdlolhkhi"
+          # Markdown downloader
+          "pcmpcfapbekmbjjkdalcgopdkipoggdi"
+          # gnome extention plugin
+          "gphhapmejobijbbhgpjhcjognlahblep"
+          # copy to clipboard
+          "miancenhdlkbmjmhlginhaaepbdnlllc"
+          # Speed dial extention
+          "jpfpebmajhhopeonhlcgidhclcccjcik"
+          # Raindrop
+          "ldgfbffkinooeloadekpmfoklnobpien"
+          # Adguard AdBlocker
+          "bgnkhhnnamicmpeenaelnjfhikgbkllg"
+        ];
+      };
       # Create Wayland-optimized flags config files
       xdg.configFile = {
         "brave-flags.conf".text = lib.concatStringsSep "\n" waylandFlags;

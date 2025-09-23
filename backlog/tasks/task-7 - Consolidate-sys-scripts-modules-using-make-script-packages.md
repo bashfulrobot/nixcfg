@@ -1,9 +1,11 @@
 ---
 id: task-7
 title: Consolidate sys/scripts modules using make-script-packages
-status: Backlog
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2025-09-23 21:50'
+updated_date: '2025-09-23 22:02'
 labels:
   - refactor
   - scripts

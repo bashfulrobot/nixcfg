@@ -22,9 +22,9 @@ in {
         settings = {
           scrollback_editor = "hx";
           copy_on_select = true;
-          copy_command = "wl-copy --primary";
-          copy_clipboard = "primary";
-          paste_command = "wl-paste --primary";
+          copy_command = "wl-copy";
+          copy_clipboard = "system";
+          paste_command = "wl-paste";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
           mouse_mode = true;

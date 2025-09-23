@@ -185,9 +185,20 @@ global:
           if gum confirm "Proceed with backup?"; then
             gum style --foreground 226 "🚀 Starting backup process..."
             echo ""
-            gum spin --spinner globe --title "Backing up files..." -- autorestic backup -a
-            echo ""
-            gum style --foreground 46 --bold "✅ Backup completed successfully!"
+
+            # Create logs directory if it doesn't exist
+            mkdir -p ~/.local/var/logs/restic
+
+            if gum spin --spinner globe --title "Backing up files..." -- autorestic backup -a; then
+              echo ""
+              gum style --foreground 46 --bold "✅ Backup completed successfully!"
+              echo "$(date -Iseconds): SUCCESS (manual)" >> ~/.local/var/logs/restic/backup.log
+            else
+              echo ""
+              gum style --foreground 196 --bold "❌ Backup failed!"
+              echo "$(date -Iseconds): FAILED (manual)" >> ~/.local/var/logs/restic/backup.log
+              exit 1
+            fi
           else
             gum style --foreground 208 "❌ Backup cancelled"
             exit 1

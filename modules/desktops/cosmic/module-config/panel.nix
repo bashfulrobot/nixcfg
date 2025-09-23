@@ -51,7 +51,7 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/size" = {
         text = ''
-          M
+          XS
         '';
         force = true;
       };
@@ -107,7 +107,7 @@
 
       "cosmic/com.system76.CosmicPanel.Panel/v1/anchor" = {
         text = ''
-          Bottom
+          Top
         '';
         force = true;
       };
@@ -116,7 +116,7 @@
       # Settings that match current system values but aren't in cosmic.nix
       "cosmic/com.system76.CosmicPanel.Panel/v1/opacity" = {
         text = ''
-          0.50
+          1.0
         '';
         force = true;
       };

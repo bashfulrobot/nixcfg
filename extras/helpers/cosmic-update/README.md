@@ -4,7 +4,7 @@ This document outlines the complete process for updating COSMIC desktop packages
 
 ## Overview
 
-Your COSMIC desktop setup uses custom package builds with pinned commits from the pop-os repositories. This process uses a two-script approach:
+My COSMIC desktop setup uses custom package builds with pinned commits from the pop-os repositories. This process uses a two-script approach:
 
 1. **Hash Cache System** - Fetch and cache latest commits separately from updates
 2. **Pin Updates** - Apply cached commits to your package files

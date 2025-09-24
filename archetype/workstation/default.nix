@@ -45,14 +45,7 @@ in {
       fonts.enable = true;
       ssh.enable = true;
       wallpapers.enable = true;
-      scripts = {
-        hw-scan.enable = true;
-        screenshots.enable = true;
-        gmail-url.enable = true;
-        copy_icons.enable = true;
-        init-bootstrap.enable = true;
-        toggle-cursor-size.enable = true;
-      };
+      scripts.enable = true;
     };
 
     hw = {

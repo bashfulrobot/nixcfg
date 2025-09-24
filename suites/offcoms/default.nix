@@ -53,6 +53,7 @@ in
 
       };
 
+      okular.enable = true;
       one-password.enable = true;
       obsidian.enable = true;
       br-gcal.enable = true;
@@ -83,7 +84,6 @@ in
       # evince # pdf viewer
       # texliveSmall # get pdflatex
       # pdf-sign # pdf signing utility
-      kdePackages.okular # pdf viewer - can add sig stamps
 
       # Office
       # libreoffice # office suite

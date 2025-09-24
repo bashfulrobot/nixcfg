@@ -46,9 +46,6 @@ in
             removed = {
               "application/pdf" = [ "draw.desktop" "libreoffice-draw.desktop" "org.libreoffice.LibreOffice.draw.desktop" ];
             };
-            added = {
-              "application/pdf" = [ "okular.desktop" ];
-            };
             # added = { "x-scheme-handler/tg" = "org.telegram.desktop.desktop"; };
           };
           enable = true;
@@ -56,7 +53,6 @@ in
             "text/plain" = [ "code.desktop" ];
             "text/markdown" = [ "code.desktop" ];
             "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
-            "application/pdf" = [ "okular.desktop" ];
             "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
             "x-scheme-handler/postman" = [ "Postman.desktop" ];
             "x-scheme-handler/slack" = [ "slack.desktop" ];

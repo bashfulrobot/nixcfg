@@ -28,6 +28,7 @@ in
 
       # nix-ai-tools packages
       inputs.nix-ai-tools.packages.${pkgs.system}.backlog-md
+      unstable.code-cursor # Ai code editor
     ];
 
     cli = {

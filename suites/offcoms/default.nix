@@ -70,6 +70,7 @@ in
     cli = {
       note.enable = true;
       espanso.enable = false;
+      meetsum.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

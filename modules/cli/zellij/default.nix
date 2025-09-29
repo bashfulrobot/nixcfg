@@ -1,6 +1,15 @@
-{ user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.zellij;
-in {
+{
+  user-settings,
+  pkgs,
+  secrets,
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.cli.zellij;
+in
+{
   options = {
     cli.zellij.enable = lib.mkOption {
       type = lib.types.bool;
@@ -17,8 +26,8 @@ in {
 
       programs.zellij = {
         enable = true;
-        enableBashIntegration = true;
-        enableFishIntegration = true;
+        enableBashIntegration = false;
+        enableFishIntegration = false;
         settings = {
           scrollback_editor = "hx";
           copy_on_select = true;
@@ -27,7 +36,7 @@ in {
           paste_command = "wl-paste";
           default_shell = lib.getExe pkgs.fish;
           scroll_buffer_size = 50000;
-          mouse_mode = true;
+          mouse_mode = false;
           default_mode = "normal";
           show_startup_tips = false;
           default_layout = "compact";

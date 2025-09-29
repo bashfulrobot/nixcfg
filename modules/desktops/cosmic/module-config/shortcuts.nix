@@ -15,6 +15,12 @@
           {
               (
                   modifiers: [
+                      Super,
+                  ],
+                  key: "t",
+              ): Spawn("rio"),
+              (
+                  modifiers: [
                       Ctrl,
                       Alt,
                   ],

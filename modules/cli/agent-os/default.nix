@@ -150,17 +150,130 @@ in {
       home.file.".agent-os/project_types/bash/standards/code-style/justfile-style.md".source =
         ./module-config/justfile-style.md;
 
-      # Shell aliases for convenience
+      # Shell alias to navigate to Agent-OS directory
       programs.fish.shellAliases = {
-        aos-project-init = "${user-settings.user.home}/.agent-os/setup/project.sh";
-        aos-config = "cat ${user-settings.user.home}/.agent-os/config.yml";
-        aos-standards-nix = "ls -la ${user-settings.user.home}/.agent-os/project_types/nix/standards/";
-        aos-standards-go = "ls -la ${user-settings.user.home}/.agent-os/project_types/go/standards/";
-        aos-standards-bash = "ls -la ${user-settings.user.home}/.agent-os/project_types/bash/standards/";
-        aos-project-init-nix = "${user-settings.user.home}/.agent-os/setup/project.sh nix";
-        aos-project-init-go = "${user-settings.user.home}/.agent-os/setup/project.sh go";
-        aos-project-init-bash = "${user-settings.user.home}/.agent-os/setup/project.sh bash";
+        aos = "cd ${user-settings.user.home}/.agent-os";
       };
+
+      # Agent-OS management justfile
+      home.file.".agent-os/justfile".text = ''
+        # Agent-OS Management Commands
+        # https://github.com/casey/just
+
+        # === Settings ===
+        set dotenv-load := true
+        set ignore-comments := true
+        set shell := ["bash", "-euo", "pipefail", "-c"]
+
+        # === Variables ===
+        config_file := justfile_directory() + "/config.yml"
+        nixos_module := env_var_or_default("HOME", "") + "/dev/nix/nixcfg/modules/cli/agent-os/default.nix"
+
+        # === Help ===
+        # Show available Agent-OS commands
+        default:
+            @echo "🤖 Agent-OS Management Commands"
+            @echo "==============================="
+            @just --list --unsorted
+            @echo ""
+            @echo "🔧 Commands with Parameters:"
+            @echo "  init-project [type=nix]     - Initialize project (nix, go, bash)"
+            @echo ""
+            @echo "💡 Usage:"
+            @echo "  cd ~/.agent-os && just <command>"
+            @echo "  Or use fish alias: aos && just <command>"
+
+        # === Project Management ===
+        # Initialize new project with Agent-OS
+        [group('project')]
+        init-project type="nix":
+            #!/usr/bin/env bash
+            set -euo pipefail
+            echo "🚀 Initializing {{type}} project with Agent-OS..."
+            if [[ ! -f ./setup/project.sh ]]; then
+                echo "❌ Agent-OS project.sh not found. Check installation."
+                exit 1
+            fi
+            ./setup/project.sh --project-type={{type}}
+            echo "✅ Project initialized with {{type}} standards"
+
+        # === Information Commands ===
+        # Display Agent-OS configuration and status
+        [group('info')]
+        status:
+            @echo "📋 Agent-OS Status"
+            @echo "=================="
+            @echo "📍 Installation: $(pwd)"
+            @echo "🔧 Config file: $(pwd)/config.yml"
+            @echo ""
+            @echo "📦 Available project types:"
+            @ls -1 ./project_types/ 2>/dev/null | sed 's/^/  - /' || echo "  No custom project types"
+            @echo ""
+            @echo "🎯 Default project type:"
+            @grep "default_project_type:" ./config.yml | sed 's/.*: /  /' || echo "  Not configured"
+            @echo ""
+            @echo "📁 Custom standards:"
+            @find ./project_types/ -name "*.md" 2>/dev/null | head -5 | sed 's|^\./|  |' || echo "  No custom standards found"
+
+        # Show Agent-OS configuration file
+        [group('info')]
+        config:
+            @echo "📄 Agent-OS Configuration:"
+            @echo "=========================="
+            @cat ./config.yml
+
+        # List all available standards files
+        [group('info')]
+        standards:
+            @echo "📚 Available Standards:"
+            @echo "======================"
+            @echo ""
+            @echo "🔹 Upstream (default):"
+            @find ./standards/ -name "*.md" 2>/dev/null | sed 's|^\./|  |' || echo "  No upstream standards"
+            @echo ""
+            @echo "🔸 Custom project types:"
+            @find ./project_types/ -name "*.md" 2>/dev/null | sed 's|^\./|  |' || echo "  No custom standards"
+
+        # === Update Management ===
+        # Check for Agent-OS upstream updates
+        [group('update')]
+        check-upstream:
+            #!/usr/bin/env bash
+            set -euo pipefail
+            echo "🔍 Checking Agent-OS upstream for updates..."
+
+            if [[ -f "{{nixos_module}}" ]]; then
+                CURRENT_COMMIT=$(grep "agentOsCommit" "{{nixos_module}}" | cut -d'"' -f2)
+                echo "Current: $CURRENT_COMMIT"
+            else
+                echo "⚠️  NixOS module not found at {{nixos_module}}"
+                echo "Current: Unknown"
+            fi
+
+            LATEST_COMMIT=$(curl -s https://api.github.com/repos/buildermethods/agent-os/commits/main | jq -r .sha | cut -c1-7)
+            echo "Latest:  $LATEST_COMMIT"
+
+            if [[ "$CURRENT_COMMIT" != "$LATEST_COMMIT" ]] && [[ "$CURRENT_COMMIT" != "main" ]]; then
+                echo "⚠️  Updates available!"
+                echo "Update via NixOS rebuild after updating agentOsCommit in module"
+            else
+                echo "✅ Up to date (or using 'main' branch)"
+            fi
+
+        # === Development ===
+        # Test project initialization in temporary directory
+        [group('dev')]
+        test-init type="nix":
+            #!/usr/bin/env bash
+            set -euo pipefail
+            TEST_DIR="/tmp/agent-os-test-$(date +%s)"
+            echo "🧪 Testing {{type}} project initialization in $TEST_DIR"
+            mkdir -p "$TEST_DIR"
+            cd "$TEST_DIR"
+            ~/.agent-os/setup/project.sh --project-type={{type}}
+            echo "✅ Test completed in $TEST_DIR"
+            echo "🗑️  Clean up with: rm -rf $TEST_DIR"
+      '';
     };
   };
 }

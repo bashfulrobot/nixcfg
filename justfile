@@ -26,6 +26,7 @@ default:
     @echo "  log [days=7]               - Show commits from last N days"
     @echo "  lint [target=.]            - Lint specific file/directory (use jlint for tab completion)"
     @echo "  pkg-search <query>         - Search for packages"
+    @echo "  aos-init-project [type=nix] - Initialize project with Agent-OS (nix, go, bash)"
     @echo "  brand-icons <source> <target> - Create branded icons (e.g. gmail-br kong-email)"
     @echo "  backup-icons <app>         - Backup app icons before branding"
     @echo "  restore-icons <app>        - Restore original icons from backup"
@@ -306,6 +307,53 @@ inspect:
     @echo "nix eval .#nixosConfigurations.{{hostname}}.options.services --json"
     @echo "================================"
     @if [ -f extras/helpers/nix-repl.sh ]; then extras/helpers/nix-repl.sh; fi
+
+# Check for Agent-OS upstream updates
+[group('helpers')]
+aos-check-upstream:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔍 Checking Agent-OS upstream for updates..."
+    CURRENT_COMMIT=$(grep "agentOsCommit" modules/cli/agent-os/default.nix | cut -d'"' -f2)
+    LATEST_COMMIT=$(curl -s https://api.github.com/repos/buildermethods/agent-os/commits/main | jq -r .sha | cut -c1-7)
+    echo "Current: $CURRENT_COMMIT"
+    echo "Latest:  $LATEST_COMMIT"
+    if [[ "$CURRENT_COMMIT" != "$LATEST_COMMIT" ]]; then
+        echo "⚠️  Updates available!"
+        echo "Run 'just aos-update' to update (manual review required)"
+    else
+        echo "✅ Up to date"
+    fi
+
+# Display Agent-OS configuration and project types
+[group('helpers')]
+aos-status:
+    @echo "📋 Agent-OS Status"
+    @echo "=================="
+    @echo "📍 Installation: ~/.agent-os/"
+    @echo "🔧 Config file: ~/.agent-os/config.yml"
+    @echo ""
+    @echo "📦 Available project types:"
+    @ls -1 ~/.agent-os/project_types/ 2>/dev/null | sed 's/^/  - /' || echo "  No custom project types"
+    @echo ""
+    @echo "🎯 Default project type:"
+    @grep "default_project_type:" ~/.agent-os/config.yml | sed 's/.*: /  /'
+    @echo ""
+    @echo "📁 Custom standards:"
+    @find ~/.agent-os/project_types/ -name "*.md" 2>/dev/null | head -5 | sed 's/^/  /'
+
+# Create new project with Agent-OS
+[group('helpers')]
+aos-init-project type="nix":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🚀 Initializing {{type}} project with Agent-OS..."
+    if [[ ! -f ~/.agent-os/setup/project.sh ]]; then
+        echo "❌ Agent-OS not installed. Enable cli.agent-os in your NixOS config."
+        exit 1
+    fi
+    ~/.agent-os/setup/project.sh --project-type={{type}}
+    echo "✅ Project initialized with {{type}} standards"
 
 # === Branded Icons ===
 # Create branded work icons with Kong overlay (1/4 corner, pristine sources)

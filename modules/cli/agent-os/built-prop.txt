@@ -1,0 +1,484 @@
+# Agent-OS NixOS Management Strategy - Detailed Proposal
+
+## Current Situation Analysis
+
+### What We Have Now
+- Agent-OS v1.4.1 installed system-wide at `~/.agent-os/` via curl|bash installation
+- Basic NixOS module at `modules/cli/agent-os/default.nix` with only shell alias
+- Custom coding standards stored in `modules/cli/agent-os/module-config/`:
+  - `go-style.md`
+  - `nix-style.md`
+  - `bash-style.md`
+  - `justfile-style.md`
+  - `tech-stack.md` (customized for NixOS/K8s environment)
+
+### The Problem
+- Shell script installation bypasses NixOS declarative management
+- Updates via `curl -sSL ... | bash` risk overwriting customizations
+- No version control or rollback capability for Agent-OS installation
+- Custom files not integrated with upstream updates
+
+## Understanding Agent-OS Installation (from base.sh analysis)
+
+### Installation Structure
+Agent-OS installs these components to `~/.agent-os/`:
+
+```
+~/.agent-os/
+├── instructions/           # Workflow templates
+├── standards/             # Code standards (WHERE OUR CUSTOMIZATIONS GO)
+│   ├── best-practices.md
+│   ├── tech-stack.md
+│   └── code-style/
+│       ├── go-style.md
+│       ├── javascript-style.md
+│       ├── nix-style.md
+│       └── ...
+├── commands/              # Command definitions
+├── setup/                 # Installation scripts
+│   ├── functions.sh
+│   └── project.sh
+├── config.yml            # Main configuration
+└── claude-code/          # Claude Code specific agents (with --claude-code)
+    └── agents/
+```
+
+### Installation Command Analysis
+```bash
+curl -sSL https://raw.githubusercontent.com/buildermethods/agent-os/main/setup/base.sh | bash -s -- --claude-code
+```
+
+This downloads and installs:
+1. Base directory structure
+2. Core files from GitHub raw URLs
+3. Optional Claude Code agent configurations
+4. Configuration with sensible defaults
+
+## Proposed NixOS Solution
+
+### Core Strategy: Non-Invasive Custom Project Type
+
+Agent-OS has built-in support for custom project types! Instead of modifying upstream files, we can:
+
+1. **Install upstream completely untouched** - All original Agent-OS files preserved
+2. **Create custom "nixos" project type** - Your standards in separate directory
+3. **Configure Agent-OS to use custom type** - Automatic preference via config.yml
+4. **Zero conflicts on updates** - Upstream updates never touch your files
+
+### Alternative Strategy: File Extension Pattern
+
+If custom project types don't work, use additional files:
+- Add files with suffixes: `tech-stack-nixos.md`, `nix-style-dustin.md`
+- Agent-OS appears to support multiple files in standards directories
+- Your files supplement (don't replace) upstream files
+
+### Implementation Approach
+
+#### Option A: Custom Project Type (Highly Recommended)
+
+Agent-OS's update documentation confirms this is the best approach:
+- Base installation files get updated safely with `--overwrite-instructions`
+- Standards files are preserved from updates
+- Custom project types are the intended way to handle this
+
+```nix
+# Enhanced config.yml with custom project type
+home.file.".agent-os/config.yml".text = ''
+  # Agent OS Configuration
+  agent_os_version: ${agentOsVersion}
+
+  agents:
+    claude_code:
+      enabled: true
+    cursor:
+      enabled: false
+
+  project_types:
+    default:
+      instructions: ~/.agent-os/instructions
+      standards: ~/.agent-os/standards
+
+    nixos:
+      instructions: ~/.agent-os/instructions
+      standards: ~/.agent-os/project_types/nixos/standards
+
+  default_project_type: nixos
+'';
+
+# Install upstream files completely untouched
+home.file.".agent-os/standards".source = fetchAgentOsFile "standards";
+home.file.".agent-os/instructions".source = fetchAgentOsFile "instructions";
+
+# Install your custom standards in separate directory
+home.file.".agent-os/project_types/nixos/standards/tech-stack.md".source =
+  ./module-config/tech-stack.md;
+home.file.".agent-os/project_types/nixos/standards/code-style/nix-style.md".source =
+  ./module-config/nix-style.md;
+# ... etc for all custom files
+```
+
+#### Option B: File Extension Pattern (Fallback)
+
+If custom project types don't work as expected, use additional files:
+
+```nix
+# Upstream files untouched
+home.file.".agent-os/standards".source = fetchAgentOsFile "standards";
+
+# Additional custom files with clear naming
+home.file.".agent-os/standards/tech-stack-nixos.md".source =
+  ./module-config/tech-stack.md;
+home.file.".agent-os/standards/code-style/nix-style-dustin.md".source =
+  ./module-config/nix-style.md;
+```
+
+### Enhanced NixOS Module Structure
+
+```nix
+{ user-settings, lib, pkgs, config, ... }:
+let
+  cfg = config.cli.agent-os;
+
+  # Version pinning for reproducibility
+  agentOsVersion = "1.4.1";
+  agentOsCommit = "main"; # or specific commit hash
+
+  # Helper function to fetch Agent-OS files
+  fetchAgentOsFile = path: pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/buildermethods/agent-os/${agentOsCommit}/${path}";
+    # sha256 = ""; # Add hash for each file
+  };
+
+  # Custom standards overlay
+  customStandards = {
+    "code-style/nix-style.md" = ./module-config/nix-style.md;
+    "code-style/go-style.md" = ./module-config/go-style.md;
+    "code-style/bash-style.md" = ./module-config/bash-style.md;
+    "code-style/justfile-style.md" = ./module-config/justfile-style.md;
+  };
+
+  # Custom root-level standards
+  customRootStandards = {
+    "tech-stack.md" = ./module-config/tech-stack.md;
+  };
+
+in {
+  options = {
+    cli.agent-os = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable Agent-OS with NixOS-managed installation";
+      };
+
+      enableClaudeCode = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable Claude Code agent configurations";
+      };
+
+      version = lib.mkOption {
+        type = lib.types.str;
+        default = agentOsVersion;
+        description = "Agent-OS version to install";
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    home-manager.users."${user-settings.user.username}" = {
+
+      # Core Agent-OS files (direct from upstream)
+      home.file = {
+        ".agent-os/config.yml".source = fetchAgentOsFile "config.yml";
+        ".agent-os/setup/functions.sh".source = fetchAgentOsFile "setup/functions.sh";
+        ".agent-os/setup/project.sh".source = fetchAgentOsFile "setup/project.sh";
+
+        # Instructions (upstream only for now)
+        ".agent-os/instructions".source = fetchAgentOsFile "instructions";
+
+        # Commands (upstream only)
+        ".agent-os/commands".source = fetchAgentOsFile "commands";
+
+        # Claude Code agents (conditional)
+        ".agent-os/claude-code".source = lib.mkIf cfg.enableClaudeCode
+          (fetchAgentOsFile "claude-code");
+      }
+
+      # Custom standards with upstream integration (code-style subdirectory)
+      // (lib.mapAttrs' (name: customFile:
+        lib.nameValuePair ".agent-os/standards/${name}" {
+          text = ''
+            ${builtins.readFile customFile}
+
+            <!-- ================================= -->
+            <!-- UPSTREAM REFERENCE (Agent-OS) -->
+            <!-- ================================= -->
+
+            ${builtins.readFile (fetchAgentOsFile "standards/${name}")}
+          '';
+        }
+      ) customStandards)
+
+      # Custom root-level standards with upstream integration
+      // (lib.mapAttrs' (name: customFile:
+        lib.nameValuePair ".agent-os/standards/${name}" {
+          text = ''
+            ${builtins.readFile customFile}
+
+            <!-- ================================= -->
+            <!-- UPSTREAM REFERENCE (Agent-OS) -->
+            <!-- ================================= -->
+
+            ${builtins.readFile (fetchAgentOsFile "standards/${name}")}
+          '';
+        }
+      ) customRootStandards)
+
+      # Other upstream standards (non-customized)
+      // {
+        ".agent-os/standards/best-practices.md".source =
+          fetchAgentOsFile "standards/best-practices.md";
+      };
+
+      # Shell aliases for convenience
+      programs.fish.shellAliases = {
+        aos-project-init = "${user-settings.user.home}/.agent-os/setup/project.sh";
+        aos-update = "sudo nixos-rebuild switch";  # Updates via NixOS rebuild
+      };
+    };
+  };
+}
+```
+
+## Step-by-Step Implementation Plan
+
+### Phase 1: Research & Setup
+1. **Analyze upstream structure** - Map all files in Agent-OS repo
+2. **Get file hashes** - Calculate sha256 for each upstream file
+3. **Test fetchurl approach** - Verify file download works correctly
+
+### Phase 2: Basic Implementation
+4. **Replace shell installation** - Remove current basic module
+5. **Implement core files** - Install config.yml, setup scripts, etc.
+6. **Add upstream standards** - Install non-customized standards files
+
+### Phase 3: Custom Overlay
+7. **Implement custom standards** - Combine custom + upstream content
+8. **Test functionality** - Verify Agent-OS works with new installation
+9. **Add version management** - Enable version pinning and updates
+
+### Phase 4: Enhancement & Maintenance
+10. **Add justfile commands** - Integration with your build system
+11. **Documentation** - Update CLAUDE.md with new approach
+12. **Monitoring** - Setup to detect upstream changes
+
+## Benefits of This Approach
+
+### Immediate Benefits
+- **Zero conflicts** - Your files completely separate from upstream
+- **Declarative management** - Agent-OS installation described in NixOS config
+- **Version control** - Your customizations are version controlled
+- **Rollback capability** - Standard NixOS generation rollback works
+- **Reproducible** - Same installation across systems
+
+### Update Management (Conflict-Free!)
+- **Safe updates** - Upstream files update without touching yours
+- **No manual intervention** - Updates just work, no conflict resolution needed
+- **Selective adoption** - Choose which upstream improvements to adopt manually
+- **Perfect isolation** - Your customizations never interfere with upstream changes
+
+### Integration Benefits
+- **NixOS ecosystem** - Leverages existing home-manager patterns
+- **Build system integration** - Works with your justfile commands
+- **Shell integration** - Fish aliases automatically managed
+
+## Migration Strategy
+
+### Phase 1: Backup Current Setup
+```bash
+# Backup existing installation
+cp -r ~/.agent-os ~/.agent-os.backup-$(date +%Y%m%d)
+```
+
+### Phase 2: Implement New Module
+1. Update `modules/cli/agent-os/default.nix` with new implementation
+2. Enable the module: `cli.agent-os.enable = true;`
+3. Build and test: `just build`
+
+### Phase 3: Verify Functionality
+1. Check installation: `ls -la ~/.agent-os`
+2. Test project setup: `~/.agent-os/setup/project.sh`
+3. Verify custom standards are included
+
+### Phase 4: Production Deploy
+1. Commit changes to git
+2. Deploy: `just rebuild`
+3. Remove backup if successful
+
+## Conflict Resolution Strategy
+
+### Upstream Update Scenarios
+
+#### Scenario 1: Upstream Adds New Content
+**What happens:** Upstream adds new sections to files you've customized
+**Resolution:** Automatically included via overlay - your content first, then upstream additions
+**Example:** Upstream adds new Go best practices to `go-style.md`
+**Result:** Your custom Go standards + new upstream additions
+
+#### Scenario 2: Upstream Modifies Existing Sections
+**What happens:** Upstream changes content that overlaps with your customizations
+**Detection:** Hash mismatch when updating Agent-OS version
+**Resolution:** Manual intervention required
+**Workflow:**
+1. Build fails with hash mismatch
+2. Update hash to get new upstream version
+3. Review combined file output
+4. Manually resolve conflicts in your custom files
+5. Rebuild and test
+
+#### Scenario 3: Upstream Removes Content
+**What happens:** Upstream removes sections your customizations reference
+**Detection:** Build succeeds but generated files may have broken references
+**Resolution:** Manual cleanup of custom files
+
+#### Scenario 4: Structural Changes
+**What happens:** Upstream reorganizes files or changes format
+**Detection:** Build fails or unexpected file structure
+**Resolution:** Update NixOS module to match new structure
+
+### Conflict Detection Mechanism
+
+#### Version Pinning Strategy
+```nix
+# Pin to specific commit for stability
+agentOsCommit = "abc123def"; # Known good commit
+agentOsVersion = "1.4.1";
+
+# When ready to update:
+# 1. Change agentOsCommit to newer commit
+# 2. Update hashes (will fail first, then update)
+# 3. Test build
+# 4. Review generated files
+# 5. Resolve conflicts in custom files if needed
+```
+
+#### Update Workflow with Justfile Integration
+```just
+# Check for Agent-OS upstream updates
+aos-check-upstream:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔍 Checking Agent-OS upstream for updates..."
+    CURRENT_COMMIT=$(grep "agentOsCommit" modules/cli/agent-os/default.nix | cut -d'"' -f2)
+    LATEST_COMMIT=$(curl -s https://api.github.com/repos/buildermethods/agent-os/commits/main | jq -r .sha | cut -c1-7)
+    echo "Current: $CURRENT_COMMIT"
+    echo "Latest:  $LATEST_COMMIT"
+    if [[ "$CURRENT_COMMIT" != "$LATEST_COMMIT" ]]; then
+        echo "⚠️  Updates available!"
+        echo "Run 'just aos-update' to update (manual review required)"
+    else
+        echo "✅ Up to date"
+    fi
+
+# Update Agent-OS (requires manual conflict resolution)
+aos-update:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔄 Updating Agent-OS..."
+    LATEST_COMMIT=$(curl -s https://api.github.com/repos/buildermethods/agent-os/commits/main | jq -r .sha | cut -c1-7)
+
+    # Update commit hash in module
+    sed -i "s/agentOsCommit = \".*\"/agentOsCommit = \"$LATEST_COMMIT\"/" modules/cli/agent-os/default.nix
+
+    echo "⚠️  Updated to commit $LATEST_COMMIT"
+    echo "⚠️  Build will likely fail due to hash mismatches"
+    echo "⚠️  Run 'just check' and update hashes as needed"
+    echo "⚠️  Then run 'just aos-review' to check for conflicts"
+
+# Review generated Agent-OS files for conflicts
+aos-review:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📋 Reviewing generated Agent-OS files..."
+    echo "Checking custom standards for conflicts:"
+    for file in nix-style.md go-style.md bash-style.md justfile-style.md tech-stack.md; do
+        if [[ -f "$HOME/.agent-os/standards/$file" ]] || [[ -f "$HOME/.agent-os/standards/code-style/$file" ]]; then
+            echo "📄 $file - generated successfully"
+        else
+            echo "❌ $file - MISSING! Check for upstream structural changes"
+        fi
+    done
+    echo ""
+    echo "🔍 To manually review files:"
+    echo "  cat ~/.agent-os/standards/tech-stack.md"
+    echo "  cat ~/.agent-os/standards/code-style/nix-style.md"
+```
+
+### Three-Way Merge Strategy (Advanced)
+
+For complex scenarios, implement a three-way merge approach:
+
+```nix
+# Advanced conflict resolution
+customStandardsAdvanced = lib.mapAttrs (name: customFile:
+  let
+    upstream = fetchAgentOsFile "standards/${name}";
+    upstreamContent = builtins.readFile upstream;
+    customContent = builtins.readFile customFile;
+
+    # Store previous upstream version for conflict detection
+    previousUpstream = fetchurl {
+      url = "https://raw.githubusercontent.com/buildermethods/agent-os/${previousCommit}/standards/${name}";
+      sha256 = "..."; # Previous version hash
+    };
+
+  in {
+    text = ''
+      <!-- CUSTOM CONTENT -->
+      ${customContent}
+
+      <!-- UPSTREAM CHANGES -->
+      <!-- Previous version: ${previousCommit} -->
+      <!-- Current version: ${agentOsCommit} -->
+
+      ${upstreamContent}
+    '';
+  }
+) customStandards;
+```
+
+## Risk Mitigation
+
+### Potential Issues
+- **Hash mismatches** - Upstream files change without notice
+- **Network dependencies** - Fetchurl requires internet during build
+- **Content conflicts** - Upstream changes conflict with custom content
+- **Structural changes** - Upstream reorganizes file structure
+
+### Mitigation Strategies
+- **Commit pinning** - Use specific commit hashes, not "main" branch
+- **Local caching** - Nix store caches downloads
+- **Update workflow** - Structured process for handling updates
+- **Conflict detection** - Automated checking for update availability
+- **Manual review process** - Required step before applying updates
+- **Rollback plan** - NixOS generation rollback available
+- **Testing framework** - Test builds before production deployment
+
+## Future Enhancements
+
+### Automated Updates
+- **Upstream monitoring** - Detect when new Agent-OS versions release
+- **Hash updates** - Automatically update file hashes
+- **Conflict detection** - Alert when custom files need updates
+
+### Extended Customization
+- **Project-specific configs** - Different configs for different project types
+- **Dynamic standards** - Standards that adapt to project structure
+- **Integration hooks** - Hooks for Claude Code and other tools
+
+## Conclusion
+
+This approach provides a robust, NixOS-native way to manage Agent-OS while preserving your customizations. It eliminates the update fragility of shell script installation while gaining all the benefits of declarative system management.
+
+The overlay system ensures your custom coding standards are always preserved and combined with upstream improvements, giving you the best of both worlds.

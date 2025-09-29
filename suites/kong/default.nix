@@ -38,7 +38,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-
+      unstable.insomnia
     ];
 
     home-manager.users."${user-settings.user.username}" = {

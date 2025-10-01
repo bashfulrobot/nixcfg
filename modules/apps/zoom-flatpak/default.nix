@@ -26,17 +26,28 @@ in
 
     services.flatpak.overrides = {
       "us.zoom.Zoom" = {
-        Context.shared = [ "network" "ipc" ];  # Add IPC for process communication
+        Context.shared = [ "network" "ipc" ];  # Required: IPC and network access
+        Context.sockets = [ "x11" "wayland" "pulseaudio" ];  # Required: Display and audio
+        Context.devices = [ "all" ];  # Required: Camera and microphone access
         Context.filesystems = [
           "host-etc:ro"  # Access to /etc for NixOS user profiles
           "/run/current-system/sw/bin:ro"  # System binaries
+          "xdg-documents/Zoom:create"  # Required: Zoom documents folder
         ];
         Context.talks = [
           "org.freedesktop.portal.Desktop"  # Desktop portal for launching apps
           "org.freedesktop.portal.OpenURI"  # URI opening portal
+          "org.freedesktop.secrets"         # Access to GNOME keyring via Secret Service API
+          "org.freedesktop.ScreenSaver"     # Required: Screen saver control
         ];
+        Context.owns = [ "org.kde.*" ];  # Required: KDE namespace (for Qt integration)
+        Context.persistent = [ ".zoom" ];  # Required: Persistent Zoom config
         Environment = {
-          XDG_CURRENT_DESKTOP = "COSMIC";
+          XDG_CURRENT_DESKTOP = "Hyprland";
+          QT_QPA_PLATFORM = "";  # Required: Qt platform environment
+          GTK_THEME = "Adwaita:dark";
+          QT_STYLE_OVERRIDE = "adwaita-dark";
+          QT_QPA_PLATFORMTHEME = "gnome";
         };
       };
     };

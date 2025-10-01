@@ -80,6 +80,21 @@ in
         };
       };
 
+      # GNOME Keyring Secrets component - handles password storage and unlock
+      gnome-keyring-secrets = {
+        description = "GNOME Keyring Secrets component";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets";
+          Restart = "on-failure";
+          RestartSec = 2;
+          TimeoutStopSec = 10;
+        };
+      };
+
       privacy-monitor =
         let
           privacy-monitor-script = pkgs.writeShellScript "privacy-monitor" ''
@@ -202,8 +217,8 @@ in
     xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
-        unstable.xdg-desktop-portal-hyprland
-        unstable.xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
+        xdg-desktop-portal-gtk
       ];
       config = {
         common = {
@@ -270,6 +285,14 @@ in
     };
 
     hw.bluetooth.enable = true;
+
+    # Security wrapper for gnome-keyring-daemon with proper capabilities
+    security.wrappers.gnome-keyring-daemon = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_ipc_lock=ep";
+      source = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon";
+    };
 
     # Fix keyring unlock by ensuring XDG_RUNTIME_DIR is properly set during login
     environment.variables = {

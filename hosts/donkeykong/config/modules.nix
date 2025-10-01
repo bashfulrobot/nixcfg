@@ -30,6 +30,7 @@
   };
 
   cli = {
+    ghostty.enable = true;
     # only a subset of ai tools needed on this host.
     # not powerful enough for full suite.
     gemini-cli.enable = true;

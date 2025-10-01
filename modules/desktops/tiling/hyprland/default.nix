@@ -202,9 +202,17 @@ in
     xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-        xdg-desktop-portal-gtk
+        unstable.xdg-desktop-portal-hyprland
+        unstable.xdg-desktop-portal-gtk
       ];
+      config = {
+        common = {
+          default = [ "hyprland" "gtk" ];
+        };
+        hyprland = {
+          default = [ "hyprland" "gtk" ];
+        };
+      };
     };
 
     environment.systemPackages = with pkgs; [
@@ -264,7 +272,13 @@ in
     hw.bluetooth.enable = true;
 
     # Fix keyring unlock by ensuring XDG_RUNTIME_DIR is properly set during login
-    environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
+    environment.variables = {
+      XDG_RUNTIME_DIR = "/run/user/$UID";
+      # Ensure desktop portals get proper theming
+      GTK_THEME = "Adwaita:dark";
+      QT_STYLE_OVERRIDE = "adwaita-dark";
+      QT_QPA_PLATFORMTHEME = "gnome";
+    };
 
     sys = {
       dconf.enable = true;
@@ -378,7 +392,8 @@ in
             "SIGNAL_PASSWORD_STORE,gnome-libsecret"
             # Additional theming variables for comprehensive dark mode support
             "GTK_THEME,Adwaita:dark"
-            "QT_STYLE_OVERRIDE,kvantum"
+            "QT_STYLE_OVERRIDE,adwaita-dark"
+            "QT_QPA_PLATFORMTHEME,gnome"
             "ELECTRON_FORCE_DARK_MODE,1"
             "ELECTRON_ENABLE_DARK_MODE,1"
             "ELECTRON_USE_SYSTEM_THEME,1"

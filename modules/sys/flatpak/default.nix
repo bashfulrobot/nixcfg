@@ -15,9 +15,7 @@ in {
     # Enable Flatpaks
     services.flatpak.enable = true;
     
-    # Fix xdg-open mimetype handling with Flatpak installed
-    # This prevents xdg-open from using portal system and breaking URL associations
-    xdg.portal.xdgOpenUsePortal = false;
+    xdg.portal.xdgOpenUsePortal = true;
 
     # enable updates at system activation (default false)
     # services.flatpak.update.onActivation = true;

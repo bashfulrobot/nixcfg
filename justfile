@@ -332,6 +332,44 @@ restore-icons app_name:
     @echo "🔄 Restoring {{app_name}} from backup..."
     @./extras/helpers/backup-icons.sh --restore {{app_name}}
 
+# === Flatpak Management ===
+# Update all installed Flatpak applications
+[group('maintenance')]
+flatpak-update:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📦 Updating Flatpak applications..."
+    echo "Current installed apps:"
+    flatpak list --app --columns=application,version,name
+    echo ""
+    echo "Checking for updates..."
+    if flatpak update --noninteractive; then
+        echo "✅ Flatpak updates completed successfully"
+        echo ""
+        echo "Updated versions:"
+        flatpak list --app --columns=application,version,name
+        echo ""
+        echo "📺 ZOOM REMINDER: If Zoom was updated, verify screen sharing settings:"
+        echo "   Settings > Screen Share > Advanced > Set 'Screen Capture Mode on Wayland' to 'PipeWire Mode'"
+        echo ""
+    else
+        echo "❌ Flatpak update failed"
+        exit 1
+    fi
+
+# Show Flatpak update status without updating
+[group('maintenance')]
+flatpak-check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📦 Checking Flatpak application status..."
+    echo ""
+    echo "Currently installed:"
+    flatpak list --app --columns=application,version,name
+    echo ""
+    echo "Available updates:"
+    flatpak remote-ls --updates --columns=application,version,name || echo "No updates available"
+
 # === Workflow Aliases ===
 alias c := check
 alias d := check-diff
@@ -341,3 +379,5 @@ alias r := rebuild
 alias up := upgrade
 alias gc := clean
 alias l := log
+alias fup := flatpak-update
+alias fcheck := flatpak-check

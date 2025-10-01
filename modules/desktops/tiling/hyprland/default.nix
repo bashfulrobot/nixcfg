@@ -1,4 +1,5 @@
-# https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/x11/desktop-managers/gnome.nix
+# Screenshare guide for hyprland
+# https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580
 {
   user-settings,
   pkgs,
@@ -201,8 +202,8 @@ in
     xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk # Fallback for better app compatibility
-        xdg-desktop-portal-gnome
+        xdg-desktop-portal-hyprland
+        xdg-desktop-portal-gtk
       ];
     };
 
@@ -215,6 +216,8 @@ in
       hyprpicker
       cliphist
       grimblast
+      grim # needed for screensharing
+      slurp # needed for screensharing
       swappy
       libnotify
       brightnessctl
@@ -390,6 +393,8 @@ in
             #"[workspace special silent] ${browser} --private-window"
             #"[workspace special silent] ${terminal}"
 
+            # Needed for screensharing
+            "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
             "swaync"
             "nm-applet --indicator"
             #"blueman-applet"

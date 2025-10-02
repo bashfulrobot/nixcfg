@@ -34,13 +34,26 @@ in
           name = "JetBrainsMono Nerd Font Mono";
         };
         sansSerif = {
-          package = pkgs.work-sans;
-          name = "Work Sans";
+          package = pkgs.nerd-fonts.liberation;
+          name = "LiterationSans Nerd Font";
         };
         serif = {
-          package = pkgs.work-sans;
-          name = "Work Sans";
+          package = pkgs.nerd-fonts.liberation;
+          name = "LiterationSerif Nerd Font";
         };
+        # Previous fonts (fallback):
+        # monospace = {
+        #   package = pkgs.nerd-fonts.jetbrains-mono;
+        #   name = "JetBrainsMono Nerd Font Mono";
+        # };
+        # sansSerif = {
+        #   package = pkgs.work-sans;
+        #   name = "Work Sans";
+        # };
+        # serif = {
+        #   package = pkgs.work-sans;
+        #   name = "Work Sans";
+        # };
         emoji = {
           package = pkgs.noto-fonts-emoji;
           name = "Noto Color Emoji";

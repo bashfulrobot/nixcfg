@@ -242,6 +242,7 @@ in
       grim # needed for screensharing
       slurp # needed for screensharing
       swappy
+      annotator # image annotation tool
       libnotify
       brightnessctl
       networkmanagerapplet
@@ -801,6 +802,7 @@ in
               "$mainMod CTRL, P, exec, ${../module-config/scripts/screenshot.sh} sf" # frozen screen, drag to snip an area / click on a window to print it
               "$mainMod, print, exec, ${../module-config/scripts/screenshot.sh} m" # print focused monitor
               "$mainMod ALT, P, exec, ${../module-config/scripts/screenshot.sh} p" # print all monitor outputs
+              "CTRL ALT, A, exec, ${../module-config/scripts/screenshot-annotate.sh}" # screenshot + annotate workflow
 
               # Functional keybinds
               ",xf86Sleep, exec, systemctl suspend" # Put computer into sleep mode

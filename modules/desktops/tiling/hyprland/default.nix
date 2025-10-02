@@ -114,14 +114,12 @@ in
                 if ${pkgs.lsof}/bin/lsof /dev/video* 2>/dev/null | grep -v COMMAND | head -1 >/dev/null; then
                     if [[ ! -f "$CAMERA_FILE" ]]; then
                         touch "$CAMERA_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "🔴 Camera Access" -b "An application is accessing your camera" --urgency critical
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(f38ba8)" "🔴 Camera is being accessed"
+                        ${pkgs.libnotify}/bin/notify-send "🔴 Camera Access" "An application is accessing your camera" -u critical
                     fi
                 else
                     if [[ -f "$CAMERA_FILE" ]]; then
                         rm "$CAMERA_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Camera Access Ended" -b "Camera access has stopped"
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Camera access ended"
+                        ${pkgs.libnotify}/bin/notify-send "✅ Camera Access Ended" "Camera access has stopped" -u normal
                     fi
                 fi
             }
@@ -131,14 +129,12 @@ in
                 if ${pkgs.pulseaudio}/bin/pactl list source-outputs 2>/dev/null | grep -q "Source Output"; then
                     if [[ ! -f "$MIC_FILE" ]]; then
                         touch "$MIC_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "🎤 Microphone Access" -b "An application is accessing your microphone" --urgency critical
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(f9e2af)" "🎤 Microphone is being accessed"
+                        ${pkgs.libnotify}/bin/notify-send "🎤 Microphone Access" "An application is accessing your microphone" -u critical
                     fi
                 else
                     if [[ -f "$MIC_FILE" ]]; then
                         rm "$MIC_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Microphone Access Ended" -b "Microphone access has stopped"
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Microphone access ended"
+                        ${pkgs.libnotify}/bin/notify-send "✅ Microphone Access Ended" "Microphone access has stopped" -u normal
                     fi
                 fi
             }
@@ -148,14 +144,12 @@ in
                 if ${pkgs.procps}/bin/pgrep -f "grim|grimblast|wf-recorder|obs" >/dev/null 2>&1; then
                     if [[ ! -f "$SCREEN_FILE" ]]; then
                         touch "$SCREEN_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "📺 Screen Sharing Active" -b "Screen recording/sharing is active" --urgency critical
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 5000 "rgb(cba6f7)" "📺 Screen sharing is active"
+                        ${pkgs.libnotify}/bin/notify-send "📺 Screen Sharing Active" "Screen recording/sharing is active" -u critical
                     fi
                 else
                     if [[ -f "$SCREEN_FILE" ]]; then
                         rm "$SCREEN_FILE"
-                        ${pkgs.swaynotificationcenter}/bin/swaync-client -t "✅ Screen Sharing Ended" -b "Screen sharing has stopped"
-                        ${pkgs.hyprland}/bin/hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Screen sharing ended"
+                        ${pkgs.libnotify}/bin/notify-send "✅ Screen Sharing Ended" "Screen sharing has stopped" -u normal
                     fi
                 fi
             }
@@ -786,9 +780,11 @@ in
               # Applications/Programs
               "$mainMod, Return, exec, $term"
               "$mainMod, T, exec, $term"
-              "$mainMod, E, exec, $fileManager"
+              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000"
+              "$mainMod, E, submap, 󰉋 Explore"
               "$mainMod, C, exec, $editor"
-              "$mainMod, F, exec, $browser"
+              "$mainMod, B, exec, $browser"
+              "$mainMod, F, fullscreen"
               "$mainMod SHIFT, S, exec, spotify"
               "$mainMod SHIFT, Y, exec, youtube-music"
               "$CONTROL ALT, DELETE, exec, $term -e '${getExe pkgs.btop}'" # System Monitor
@@ -803,7 +799,6 @@ in
               "$mainMod ALT, K, exec, ${../module-config/scripts/keyboardswitch.sh}" # change keyboard layout
               "$mainMod ALT, B, exec, blueman-manager" # bluetooth manager
               "$mainMod SHIFT, N, exec, swaync-client -t -sw" # swayNC panel
-              "$mainMod SHIFT, Q, exec, swaync-client -t -sw" # swayNC panel
               "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher
               "$mainMod ALT, G, exec, ${../module-config/scripts/gamemode.sh}" # disable hypr effects for gamemode
               "$mainMod, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
@@ -930,7 +925,8 @@ in
               "$mainMod, O, togglesplit" # Toggle split direction of focused window
 
               # Enter resize mode
-              "$mainMod, R, submap, resize" # Enter resize mode
+              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000"
+              "$mainMod, R, submap, ↔ resize" # Enter resize mode
 
               # Special workspaces (scratchpad)
               "$mainMod CTRL, S, movetoworkspacesilent, special"
@@ -967,8 +963,23 @@ in
             #pass_mouse_when_bound=0
           }
 
+          # Submap for exploring directories
+          submap = 󰉋 Explore
+          bind = , d, exec, nautilus ~/Downloads
+          bind = , d, submap, reset
+          bind = , o, exec, nautilus ~/Documents
+          bind = , o, submap, reset
+          bind = , v, exec, nautilus ~/dev
+          bind = , v, submap, reset
+          bind = , s, exec, nautilus ~/Pictures/Screenshots
+          bind = , s, submap, reset
+          bind = , n, exec, nautilus ~/dev/nix/nixcfg
+          bind = , n, submap, reset
+          bind = , escape, submap, reset
+          bind = , return, submap, reset
+
           # Resize submap for cleaner resize workflow
-          submap = resize
+          submap = ↔ resize
           binde = , h, resizeactive, -30 0
           binde = , l, resizeactive, 30 0
           binde = , k, resizeactive, 0 -30

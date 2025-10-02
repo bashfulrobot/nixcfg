@@ -14,14 +14,12 @@ check_camera() {
     if lsof /dev/video* 2>/dev/null | grep -v COMMAND | head -1 >/dev/null; then
         if [[ ! -f "$CAMERA_FILE" ]]; then
             touch "$CAMERA_FILE"
-            swaync-client -t "🔴 Camera Access" -b "An application is accessing your camera" --urgency critical
-            hyprctl notify -1 5000 "rgb(f38ba8)" "🔴 Camera is being accessed"
+            notify-send "🔴 Camera Access" "An application is accessing your camera" -u critical
         fi
     else
         if [[ -f "$CAMERA_FILE" ]]; then
             rm "$CAMERA_FILE"
-            swaync-client -t "✅ Camera Access Ended" -b "Camera access has stopped"
-            hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Camera access ended"
+            notify-send "✅ Camera Access Ended" "Camera access has stopped" -u normal
         fi
     fi
 }
@@ -31,14 +29,12 @@ check_microphone() {
     if pactl list source-outputs 2>/dev/null | grep -q "Source Output"; then
         if [[ ! -f "$MIC_FILE" ]]; then
             touch "$MIC_FILE"
-            swaync-client -t "🎤 Microphone Access" -b "An application is accessing your microphone" --urgency critical
-            hyprctl notify -1 5000 "rgb(f9e2af)" "🎤 Microphone is being accessed"
+            notify-send "🎤 Microphone Access" "An application is accessing your microphone" -u critical
         fi
     else
         if [[ -f "$MIC_FILE" ]]; then
             rm "$MIC_FILE"
-            swaync-client -t "✅ Microphone Access Ended" -b "Microphone access has stopped"
-            hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Microphone access ended"
+            notify-send "✅ Microphone Access Ended" "Microphone access has stopped" -u normal
         fi
     fi
 }
@@ -48,14 +44,12 @@ check_screenshare() {
     if pgrep -f "grim\|grimblast\|wf-recorder\|obs" >/dev/null 2>&1; then
         if [[ ! -f "$SCREEN_FILE" ]]; then
             touch "$SCREEN_FILE"
-            swaync-client -t "📺 Screen Sharing Active" -b "Screen recording/sharing is active" --urgency critical
-            hyprctl notify -1 5000 "rgb(cba6f7)" "📺 Screen sharing is active"
+            notify-send "📺 Screen Sharing Active" "Screen recording/sharing is active" -u critical
         fi
     else
         if [[ -f "$SCREEN_FILE" ]]; then
             rm "$SCREEN_FILE"
-            swaync-client -t "✅ Screen Sharing Ended" -b "Screen sharing has stopped"
-            hyprctl notify -1 3000 "rgb(a6e3a1)" "✅ Screen sharing ended"
+            notify-send "✅ Screen Sharing Ended" "Screen sharing has stopped" -u normal
         fi
     fi
 }

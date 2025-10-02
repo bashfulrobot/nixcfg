@@ -255,7 +255,7 @@ in
             --enable-features=UseOzonePlatform
             --ozone-platform=wayland
             --enable-features=WaylandWindowDecorations
-            --ozone-platform-hint=auto
+            --ozone-platform-hint=wayland
             --gtk-version=4
           '';
         in

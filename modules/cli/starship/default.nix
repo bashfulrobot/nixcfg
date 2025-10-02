@@ -22,7 +22,7 @@ in {
         enableZshIntegration = true;
         enableFishIntegration = true;
         settings = {
-          command_timeout = 1000;
+          command_timeout = 300;
           character = {
             success_symbol = "[](bold)";
             error_symbol = "[](bold)";
@@ -34,16 +34,31 @@ in {
           package.disabled = true;
           container.disabled = true;
           git_status = {
-            untracked = "";
-            stashed = "";
-            modified = "";
-            staged = "";
-            renamed = "";
-            deleted = "";
+            format = "[$all_status]($style)";
+            ahead = "⇡\${count} ";
+            behind = "⇣\${count} ";
+            diverged = "⇕⇡\${ahead_count}⇣\${behind_count} ";
+            conflicted = " ";
+            up_to_date = " ";
+            untracked = "? ";
+            modified = " ";
+            staged = "+ ";
+            renamed = "» ";
+            deleted = "✘ ";
           };
           terraform.symbol = " ";
-          git_branch.symbol = " ";
-          directory.read_only = " ";
+          git_branch = {
+            symbol = " ";
+            style = "italic";
+            format = "[$symbol$branch]($style) ";
+          };
+          directory = {
+            read_only = " ";
+            truncation_length = 2;
+            truncation_symbol = "…/";
+            repo_root_style = "bold";
+            format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ";
+          };
           custom.env = {
             command = "cat /etc/prompt";
             format = "$output ";
@@ -90,6 +105,10 @@ in {
           python = {
             format = "[$symbol]($style)";
             symbol = " ";
+          };
+          cmd_duration = {
+            min_time = 500;
+            format = "took [$duration]($style) ";
           };
           gcloud.disabled = true;
           aws.disabled = true;

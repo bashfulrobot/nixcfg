@@ -11,9 +11,9 @@ let
   homeManagerSearchApp = makeDesktopApp {
     name = "Home Manager Search";
     url = "https://home-manager-options.extranix.com/";
-    binary = "${pkgs.unstable.brave}/bin/brave";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-home-manager-options.extranix.com__-Default";
-    myStartupWMClass = "brave-home-manager-options.extranix.com__-Default";
+    myStartupWMClass = "chrome-home-manager-options.extranix.com__-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

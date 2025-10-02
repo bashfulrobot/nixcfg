@@ -21,7 +21,7 @@ let
     desktopName = "Chromium";
     genericName = "Chromium Web Browser";
     comment = "Access the Internet";
-    exec = "${pkgs.chromium}/bin/chromium %U";
+    exec = "${pkgs.unstable.chromium}/bin/chromium %U";
     startupWMClass = "chromium-browser";
     startupNotify = true;
     terminal = false;

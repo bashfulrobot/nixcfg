@@ -11,9 +11,9 @@ let
   githubCodeSearchApp = makeDesktopApp {
     name = "Github Code Search";
     url = "https://github.com/search?type=code&auto_enroll=true";
-    binary = "${pkgs.unstable.brave}/bin/brave";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-github.com__search-Default";
-    myStartupWMClass = "brave-github.com__search-Default";
+    myStartupWMClass = "chrome-github.com__search-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256" "512" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

@@ -10,8 +10,8 @@ let
   newKongDocApp = makeDesktopApp {
     name = "New Kong Doc";
     url = "https://docs.new/2";
-    binary = "${pkgs.unstable.brave}/bin/brave";
-    myStartupWMClass = "brave-docs.new__2-Default";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
+    myStartupWMClass = "chrome-docs.new__2-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

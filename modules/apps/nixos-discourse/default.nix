@@ -11,9 +11,9 @@ let
   nixosDiscourseApp = makeDesktopApp {
     name = "NixOS Discourse";
     url = "https://discourse.nixos.org/";
-    binary = "${pkgs.unstable.brave}/bin/brave";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-discourse.nixos.org__-Default";
-    myStartupWMClass = "brave-discourse.nixos.org__-Default";
+    myStartupWMClass = "chrome-discourse.nixos.org__-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

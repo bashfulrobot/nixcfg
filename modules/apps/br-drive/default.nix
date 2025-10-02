@@ -9,8 +9,8 @@ let
   brDriveApp = makeDesktopApp {
     name = "Bashfulrobot Drive";
     url = "https://drive.google.com/drive/u/0/my-drive";
-    binary = "${pkgs.unstable.brave}/bin/brave";
-    myStartupWMClass = "brave-drive.google.com__drive_u_0_my-drive-Default";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
+    myStartupWMClass = "chrome-drive.google.com__drive_u_0_my-drive-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "256"];
     iconPath = ./icons;
     useAppFlag = true;

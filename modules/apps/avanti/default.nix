@@ -10,8 +10,8 @@ let
   avantiApp = makeDesktopApp {
     name = "Avanti";
     url = "https://avanti.letter.ai/?scope=all";
-    binary = "${pkgs.unstable.brave}/bin/brave";
-    myStartupWMClass = "brave-avanti.letter.ai__-Default";
+    binary = "${pkgs.unstable.chromium}/bin/chromium";
+    myStartupWMClass = "chrome-avanti.letter.ai__-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

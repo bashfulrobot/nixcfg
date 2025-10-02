@@ -33,7 +33,7 @@ in
         font-size = 16
         cursor-style = block
         cursor-opacity = 0.7
-        cursor-style-blink = true
+        cursor-style-blink = false
         link-url = true
         title = " "
         window-theme = system
@@ -43,15 +43,15 @@ in
         clipboard-write = allow
         clipboard-trim-trailing-spaces = true
         copy-on-select = true
-        window-padding-x = 10
-        window-padding-y = 10
+        window-padding-x = 14
+        window-padding-y = 14
         window-padding-balance = true
         window-padding-color = extend-always
         window-decoration = auto
         mouse-hide-while-typing = true
         window-save-state = never
         shell-integration = fish
-        shell-integration-features = true
+        shell-integration-features = no-cursor
         confirm-close-surface = false
         gtk-titlebar-hide-when-maximized = true
         # Theme handled by stylix

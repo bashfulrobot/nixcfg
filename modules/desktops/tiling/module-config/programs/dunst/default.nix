@@ -13,7 +13,7 @@
           global = {
             # frame_color, separator_color, and highlight managed by stylix
             rounded = "yes";
-            origin = "top-right";
+            origin = "top-center";
             alignment = "left";
             vertical_alignment = "center";
             width = "400";

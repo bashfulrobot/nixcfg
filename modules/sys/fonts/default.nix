@@ -64,6 +64,8 @@ in
       nerd-fonts.fira-code
       nerd-fonts.caskaydia-cove
       nerd-fonts.jetbrains-mono
+      liberation_ttf  # Base Liberation fonts (Liberation Sans, Liberation Serif, Liberation Mono)
+      nerd-fonts.liberation  # Liberation with Nerd Font icons
       nerd-fonts.sauce-code-pro
       nerd-fonts.ubuntu
       nerd-fonts.ubuntu-mono

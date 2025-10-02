@@ -734,9 +734,21 @@ in
                     ${pkgs.swayosd}/bin/swayosd-client --custom-progress "$disk_usage"
                     ;;
 
+                  "screenshot-taken")
+                    # Show screenshot confirmation
+                    ${pkgs.swayosd}/bin/swayosd-client --output-volume 0 --max-volume 100 > /dev/null 2>&1 || true
+                    ${pkgs.libnotify}/bin/notify-send "Screenshot" "Screenshot captured" --icon=camera-photo
+                    ;;
+
+                  "launcher-opened")
+                    # Show launcher opened notification
+                    ${pkgs.swayosd}/bin/swayosd-client --output-volume 0 --max-volume 100 > /dev/null 2>&1 || true
+                    ${pkgs.libnotify}/bin/notify-send "Launcher" "Application launcher opened" --icon=applications-system
+                    ;;
+
                   *)
-                    echo "Usage: $0 {battery|microphone-volume|cpu-temp|memory-usage|wifi-strength|disk-usage [path]}"
-                    echo "Custom swayosd progress indicators for system monitoring"
+                    echo "Usage: $0 {battery|microphone-volume|cpu-temp|memory-usage|wifi-strength|disk-usage [path]|screenshot-taken|launcher-opened}"
+                    echo "Custom swayosd progress indicators for system monitoring and notifications"
                     exit 1
                     ;;
                 esac
@@ -824,6 +836,14 @@ in
               "$mainMod, F4, exec, ${swayosd-custom} disk-usage" # Show disk usage
               "$mainMod SHIFT, F1, exec, ${swayosd-custom} microphone-volume" # Show mic volume
               "$mainMod SHIFT, F2, exec, ${swayosd-custom} wifi-strength" # Show WiFi strength
+
+              # Media key mappings (default behavior - icons on keys)
+              # F6 icon (person head + sound waves) - Works natively, no binding needed
+              # F7 icon (happy face) - Works natively for window selector, no binding needed
+              # F8 icon (screenshot) - Screenshot function
+              ",Print,exec,bash -c '${../module-config/scripts/screenshot.sh} s && ${swayosd-custom} screenshot-taken'" # F8 icon: Screenshot with OSD feedback
+              # F10 icon (search) - Search/launcher function
+              ",XF86Search,exec,bash -c 'pkill rofi || rofi -show run && ${swayosd-custom} launcher-opened'" # F10 icon: Search/launcher with OSD feedback
 
               # ",xf86AudioNext,exec,${../module-config/scripts/MediaCtrl.sh} next" # go to next media
               # ",xf86AudioPrev,exec,${../module-config/scripts/MediaCtrl.sh} previous" # go to previous media

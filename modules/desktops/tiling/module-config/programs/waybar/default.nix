@@ -19,9 +19,9 @@
             gtk-layer-shell = true;
             ipc = true;
             fixed-center = true;
-            margin-top = 10;
-            margin-left = 10;
-            margin-right = 10;
+            margin-top = 0;
+            margin-left = 0;
+            margin-right = 0;
             margin-bottom = 0;
 
             modules-left = [
@@ -29,8 +29,8 @@
                else "hyprland/workspaces")  # fallback
               "mpris"
             ];
-            modules-center = ["custom/notification" "clock"];
-            modules-right = ["group/system-info" "custom/power"];
+            modules-center = ["clock"];
+            modules-right = ["group/system-info" "custom/notification" "custom/power"];
 
             "group/system-info" = {
               orientation = "inherit";
@@ -39,7 +39,7 @@
                 children-class = "system-drawer";
                 transition-left-to-right = false;
               };
-              modules = ["custom/system-gear" "idle_inhibitor" "network" "bluetooth" "pulseaudio"]
+              modules = ["custom/system-gear" "idle_inhibitor" "bluetooth" "pulseaudio"]
                         ++ (lib.optionals (builtins.pathExists /sys/class/power_supply) ["battery"])
                         ++ ["tray"];
             };
@@ -323,8 +323,8 @@
           window#waybar {
               transition-property: background-color;
               transition-duration: 0.5s;
-              background: transparent;
-              border-radius: 10px;
+              background: @theme_base_color;
+              border-radius: 0px;
           }
 
           window#waybar.hidden {
@@ -344,14 +344,14 @@
           .modules-left,
           .modules-center,
           .modules-right {
-              background: @theme_base_color;
-              border: 1px solid @blue;
+              background: transparent;
+              border: none;
               padding: 0 15px;
-              border-radius: 10px;
+              border-radius: 0px;
           }
 
           .modules-center {
-              border: 0.5px solid @overlay0;
+              border: none;
               padding: 0 10px;
           }
 
@@ -360,13 +360,26 @@
           #idle_inhibitor,
           #mpris,
           #clock,
-          #network,
           #bluetooth,
           #pulseaudio,
           #battery,
           #tray {
               padding: 1px 10px;
               margin: 0 1.5px;
+          }
+
+          /* --- Unified Icon Sizing --- */
+          #idle_inhibitor,
+          #bluetooth,
+          #pulseaudio,
+          #battery,
+          #custom-notification,
+          #custom-power {
+              font-size: 14px;
+              min-width: 20px;
+              min-height: 20px;
+              margin: 0 1px;
+              padding: 2px 6px;
           }
 
           /* --- Specific Module Styling --- */
@@ -377,7 +390,7 @@
               text-shadow: none;
               padding: 1px 8px;
               margin: 0 1px;
-              border-radius: 6px;
+              border-radius: 0px;
               background-color: transparent;
               border: 1px solid transparent;
               transition: all 0.2s ease-in-out;
@@ -463,7 +476,7 @@
           #battery {
               color: @green;
               transition: all 0.3s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -495,7 +508,7 @@
               color: @yellow;
               font-weight: 500;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -508,7 +521,7 @@
               color: @pink;
               font-style: italic;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -530,7 +543,7 @@
 
           #tray {
               padding: 2px 8px;
-              border-radius: 6px;
+              border-radius: 0px;
               transition: background-color 0.2s ease-in-out;
           }
 
@@ -565,7 +578,7 @@
           #custom-notification {
               color: @overlay1;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
               margin: 0 1.5px;
           }
@@ -577,10 +590,10 @@
 
           #custom-power {
               color: @red;
-              border-left: 1px solid @blue;
-              padding: 2px 8px 2px 12px;
-              margin-left: 12px;
-              border-radius: 0 6px 6px 0;
+              border-left: none;
+              padding: 2px 8px;
+              margin: 0 1.5px;
+              border-radius: 0px;
               transition: all 0.2s ease-in-out;
           }
 
@@ -592,7 +605,7 @@
           #pulseaudio {
               color: @lavender;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -619,7 +632,7 @@
           #bluetooth {
               color: @blue;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -641,7 +654,7 @@
           #network {
               color: @green;
               transition: all 0.2s ease-in-out;
-              border-radius: 6px;
+              border-radius: 0px;
               padding: 2px 8px;
           }
 
@@ -665,7 +678,7 @@
 
           /* -- Group Styling -- */
           group#system-info {
-              border-radius: 6px;
+              border-radius: 0px;
               transition: all 0.2s ease-in-out;
           }
 
@@ -676,15 +689,15 @@
           }
 
           .system-drawer:first-child {
-              border-radius: 6px 0 0 6px;
+              border-radius: 0px;
           }
 
           .system-drawer:last-child {
-              border-radius: 0 6px 6px 0;
+              border-radius: 0px;
           }
 
           .system-drawer:only-child {
-              border-radius: 6px;
+              border-radius: 0px;
           }
 
           group#system-info:hover .system-drawer {
@@ -694,10 +707,9 @@
           #custom-system-gear {
               color: @overlay1;
               font-size: 14px;
-              padding: 2px 8px 2px 12px;
+              padding: 3px 8px 1px 8px;
               margin: 0 1.5px;
-              margin-right: 12px;
-              border-radius: 6px;
+              border-radius: 0px;
               transition: all 0.2s ease-in-out;
           }
 

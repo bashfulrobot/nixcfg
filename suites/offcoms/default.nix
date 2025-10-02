@@ -37,14 +37,14 @@ in
           enable = false;
           setAsDefault = false;
         };
-        chrome-based-browser.enable = false;
+        chrome-based-browser.enable = true;
         google-chrome = {
           enable = false;
           setAsDefault = false;
         };
         brave = {
-          enable = true;
-          setAsDefault = true;
+          enable = false;
+          setAsDefault = false;
         };
         vivaldi = {
           enable = false;

@@ -1,4 +1,9 @@
-{ config, pkgs, user-settings, ... }:
+{
+  config,
+  pkgs,
+  user-settings,
+  ...
+}:
 {
 
   users.default.enable = true;
@@ -18,10 +23,10 @@
   # Desktop configuration - testing hash fix in custom COSMIC build
   desktops = {
     # gnome.enable = false;
-    cosmic.enable = true;
-    # tiling = {
-  #   hyprland.enable = false;
-  # };
+    cosmic.enable = false;
+    tiling = {
+      hyprland.enable = true;
+    };
   };
 
   apps = {
@@ -59,11 +64,11 @@
       localBackup = {
         enable = true;
         path = "/run/media/${user-settings.user.username}/dk-data/Restic-backups";
-        mountCheck.enable = true;  # Enable prevalidation mount check
+        mountCheck.enable = true; # Enable prevalidation mount check
       };
       validation = {
         enable = true;
-        schedule = "Sun *-*-* 23:00:00";  # Sunday 11 PM
+        schedule = "Sun *-*-* 23:00:00"; # Sunday 11 PM
         type = "read-data-subset";
         dataSubsetPercent = "10%";
       };

@@ -7,12 +7,12 @@
         enable = true;
         settings = {
           "$schema" = "/etc/xdg/swaync/configSchema.json";
-          positionX = "center";
+          positionX = "right";
           positionY = "top";
           cssPriority = "user";
-          control-center-margin-top = 50;
-          control-center-margin-bottom = 2;
-          control-center-margin-right = 200;
+          control-center-margin-top = 0;
+          control-center-margin-bottom = 0;
+          control-center-margin-right = 0;
           control-center-margin-left = 0;
           notification-icon-size = 64;
           notification-body-image-height = 128;
@@ -255,8 +255,8 @@
 
           .control-center {
             background: @theme_base_color;
-            border-radius: 8px 8px 12px 12px;
-            border: 1px solid @blue;
+            border-radius: 8px 0px 0px 12px;
+            border: none;
             box-shadow: 0 4px 20px 0 rgba(0,0,0,.60);
             margin: 0px;
             padding: 8px;

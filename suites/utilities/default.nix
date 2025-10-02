@@ -24,6 +24,7 @@ in
 
     apps = {
       satty.enable = true;
+      deskflow.enable = true; # software KVM
     };
 
     environment.systemPackages = with pkgs; [

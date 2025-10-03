@@ -689,8 +689,9 @@ in
               "$mainMod, slash, exec, hyprland-keybinds"
               "$mainMod CTRL, question, exec, hyprland-keybinds"
               # Fish commands help menu
-              "$mainMod ALT, question, exec, fish-help-rofi"
-              "$mainMod ALT, slash, exec, fish-help-rofi"
+              "$mainMod SHIFT, slash, exec, rofi-fish-commands"
+              "$mainMod ALT, question, exec, rofi-fish-commands"
+              "$mainMod ALT, slash, exec, rofi-fish-commands"
               # Espanso shortcuts menu
               "$mainMod SHIFT, question, exec, ${../module-config/scripts/espanso-rofi.sh}"
 

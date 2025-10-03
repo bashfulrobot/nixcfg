@@ -11,7 +11,6 @@ let
     name = "Lucidchart";
     url = "https://lucid.app/documents#/home?folder_id=recent";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    myStartupWMClass = "chrome-lucid.app__documents-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

@@ -10,7 +10,6 @@ let
     name = "Kong Mail";
     url = "https://mail.google.com/mail/u/1/#search/is%3Aunread+in%3Ainbox";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    myStartupWMClass = "chrome-mail.google.com__mail_u_1_-Default";
     iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

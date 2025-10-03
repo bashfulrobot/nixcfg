@@ -1,7 +1,7 @@
 { pkgs, lib, makeDesktopItem, ... }:
 #  https://peter.sh/experiments/chromium-command-line-switches/
 let
-  makeDesktopApp = { name, url, binary, myStartupWMClass, iconSizes, iconPath, useAppFlag ? true, enableLogging ? false }:
+  makeDesktopApp = { name, url, binary, iconSizes, iconPath, useAppFlag ? true, enableLogging ? false }:
     let
       desktopName =
         lib.strings.toLower (lib.strings.replaceStrings [ " " ] [ "_" ] name);
@@ -9,20 +9,20 @@ let
         ${if enableLogging then ''
         # Log file in nixcfg repo root
         LOGFILE="/home/dustin/dev/nix/nixcfg/${desktopName}-debug.log"
-        
+
         echo "Starting ${name} at $(date)" >> "$LOGFILE"
         echo "Command: ${binary} --class=${desktopName} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}" >> "$LOGFILE"
-        
+
         # Run with standard flags
         ${binary} --class=${desktopName} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
-        
+
         # Store PID and wait
         PID=$!
         echo "Process ID: $PID" >> "$LOGFILE"
         wait $PID
         EXIT_CODE=$?
         echo "Process exited with code: $EXIT_CODE at $(date)" >> "$LOGFILE"
-        
+
         # If crashed, also log to console
         if [ $EXIT_CODE -ne 0 ]; then
           echo "❌ ${name} crashed with exit code $EXIT_CODE. See log: $LOGFILE" >&2
@@ -35,11 +35,7 @@ let
         type = "Application";
         name = desktopName;
         desktopName = name;
-        startupWMClass = myStartupWMClass;
-        # startupWMClass = desktopName; # Test this if myStartupWMClass doesn't work with --class
-        # exec = ''
-        #   ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode --new-window --app="${lib.escapeShellArg url}"
-        # '';
+        startupWMClass = desktopName;
         exec = "${scriptPath}/bin/${desktopName}"; # use the script to open the app - accounts for url encoding. which breaks due to the desktop file spec.
         icon = desktopName;
         categories = [ "Application" ];
@@ -68,10 +64,6 @@ let
         {
           assertion = binary != null;
           message = "binary is a required parameter for makeDesktopApp";
-        }
-        {
-          assertion = myStartupWMClass != null;
-          message = "startupWMClass is a required parameter for makeDesktopApp";
         }
         {
           assertion = iconSizes != null;

@@ -11,7 +11,6 @@ let
     name = "Kong Docs";
     url = "https://developer.konghq.com/";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    myStartupWMClass = "chrome-developer.konghq.com__-Default";
     iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;

@@ -1,16 +1,16 @@
 { user-settings, config, pkgs, lib, makeDesktopItem, ... }:
 
 let
-  cfg = config.apps.kong-drive;
+  cfg = config.apps.freshdesk;
 
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-  kongDriveApp = makeDesktopApp {
-    name = "Kong Drive";
-    url = "https://drive.google.com/drive/u/1/my-drive";
+  freshdeskApp = makeDesktopApp {
+    name = "Freshdesk";
+    url = "https://kong.freshservice.com/support/home";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "32" "48" "64" "96" "128" "256"];
+    iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     iconPath = ./icons;
     useAppFlag = true;
   };
@@ -18,17 +18,17 @@ let
 in {
 
   options = {
-    apps.kong-drive.enable = lib.mkOption {
+    apps.freshdesk.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable the Kong Drive app.";
+      description = "Enable the Freshdesk app.";
     };
   };
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ kongDriveApp.desktopItem ]
-      ++ kongDriveApp.icons;
+    environment.systemPackages = [ freshdeskApp.desktopItem ]
+      ++ freshdeskApp.icons;
 
   };
 

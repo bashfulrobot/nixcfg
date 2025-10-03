@@ -1,4 +1,10 @@
-{ config, lib, pkgs, user-settings, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  user-settings,
+  ...
+}:
 
 let
   cfg = config.sys.stylix-theme;
@@ -13,7 +19,10 @@ in
       description = "Whether to extract colors from wallpaper (true) or use handmade scheme (false)";
     };
     wallpaperType = lib.mkOption {
-      type = lib.types.enum [ "personal" "professional" ];
+      type = lib.types.enum [
+        "personal"
+        "professional"
+      ];
       default = "personal";
       description = "Which wallpaper type to use: personal or professional";
     };
@@ -22,11 +31,11 @@ in
   config = lib.mkIf cfg.enable {
     stylix = {
       enable = true;
-      autoEnable = true;  # Let stylix auto-detect available applications
-      
+      autoEnable = true; # Let stylix auto-detect available applications
+
       # Force dark theme to match desktop
       polarity = "dark";
-      
+
       # Font configuration
       fonts = {
         monospace = {
@@ -60,37 +69,53 @@ in
         };
         sizes = {
           applications = 12;
-          terminal = 14;
-          desktop = 12;
-          popups = 12;
+          terminal = 18;
+          desktop = 10;
+          popups = 10;
         };
+
+      };
+
+      opacity = {
+        applications = 1.0;
+        terminal = 1.0;
+        desktop = 1.0;
+        popups = 1.0;
       };
 
       # Cursor configuration
       cursor = {
-        package = pkgs.adwaita-icon-theme;
-        name = "Adwaita";
+        # package = pkgs.adwaita-icon-theme;
+        # name = "Adwaita";
+        package = pkgs.unstable.bibata-cursors;
+        name = "Bibata-Modern-Ice";
         size = 24;
       };
 
       # Qt platform configuration - use gnome for native GNOME integration
       targets.qt.platform = lib.mkForce "gnome";
-      
+
       # Disable Plymouth targeting to avoid missing theme files
       targets.plymouth.enable = lib.mkForce false;
-    } // (if cfg.useWallpaper then {
-      # Extract colors from wallpaper
-      image = wallpaperPath;
-    } else {
-      # Use handmade base16 scheme but still set wallpaper
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/${user-settings.theme.handmade-scheme}.yaml";
-      image = wallpaperPath;
-    });
+    }
+    // (
+      if cfg.useWallpaper then
+        {
+          # Extract colors from wallpaper
+          image = wallpaperPath;
+        }
+      else
+        {
+          # Use handmade base16 scheme but still set wallpaper
+          base16Scheme = "${pkgs.base16-schemes}/share/themes/${user-settings.theme.handmade-scheme}.yaml";
+          image = wallpaperPath;
+        }
+    );
 
     # Install necessary packages for stylix functionality
     environment.systemPackages = with pkgs; [
-      unstable.imagemagickBig  # For color extraction from images
-      base16-schemes  # Base16 color schemes (fallback)
+      unstable.imagemagickBig # For color extraction from images
+      base16-schemes # Base16 color schemes (fallback)
     ];
   };
 }

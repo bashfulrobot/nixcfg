@@ -1,7 +1,10 @@
 { config, pkgs, lib, user-settings, ... }:
-let 
+let
   cfg = config.sys.plymouth;
   plymouthIcon = pkgs.callPackage ./build/icon.nix {};
+
+  # Get colors from stylix
+  inherit (config.lib.stylix) colors;
   
   # Use wallpaper module if enabled, otherwise fallback to old method
   plymouthLogo = if config.sys.wallpapers.enable
@@ -55,11 +58,19 @@ in {
     boot.plymouth = {
       enable = true;
       theme = "bgrt";  # Use bgrt theme which supports logos and encryption prompts
-      font = "${pkgs.work-sans}/share/fonts/opentype/WorkSans-Regular.ttf";
+      font = "${pkgs.nerd-fonts.jetbrains-mono}/share/fonts/truetype/NerdFonts/JetBrainsMono/JetBrainsMonoNerdFontMono-Regular.ttf";
       logo = plymouthLogo;
       extraConfig = ''
         ShowDelay=0
         DeviceScale=2
+        BackgroundStartColor=0x${colors.base00}
+        BackgroundEndColor=0x${colors.base01}
+        TextColor=0x${colors.base05}
+        ProgressBarBackgroundColor=0x${colors.base01}
+        ProgressBarForegroundColor=0x${colors.base0D}
+        PasswordCharacter=*
+        UseProgressBar=true
+        UseAnimation=true
       '';
     };
 

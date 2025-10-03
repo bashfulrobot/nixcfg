@@ -17,6 +17,17 @@ let
   browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
+
+  makeScriptPackages = pkgs.callPackage ../../../../lib/make-script-packages { };
+
+  # Create script packages for hyprland module
+  scriptPackages = makeScriptPackages {
+    scriptsDir = ./scripts;
+    scripts = [
+      { name = "rofi-keybinds"; command = "hyprland-keybinds"; }
+    ];
+    createFishAbbrs = false;
+  };
 in
 {
 
@@ -191,7 +202,7 @@ in
       # hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
-    ];
+    ] ++ scriptPackages.packages;
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
     # Enable PAM keyring for automatic unlock on login
@@ -496,8 +507,11 @@ in
             # "workspace 3, class:^(factorio)$"
             # "workspace 3, class:^(steam)$"
             # "workspace 5, class:^(firefox|floorp|zen)$"
-            # "workspace 6, class:^(Spotify)$"
-            # "workspace 6, title:(.*)(Spotify)(.*)$"
+            # Auto-send apps to special workspaces
+            "workspace special:spotify, class:^(Spotify)$"
+            "workspace special:spotify, title:(.*)(Spotify)(.*)$"
+            "workspace special:1password, class:^(1Password)$"
+            "workspace special:1password, title:(.*)(1Password)(.*)$"
 
             # Can use FLOAT FLOAT for active and inactive or just FLOAT
             "opacity 0.80 0.80,class:^(kitty|alacritty|Alacritty|org.wezfurlong.wezterm)$"
@@ -671,9 +685,12 @@ in
             in
             [
               # Keybinds help menu
-              "$mainMod, question, exec, ${../module-config/scripts/keybinds.sh}"
-              "$mainMod, slash, exec, ${../module-config/scripts/keybinds.sh}"
-              "$mainMod CTRL, question, exec, ${../module-config/scripts/keybinds.sh}"
+              "$mainMod, question, exec, hyprland-keybinds"
+              "$mainMod, slash, exec, hyprland-keybinds"
+              "$mainMod CTRL, question, exec, hyprland-keybinds"
+              # Fish commands help menu
+              "$mainMod ALT, question, exec, fish-help-rofi"
+              "$mainMod ALT, slash, exec, fish-help-rofi"
               # Espanso shortcuts menu
               "$mainMod SHIFT, question, exec, ${../module-config/scripts/espanso-rofi.sh}"
 
@@ -701,7 +718,7 @@ in
               # Applications/Programs
               "$mainMod, Return, exec, $term"
               "$mainMod, T, exec, $term"
-              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder"
+              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder --skip-summary"
               "$mainMod, E, submap, 󰉋 Explore"
               "$mainMod, C, exec, $editor"
               "$mainMod, B, exec, $browser"
@@ -846,13 +863,17 @@ in
               "$mainMod, O, togglesplit" # Toggle split direction of focused window
 
               # Enter resize mode
-              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen"
+              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen --skip-summary"
               "$mainMod, R, submap, ↔ resize" # Enter resize mode
 
-              # Special workspaces (scratchpad)
-              "$mainMod CTRL, S, movetoworkspacesilent, special"
-              "$mainMod ALT, S, movetoworkspacesilent, special"
-              "$mainMod, S, togglespecialworkspace,"
+              # Special workspaces submap - follows existing submap pattern
+              # Template for adding new special workspaces:
+              # 1. Add window rule: "workspace special:[name], class:^([AppClass])$"
+              # 2. Add to notification: update letters in notification
+              # 3. Add to submap: bind = , [letter], exec, notify-send + togglespecialworkspace + submap reset
+              "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia --skip-summary"
+              "$mainMod, S, submap,  special"
+              "$mainMod SHIFT, S, movetoworkspace, special"  # Move current window to default scratchpad
             ]
             ++ (builtins.concatLists (
               builtins.genList (
@@ -898,6 +919,21 @@ in
           bind = , n, submap, reset
           bind = , escape, submap, reset
           bind = , return, submap, reset
+
+          # Special workspaces submap
+          submap =  special
+          bind = , s, exec, notify-send '📋 Scratchpad' 'Toggling default scratchpad' -u low -t 2000 -i applications-utilities --skip-summary
+          bind = , s, togglespecialworkspace,
+          bind = , s, submap, reset
+          bind = , m, exec, notify-send '🎵 Music' 'Toggling Spotify workspace' -u low -t 2000 -i applications-multimedia --skip-summary
+          bind = , m, togglespecialworkspace, spotify
+          bind = , m, submap, reset
+          bind = , p, exec, notify-send '🔐 1Password' 'Toggling 1Password workspace' -u low -t 2000 -i applications-security --skip-summary
+          bind = , p, togglespecialworkspace, 1password
+          bind = , p, submap, reset
+          bind = , escape, submap, reset
+          bind = , return, submap, reset
+          submap = reset
 
           # Resize submap for cleaner resize workflow
           submap = ↔ resize

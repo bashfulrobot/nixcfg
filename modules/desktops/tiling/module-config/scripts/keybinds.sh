@@ -45,8 +45,13 @@ yad \
   --timeout-indicator=bottom \
   "SUPER Return" "Launch terminal" "$_terminal" \
   "SUPER T" "Launch terminal" "$_terminal" \
-  "SUPER E" "Launch file manager" "$_terminal_FM" \
-  "SUPER F" "Launch browser" "$_browser" \
+  "SUPER E" "Explore mode (file manager)" "submap explore" \
+  "In explore mode: D" "Downloads folder" "nautilus ~/Downloads" \
+  "In explore mode: O" "Documents folder" "nautilus ~/Documents" \
+  "In explore mode: V" "Dev folder" "nautilus ~/dev" \
+  "In explore mode: S" "Screenshots folder" "nautilus ~/Pictures/Screenshots" \
+  "In explore mode: N" "NixCfg folder" "nautilus ~/dev/nix/nixcfg" \
+  "SUPER B" "Launch browser" "$_browser" \
   "SUPER SHIFT S" "Launch spotify" "spotify" \
   "CTRL ALT Delete" "Open system monitor" "$_terminal -e 'btop'" \
   "SUPER A" "Launch application menu" "scripts/rofi.sh drun" \
@@ -110,8 +115,11 @@ yad \
   "SUPER SHIFT CTRL L" "Swap window right (HJKL)" "swapwindow r" \
   "SUPER SHIFT CTRL K" "Swap window up (HJKL)" "swapwindow u" \
   "SUPER SHIFT CTRL J" "Swap window down (HJKL)" "swapwindow d" \
-  "SUPER CTRL S" "Move to scratchpad" "movetoworkspacesilent special" \
-  "SUPER S" "Toggle scratchpad workspace" "togglespecialworkspace" \
+  "SUPER S" "Special workspaces menu" "submap special" \
+  "In special mode: S" "Toggle scratchpad" "togglespecialworkspace" \
+  "In special mode: M" "Toggle music (Spotify)" "togglespecialworkspace spotify" \
+  "In special mode: P" "Toggle password (1Password)" "togglespecialworkspace 1password" \
+  "SUPER SHIFT S" "Move window to scratchpad" "movetoworkspace special" \
   "SUPER Tab" "Cycle next window" "cyclenext" \
   "SUPER Tab" "Bring active window to top" "bringactivetotop" \
   "SUPER CTRL →" "Switch to next workspace" "workspace r+1" \

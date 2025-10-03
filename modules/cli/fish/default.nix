@@ -15,6 +15,17 @@ let
   ];
   inherit (pkgs.stdenv) isDarwin;
 
+  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
+
+  # Create script packages for fish module
+  scriptPackages = makeScriptPackages {
+    scriptsDir = ./scripts;
+    scripts = [
+      { name = "rofi-fish-commands"; command = "fish-help-rofi"; }
+    ];
+    createFishAbbrs = false; # We handle aliases manually
+  };
+
   # Define which functions should be excluded on Darwin
   darwinExcludedFunctions = lib.unique [
     "vm-shutdown-all"
@@ -1070,8 +1081,8 @@ let
     # y = "cd ~/; yazi";
 
     # Help system
-    help = "fish-help";
-    "?" = "fish-help";
+    help = "fish-help-rofi";
+    "?" = "fish-help-rofi";
   };
 
   filteredShellAliases = lib.filterAttrs (
@@ -1094,6 +1105,9 @@ in
     programs.fish.enable = true;
 
     environment.shells = lib.mkIf isDarwin [ pkgs.fish ];
+
+    # Install fish script packages
+    environment.systemPackages = scriptPackages.packages;
 
     home-manager.users."${user-settings.user.username}" = {
       programs.fish = {

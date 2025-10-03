@@ -719,7 +719,7 @@ in
               # Applications/Programs
               "$mainMod, Return, exec, $term"
               "$mainMod, T, exec, $term"
-              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder --skip-summary"
+              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder"
               "$mainMod, E, submap, 󰉋 Explore"
               "$mainMod, C, exec, $editor"
               "$mainMod, B, exec, $browser"
@@ -864,16 +864,16 @@ in
               "$mainMod, O, togglesplit" # Toggle split direction of focused window
 
               # Enter resize mode
-              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen --skip-summary"
+              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen"
               "$mainMod, R, submap, ↔ resize" # Enter resize mode
 
               # Special workspaces submap - follows existing submap pattern
               # Template for adding new special workspaces:
               # 1. Add window rule: "workspace special:[name], class:^([AppClass])$"
               # 2. Add to notification: update letters in notification
-              # 3. Add to submap: bind = , [letter], exec, notify-send + togglespecialworkspace + submap reset
-              "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia --skip-summary"
-              "$mainMod, S, submap,  special"
+              # 3. Add to submap: bind = , [letter], togglespecialworkspace, [name]
+              "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia",
+              "$mainMod, S, submap,  special",
               "$mainMod SHIFT, S, movetoworkspace, special"  # Move current window to default scratchpad
             ]
             ++ (builtins.concatLists (
@@ -887,15 +887,15 @@ in
                     builtins.toString (x + 1 - (c * 10));
                 in
                 [
-                  "$mainMod, ${ws}, workspace, ${toString (x + 1)}"
-                  "$mainMod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+                  "$mainMod, ${ws}, workspace, ${toString (x + 1)}",
+                  "$mainMod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}",
                   "$mainMod CTRL, ${ws}, movetoworkspacesilent, ${toString (x + 1)}"
                 ]
               ) 10
             ));
           bindm = [
             # Move/Resize windows with mainMod + LMB/RMB and dragging
-            "$mainMod, mouse:272, movewindow"
+            "$mainMod, mouse:272, movewindow",
             "$mainMod, mouse:273, resizewindow"
           ];
         };
@@ -923,13 +923,10 @@ in
 
           # Special workspaces submap
           submap =  special
-          bind = , s, exec, notify-send '📋 Scratchpad' 'Toggling default scratchpad' -u low -t 2000 -i applications-utilities --skip-summary
-          bind = , s, togglespecialworkspace,
+          bind = , s, togglespecialworkspace
           bind = , s, submap, reset
-          bind = , m, exec, notify-send '🎵 Music' 'Toggling Spotify workspace' -u low -t 2000 -i applications-multimedia --skip-summary
           bind = , m, togglespecialworkspace, spotify
           bind = , m, submap, reset
-          bind = , p, exec, notify-send '🔐 1Password' 'Toggling 1Password workspace' -u low -t 2000 -i applications-security --skip-summary
           bind = , p, togglespecialworkspace, 1password
           bind = , p, submap, reset
           bind = , escape, submap, reset

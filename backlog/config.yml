@@ -1,7 +1,7 @@
 project_name: "nixcfg"
-default_status: "Backlog"
-statuses: ["Backlog", "In Progress", "Blocked", "Done"]
-labels: ["Security", "Tech-debt",]
+default_status: "To Do"
+statuses: ["To Do", "In Progress", "Done"]
+labels: []
 milestones: []
 date_format: yyyy-mm-dd
 max_column_width: 20
@@ -9,7 +9,7 @@ default_editor: "hx"
 auto_open_browser: true
 default_port: 6420
 remote_operations: true
-auto_commit: true
+auto_commit: false
 bypass_git_hooks: false
 check_active_branches: true
 active_branch_days: 30

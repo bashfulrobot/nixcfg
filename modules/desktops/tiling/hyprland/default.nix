@@ -24,7 +24,7 @@ let
   scriptPackages = makeScriptPackages {
     scriptsDir = ./scripts;
     scripts = [
-      { name = "rofi-keybinds"; command = "hyprland-keybinds"; }
+      { name = "rofi-hyprland-keybinds"; command = "hyprland-keybinds"; }
     ];
     createFishAbbrs = false;
   };

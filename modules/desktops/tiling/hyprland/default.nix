@@ -41,6 +41,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # sys.gtk-theme.enable = true;
+
     # Enable D-Bus for proper desktop session integration
     services.dbus.enable = true;
 
@@ -95,86 +97,6 @@ in
         };
       };
 
-      privacy-monitor =
-        let
-          privacy-monitor-script = pkgs.writeShellScript "privacy-monitor" ''
-            #!/usr/bin/env bash
-            # Privacy monitoring script for desktop notifications
-            # Monitors camera, microphone, and screen sharing access
-
-            CACHE_DIR="/tmp/privacy-monitor"
-            mkdir -p "$CACHE_DIR"
-
-            CAMERA_FILE="$CACHE_DIR/camera"
-            MIC_FILE="$CACHE_DIR/mic"
-            SCREEN_FILE="$CACHE_DIR/screen"
-
-            # Function to check camera usage
-            check_camera() {
-                if ${pkgs.lsof}/bin/lsof /dev/video* 2>/dev/null | grep -v COMMAND | head -1 >/dev/null; then
-                    if [[ ! -f "$CAMERA_FILE" ]]; then
-                        touch "$CAMERA_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "🔴 Camera Access" "An application is accessing your camera" -u critical
-                    fi
-                else
-                    if [[ -f "$CAMERA_FILE" ]]; then
-                        rm "$CAMERA_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "✅ Camera Access Ended" "Camera access has stopped" -u normal
-                    fi
-                fi
-            }
-
-            # Function to check microphone usage (via PulseAudio)
-            check_microphone() {
-                if ${pkgs.pulseaudio}/bin/pactl list source-outputs 2>/dev/null | grep -q "Source Output"; then
-                    if [[ ! -f "$MIC_FILE" ]]; then
-                        touch "$MIC_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "🎤 Microphone Access" "An application is accessing your microphone" -u critical
-                    fi
-                else
-                    if [[ -f "$MIC_FILE" ]]; then
-                        rm "$MIC_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "✅ Microphone Access Ended" "Microphone access has stopped" -u normal
-                    fi
-                fi
-            }
-
-            # Function to check screen sharing (via active screen capture sessions)
-            check_screenshare() {
-                if ${pkgs.procps}/bin/pgrep -f "grim|grimblast|wf-recorder|obs" >/dev/null 2>&1; then
-                    if [[ ! -f "$SCREEN_FILE" ]]; then
-                        touch "$SCREEN_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "📺 Screen Sharing Active" "Screen recording/sharing is active" -u critical
-                    fi
-                else
-                    if [[ -f "$SCREEN_FILE" ]]; then
-                        rm "$SCREEN_FILE"
-                        ${pkgs.libnotify}/bin/notify-send "✅ Screen Sharing Ended" "Screen sharing has stopped" -u normal
-                    fi
-                fi
-            }
-
-            # Main monitoring loop
-            while true; do
-                check_camera
-                check_microphone
-                check_screenshare
-                sleep 2
-            done
-          '';
-        in
-        {
-          description = "Privacy Monitor - Camera/Microphone/Screenshare notifications";
-          wantedBy = [ "graphical-session.target" ];
-          wants = [ "graphical-session.target" ];
-          after = [ "graphical-session.target" ];
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${privacy-monitor-script}";
-            Restart = "always";
-            RestartSec = 3;
-          };
-        };
     };
 
     # Disable the default NixOS keyring service to prevent conflicts
@@ -496,13 +418,12 @@ in
             "ignorezero, rofi"
             "ignorealpha 0.7, rofi"
 
-            "blur, swaync-control-center"
-            "blur, swaync-notification-window"
-            "ignorezero, swaync-control-center"
-            "ignorezero, swaync-notification-window"
-            "ignorealpha 0.7, swaync-control-center"
-            # "ignorealpha 0.8, swaync-notification-window"
-            # "dimaround, swaync-control-center"
+            # "blur, swaync-control-center"
+            # "blur, swaync-notification-window"
+            # "ignorezero, swaync-control-center"
+            # "ignorezero, swaync-notification-window"
+            # "ignorealpha 0.9, swaync-control-center"
+            # "ignorealpha 0.9, swaync-notification-window"
           ];
           animations = {
             enabled = true;
@@ -780,7 +701,7 @@ in
               # Applications/Programs
               "$mainMod, Return, exec, $term"
               "$mainMod, T, exec, $term"
-              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000"
+              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder"
               "$mainMod, E, submap, 󰉋 Explore"
               "$mainMod, C, exec, $editor"
               "$mainMod, B, exec, $browser"
@@ -805,8 +726,8 @@ in
               "$mainMod, M, exec, pkill -x rofi || ${../module-config/scripts/rofimusic.sh}" # online music
 
               # Screenshot/Screencapture
-              "$mainMod, P, exec, ${../module-config/scripts/screenshot.sh} s" # drag to snip an area / click on a window to print it
-              "$mainMod CTRL, P, exec, ${../module-config/scripts/screenshot.sh} sf" # frozen screen, drag to snip an area / click on a window to print it
+              "$mainMod CTRL, P, exec, ${../module-config/scripts/screenshot.sh} s" # drag to snip an area / click on a window to /* print */ it
+              "$mainMod, P, exec, ${../module-config/scripts/screenshot.sh} sf" # frozen screen, drag to snip an area / click on a window to print it
               "$mainMod, print, exec, ${../module-config/scripts/screenshot.sh} m" # print focused monitor
               "$mainMod ALT, P, exec, ${../module-config/scripts/screenshot.sh} p" # print all monitor outputs
               "CTRL ALT, A, exec, ${../module-config/scripts/screenshot-annotate.sh}" # screenshot + annotate workflow
@@ -821,8 +742,8 @@ in
               ",xf86AudioPrev,exec,swayosd-client --player-status previous" # go to previous media with OSD
 
               # Keyboard lock indicators with OSD
-              ",Caps_Lock,exec,swayosd-client --caps-lock toggle" # Show Caps Lock status
-              ",Num_Lock,exec,swayosd-client --num-lock toggle" # Show Num Lock status
+              ",Caps_Lock,exec,swayosd-client --caps-lock" # Show Caps Lock status
+              ",Num_Lock,exec,swayosd-client --num-lock" # Show Num Lock status
 
               # Custom system monitoring with swayosd
               "$mainMod, F1, exec, ${swayosd-custom} battery" # Show battery level
@@ -925,7 +846,7 @@ in
               "$mainMod, O, togglesplit" # Toggle split direction of focused window
 
               # Enter resize mode
-              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000"
+              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen"
               "$mainMod, R, submap, ↔ resize" # Enter resize mode
 
               # Special workspaces (scratchpad)

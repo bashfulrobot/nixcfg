@@ -1,4 +1,4 @@
-{lib, ...}: {
+{lib, config, ...}: {
   home-manager.sharedModules = [
     (_: {
       xdg.configFile."wlogout/icons".source = ./icons;
@@ -43,31 +43,41 @@
             keybind = "r";
           }
         ];
-        style = lib.mkForce ''
+        style = with config.lib.stylix.colors.withHashtag; lib.mkForce ''
           window {
-            font-family: monospace;
-            font-size: 14pt;
-            color: #cdd6f4; /* text */
-            background-color: rgba(30, 30, 46, 0.5);
+            font-family: "${config.stylix.fonts.monospace.name}", monospace;
+            font-size: 12pt;
+            color: ${base05};
+            background-color: alpha(${base00}, 0.95);
+            border-radius: 12px;
+            border: 2px solid ${base01};
+            padding: 20px;
           }
 
           button {
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 25%;
-            border: none;
-            background-color: rgba(30, 30, 46, 0);
-            margin: 5px;
-            transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            background-size: 32px;
+            border: 2px solid ${base03};
+            background-color: ${base01};
+            margin: 8px;
+            min-width: 80px;
+            min-height: 80px;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
           }
 
           button:hover {
-            background-color: rgba(49, 50, 68, 0.1);
+            background-color: ${base02};
+            border-color: ${base04};
+            transform: scale(1.05);
           }
 
           button:focus {
-            background-color: #cba6f7;
-            color: #1e1e2e;
+            background-color: ${base0D};
+            border-color: ${base0D};
+            color: ${base00};
+            transform: scale(1.1);
           }
           #lock {
             background-image: image(url("icons/lock.png"));

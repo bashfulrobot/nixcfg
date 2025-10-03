@@ -26,11 +26,19 @@ EOF
     exit 1
 }
 
+# case "$1" in
+#     p)  grimblast save screen - | swappy -f - ;;
+#     s)  grimblast save area - | swappy -f - ;;
+#     sf) grimblast --freeze save area - | swappy -f - ;;
+#     m)  grimblast save output - | swappy -f - ;;
+#     *)  print_error ;;
+# esac
+
 case "$1" in
-    p)  grimblast save screen - | swappy -f - ;;
-    s)  grimblast save area - | swappy -f - ;;
-    sf) grimblast --freeze save area - | swappy -f - ;;
-    m)  grimblast save output - | swappy -f - ;;
+    p)  grimblast save screen - | /run/current-system/sw/bin/com.github.phase1geo.annotator -i - ;;
+    s)  grimblast save area - | /run/current-system/sw/bin/com.github.phase1geo.annotator -i - ;;
+    sf) grimblast --freeze save area - | /run/current-system/sw/bin/com.github.phase1geo.annotator -i - ;;
+    m)  grimblast save output - | /run/current-system/sw/bin/com.github.phase1geo.annotator -i - ;;
     *)  print_error ;;
 esac
 

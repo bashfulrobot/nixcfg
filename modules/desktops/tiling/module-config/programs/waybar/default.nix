@@ -25,9 +25,10 @@
             margin-bottom = 0;
 
             modules-left = [
+              "hyprland/submap"
               (if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
                else "hyprland/workspaces")  # fallback
-              "mpris"
+              # "mpris"
             ];
             modules-center = ["clock"];
             modules-right = ["group/system-info" "custom/notification" "custom/power"];
@@ -106,31 +107,31 @@
               exec = "echo ' '";
               format = "";
             };
-            "mpris" = {
-              format = "{player_icon} {title} - {artist}";
-              format-paused = "{status_icon} <i>{title} - {artist}</i>";
-              format-stopped = "";
-              player-icons = {
-                default = "▶";
-                spotify = "";
-                mpv = "󰐹";
-                vlc = "󰕼";
-                firefox = "";
-                chromium = "";
-                kdeconnect = "";
-                mopidy = "";
-              };
-              status-icons = {
-                paused = "⏸";
-                playing = "";
-              };
-              ignored-players = ["firefox" "chromium"];
-              max-length = 35;
-              tooltip-format = "{player}: {title} - {artist}\\nAlbum: {album}";
-              on-click = "playerctl play-pause";
-              on-scroll-up = "playerctl next";
-              on-scroll-down = "playerctl previous";
-            };
+            # "mpris" = {
+            #               format = "{player_icon} {title} - {artist}";
+            #               format-paused = "{status_icon} <i>{title} - {artist}</i>";
+            #               format-stopped = "";
+            #               player-icons = {
+            #                 default = "▶";
+            #                 spotify = "";
+            #                 mpv = "󰐹";
+            #                 vlc = "󰕼";
+            #                 firefox = "";
+            #                 chromium = "";
+            #                 kdeconnect = "";
+            #                 mopidy = "";
+            #               };
+            #               status-icons = {
+            #                 paused = "⏸";
+            #                 playing = "";
+            #               };
+            #               ignored-players = ["firefox" "chromium"];
+            #               max-length = 35;
+            #               tooltip-format = "{player}: {title} - {artist}\\nAlbum: {album}";
+            #               on-click = "playerctl play-pause";
+            #               on-scroll-up = "playerctl next";
+            #               on-scroll-down = "playerctl previous";
+            #             };
 
             "temperature" = {
               hwmon-path = "/sys/class/hwmon/hwmon5/temp1_input";
@@ -143,12 +144,44 @@
               format = "{short}"; # can use {short} and {variant}
               on-click = "/run/current-system/sw/bin/keyboardswitch";
             };
+            "hyprland/submap" = {
+              format = "{}";
+              format-map = {
+                "resize" = "󰆾 resize";
+              };
+              tooltip = false;
+            };
             "hyprland/workspaces" = {
-              disable-scroll = true;
               all-outputs = true;
               active-only = false;
               on-click = "activate";
               show-special = false;
+              format = "{icon} {windows}";
+              format-window-separator = " ";
+              window-rewrite-default = "";
+              window-rewrite = {
+                "chrome-mail.google.com__mail_u_0_-Default" = "󰇰";
+                "chrome-mail.google.com__mail_u_1_-Default" = "󰇰";
+                "chrome-drive.google.com__drive_u_1_my-drive-Default" = "󰉋";
+                "chrome-drive.google.com__drive_u_0_my-drive-Default" = "󰉋";
+                "chrome-calendar.google.com__calendar_u_0-Default" = "󰃭";
+                "chrome-calendar.google.com__calendar_u_1_r-Default" = "󰃭";
+                "zoom" = "󰍄";
+                "1Password" = "󰌾";
+                "Todoist" = "󰄲";
+                "Slack" = "󰒱";
+                "Chromium" = "";
+                "Code" = "󰨞";
+                "VSCodium" = "󰨞";
+                "ghostty" = "";
+                "nautilus" = "󰉋";
+                "firefox" = "󰈹";
+                "Spotify" = "";
+                "steam" = "󰓓";
+                "Signal" = "󰍡";
+                "discord" = "󰙯";
+                "terminalFileManager" = "";
+              };
             };
 
             "hyprland/window" = {
@@ -300,8 +333,8 @@
 
             "custom/power" = {
               format = "{}";
-              on-click = "bash -c 'selected=$(printf \"Reboot\\nSuspend\\nShutdown\\nLogout\" | rofi -dmenu -p \"Power Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Reboot\") systemctl reboot; ;; \"Suspend\") systemctl suspend; ;; \"Shutdown\") systemctl poweroff; ;; \"Logout\") hyprctl dispatch exit 0; ;; esac'";
-              tooltip-format = "Power Options (click for menu)";
+              on-click = "wlogout";
+              tooltip-format = "Power Options";
             };
           }
         ];
@@ -529,6 +562,17 @@
               background-color: @surface1;
               color: @text;
               font-style: normal;
+          }
+
+          #submap {
+              color: #${config.lib.stylix.colors.base0D};
+              background-color: #${config.lib.stylix.colors.base01};
+              padding: 2px 8px;
+              margin: 0 1.5px;
+              border-radius: 0px;
+              font-weight: bold;
+              font-style: italic;
+              transition: all 0.2s ease-in-out;
           }
 
           #mpris.paused {

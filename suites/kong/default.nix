@@ -35,6 +35,7 @@ in
       gemini-pro.enable = true;
       lucidchart.enable = true;
       avanti.enable = true;
+      freshdesk.enable = true;
     };
 
     environment.systemPackages = with pkgs; [

@@ -21,7 +21,7 @@ let
   scriptPackages = makeScriptPackages {
     scriptsDir = ./scripts;
     scripts = [
-      { name = "rofi-fish-commands"; command = "fish-help-rofi"; }
+      { name = "rofi-fish-commands"; command = "rofi-fish-commands"; }
     ];
     createFishAbbrs = false; # We handle aliases manually
   };

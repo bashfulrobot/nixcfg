@@ -31,6 +31,7 @@ in {
         ".claude/agents/parker.md".source = ./agents/parker.md;
         ".claude/agents/gopher.md".source = ./agents/gopher.md;
         ".claude/agents/kong.md".source = ./agents/kong.md;
+        ".claude/agents/nix-config-expert.md".source = ./agents/nix-config-expert.md;
         ".claude/commands/commit.md".text = ''
         ---
         description: Create conventional commits with emoji and optional push, tagging, or GitHub releases

@@ -127,6 +127,12 @@ in
 
           '';
         };
+
+        # Hide ncspot from desktop menus
+        file.".local/share/applications/ncspot.desktop".text = ''
+          [Desktop Entry]
+          Hidden=true
+        '';
       };
     };
   };

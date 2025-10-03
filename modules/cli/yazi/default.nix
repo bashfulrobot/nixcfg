@@ -56,6 +56,11 @@ in
         };
       };
 
+      # Hide yazi from desktop menus
+      home.file.".local/share/applications/yazi.desktop".text = ''
+        [Desktop Entry]
+        Hidden=true
+      '';
     };
   };
 }

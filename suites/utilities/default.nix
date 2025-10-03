@@ -91,6 +91,20 @@ in
           enable = true;
         };
       };
+
+      # Hide CLI monitoring tools from desktop menus
+      home.file.".local/share/applications/btop.desktop".text = ''
+        [Desktop Entry]
+        Hidden=true
+      '';
+      home.file.".local/share/applications/bottom.desktop".text = ''
+        [Desktop Entry]
+        Hidden=true
+      '';
+      home.file.".local/share/applications/htop.desktop".text = ''
+        [Desktop Entry]
+        Hidden=true
+      '';
     };
   };
 }

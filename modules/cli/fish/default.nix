@@ -1187,6 +1187,12 @@ in
             # Tab completion for dev-jcheck function - supports multiple files
             complete -c dev-jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
           '';
+
+          # Hide CLI applications from desktop menus
+          ".local/share/applications/fish.desktop".text = ''
+            [Desktop Entry]
+            Hidden=true
+          '';
         };
 
         packages = with pkgs; [

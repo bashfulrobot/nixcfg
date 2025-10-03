@@ -85,6 +85,12 @@ in {
     # Create flag file for feature detection in build scripts
     home-manager.users."${user-settings.user.username}" = {
       home.file.".config/nix-flags/ollama-enabled".text = "";
+
+      # Hide nvtop from desktop menus
+      home.file.".local/share/applications/nvtop.desktop".text = ''
+        [Desktop Entry]
+        Hidden=true
+      '';
     };
 
     # Open firewall ports for web access (optional)

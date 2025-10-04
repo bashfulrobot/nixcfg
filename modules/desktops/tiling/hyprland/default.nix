@@ -510,6 +510,7 @@ in
             # Auto-send apps to special workspaces
             "workspace special:spotify, class:^(Spotify)$"
             "workspace special:spotify, title:(.*)(Spotify)(.*)$"
+            "workspace special:spotify, class:^(ncspot)$"
             "workspace special:1password, class:^(1Password)$"
             "workspace special:1password, title:(.*)(1Password)(.*)$"
 

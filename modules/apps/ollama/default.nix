@@ -1,5 +1,5 @@
 { user-settings, pkgs, config, lib, ... }:
-let 
+let
   cfg = config.apps.ollama;
 in {
   options = {
@@ -65,10 +65,10 @@ in {
       # CLI tools for model management
       curl
       wget
-      
+
       # Optional: GPU monitoring tools for AMD
       radeontop
-      
+
       # Optional: System monitoring
       htop
       nvtopPackages.amd  # GPU monitoring for AMD GPUs
@@ -86,18 +86,13 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       home.file.".config/nix-flags/ollama-enabled".text = "";
 
-      # Hide nvtop from desktop menus
-      home.file.".local/share/applications/nvtop.desktop".text = ''
-        [Desktop Entry]
-        Hidden=true
-      '';
     };
 
     # Open firewall ports for web access (optional)
     networking.firewall = {
-      allowedTCPPorts = [ 
+      allowedTCPPorts = [
         11434  # Ollama API
-      ] ++ lib.optionals cfg.openWebUI [ 
+      ] ++ lib.optionals cfg.openWebUI [
         3000   # Open WebUI default port
       ];
     };

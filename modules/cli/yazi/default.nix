@@ -18,7 +18,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # environment.systemPackages = with pkgs; [  ];
+    # Override yazi package to remove desktop file
+    nixpkgs.overlays = [
+      (final: prev: {
+        yazi = prev.yazi.overrideAttrs (oldAttrs: {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            rm -f $out/share/applications/yazi.desktop
+          '';
+        });
+      })
+    ];
 
     home-manager.users."${user-settings.user.username}" = {
 
@@ -55,12 +64,6 @@ in
           '';
         };
       };
-
-      # Hide yazi from desktop menus
-      home.file.".local/share/applications/yazi.desktop".text = ''
-        [Desktop Entry]
-        Hidden=true
-      '';
     };
   };
 }

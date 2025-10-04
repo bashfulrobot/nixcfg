@@ -30,8 +30,8 @@
                else "hyprland/workspaces")  # fallback
               # "mpris"
             ];
-            modules-center = ["clock"];
-            modules-right = ["group/system-info" "custom/notification" "custom/power"];
+            modules-center = ["clock" "custom/notification"];
+            modules-right = ["group/system-info" "custom/power"];
 
             "group/system-info" = {
               orientation = "inherit";
@@ -210,9 +210,8 @@
             };
 
             "clock" = {
-              format = "{:%a %d %b %R}";
-              # format = "{:%R 󰃭 %d·%m·%y}";
-              format-alt = "{:%I:%M %p}";
+              format = "{:%H:%M}";
+              format-alt = "{:%a %d %b %H:%M}";
               tooltip-format = "<tt>{calendar}</tt>";
               calendar = {
                 mode = "month";
@@ -396,7 +395,8 @@
           #bluetooth,
           #pulseaudio,
           #battery,
-          #tray {
+          #tray,
+          #custom-notification {
               padding: 1px 10px;
               margin: 0 1.5px;
           }
@@ -630,6 +630,18 @@
           #custom-notification:hover {
               background-color: @surface1;
               color: @text;
+          }
+
+          /* Hide notification module when no notifications */
+          #custom-notification.none,
+          #custom-notification.dnd-none,
+          #custom-notification.inhibited-none,
+          #custom-notification.dnd-inhibited-none {
+              font-size: 0;
+              margin: 0;
+              padding: 0;
+              min-width: 0;
+              min-height: 0;
           }
 
           #custom-power {

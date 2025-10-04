@@ -20,6 +20,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Override packages to remove desktop files
+    nixpkgs.overlays = [
+      (final: prev: {
+        bottom = prev.bottom.overrideAttrs (oldAttrs: {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            rm -f $out/share/applications/bottom.desktop
+          '';
+        });
+        btop = prev.btop.overrideAttrs (oldAttrs: {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            rm -f $out/share/applications/btop.desktop
+          '';
+        });
+      })
+    ];
+
     cli = { };
 
     apps = {
@@ -91,20 +107,6 @@ in
           enable = true;
         };
       };
-
-      # Hide CLI monitoring tools from desktop menus
-      home.file.".local/share/applications/btop.desktop".text = ''
-        [Desktop Entry]
-        Hidden=true
-      '';
-      home.file.".local/share/applications/bottom.desktop".text = ''
-        [Desktop Entry]
-        Hidden=true
-      '';
-      home.file.".local/share/applications/htop.desktop".text = ''
-        [Desktop Entry]
-        Hidden=true
-      '';
     };
   };
 }

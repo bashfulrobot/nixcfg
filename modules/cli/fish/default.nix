@@ -1101,6 +1101,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Override fish package to remove desktop file
+    nixpkgs.overlays = [
+      (final: prev: {
+        fish = prev.fish.overrideAttrs (oldAttrs: {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            rm -f $out/share/applications/fish.desktop
+          '';
+        });
+      })
+    ];
+
     # You can enable the fish shell and manage fish configuration and plugins with Home Manager, but to enable vendor fish completions provided by Nixpkgs you will also want to enable the fish shell in /etc/nixos/configuration.nix:
     programs.fish.enable = true;
 
@@ -1202,11 +1213,6 @@ in
             complete -c dev-jcheck -xa "(find . -name '*.nix' -type f 2>/dev/null | string replace './' \"\")"
           '';
 
-          # Hide CLI applications from desktop menus
-          ".local/share/applications/fish.desktop".text = ''
-            [Desktop Entry]
-            Hidden=true
-          '';
         };
 
         packages = with pkgs; [

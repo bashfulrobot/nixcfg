@@ -18,6 +18,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Override ranger package to remove desktop file
+    nixpkgs.overlays = [
+      (final: prev: {
+        ranger = prev.ranger.overrideAttrs (oldAttrs: {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            rm -f $out/share/applications/ranger.desktop
+          '';
+        });
+      })
+    ];
+
     home-manager.users."${user-settings.user.username}" = {
       imports = [
         ./build/config.nix

@@ -27,13 +27,13 @@ in
       tmux.enable = false;
       zellij.enable = true;
       yazi.enable = true;
-      ranger.enable = true;
+      ranger.enable = false;
       foot.enable = false;
       blackbox.enable = false;
-      ghostty.enable = true;
+      ghostty.enable = false;
       ntf.enable = true;
       xkill.enable = true;
-      kitty.enable = false;
+      kitty.enable = true;
       wezterm.enable = false;
       eza.enable = true;
       rio.enable = false;

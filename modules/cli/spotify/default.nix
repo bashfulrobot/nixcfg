@@ -76,8 +76,21 @@ in
           NCSPOT_SOCK = "/run/user/1000/ncspot/ncspot.sock";
         };
 
-        # spotify-player config (theming handled by stylix)
+        # Custom ncspot desktop file with proper window class
         file = {
+          ".local/share/applications/ncspot.desktop".text = ''
+            [Desktop Entry]
+            Name=ncspot
+            Comment=ncurses Spotify client
+            Exec=kitty --class=ncspot -e ncspot
+            Terminal=false
+            Type=Application
+            Icon=spotify
+            Categories=Audio;Music;Player;
+            StartupWMClass=ncspot
+          '';
+
+          # spotify-player config (theming handled by stylix)
           ".config/spotify-player/app.toml".text = ''
             client_id = "${secrets.spotify-player.client-id}"
             client_port = 8080

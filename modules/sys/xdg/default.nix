@@ -57,7 +57,7 @@ in
             "x-scheme-handler/postman" = [ "Postman.desktop" ];
             "x-scheme-handler/slack" = [ "slack.desktop" ];
             # "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
-            "x-scheme-handler/terminal" = [ "ghostty.desktop" ];
+            "x-scheme-handler/terminal" = [ "kitty.desktop" ];
             # Image files
             "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
             "image/png" = [ "org.gnome.Loupe.desktop" ];

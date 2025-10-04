@@ -12,8 +12,8 @@ let
   cfg = config.desktops.tiling.hyprland;
   inherit (lib) getExe getExe';
 
-  terminal = "ghostty";
-  terminalFileManager = "ranger";
+  terminal = "kitty";
+  terminalFileManager = "yazi";
   browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant

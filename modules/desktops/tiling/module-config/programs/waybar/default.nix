@@ -173,7 +173,7 @@
                 "Chromium" = "";
                 "Code" = "󰨞";
                 "VSCodium" = "󰨞";
-                "ghostty" = "";
+                "kitty" = "";
                 "nautilus" = "󰉋";
                 "firefox" = "󰈹";
                 "Spotify" = "";
@@ -257,7 +257,7 @@
             };
 
             "network" = {
-              on-click = "ghostty --class=floating-terminal -e nmtui";
+              on-click = "kitty --class=floating-terminal -e nmtui";
               # "interface" = "wlp2*"; # (Optional) To force the use of this interface
               format-wifi = "󰤨 Wi-Fi";
               # format-wifi = " {bandwidthDownBits}  {bandwidthUpBits}";
@@ -302,7 +302,7 @@
               };
               scroll-step = 5;
               on-click = "pwvucontrol &";
-              on-click-right = "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") ghostty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'";
+              on-click-right = "bash -c 'selected=$(printf \"Open PipeWire Control\\nSwitch to Shure MV7\\nSwitch to rempods (AirPods)\\nSwitch to earmuffs\\nSwitch to Speakers\\nMixed Mode (MV7 + rempods)\\nMixed Mode (MV7 + earmuffs)\\nList Audio Devices\\nToggle Output Mute\\nToggle Input Mute\" | rofi -dmenu -p \"Audio Options\" -theme-str \"window {padding: 15px; margin: 10px;}\"); case \"$selected\" in \"Open PipeWire Control\") pwvucontrol & ;; \"Switch to Shure MV7\") mv7; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to Shure MV7\" ;; \"Switch to rempods (AirPods)\") rempods; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to rempods\" ;; \"Switch to earmuffs\") earmuffs; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to earmuffs\" ;; \"Switch to Speakers\") speakers; hyprctl notify -1 3000 \"rgb(74c7ec)\" \"Switched to speakers\" ;; \"Mixed Mode (MV7 + rempods)\") mixed-mode-rempods; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + rempods\" ;; \"Mixed Mode (MV7 + earmuffs)\") mixed-mode-earmuffs; hyprctl notify -1 3000 \"rgb(f9e2af)\" \"Mixed mode: MV7 + earmuffs\" ;; \"List Audio Devices\") kitty --class floating-terminal -e bash -c \"audio-list; read -p \\\"Press Enter to close...\\\"\" ;; \"Toggle Output Mute\") pamixer -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Output mute toggled\" ;; \"Toggle Input Mute\") pamixer --default-source -t; hyprctl notify -1 2000 \"rgb(f38ba8)\" \"Input mute toggled\" ;; esac'";
               on-scroll-up = "pamixer -i 5";
               on-scroll-down = "pamixer -d 5";
               tooltip-format = "Source: {desc}\nVolume: {volume}%\nClick: Open PipeWire Control | Right-click: Audio menu | Scroll: Volume";

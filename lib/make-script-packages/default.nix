@@ -8,22 +8,34 @@
   # Examples:
   #   scripts = [ "script1" "script2" ];
   #   scripts = [ "script1" { name = "script2"; command = "custom-cmd"; } ];
+  #   scripts = [ { name = "script3"; runtimeInputs = [ pkgs.curl pkgs.jq ]; } ];
   scripts,
 
   # Whether to create fish shell abbreviations (optional)
   createFishAbbrs ? true,
 
   # Global script-to-command mapping (optional, overridden by per-script command)
-  scriptMap ? {}
+  scriptMap ? {},
+
+  # Global runtime dependencies for all scripts (optional)
+  # When specified, scripts will use writeShellApplication instead of writeShellScriptBin
+  runtimeInputs ? []
 }:
 
 let
   # Normalize script entries to attribute sets
   normalizeScript = script:
     if builtins.isString script then
-      { name = script; command = scriptMap.${script} or script; }
+      {
+        name = script;
+        command = scriptMap.${script} or script;
+        runtimeInputs = [];
+      }
     else
-      script // { command = script.command or (scriptMap.${script.name} or script.name); };
+      script // {
+        command = script.command or (scriptMap.${script.name} or script.name);
+        runtimeInputs = script.runtimeInputs or [];
+      };
 
   # Convert all scripts to normalized form
   normalizedScripts = builtins.map normalizeScript scripts;
@@ -33,9 +45,19 @@ let
     let
       scriptFile = "${scriptsDir}/${scriptConfig.name}.sh";
       commandName = scriptConfig.command;
+      # Merge global and per-script runtimeInputs
+      allRuntimeInputs = runtimeInputs ++ scriptConfig.runtimeInputs;
+      hasRuntimeInputs = builtins.length allRuntimeInputs > 0;
     in
     if builtins.pathExists scriptFile then
-      pkgs.writeShellScriptBin commandName (builtins.readFile scriptFile)
+      if hasRuntimeInputs then
+        pkgs.writeShellApplication {
+          name = commandName;
+          runtimeInputs = allRuntimeInputs;
+          text = builtins.readFile scriptFile;
+        }
+      else
+        pkgs.writeShellScriptBin commandName (builtins.readFile scriptFile)
     else
       throw "Script file not found: ${scriptFile}";
 

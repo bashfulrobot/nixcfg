@@ -46,7 +46,6 @@
   };
 
   cli = {
-    agent-os.enable = true;
     restic = {
       enable = true;
       folderName = "tower";

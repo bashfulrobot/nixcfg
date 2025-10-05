@@ -1,9 +1,10 @@
 ---
 id: task-4
 title: Investigate Hyprshell for Alt-Tab functionality
-status: To Do
+status: Done
 assignee: []
 created_date: '2025-10-03 00:04'
+updated_date: '2025-10-05 05:03'
 labels:
   - hyprland
   - research

@@ -37,7 +37,7 @@ in {
       gnome-tweaks
       nautilus-open-any-terminal # open terminal(s) in nautilus
       file-roller # GNOME archive manager - core desktop component
-      gnome-screenshot # Re-adding since flameshot doesn't work in Wayland
+      gnome-screenshot
       fzf # Terminal-based fuzzy finder for theme selection
       # Icon theme support for notifications
       hicolor-icon-theme
@@ -101,7 +101,6 @@ in {
       keybindings.enable = true;
       extensions.enable = true;
     };
-
 
     ##### Home Manager Config options #####
     home-manager.users."${user-settings.user.username}" = {

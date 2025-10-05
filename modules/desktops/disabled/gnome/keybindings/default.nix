@@ -1,5 +1,5 @@
 { user-settings, lib, config, pkgs, inputs, ... }:
-let 
+let
   cfg = config.desktops.gnome.keybindings;
 in {
 
@@ -14,7 +14,7 @@ in {
   config = lib.mkIf cfg.enable {
 
     # environment.systemPackages = with pkgs; [
-    #   # No additional packages needed for direct app launch keybindings  
+    #   # No additional packages needed for direct app launch keybindings
     # ];
 
     desktops.gnome = { keybindings.display-custom-keybindings.enable = true; };
@@ -35,7 +35,6 @@ in {
         # };
 
         "org/gnome/shell/keybindings" = {
-          # Re-enable GNOME screenshot UI since flameshot doesn't work in Wayland
           show-screenshot-ui = [ "<Control><Alt>p" ];
           switch-to-application-1 = [ ];
           switch-to-application-2 = [ ];
@@ -115,10 +114,7 @@ in {
             binding = "<Super>t";
             # command = "kgx";
             # command = "alacritty";
-            # command = "ghostty";
-            # command = "foot";
-            # command = "blackbox";
-            command = "ghostty";
+            command = "blackbox";
             name = "Default Terminal";
           };
 
@@ -209,7 +205,7 @@ in {
             # ctrl-shift-?
             binding = "<Control><Shift>slash";
             command =
-              "/run/current-system/sw/bin/ghostty -c display-custom-keybindings";
+              "/run/current-system/sw/bin/kitty -c display-custom-keybindings";
             name = "Show current custom keybindings in a terminal";
           };
 
@@ -221,8 +217,8 @@ in {
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15" = {
           binding = "<Control><Alt>p";
-          command = "flameshot gui";
-          name = "Flameshot Screenshot GUI";
+          command = "com.github.phase1geo.annotator --screenshot";
+          name = "Annotator Screenshot GUI";
         };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16" = {
@@ -305,7 +301,6 @@ in {
           # Mouse
           mod-mask-mouse-tile = "None";
         };
-
 
       };
 

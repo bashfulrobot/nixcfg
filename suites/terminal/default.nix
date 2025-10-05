@@ -28,9 +28,7 @@ in
       zellij.enable = true;
       yazi.enable = true;
       ranger.enable = false;
-      foot.enable = false;
       blackbox.enable = false;
-      ghostty.enable = false;
       ntf.enable = true;
       xkill.enable = true;
       kitty.enable = true;

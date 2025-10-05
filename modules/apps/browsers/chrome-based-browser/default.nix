@@ -83,13 +83,13 @@ in
         # kagi search
         # "cdglnehniifkbagbbombnjghhcihifij"
         # Just Read
-        "dgmanlpmmkibanfdgjocnabmcaclkmod"
+        # "dgmanlpmmkibanfdgjocnabmcaclkmod"
         # 1password
         "aeblfdkhhhdcdjpifhhbdiojplfjncoa"
         # dark reader
         "eimadpbcbfnmbkopoojfekhnkhdbieeh"
         # ublock origin
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+        # "cjpalhdlnbpafiamejdnhcphjbkeiagm"
         # tactiq
         #"fggkaccpbmombhnjkjokndojfgagejfb"
         # okta
@@ -115,7 +115,7 @@ in
         # obsidian clipper
         #"mphkdfmipddgfobjhphabphmpdckgfhb"
         # URL/Tab Manager
-        "egiemoacchfofdhhlfhkdcacgaopncmi"
+        # "egiemoacchfofdhhlfhkdcacgaopncmi"
         # Mail message URL
         "bcelhaineggdgbddincjkdmokbbdhgch"
         # Catppuccin Github icons
@@ -123,7 +123,7 @@ in
         # Glean browser extension
         # "cfpdompphcacgpjfbonkdokgjhgabpij" # overrides my speed dial extention
         # gnome extention plugin
-        "gphhapmejobijbbhgpjhcjognlahblep"
+        # "gphhapmejobijbbhgpjhcjognlahblep"
         # copy to clipboard
         "miancenhdlkbmjmhlginhaaepbdnlllc"
         # Speed dial extention

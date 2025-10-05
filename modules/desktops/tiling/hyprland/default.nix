@@ -164,6 +164,7 @@ in
       hyprpaper
       seahorse
       hyprpicker
+      hyprdim
       cliphist
       grimblast
       grim # needed for screensharing

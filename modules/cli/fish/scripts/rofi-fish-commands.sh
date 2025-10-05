@@ -21,7 +21,6 @@ COMMANDS=(
     "<b>🌐 sys-get-ips</b>  <i>List network interfaces and IPs</i>"
     "<b>📖 sys-docs-nixcfg</b>  <i>Open NixOS configuration manual</i>"
     "<b>📖 sys-docs-home-manager</b>  <i>Open Home Manager manual</i>"
-    "<b>🍎 sys-rebuild-mac</b>  <i>Rebuild macOS configuration</i>"
     ""
     "<span color='gray'><i>Nix Commands:</i></span>"
     "<b>🏗️ nix-build</b>  <i>Build NixOS config without switching</i>"

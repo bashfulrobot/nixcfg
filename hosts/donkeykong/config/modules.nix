@@ -60,4 +60,8 @@
   #   enable = true;
   #   host.donkeykong = true;
   # };
+
+  suites = {
+    ai.enable = true;
+  };
 }

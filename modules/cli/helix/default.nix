@@ -55,7 +55,6 @@ in {
               };
             };
           }
-          (lib.mkIf pkgs.stdenv.isDarwin { theme = "onedark"; })
         ];
 
         languages = {

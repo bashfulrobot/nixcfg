@@ -11,10 +11,6 @@ let
       url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/linux/amd64/sysdig-cli-scanner";
       sha256 = "sha256-ogQ7NhpU0KZkcZXWSBX4VaTWwXz5WWMXhqZ9abHX6+Y=";
     };
-    "aarch64-darwin" = {
-      url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${version}/darwin/arm64/sysdig-cli-scanner";
-      sha256 = "sha256-FDkqWstWMTtF0QLWk+iadJr7aRHRnpiatqAeoHftVDk="; # TODO: Add sha256 after first build attempt
-    };
   };
 in
 if sources ? ${system} then
@@ -36,7 +32,6 @@ if sources ? ${system} then
       maintainers = [ bashfulrobot ];
       platforms = [
         "x86_64-linux"
-        "aarch64-darwin"
       ];
     };
   }

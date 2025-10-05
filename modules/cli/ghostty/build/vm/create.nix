@@ -15,7 +15,7 @@
   };
 in
   nixpkgs.lib.nixosSystem {
-    system = builtins.replaceStrings ["darwin"] ["linux"] system;
+    inherit system;
     modules = [
       {
         virtualisation.vmVariant = {

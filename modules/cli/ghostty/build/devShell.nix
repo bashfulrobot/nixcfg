@@ -135,8 +135,7 @@ in
         # by default so we have to include this.
         bashInteractive
 
-        # Used for testing SIMD codegen. This is Linux only because the macOS
-        # build only has the qemu-system files.
+        # Used for testing SIMD codegen.
         qemu
 
         appstream
@@ -199,15 +198,5 @@ in
         export XDG_DATA_DIRS=$XDG_DATA_DIRS:${hicolor-icon-theme}/share:${adwaita-icon-theme}/share
         export XDG_DATA_DIRS=$XDG_DATA_DIRS:$GSETTINGS_SCHEMAS_PATH # from glib setup hook
       '')
-      + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # On macOS, we unset the macOS SDK env vars that Nix sets up because
-        # we rely on a system installation. Nix only provides a macOS SDK
-        # and we need iOS too.
-        unset SDKROOT
-        unset DEVELOPER_DIR
-
-        # We need to remove "xcrun" from the PATH. It is injected by
-        # some dependency but we need to rely on system Xcode tools
-        export PATH=$(echo "$PATH" | awk -v RS=: -v ORS=: '$0 !~ /xcrun/ || $0 == "/usr/bin" {print}' | sed 's/:$//')
-      '');
+;
   }

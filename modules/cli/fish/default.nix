@@ -13,7 +13,6 @@ let
     "--hidden"
     "--exclude '.git'"
   ];
-  inherit (pkgs.stdenv) isDarwin;
 
   makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
 
@@ -26,22 +25,6 @@ let
     createFishAbbrs = false; # We handle aliases manually
   };
 
-  # Define which functions should be excluded on Darwin
-  darwinExcludedFunctions = lib.unique [
-    "vm-shutdown-all"
-    "vm-net-list-all"
-    "vm-pool-list-all"
-    "vm-img-list-all"
-    "vm-list-all"
-    "vm-net-get-info"
-    "sys-get-wm-class"
-    "sys-get-hypr-class"
-    "nix-store-find-file"
-    "app-scratch-new"
-    "app-scratch-browse"
-    "nix-run-ephemeral"
-    "app-send-to-phone"
-  ];
 
   # Command metadata for help system
   # Format: "command" = "emoji description|type|usage";
@@ -62,7 +45,6 @@ let
     "sys-get-ips" = "🌐 List network interfaces and IPs|exec|";
     "sys-docs-nixcfg" = "📖 Open NixOS configuration manual|exec|";
     "sys-docs-home-manager" = "📖 Open Home Manager manual|exec|";
-    "sys-rebuild-mac" = "🍎 Rebuild macOS configuration|exec|";
 
     # Nix commands
     "nix-build" = "🏗️  Build NixOS config without switching|exec|";
@@ -735,7 +717,7 @@ let
       set input $argv[1]
       set output (string replace -r '\.[^.]* '-1080p.mp4' $input)
       ffmpeg -i $input -vf scale=1920:1080 -c:v libx264 -preset fast -crf 23 -c:a copy $output
-    '';
+    end'';
 
     media-video-4k = ''
       if test (count $argv) -ne 1
@@ -747,7 +729,7 @@ let
       set input $argv[1]
       set output (string replace -r '\.[^.]* '-optimized.mp4' $input)
       ffmpeg -i $input -c:v libx265 -preset slow -crf 24 -c:a aac -b:a 192k $output
-    '';
+    end'';
 
     media-img-to-jpg = ''
       if test (count $argv) -ne 1
@@ -759,7 +741,7 @@ let
       set input $argv[1]
       set output (string replace -r '\.[^.]* '.jpg' $input)
       magick $input -quality 95 -strip $output
-    '';
+    end'';
 
     media-img-to-jpg-small = ''
       if test (count $argv) -ne 1
@@ -771,7 +753,7 @@ let
       set input $argv[1]
       set output (string replace -r '\.[^.]* '.jpg' $input)
       magick $input -resize 1080x\> -quality 95 -strip $output
-    '';
+    end'';
 
     media-img-to-png = ''
       if test (count $argv) -ne 1
@@ -787,23 +769,10 @@ let
         -define png:compression-strategy=1 \
         -define png:exclude-chunk=all \
         $output
-    '';
+    end'';
   };
 
-  # Create a version of functions with Darwin exclusions
-  filteredFunctions = lib.filterAttrs (
-    name: _: !(isDarwin && builtins.elem name darwinExcludedFunctions)
-  ) allFunctions;
 
-  darwinExcludedShellAbbrs = lib.unique [
-    "nix-lint"
-    "dev-docker-compose"
-    "dev-git-commit-push"
-    "app-pueue"
-    "cam-list-devices"
-    "cam-list-features"
-    "cam-set-saturation"
-  ];
 
   allShellAbbrs = {
     # Keep short abbreviations for frequently used commands
@@ -831,98 +800,7 @@ let
     cam-set-saturation = "v4l2-ctl --set-ctrl=saturation=50 -d /dev/video0";
   };
 
-  filteredShellAbbrs = lib.filterAttrs (
-    name: _: !(isDarwin && builtins.elem name darwinExcludedShellAbbrs)
-  ) allShellAbbrs;
 
-  darwinExcludedShellAliases = lib.unique [
-    "sys-support-info"
-    "sys-support-info-extended"
-    "sys-troubleshoot-last-boot"
-    "copy-icons"
-    "echo-home"
-    "sys-logs-home-manager"
-    "sys-tailscale-up-laptop"
-    "sys-tailscale-up-desktop"
-    "oc"
-    "fs-ncdu"
-    "sys-get-video-id"
-    "sys-get-ips"
-    "instruqt-pull"
-    "instruqt-push"
-    "instruqt-logs"
-    "fs-nav-terraform"
-    "fs-nav-terraform-clusters"
-    "fs-nav-terraform-modules"
-    "fs-nav-terraform-edit"
-    "fs-nav-scratch"
-    "fs-nav-nixcfg"
-    "dev-edit-vscode-nixcfg"
-    "sys-update-push"
-    "goagent"
-    "fs-nav-screenshots"
-    "y"
-    "ny"
-    "dev-edit-nixcfg"
-    "sys-commit-rebuild"
-    "fs-list"
-    "sys-font-cache-refresh"
-    "sys-font-list"
-    "fs-disk-usage"
-    "dev-process-list"
-    "dev-help"
-    "dev-top"
-    "dev-ping"
-    "sys-docs-nixcfg"
-    "sys-docs-home-manager"
-    "k8s-scan"
-    "k8s-setup-config"
-    "vm-list"
-    "dev-yaml-viewer"
-    "nix-build"
-    "nix-rebuild"
-    "nix-upgrade"
-    "nix-test"
-    "app-kubitect"
-    "nix-index-update"
-    # Backward compatibility aliases
-    "support-info"
-    "support-info-extended"
-    "tshoot-last-boot"
-    "hm-logs"
-    "tailscale-up-lt"
-    "tailscale-up-dt"
-    "ncdu"
-    "nix-get-video-id"
-    "ips"
-    "ipull"
-    "ipush"
-    "ilog"
-    "gotf"
-    "gotfc"
-    "gotfm"
-    "gotf-e"
-    "gos"
-    "gon"
-    "gon-e"
-    "do-update"
-    "goscreen"
-    "n"
-    "ncommit"
-    "font-cache-refresh"
-    "font-list"
-    "nixcfg"
-    "hmcfg"
-    "rustscan"
-    "kcfg"
-    "vms"
-    "nxb"
-    "nxr"
-    "nxu"
-    "nxt"
-    "kubitect"
-    "comma-db"
-  ];
 
   allShellAliases = {
     # File system enhancements
@@ -984,7 +862,6 @@ let
     sys-get-ips = "ip -o -4 addr list | awk '{print $2, $4}'";
     sys-docs-nixcfg = "${pkgs.man}/bin/man configuration.nix";
     sys-docs-home-manager = "${pkgs.man}/bin/man home-configuration.nix";
-    sys-rebuild-mac = "clear && echo;echo '***** UPDATE VERSIONS PERIODIALLY *****'; echo;  sleep 1; cd ~/dev/nix/nixcfg/ && ${pkgs.just}/bin/just darwin-rebuild";
     sys-commit-rebuild = "clear && cd ~/dev/nix/nixcfg && git add . && git commit -S && rm -f ${user-settings.user.home}/.config/mimeapps.list && rebuild && cd ~/dev/nix/nixcfg && git push";
     sys-update-push = "fs-nav-nixcfg && git pull && nix-upgrade && git add -A && git commit -S && git push";
 
@@ -1016,7 +893,6 @@ let
     tshoot-last-boot = "sys-troubleshoot-last-boot";
     tailscale-up-lt = "sys-tailscale-up-laptop";
     tailscale-up-dt = "sys-tailscale-up-desktop";
-    rebuild-mac = "sys-rebuild-mac";
     comma-db = "nix-index-update";
 
     # Kubernetes commands
@@ -1085,9 +961,6 @@ let
     "?" = "fish-help-rofi";
   };
 
-  filteredShellAliases = lib.filterAttrs (
-    name: _: !(isDarwin && builtins.elem name darwinExcludedShellAliases)
-  ) allShellAliases;
 
 in
 {
@@ -1115,7 +988,6 @@ in
     # You can enable the fish shell and manage fish configuration and plugins with Home Manager, but to enable vendor fish completions provided by Nixpkgs you will also want to enable the fish shell in /etc/nixos/configuration.nix:
     programs.fish.enable = true;
 
-    environment.shells = lib.mkIf isDarwin [ pkgs.fish ];
 
     # Install fish script packages
     environment.systemPackages = scriptPackages.packages;
@@ -1128,7 +1000,7 @@ in
             ''
               # Shell Init
               direnv hook fish | source
-              ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
+              source ${user-settings.user.home}/.config/op/plugins.sh
 
               # Just completions
               ${pkgs.just}/bin/just --completions fish | source
@@ -1144,7 +1016,7 @@ in
           if isWorkstation then
             ''
                   set fish_greeting # Disable greeting
-                  ${lib.optionalString (!isDarwin) "source ${user-settings.user.home}/.config/op/plugins.sh"}
+                  source ${user-settings.user.home}/.config/op/plugins.sh
 
                   # Auto-load SSH keys if this is an SSH session
               if set -q SSH_CONNECTION
@@ -1184,13 +1056,13 @@ in
 
             '';
 
-        # Apply the filtered functions
-        functions = filteredFunctions;
+        # Apply all functions
+        functions = allFunctions;
 
-        shellAbbrs = filteredShellAbbrs;
+        shellAbbrs = allShellAbbrs;
 
-        # Apply the filtered shell aliases
-        shellAliases = filteredShellAliases;
+        # Apply all shell aliases
+        shellAliases = allShellAliases;
       };
 
       # Add custom completions for jlint and jcheck

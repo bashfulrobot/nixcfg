@@ -96,11 +96,7 @@ in
     ];
 
     postInstall = ''
-      terminfo_src=${
-        if stdenv.hostPlatform.isDarwin
-        then ''"$out/Applications/Ghostty.app/Contents/Resources/terminfo"''
-        else "$out/share/terminfo"
-      }
+      terminfo_src="$out/share/terminfo"
 
       mkdir -p "$out/nix-support"
 

@@ -34,11 +34,6 @@ This is a comprehensive NixOS configuration repository for Dustin Krysak, managi
 - `just nix-lint` - Lint all nix files using statix
 - `just version-update` - Update flake dependencies
 
-### Darwin (macOS) Systems
-
-- `just darwin-rebuild` - Rebuild Darwin systems in nix-darwin/
-- `just darwin-upgrade-system` - Update and rebuild Darwin systems
-
 ## Architecture
 
 ### Flake Structure

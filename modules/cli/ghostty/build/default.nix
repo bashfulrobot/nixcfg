@@ -33,7 +33,7 @@ in (callPackage ./package.nix {
     homepage = "https://ghostty.org";
     license = licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     mainProgram = "ghostty";
   };
 })

@@ -472,7 +472,6 @@ in
         "dev/.stignore" = {
           text = ''
             .git
-            .DS_Store
           '';
           target = "dev/.stignore";
         };

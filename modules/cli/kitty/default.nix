@@ -46,7 +46,6 @@ in
             hide_window_decorations = "yes";
             editor = "${pkgs.unstable.helix}/bin/hx";
             cursor_shape = "block";
-            macos_titlebar_color = "background";
             clipboard_max_size = 0;
             window_padding_width = 15;
             bold_font = "auto";

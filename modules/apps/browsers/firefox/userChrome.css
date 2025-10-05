@@ -6,7 +6,7 @@
     pointer-events: none;
 }
 
-/* Hide macOS traffic light area */
+/* Hide tab bar area */
 #TabsToolbar {
     display: none;
 }

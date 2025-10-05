@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2025-10-03 00:04'
-updated_date: '2025-10-05 03:39'
+updated_date: '2025-10-05 04:37'
 labels:
   - keyboard
   - input
@@ -18,6 +18,8 @@ priority: medium
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Resolve issues with Caps Lock key toggle behavior. This may involve keyboard configuration, input method settings, or desktop environment specific configurations to ensure Caps Lock works as expected.
+
+Note - https://github.com/ErikReider/SwayOSD/issues/3
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria

@@ -29,6 +29,7 @@ sudo nix-shell shell.nix
 ```
 
 The bootstrap shell will automatically:
+
 - Check for root privileges
 - Download and run the deployment script
 - Guide you through interactive system selection
@@ -93,6 +94,7 @@ just rebuild
 ```
 
 The bootstrap process automatically:
+
 - Generates hardware configuration for your specific system
 - Unlocks git-crypt with your network-accessible key
 - Copies the complete repo to `/home/nixcfg` for easy access
@@ -102,38 +104,10 @@ The bootstrap process automatically:
 
 See [CLAUDE.md](./CLAUDE.md) for detailed development documentation, commands, and architecture information.
 
-## Vivaldi Theme Integration
-
-The Vivaldi browser module automatically generates themes that match your Stylix color scheme:
-
-### Theme Management
-
-1. **Theme Generation**: On each system rebuild, settings.json files are updated with current Stylix colors in:
-   - `extras/helpers/vivaldi-theme/stylix-dark/settings.json` (Dark theme)
-   - `extras/helpers/vivaldi-theme/stylix-light/settings.json` (Light theme)
-
-2. **Building Import Files**: 
-   ```bash
-   cd extras/helpers/vivaldi-theme
-   ./build-themes.sh
-   ```
-   This creates `stylix-dark.zip` and `stylix-light.zip` for import into Vivaldi.
-
-3. **Importing Themes**:
-   - Open Vivaldi → Settings → Appearance → Themes
-   - Click "Import Theme" 
-   - Select the appropriate .zip file
-   - Apply the imported theme
-
-4. **Theme Scheduling**: For automatic light/dark switching:
-   - Go to Vivaldi Settings → Appearance → Themes
-   - Set "Light Theme" to "Stylix Light (Auto-generated)"
-   - Set "Dark Theme" to "Stylix Dark (Auto-generated)" 
-   - Enable "Schedule" and configure your preferred times
-
 ### Color Mapping
 
 **Dark Theme**:
+
 - Background: `base00` (deepest background)
 - Window Background: `base01` (panels, sidebars)
 - Accent Background: `base02` (subtle highlights)
@@ -141,6 +115,7 @@ The Vivaldi browser module automatically generates themes that match your Stylix
 - Highlight: `base0D` (blue accent for selections)
 
 **Light Theme**:
+
 - Background: `base07` (lightest background)
 - Window Background: `base06` (light panels)
 - Accent Background: `base0D` (blue accent)
@@ -153,4 +128,4 @@ The Vivaldi browser module automatically generates themes that match your Stylix
 
 ## TODO
 
-- [ ] [Fix](https://github.com/fwupd/fwupd/wiki/PluginFlag:capsules-unsupported) Firmware updates 
+- [ ] [Fix](https://github.com/fwupd/fwupd/wiki/PluginFlag:capsules-unsupported) Firmware updates

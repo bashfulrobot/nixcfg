@@ -33,24 +33,7 @@ in
 
     apps = {
       browsers = {
-        firefox = {
-          enable = false;
-          setAsDefault = false;
-        };
         chrome-based-browser.enable = true;
-        google-chrome = {
-          enable = false;
-          setAsDefault = false;
-        };
-        brave = {
-          enable = false;
-          setAsDefault = false;
-        };
-        vivaldi = {
-          enable = false;
-          setAsDefault = false;
-        };
-
       };
 
       okular.enable = true;

@@ -8,6 +8,7 @@ Zoom screen sharing was failing with the error message:
 > "Screen sharing has stopped as the shared window has closed"
 
 **Root Cause:** The issue was caused by PipeWire buffer exhaustion in the screen capture pipeline between Zoom, xdg-desktop-portal-hyprland, and the Wayland compositor. Logs showed:
+
 - `[screencopy/pipewire] Out of buffers` errors
 - Rapid creation/destruction of screencopy sessions (`zoomcast1` through `zoomcast18`)
 - `[ERR] [screencopy] tried scheduling on already scheduled cb (type 1)`
@@ -46,7 +47,8 @@ This provides newer versions with potential fixes for screen sharing buffer mana
 
 The Zoom Flatpak configuration includes comprehensive permissions and environment setup:
 
-#### Flatpak Context Permissions:
+#### Flatpak Context Permissions
+
 ```nix
 services.flatpak.overrides = {
   "us.zoom.Zoom" = {
@@ -77,14 +79,15 @@ services.flatpak.overrides = {
 };
 ```
 
-#### Custom Desktop Entry:
+#### Custom Desktop Entry
+
 ```nix
 home.file.".local/share/applications/us.zoom.Zoom.desktop".text = ''
   [Desktop Entry]
   Name=Zoom
   Comment=Zoom Video Conference
   GenericName=Zoom Client for Linux
-  Exec=env BROWSER=/run/current-system/sw/bin/vivaldi /var/lib/flatpak/exports/bin/us.zoom.Zoom %U
+  Exec=env BROWSER=/run/current-system/sw/bin/chromium /var/lib/flatpak/exports/bin/us.zoom.Zoom %U
   Icon=us.zoom.Zoom
   Terminal=false
   Type=Application
@@ -98,8 +101,10 @@ home.file.".local/share/applications/us.zoom.Zoom.desktop".text = ''
 '';
 ```
 
-#### MIME Type Associations:
+#### MIME Type Associations
+
 The configuration handles multiple Zoom URL schemes:
+
 - `x-scheme-handler/zoom`
 - `x-scheme-handler/zoommtg`
 - `x-scheme-handler/zoomus`
@@ -114,7 +119,8 @@ The configuration handles multiple Zoom URL schemes:
 
 Added two new commands for Flatpak management:
 
-#### flatpak-update Command:
+#### flatpak-update Command
+
 ```bash
 flatpak-update:
     #!/usr/bin/env bash
@@ -139,7 +145,8 @@ flatpak-update:
     fi
 ```
 
-#### flatpak-check Command:
+#### flatpak-check Command
+
 ```bash
 flatpak-check:
     #!/usr/bin/env bash
@@ -153,7 +160,8 @@ flatpak-check:
     flatpak remote-ls --updates --columns=application,version,name || echo "No updates available"
 ```
 
-#### Command Aliases:
+#### Command Aliases
+
 ```bash
 alias fup := flatpak-update
 alias fcheck := flatpak-check
@@ -162,11 +170,13 @@ alias fcheck := flatpak-check
 ## Usage Instructions
 
 ### 1. Apply Configuration Changes
+
 ```bash
 just rebuild
 ```
 
 ### 2. Update Flatpak Applications
+
 ```bash
 just flatpak-update
 # or
@@ -174,11 +184,13 @@ just fup
 ```
 
 ### 3. Configure Zoom Screen Sharing
+
 1. Open Zoom
 2. Go to **Settings** > **Screen Share** > **Advanced**
 3. Set **"Screen Capture Mode on Wayland"** to **"PipeWire Mode"**
 
 ### 4. Test Screen Sharing
+
 - Start a Zoom meeting
 - Test screen sharing functionality
 - Verify no buffer exhaustion errors in logs
@@ -186,6 +198,7 @@ just fup
 ## Verification
 
 Check for successful screen sharing without errors:
+
 ```bash
 journalctl --since "5 minutes ago" | grep -i zoom
 journalctl --since "5 minutes ago" | grep -i screencopy
@@ -193,7 +206,7 @@ journalctl --since "5 minutes ago" | grep -i screencopy
 
 ## Troubleshooting
 
-### If Issues Persist:
+### If Issues Persist
 
 1. **Check Zoom Settings:** Ensure PipeWire mode is enabled in Zoom settings
 2. **Check Portal Status:** `systemctl --user status xdg-desktop-portal-hyprland`
@@ -201,9 +214,10 @@ journalctl --since "5 minutes ago" | grep -i screencopy
 4. **Update Zoom:** `just flatpak-update`
 5. **Check Logs:** `journalctl --user -f | grep -E "(zoom|screencopy|pipewire)"`
 
-### Alternative Solutions:
+### Alternative Solutions
 
 If screen sharing still fails, consider:
+
 - Restarting PipeWire: `systemctl --user restart pipewire`
 - Restarting desktop portals: `systemctl --user restart xdg-desktop-portal*`
 - Using alternative screen sharing tools for critical meetings

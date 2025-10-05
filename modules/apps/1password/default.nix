@@ -6,11 +6,11 @@ let
 
   # Beta version override - set to false for stable version
   useBeta = true;
-  
+
   # Create beta package overlay
   _1password-gui-beta = pkgs._1password-gui.overrideAttrs (oldAttrs: rec {
     version = "8.11.6-25.BETA";
-    src = 
+    src =
       if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
         pkgs.fetchurl {
           url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
@@ -42,8 +42,6 @@ in {
     environment.etc = {
       "1password/custom_allowed_browsers" = {
         text = ''
-          vivaldi-bin
-          brave
           chromium
           zen
           zen-bin

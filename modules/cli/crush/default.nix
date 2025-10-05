@@ -14,9 +14,9 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ 
+    environment.systemPackages = with pkgs; [
       inputs.nix-ai-tools.packages.${pkgs.system}.crush
-      
+
       # Language servers for crush LSP integration (all using unstable)
       unstable.gopls                                          # Go
       unstable.nil                                            # Nix
@@ -33,17 +33,17 @@ in {
       unstable.dockerfile-language-server                     # Dockerfile
       unstable.docker-compose-language-service                # Docker Compose
       unstable.postgres-lsp                                   # PostgreSQL
-      
+
       # MCP dependencies
       unstable.nodejs                                         # For npm-based MCP servers
     ];
-    
+
     home-manager.users."${user-settings.user.username}" = {
-      
+
       # Create crush configuration directory and baseline config
       home.file.".config/crush/crush.json".text = builtins.toJSON {
         "$schema" = "https://charm.land/crush.json";
-        
+
         providers = {
           ollama = {
             base_url = "http://localhost:11434/v1/";
@@ -67,12 +67,12 @@ in {
             ];
           };
         };
-        
+
         # Default provider
         default_provider = "ollama";
         # Default model within the provider (qwen3 for coding)
         default_model = "qwen3:latest";
-        
+
         # Options
         options = {
           attribution = {
@@ -80,7 +80,7 @@ in {
             generated_with = false;
           };
         };
-        
+
         # Permissions - pre-allow standard Linux and development tools
         permissions = {
           allowed_tools = [
@@ -128,85 +128,85 @@ in {
             "unzip"
           ];
         };
-        
+
         # Language Server Protocols (LSPs)
         lsp = {
           # Core development languages
           go = {
             command = "gopls";
           };
-          
+
           nix = {
             command = "nil";
           };
-          
+
           bash = {
             command = "bash-language-server";
             args = ["start"];
           };
-          
+
           javascript = {
             command = "typescript-language-server";
             args = ["--stdio"];
           };
-          
+
           typescript = {
             command = "typescript-language-server";
             args = ["--stdio"];
           };
-          
+
           python = {
             command = "pylsp";
           };
-          
+
           rust = {
             command = "rust-analyzer";
           };
-          
+
           # Web development
           html = {
             command = "vscode-html-language-server";
             args = ["--stdio"];
           };
-          
+
           css = {
             command = "vscode-css-language-server";
             args = ["--stdio"];
           };
-          
+
           json = {
             command = "vscode-json-language-server";
             args = ["--stdio"];
           };
-          
+
           # Infrastructure as Code
           terraform = {
             command = "terraform-ls";
             args = ["serve"];
           };
-          
+
           yaml = {
             command = "yaml-language-server";
             args = ["--stdio"];
           };
-          
+
           # Container/Docker
           dockerfile = {
             command = "docker-langserver";
             args = ["--stdio"];
           };
-          
+
           # Database
           sql = {
             command = "postgres-lsp";
           };
-          
+
           # Documentation
           markdown = {
             command = "marksman";
           };
         };
-        
+
         # Model Content Protocols (MCPs)
         mcp = {
           # Filesystem operations
@@ -215,49 +215,42 @@ in {
             command = "npx";
             args = ["@modelcontextprotocol/server-filesystem" "/home/${user-settings.user.username}"];
           };
-          
+
           # Git operations
           git = {
             type = "stdio";
             command = "npx";
             args = ["@modelcontextprotocol/server-git"];
           };
-          
+
           # SQLite database access
           sqlite = {
             type = "stdio";
             command = "npx";
             args = ["@modelcontextprotocol/server-sqlite"];
           };
-          
+
           # Browser automation
           puppeteer = {
             type = "stdio";
             command = "npx";
             args = ["@modelcontextprotocol/server-puppeteer"];
           };
-          
+
           # Memory/notes system
           memory = {
             type = "stdio";
             command = "npx";
             args = ["@modelcontextprotocol/server-memory"];
           };
-          
-          # Brave browser integration
-          brave = {
-            type = "stdio";
-            command = "npx";
-            args = ["@modelcontextprotocol/server-brave-search"];
-          };
-          
+
           # Time/date utilities
           time = {
             type = "stdio";
             command = "npx";
             args = ["@modelcontextprotocol/server-time"];
           };
-          
+
           # GitHub integration (uses GITHUB_TOKEN from secrets)
           github = {
             type = "stdio";
@@ -274,7 +267,7 @@ in {
       programs.fish.shellAbbrs = {
         cr = "crush";
       };
-      
+
     };
   };
 }

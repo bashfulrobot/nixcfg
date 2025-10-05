@@ -7,7 +7,7 @@ let
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-  # I temp create an app in brave to download all the icons, then I place then in the correct folder
+
   nixosSearchApp = makeDesktopApp {
     name = "Nixpkgs Search";
     url = "https://search.nixos.org/packages";

@@ -7,7 +7,7 @@ let
   # Import the makeDesktopFile function
   makeDesktopFile = pkgs.callPackage ../../../lib/mk-desktop { };
 
-  # I temp create an app in brave to download all the icons, then I place then in the correct folder
+
   xkillDesktopFile = makeDesktopFile {
     name = "xkill";
     binary = "${pkgs.xorg.xkill}/bin/xkill";

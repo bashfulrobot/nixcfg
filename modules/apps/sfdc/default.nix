@@ -7,13 +7,10 @@ let
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-  # I temp create an app in brave to download all the icons, then I place then in the correct folder
   sfdcApp = makeDesktopApp {
     name = "Sfdc";
     url = "https://kong.lightning.force.com/lightning/r/Dashboard/01ZPJ000004TcSb2AK/view?queryScope=userFolders";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    # myStartupWMClass = "chrome-sysdig.lightning.force.com__lightning_r_Account_001j000000xlClCAAU_view-Default";
-
     iconSizes = [ "16" "32" "48" "64" "96" "128" "180" "256" ];
     # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons

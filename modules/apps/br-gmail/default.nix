@@ -7,7 +7,7 @@ let
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-  # I temp create an app in brave to download all the icons, then I place then in the correct folder
+
   gmailBashfulrobotApp = makeDesktopApp {
     name = "Bashfulrobot Mail";
     url = "https://mail.google.com/mail/u/0/#inbox";

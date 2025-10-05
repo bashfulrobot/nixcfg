@@ -59,7 +59,7 @@ in
         Name=Zoom
         Comment=Zoom Video Conference
         GenericName=Zoom Client for Linux
-        Exec=env BROWSER=/run/current-system/sw/bin/vivaldi /var/lib/flatpak/exports/bin/us.zoom.Zoom %U
+        Exec=env BROWSER=/run/current-system/sw/bin/chromium /var/lib/flatpak/exports/bin/us.zoom.Zoom %U
         Icon=us.zoom.Zoom
         Terminal=false
         Type=Application

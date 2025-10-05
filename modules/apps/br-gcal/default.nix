@@ -7,8 +7,7 @@ let
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-  # I temp create an app in brave to download all the icons, then I place then in the correct folder
-  gcalBashfulrobotApp = makeDesktopApp {
+gcalBashfulrobotApp = makeDesktopApp {
     name = "Bashfulrobot Calendar";
     url = "https://calendar.google.com/calendar/u/0";
     binary = "${pkgs.unstable.chromium}/bin/chromium";

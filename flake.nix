@@ -194,5 +194,60 @@
       homeConfigurations = {
         # Ubuntu configurations now managed by ubuntu/flake.nix
       };
+
+      # --- Development shells for working on this flake
+      devShells = flake-utils.lib.eachDefaultSystemMap (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            name = "nixcfg-dev";
+            buildInputs = with pkgs; [
+              # Nix development and validation tools
+              nil                    # Nix language server for IDE
+              statix                 # Nix linter and static analysis
+              nixpkgs-fmt            # Official Nix formatter
+
+              # NixOS configuration tools
+              just                   # Command runner (already in use)
+              nixos-rebuild         # System rebuild tool
+
+              # Development utilities
+              git                    # Version control
+              jq                     # JSON processing for settings files
+
+              # System analysis tools
+              nix-tree              # Visualize nix dependencies
+              nix-du                # Analyze nix store usage
+            ];
+
+            shellHook = ''
+              echo "🏠 NixOS Configuration Development Environment"
+              echo "📁 Repository: $(basename $(pwd))"
+              echo "🖥️  Current host: $(hostname)"
+              echo ""
+              echo "🔧 Development commands:"
+              echo "  just check         - Fast syntax validation"
+              echo "  just test          - Dry-build configuration"
+              echo "  just build         - Build current system"
+              echo "  just rebuild       - Full system rebuild"
+              echo "  just lint          - Lint all Nix files"
+              echo "  just clean         - Clean old generations"
+              echo ""
+              echo "🛠️  Direct tools:"
+              echo "  statix check .     - Manual static analysis"
+              echo "  nixpkgs-fmt **/*.nix - Format Nix files"
+              echo "  nix flake check    - Validate flake structure"
+              echo "  nix-tree           - Visualize dependencies"
+              echo ""
+            '';
+          };
+        });
+
+      # --- Formatter for this flake
+      formatter = flake-utils.lib.eachDefaultSystemMap (system:
+        nixpkgs.legacyPackages.${system}.nixpkgs-fmt
+      );
     };
 }

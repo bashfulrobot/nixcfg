@@ -9,29 +9,16 @@
 let
   cfg = config.cli.spotify;
 
-  ncspot-save-playing = pkgs.writeShellApplication {
-    name = "ncspot-save-playing";
+  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
 
-    # runtimeInputs = [ pkgs.restic pkgs.pass ];
-
-    text = ''
-      #!/run/current-system/sw/bin/env bash
-
-      echo "save" | nc -W 1 -U /run/user/1000/ncspot/ncspot.sock
-      response=$(nc -W 1 -U /run/user/1000/ncspot/ncspot.sock)
-      title=$(echo "$response" | jq -r '.playable.title')
-      artist=$(echo "$response" | jq -r '.playable.artists[0]')
-      cover_url=$(echo "$response" | jq -r '.playable.cover_url')
-
-      # Download the album art
-      cover_path="/tmp/album_cover.jpg"
-      curl -s -o "$cover_path" "$cover_url"
-
-      # Send notification with album art
-      notify-send --app-name="NCSPOT" -i "$cover_path" "Song Saved" "$title - $artist"
-
-      exit 0
-    '';
+  spotifyScripts = makeScriptPackages {
+    scriptsDir = ./scripts;
+    scripts = [ "ncspot-save-playing" ];
+    runtimeInputs = with pkgs; [
+      netcat-gnu  # for nc command
+      jq          # for JSON parsing
+      libnotify   # for notify-send
+    ];
   };
 
 in
@@ -48,10 +35,13 @@ in
     environment.systemPackages = with pkgs; [
       unstable.spotify-player
       unstable.librespot
-      ncspot-save-playing
       unstable.curl
       unstable.spotify # official
-    ];
+    ] ++ spotifyScripts.packages;
+
+    # Add fish shell abbreviations if fish is enabled
+    programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable
+      spotifyScripts.fishShellAbbrs;
 
     home-manager.users."${user-settings.user.username}" = {
 

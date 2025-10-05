@@ -39,6 +39,7 @@ in
     ../module-config/programs/hyprlock
     ../module-config/programs/swaync
     ../module-config/programs/swayosd
+    ../module-config/programs/hyprdim
     # ../module-config/programs/dunst
   ];
 
@@ -164,7 +165,6 @@ in
       hyprpaper
       seahorse
       hyprpicker
-      hyprdim
       cliphist
       grimblast
       grim # needed for screensharing

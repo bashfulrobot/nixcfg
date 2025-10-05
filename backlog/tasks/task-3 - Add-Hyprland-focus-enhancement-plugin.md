@@ -1,9 +1,10 @@
 ---
 id: task-3
 title: Add Hyprland focus enhancement plugin
-status: To Do
+status: Done
 assignee: []
 created_date: '2025-10-03 00:04'
+updated_date: '2025-10-05 04:46'
 labels:
   - hyprland
   - plugins

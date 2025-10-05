@@ -1,9 +1,10 @@
 ---
 id: task-2
 title: Fix duplicate Ghostty entry in Nautilus
-status: To Do
+status: Done
 assignee: []
 created_date: '2025-10-03 00:03'
+updated_date: '2025-10-05 02:52'
 labels:
   - ghostty
   - nautilus
@@ -24,3 +25,9 @@ Resolve the issue where Ghostty terminal appears as duplicate entries in the Nau
 - [ ] #2 Ghostty opens correctly when selected from Nautilus
 - [ ] #3 No duplicate desktop entries exist for Ghostty
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Issue resolved by migrating from Ghostty to Kitty terminal. No longer relevant as Ghostty has been removed from the system configuration.
+<!-- SECTION:NOTES:END -->

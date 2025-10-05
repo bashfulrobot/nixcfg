@@ -530,6 +530,7 @@ in
             "opacity 0.80 0.80,class:^(code)$"
             "opacity 0.80 0.80,class:^(code-url-handler)$"
             "opacity 0.80 0.80,class:^(terminalFileManager)$"
+            "opacity 0.80 0.80,class:^(floating-terminal)$"
             "opacity 0.80 0.80,class:^(org.kde.dolphin)$"
             "opacity 0.80 0.80,class:^(org.kde.ark)$"
             "opacity 0.80 0.80,class:^(nwg-look)$"
@@ -581,6 +582,7 @@ in
             "float,class:^(eog)$" # Imageviewer-Gtk
             "float,class:^(io.gitlab.theevilskeleton.Upscaler)$" # Upscaler-Gtk
             "float,class:^(yad)$"
+            "float,class:^(floating-terminal)$"
             "float,class:^(pavucontrol)$"
             "float,class:^(blueman-manager)$"
             "float,class:^(.blueman-manager-wrapped)$"
@@ -760,9 +762,8 @@ in
               ",xf86AudioNext,exec,swayosd-client --player-status next" # go to next media with OSD
               ",xf86AudioPrev,exec,swayosd-client --player-status previous" # go to previous media with OSD
 
-              # Keyboard lock indicators with OSD
-              ",Caps_Lock,exec,swayosd-client --caps-lock" # Show Caps Lock status
-              ",Num_Lock,exec,swayosd-client --num-lock" # Show Num Lock status
+              # Keyboard lock indicators with OSD - removed automatic backend due to D-Bus conflicts
+              # Manual indicators will be triggered via keybinds when needed
 
               # Custom system monitoring with swayosd
               "$mainMod, F1, exec, ${swayosd-custom} battery" # Show battery level
@@ -898,6 +899,12 @@ in
             # Move/Resize windows with mainMod + LMB/RMB and dragging
             "$mainMod, mouse:272, movewindow"
             "$mainMod, mouse:273, resizewindow"
+          ];
+
+          # Bind on release for caps lock indicator
+          bindl = [
+            # Caps lock status is now handled automatically by SwayOSD LibInput backend
+            ",Caps_Lock,exec,swayosd-client --caps-lock-led input0::capslock" # Caps Lock indicator with OSD using specific LED
           ];
         };
         extraConfig = ''

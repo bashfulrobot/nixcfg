@@ -77,7 +77,7 @@ in
 
       enableLibinputBackend = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = "Enable SwayOSD LibInput backend for automatic key detection (caps lock, num lock, scroll lock)";
       };
 
@@ -95,11 +95,11 @@ in
       swayosd
     ];
 
-    # Add user to video group for brightness control
-    users.users."${user-settings.user.username}".extraGroups = [ "video" ];
+    # Add user to video and input groups for brightness control and caps lock detection
+    users.users."${user-settings.user.username}".extraGroups = [ "video" "input" ];
 
-    # Enable LibInput backend service if requested
-    systemd.services.swayosd-libinput-backend = lib.mkIf cfg.swayosd.enableLibinputBackend {
+    # Enable LibInput backend service if requested as user service
+    systemd.user.services.swayosd-libinput-backend = lib.mkIf cfg.swayosd.enableLibinputBackend {
       description = "SwayOSD LibInput Backend";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];

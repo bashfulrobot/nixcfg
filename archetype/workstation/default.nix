@@ -16,6 +16,7 @@ in {
       home-manager.enable = true;
       insecure-packages.enable = true;
       nix-settings.enable = true;
+      binary-caches.enable = true;
     };
 
     services = {

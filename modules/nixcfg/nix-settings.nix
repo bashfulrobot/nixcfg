@@ -27,8 +27,8 @@ in {
       channel.enable = false;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        max-jobs = 4;
-        cores = 4;
+        max-jobs = "auto";  # Use all available cores for parallel building
+        cores = 0;          # Use all available cores per job
         http-connections = 50;
         warn-dirty = false;
         log-lines = 50;
@@ -49,9 +49,15 @@ in {
         narinfo-cache-negative-ttl = 60;
         fsync-metadata = false;  # Faster on SSDs
         connect-timeout = 10;    # Faster timeout handling
-        max-substitution-jobs = 16;  # Parallel downloads
+        max-substitution-jobs = 32;  # Increased parallel downloads
         keep-build-log = false;  # Reduce storage overhead
         compress-build-log = true;
+
+        # Store optimization settings
+        keep-going = true;           # Continue building other derivations on failure
+        fallback = true;             # Fall back to building if substitution fails
+        min-free = 1073741824;       # Keep 1GB free (triggers GC)
+        max-free = 3221225472;       # Stop GC at 3GB free
       };
       # Automatic Garbage Collection
       # Disbaled in favour of NH garbage cleaning.

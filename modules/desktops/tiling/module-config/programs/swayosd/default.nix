@@ -92,7 +92,10 @@ in
   config = lib.mkIf (cfg.enable && cfg.swayosd.enable) {
     # Ensure swayosd package is available
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       swayosd
+      # keep-sorted end
     ];
 
     # Add user to video and input groups for brightness control and caps lock detection

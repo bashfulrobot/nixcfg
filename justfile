@@ -370,6 +370,18 @@ flatpak-check:
     echo "Available updates:"
     flatpak remote-ls --updates --columns=application,version,name || echo "No updates available"
 
+# Auto-sort files with keep-sorted blocks
+[group('maintenance')]
+sort-keep:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🔧 Running keep-sorted on files..."
+
+    # Run keep-sorted on all .nix files with keep-sorted blocks
+    fd -e nix -t f . -x bash -c 'if grep -q "# keep-sorted start" "$1"; then echo "🔧 Processing: $1"; keep-sorted "$1" && echo "✅ Sorted: $1" || { echo "❌ Failed: $1"; exit 1; }; fi' _ {} \;
+
+    echo "✅ keep-sorted processing complete"
+
 # === Workflow Aliases ===
 alias c := check
 alias d := check-diff

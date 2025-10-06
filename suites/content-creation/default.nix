@@ -15,10 +15,12 @@ in {
     apps = { obs.enable = true; };
 
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       # --- Visuals
       gimp-with-plugins # image editor
       inkscape-with-extensions # vector graphics editor
-
+      # keep-sorted end
     ];
   };
 }

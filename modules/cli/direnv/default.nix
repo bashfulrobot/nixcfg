@@ -20,7 +20,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ envsubst ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      envsubst
+      # keep-sorted end
+    ];
 
     home-manager.users."${user-settings.user.username}" = {
       programs.direnv = {

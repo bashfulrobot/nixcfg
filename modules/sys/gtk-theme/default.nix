@@ -11,9 +11,12 @@ in
   config = lib.mkIf cfg.enable {
     # GTK theming
     environment.systemPackages = with pkgs; [
-      gtk-engine-murrine
+
+      # keep-sorted start case=no numeric=yes
       gtk3
       gtk4
+      gtk-engine-murrine
+      # keep-sorted end
     ];
 
     # Enable GTK theming in home-manager

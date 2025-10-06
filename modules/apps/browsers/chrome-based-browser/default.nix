@@ -69,8 +69,11 @@ in
     services.flatpak.overrides."us.zoom.Zoom".Environment.BROWSER = lib.mkIf cfg.setAsDefault defaultApplication;
 
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       # chromiumPackage
       (chromium.override { enableWideVine = true; })
+      # keep-sorted end
     ];
 
     programs.chromium = {

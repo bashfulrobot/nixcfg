@@ -16,7 +16,12 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ catwalk ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      catwalk
+      # keep-sorted end
+    ];
     
     home-manager.users."${user-settings.user.username}" = {
       # Add any home-manager configuration for catwalk here if needed

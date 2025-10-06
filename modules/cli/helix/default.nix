@@ -11,7 +11,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.helix ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      unstable.helix
+      # keep-sorted end
+    ];
 
     # Set editor globally
     environment.variables = { EDITOR = "hx"; };

@@ -44,23 +44,26 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      unstable.httpie
-      gnumake
+
+      # keep-sorted start case=no numeric=yes
       awscli2
       ffuf
-      just # command runner
-      unstable.doppler # secret management tool
-      shadowenv # environment variable manager
-      shfmt # shell script formatter
+      gnumake
       jnv # json filtering with jq
-      zed-editor # text editor
+      just # command runner
       markdown-oxide # Zed support
       nil # nix language server for Zed
+      shadowenv # environment variable manager
+      shfmt # shell script formatter
+      unstable.doppler # secret management tool
+      unstable.fx # Terminal JSON viewer
+      unstable.helix # text editor
+      unstable.httpie
+      unstable.netlify-cli # Netlify CLI tool
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
-      unstable.helix # text editor
-      unstable.netlify-cli # Netlify CLI tool
-      unstable.fx # Terminal JSON viewer
+      zed-editor # text editor
+      # keep-sorted end
     ];
 
     # programs = { jqp = { enable = true; }; };

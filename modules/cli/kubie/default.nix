@@ -11,7 +11,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ kubie ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      kubie
+      # keep-sorted end
+    ];
 
     home-manager.users."${user-settings.user.username}" = {
       home.file.".kube/kubie.yaml".text = ''

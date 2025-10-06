@@ -19,7 +19,10 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       unstable.deskflow
+      # keep-sorted end
     ];
 
     # Set up signature and initial icons

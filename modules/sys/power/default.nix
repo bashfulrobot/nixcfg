@@ -19,8 +19,11 @@ in {
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       environment.systemPackages = with pkgs; [
+
+        # keep-sorted start case=no numeric=yes
         brightnessctl
         light
+        # keep-sorted end
       ];
 
       services.power-profiles-daemon.enable = true;

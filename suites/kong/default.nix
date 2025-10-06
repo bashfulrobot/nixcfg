@@ -39,7 +39,10 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       unstable.insomnia
+      # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {

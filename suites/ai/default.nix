@@ -22,13 +22,16 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      inputs.nixai.packages.${pkgs.system}.default # AI-Powered NixOS Companion
+
+      # keep-sorted start case=no numeric=yes
 
       #lmstudio # Local LLMs management tool
 
       # nix-ai-tools packages
       inputs.nix-ai-tools.packages.${pkgs.system}.backlog-md
+      inputs.nixai.packages.${pkgs.system}.default # AI-Powered NixOS Companion
       # unstable.code-cursor # Ai code editor
+      # keep-sorted end
     ];
 
     cli = {

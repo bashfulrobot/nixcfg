@@ -23,7 +23,10 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       kdePackages.okular # pdf viewer - can add sig stamps
+      # keep-sorted end
     ];
 
     # Set up signature and initial icons

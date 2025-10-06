@@ -1,6 +1,11 @@
 { config, pkgs, secrets, ... }: {
 
-  environment.systemPackages = with pkgs; [ nfs-utils ];
+  environment.systemPackages = with pkgs; [
+
+    # keep-sorted start case=no numeric=yes
+    nfs-utils
+    # keep-sorted end
+  ];
 
   fileSystems."/exports/spitfire" = {
     device = "/srv/nfs/spitfire";

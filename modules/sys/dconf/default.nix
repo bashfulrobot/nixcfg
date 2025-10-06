@@ -12,10 +12,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       dconf
       dconf2nix
       dconf-editor
-
+      # keep-sorted end
     ];
     # Enable dconf
     programs.dconf.enable = true;

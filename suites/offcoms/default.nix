@@ -57,48 +57,50 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      # projecteur # virtual laser pointer
+
+      # keep-sorted start case=no numeric=yes
+
+      # Office
+      # libreoffice # office suite
 
       # PDF
 
-      # Annotation
-      unstable.gromit-mpx # on-screen annotation tool
-      unstable.annotator # image annotation tool
+      # element-desktop # Matrix Client
 
       # evince # pdf viewer
       # texliveSmall # get pdflatex
       # pdf-sign # pdf signing utility
 
-      # Office
-      # libreoffice # office suite
+      # lan-mouse # software kvm
 
-      # Organize
-      unstable.morgen # AI calendar - testing
-      unstable.todoist-electron # task manager
       # planify
 
-      # # IM
-      # fractal # Matrix Client
-      whatsapp-for-linux # instant messaging
-      unstable.zulip
-      # element-desktop # Matrix Client
+      # projecteur # virtual laser pointer
 
-      # Email
-      meli # terminal email client
-      gmailctl # cli to write gmail filters as code
       # thunderbird # email client
       # unstable.evolutionWithPlugins
       # mailspring # email client
       #geary # email reader
 
-      pandoc # document converter
-      # lan-mouse # software kvm
-
+      gmailctl # cli to write gmail filters as code
       # Static Site Generation
       hugo # static site generator
-
+      # Email
+      meli # terminal email client
+      pandoc # document converter
+      unstable.annotator # image annotation tool
+      # Annotation
+      unstable.gromit-mpx # on-screen annotation tool
+      # Organize
+      unstable.morgen # AI calendar - testing
+      unstable.todoist-electron # task manager
       # Networking
       unstable.wgnord
+      unstable.zulip
+      # # IM
+      # fractal # Matrix Client
+      whatsapp-for-linux # instant messaging
+      # keep-sorted end
     ];
 
     services.flatpak.packages = [

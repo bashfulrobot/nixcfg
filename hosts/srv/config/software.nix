@@ -5,28 +5,31 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wakeonlan
-    wget
+
+    # keep-sorted start case=no numeric=yes
     bat
-    curl
-    tmux
-    git
-    git-crypt
-    shadowenv
-    fd
     bottom
     cloud-utils
-    gnumake
-    eza
-    ripgrep
+    curl
     du-dust
-    tree
+    eza
+    fd
+    gdu
+    git
+    git-crypt
+    gnumake
+    gnupg
     just
     nixfmt-rfc-style
-    gdu
     pass
-    gnupg
     pinentry-tty
+    ripgrep
+    shadowenv
+    tmux
+    tree
+    wakeonlan
+    wget
+    # keep-sorted end
   ];
 
   apps = { kvm.enable = true; };

@@ -114,8 +114,11 @@ in
 
     # Install necessary packages for stylix functionality
     environment.systemPackages = with pkgs; [
-      unstable.imagemagickBig # For color extraction from images
+
+      # keep-sorted start case=no numeric=yes
       base16-schemes # Base16 color schemes (fallback)
+      unstable.imagemagickBig # For color extraction from images
+      # keep-sorted end
     ];
   };
 }

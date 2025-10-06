@@ -29,24 +29,25 @@ in
 
     environment.systemPackages = with pkgs; [
 
-      # --- Cloud
-      #awscli2 # AWS command line interface
-      # google-cloud-sdk # Google Cloud SDK
-      aws-iam-authenticator # AWS IAM authentication tool
-
-      #  --- IAS
-      unstable.terraform # infrastructure as code tools
-      cloud-utils # cloud management utilities
-      cdrtools # mkisofs needed for cloud-init
-      libxslt # A C library and tools to do XSL transformations - needed in my terraform scripts
+      # keep-sorted start case=no numeric=yes
 
       # --- Backup
       # restic and autorestic moved to cli.restic module
 
+      # --- Cloud
+      #awscli2 # AWS command line interface
+      # google-cloud-sdk # Google Cloud SDK
+      aws-iam-authenticator # AWS IAM authentication tool
+      cdrtools # mkisofs needed for cloud-init
+      cloud-utils # cloud management utilities
       # --- Other
       ctop # container process monitoring
-      wakeonlan
+      libxslt # A C library and tools to do XSL transformations - needed in my terraform scripts
       unstable.lazyjournal # TUI Logging
+      #  --- IAS
+      unstable.terraform # infrastructure as code tools
+      wakeonlan
+      # keep-sorted end
     ];
   };
 }

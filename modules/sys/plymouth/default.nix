@@ -53,7 +53,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       plymouthIcon
+      # keep-sorted end
     ];
     boot.plymouth = {
       enable = true;

@@ -11,7 +11,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ blackbox-terminal ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      blackbox-terminal
+      # keep-sorted end
+    ];
 
     # Configure nautilus to use blackbox when enabled
     programs.nautilus-open-any-terminal = {

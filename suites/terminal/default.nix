@@ -40,19 +40,20 @@ in
 
     environment.systemPackages = with pkgs; [
 
-      # --- Shell experience
-      fzf # command-line fuzzy finder
-      tealdeer # command-line help utility
+      # keep-sorted start case=no numeric=yes
       bottom # system monitoring tool
-      jless # json/yaml parser
-      fd # find alternative
-      sd # sed alternative
-      tree # directory structure viewer
       broot # Fuzzy finder
-      eza # ls and exa alternative
       btop # top alternative
+      eza # ls and exa alternative
+      fd # find alternative
+      fzf # command-line fuzzy finder
+      jless # json/yaml parser
       pass # password manager
+      sd # sed alternative
+      tealdeer # command-line help utility
+      tree # directory structure viewer
       wcurl # curl wget wrapper
+      # keep-sorted end
     ];
 
     programs = {

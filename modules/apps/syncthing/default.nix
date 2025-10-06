@@ -41,8 +41,11 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      syncthing
+
+      # keep-sorted start case=no numeric=yes
       gnomeExtensions.syncthing-indicator
+      syncthing
+      # keep-sorted end
     ];
 
     # Syncthing ports

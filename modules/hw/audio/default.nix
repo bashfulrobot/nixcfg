@@ -44,8 +44,11 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      pwvucontrol
+
+      # keep-sorted start case=no numeric=yes
       pavucontrol
+      pwvucontrol
+      # keep-sorted end
     ];
   };
 }

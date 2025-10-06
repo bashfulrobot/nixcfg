@@ -16,14 +16,17 @@ in {
 
     # Install necessary packages
     environment.systemPackages = with pkgs; [
-      virt-viewer
-      virt-manager
+
+      # keep-sorted start case=no numeric=yes
+      guestfs-tools # Extra tools for accessing and modifying virtual machine disk images
       spice
       spice-gtk
       spice-protocol
-      win-virtio
+      virt-manager
+      virt-viewer
       win-spice
-      guestfs-tools # Extra tools for accessing and modifying virtual machine disk images
+      win-virtio
+      # keep-sorted end
     ];
 
     # Add user to libvirtd group

@@ -23,7 +23,10 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       unstable.satty
+      # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {

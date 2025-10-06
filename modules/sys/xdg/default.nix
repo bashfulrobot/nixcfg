@@ -19,7 +19,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.xdg-utils ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      unstable.xdg-utils
+      # keep-sorted end
+    ];
     # Enable xdg
     xdg = {
       portal = {

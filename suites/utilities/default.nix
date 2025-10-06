@@ -45,59 +45,60 @@ in
 
     environment.systemPackages = with pkgs; [
 
-      spacedrive # File explorer
-      playonlinux # Wine frontend
+      # keep-sorted start case=no numeric=yes
+      appimage-run # Run AppImages
+      # ntfy # shell notification tool
+      bottom # system monitoring tool
+      desktop-file-utils # utilities for working with desktop files
+      dex # open desktop files from the terminal
+      dogdns # dig alternative
+      du-dust # disk usage utility
+      dua # disk usage analyzer
+      duf # disk usage/free utility
+      dufs # static file server
+      dysk # Mounted Disk Info
+      ffmpeg_6-full # multimedia processing
+      file
+      gcolor3
+      gdu # disk usage analyzer
+      glow # Render Markdown on the CLI
       # ephemeral removed in 25.05 - archived upstream
       gnome-disk-utility
+      gnupg # encryption and signing tool
+      gping # visual ping alternative
+      inetutils # network utilities
+      killall # kill all instances of a running app
       # TODO: COnfirm: ENabled with logitech.solaar, not needed?
       #solaar # Linux manager for many Logitech keyboards, mice
       # junction # default app selector
       kooha # Screen recorder for x11/Wayland
-      gcolor3
+      libnotify # notification library
+      libthai # Needed for some appImages
+      lshw # hardware lister
+      openssl # cryptographic toolkit
+      pciutils # list all PCI devic
+      playonlinux # Wine frontend
+      procs # ps alternative
+      pup # Terminal HTML parser
+      ripgrep # grep alternative
+      spacedrive # File explorer
+      sshfs # filesystem client over SSH
+      steam-run # helps run some static compiled binaries
       # ydotool # xdotool alternative. window automation
       tcpdump
-      usbutils # usb utilities like lsusb
-      pciutils # list all PCI devic
-      steam-run # helps run some static compiled binaries
-      file
-      killall # kill all instances of a running app
-      dex # open desktop files from the terminal
-      textsnatcher # copy text from images
-      pup # Terminal HTML parser
       # ncdu # disk usage analyzer - replaced with gdu
       tesseract # CLI OCR
-      gping # visual ping alternative
-      dysk # Mounted Disk Info
-      appimage-run # Run AppImages
-      glow # Render Markdown on the CLI
-      gnupg # encryption and signing tool
-      lshw # hardware lister
-      sshfs # filesystem client over SSH
-      openssl # cryptographic toolkit
-      # ntfy # shell notification tool
-      bottom # system monitoring tool
-      procs # ps alternative
-      desktop-file-utils # utilities for working with desktop files
-      du-dust # disk usage utility
-      gdu # disk usage analyzer
-      dua # disk usage analyzer
-      duf # disk usage/free utility
-      dufs # static file server
-      inetutils # network utilities
-      dogdns # dig alternative
-      xorg.xkill # kill client by X resource
-      unstable.imagemagickBig # image manipulation library
+      textsnatcher # copy text from images
       unstable.coreutils # basic file, shell, and text manipulation
-      wget # file download utility
-      xclip # command line interface to X clipboard
-      ripgrep # grep alternative
-      ffmpeg_6-full # multimedia processing
-      v4l-utils # camera controls
-      libthai # Needed for some appImages
-      libnotify # notification library
+      unstable.imagemagickBig # image manipulation library
       # lftp # file transfer program
       unzip # file decompression tool
-
+      usbutils # usb utilities like lsusb
+      v4l-utils # camera controls
+      wget # file download utility
+      xclip # command line interface to X clipboard
+      xorg.xkill # kill client by X resource
+      # keep-sorted end
     ];
     programs.wshowkeys.enable = false;
 

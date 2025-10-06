@@ -13,18 +13,22 @@ in {
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      cachix # Binary cache client for pushing/pulling packages
+      comma # Nix command wrapper
+      keep-sorted # Keep code sorted
       # Nixd
       # https://github.com/nix-community/nixd/blob/main/docs/editor-setup.md
       # lsp for nix - mayb e for zed
       nix-index # Nix package indexer
-      comma # Nix command wrapper
+      nix-prefetch-github # Get sha256 info for GitHub
+      nixd # nix language server
       nixfmt-rfc-style # Nix code formatter
       nodePackages.node2nix # Node to Nix
       statix # nix linting
-      nixd # nix language server
-      nix-prefetch-github # Get sha256 info for GitHub
       unstable.nh # nix helper - rebuilds, etc
-      cachix # Binary cache client for pushing/pulling packages
+      # keep-sorted end
     ];
     home-manager.users."${user-settings.user.username}" = {
 

@@ -19,7 +19,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ wl-clipboard ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      wl-clipboard
+      # keep-sorted end
+    ];
     # TODO: Update version periodically
 
     home-manager.users."${user-settings.user.username}" = {

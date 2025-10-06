@@ -79,8 +79,11 @@ let
 in {
 
   environment.systemPackages = with pkgs; [
-    restic
+
+    # keep-sorted start case=no numeric=yes
     (writeScriptBin "backup-mgr" backup-mgr)
+    restic
+    # keep-sorted end
   ];
 
   systemd.timers.backup-mgr = {

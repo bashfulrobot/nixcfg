@@ -101,7 +101,10 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       inputs.nix-ai-tools.packages.${pkgs.system}.gemini-cli
+      # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {

@@ -13,9 +13,12 @@ in {
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      unstable.go
+
+      # keep-sorted start case=no numeric=yes
       clang
       llvm
+      unstable.go
+      # keep-sorted end
     ];
 
     # Set clang as default C/C++ compiler for CGO

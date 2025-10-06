@@ -18,7 +18,10 @@ in {
 
     # Install Slack
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       unstable.slack
+      # keep-sorted end
     ];
   };
 }

@@ -16,7 +16,12 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ note ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      note
+      # keep-sorted end
+    ];
     home-manager.users."${user-settings.user.username}" = {
 
       home.file.".config/note/config.yaml".text = ''

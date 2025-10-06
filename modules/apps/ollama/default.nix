@@ -62,16 +62,18 @@ in {
 
     # System packages for LLM development and interaction
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+
       # CLI tools for model management
       curl
-      wget
-
-      # Optional: GPU monitoring tools for AMD
-      radeontop
-
       # Optional: System monitoring
       htop
       nvtopPackages.amd  # GPU monitoring for AMD GPUs
+      # Optional: GPU monitoring tools for AMD
+      radeontop
+      wget
+      # keep-sorted end
     ];
 
     # Enable ROCm for AMD GPU acceleration

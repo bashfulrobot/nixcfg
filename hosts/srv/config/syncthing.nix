@@ -2,7 +2,12 @@
 
 {
 
-  environment.systemPackages = with pkgs; [ syncthing ];
+  environment.systemPackages = with pkgs; [
+
+    # keep-sorted start case=no numeric=yes
+    syncthing
+    # keep-sorted end
+  ];
 
   services.syncthing = {
     enable = true;

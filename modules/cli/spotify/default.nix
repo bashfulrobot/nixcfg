@@ -33,10 +33,13 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.spotify-player
-      unstable.librespot
+
+      # keep-sorted start case=no numeric=yes
       unstable.curl
+      unstable.librespot
       unstable.spotify # official
+      unstable.spotify-player
+      # keep-sorted end
     ] ++ spotifyScripts.packages;
 
     # Add fish shell abbreviations if fish is enabled

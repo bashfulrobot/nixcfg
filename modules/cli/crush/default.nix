@@ -15,27 +15,29 @@ in {
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      inputs.nix-ai-tools.packages.${pkgs.system}.crush
 
+      # keep-sorted start case=no numeric=yes
+
+      inputs.nix-ai-tools.packages.${pkgs.system}.crush
+      unstable.docker-compose-language-service                # Docker Compose
+      unstable.docker-language-server                         # Docker
+      unstable.dockerfile-language-server                     # Dockerfile
       # Language servers for crush LSP integration (all using unstable)
       unstable.gopls                                          # Go
+      unstable.marksman                                       # Markdown
       unstable.nil                                            # Nix
+      # MCP dependencies
+      unstable.nodejs                                         # For npm-based MCP servers
       unstable.nodePackages.bash-language-server             # Bash
       unstable.nodePackages.typescript-language-server       # JavaScript/TypeScript
       unstable.nodePackages.yaml-language-server             # YAML/Kubernetes
-      unstable.yaml-language-server                           # Alternative YAML LSP
-      unstable.marksman                                       # Markdown
+      unstable.postgres-lsp                                   # PostgreSQL
       unstable.python312Packages.python-lsp-server           # Python
       unstable.rust-analyzer                                  # Rust
       unstable.terraform-ls                                   # Terraform
       unstable.vscode-langservers-extracted                   # HTML/CSS/JSON/ESLint from VSCode
-      unstable.docker-language-server                         # Docker
-      unstable.dockerfile-language-server                     # Dockerfile
-      unstable.docker-compose-language-service                # Docker Compose
-      unstable.postgres-lsp                                   # PostgreSQL
-
-      # MCP dependencies
-      unstable.nodejs                                         # For npm-based MCP servers
+      unstable.yaml-language-server                           # Alternative YAML LSP
+      # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {

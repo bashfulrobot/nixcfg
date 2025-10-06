@@ -1,6 +1,9 @@
 { pkgs, ... }: {
   environment.systemPackages = with pkgs; [
+
+    # keep-sorted start case=no numeric=yes
     hyprdim
+    # keep-sorted end
   ];
 
   systemd.user.services = {

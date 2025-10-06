@@ -16,7 +16,12 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ versitygw ];
+    environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
+      versitygw
+      # keep-sorted end
+    ];
     # home-manager.users."${user-settings.user.username}" = {
 
     # };

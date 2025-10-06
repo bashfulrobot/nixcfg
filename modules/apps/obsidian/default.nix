@@ -15,9 +15,12 @@ in {
 
     # Install necessary packages
     environment.systemPackages = with pkgs; [
+
+      # keep-sorted start case=no numeric=yes
       obsidian
       obsidian-export
       # vimPlugins.obsidian-nvim
+      # keep-sorted end
     ];
   };
 }

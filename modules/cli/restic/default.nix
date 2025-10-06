@@ -109,10 +109,13 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.restic
+
+      # keep-sorted start case=no numeric=yes
       unstable.autorestic
       unstable.backblaze-b2
       unstable.gum
+      unstable.restic
+      # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {

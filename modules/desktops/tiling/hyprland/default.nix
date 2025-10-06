@@ -159,50 +159,53 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      pinentry-all # gpg passphrase prompting
-      nautilus-open-any-terminal # open terminal(s) in nautilus
-      file-roller # GNOME archive manager
-      hyprpaper
-      seahorse
-      hyprpicker
-      cliphist
-      grimblast
-      grim # needed for screensharing
-      slurp # needed for screensharing
-      swappy
+
+      # keep-sorted start case=no numeric=yes
       annotator # image annotation tool
-      libnotify
-      brightnessctl
-      networkmanagerapplet
-      pamixer
-      nautilus
-      pavucontrol
-      playerctl
-      waybar
-      wtype
-      wl-clipboard
-      xdotool
-      yad
       bibata-cursors
-      ranger
-      gnome-keyring
-      gcr_4 # GCR 4.x for modern keyring password prompts
-      libsecret
       blueman
-      papirus-folders
-      # Packages for swayosd custom indicators
-      swayosd
-      lm_sensors
-      procps
-      wirelesstools
+      brightnessctl
+      cliphist
+      desktop-file-utils
+      file-roller # GNOME archive manager
+      gcr_4 # GCR 4.x for modern keyring password prompts
+      gnome-keyring
+      grim # needed for screensharing
+      grimblast
+      gtk3.out # for gtk-update-icon-cache
       # Icon theme support for notifications
       hicolor-icon-theme
+      hyprpaper
+      hyprpicker
+      libnotify
+      libsecret
+      lm_sensors
+      nautilus
+      nautilus-open-any-terminal # open terminal(s) in nautilus
+      networkmanagerapplet
+      pamixer
+      papirus-folders
+      pavucontrol
+      pinentry-all # gpg passphrase prompting
+      playerctl
+      procps
+      ranger
+      seahorse
       shared-mime-info
-      desktop-file-utils
-      gtk3.out # for gtk-update-icon-cache
+      slurp # needed for screensharing
+      swappy
+      # Packages for swayosd custom indicators
+      swayosd
+      waybar
+      wirelesstools
+      wl-clipboard
+      wtype
+      xdotool
+      yad
       # hyprshell managed by Home Manager module
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
+      # keep-sorted end
     ] ++ scriptPackages.packages;
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
@@ -711,7 +714,6 @@ in
               "$mainMod, delete, exit" # kill hyperland session
               "$mainMod, W, togglefloating" # toggle the window on focus to float
               "$mainMod SHIFT, G, togglegroup" # toggle the window on focus to float
-              "ALT, return, fullscreen" # toggle the window on focus to fullscreen
               "$mainMod ALT, L, exec, hyprlock" # lock screen
               "$mainMod, backspace, exec, pkill -x wlogout || wlogout -b 4" # logout menu
               "$mainMod ALT, S, exec, systemctl suspend" # suspend system

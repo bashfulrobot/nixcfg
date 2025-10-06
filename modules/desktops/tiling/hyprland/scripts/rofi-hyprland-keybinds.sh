@@ -55,7 +55,6 @@ BINDINGS=(
     "<b>SUPER + Delete</b>  <i>Exit Hyprland session</i>"
     "<b>SUPER + W</b>  <i>Toggle floating window</i>"
     "<b>SUPER + SHIFT + G</b>  <i>Toggle window group</i>"
-    "<b>ALT + Return</b>  <i>Toggle fullscreen</i>"
     "<b>SUPER + ALT + L</b>  <i>Lock screen</i>"
     "<b>SUPER + Backspace</b>  <i>Power menu</i>"
     "<b>CTRL + Escape</b>  <i>Toggle Waybar</i>"

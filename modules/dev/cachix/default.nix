@@ -1,5 +1,5 @@
 { user-settings, pkgs, config, lib, secrets, ... }:
-let 
+let
   cfg = config.dev.cachix;
 in {
   options = {
@@ -19,14 +19,13 @@ in {
     # Cachix and helper scripts
     environment.systemPackages = with pkgs; [
 
-      # keep-sorted start case=no numeric=yes
-
-      '')
+      cachix # Binary cache client for pushing/pulling packages
       (writeShellScriptBin "cachix-auth" ''
         # Authenticate with cachix using token from secrets
         echo "🔐 Authenticating with cachix..."
         echo "${secrets.cachix.auth_token}" | cachix authtoken --stdin
         echo "✅ Cachix authentication successful!"
+      '')
       (writeShellScriptBin "push-to-bashfulrobot-cache" ''
         # Generic helper to push build results to bashfulrobot cache
         if [[ $# -eq 0 ]]; then
@@ -49,8 +48,8 @@ in {
 
         echo "✅ Successfully pushed to bashfulrobot cache!"
         echo "🔗 Cache: https://bashfulrobot.cachix.org"
-      cachix # Binary cache client for pushing/pulling packages
-      # keep-sorted end
+      '')
+
     ];
 
     # Configure bashfulrobot binary cache

@@ -14,16 +14,10 @@ let
     "--exclude '.git'"
   ];
 
-  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
-
-  # Create script packages for fish module
-  scriptPackages = makeScriptPackages {
-    scriptsDir = ./scripts;
-    scripts = [
-      { name = "rofi-fish-commands"; command = "rofi-fish-commands"; }
-    ];
-    createFishAbbrs = false; # We handle aliases manually
-  };
+  # Fish script packages using standard pattern
+  fishScripts = with pkgs; [
+    (writeShellScriptBin "rofi-fish-commands" (builtins.readFile ./scripts/rofi-fish-commands.sh))
+  ];
 
 
   # Command metadata for help system
@@ -990,7 +984,7 @@ in
 
 
     # Install fish script packages
-    environment.systemPackages = scriptPackages.packages;
+    environment.systemPackages = fishScripts;
 
     home-manager.users."${user-settings.user.username}" = {
       programs.fish = {

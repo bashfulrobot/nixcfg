@@ -2,21 +2,17 @@
 
 let
   cfg = config.cli.audio-switch;
-  
-  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
-  
-  audioScripts = makeScriptPackages {
-    scriptsDir = ./scripts;
-    scripts = [
-      "mv7"
-      "rempods"
-      "earmuffs"
-      "mixed-mode-rempods"
-      "mixed-mode-earmuffs"
-      "speakers"
-      "audio-list"
-    ];
-  };
+
+  # Audio switching script packages using standard pattern
+  audioScripts = with pkgs; [
+    (writeShellScriptBin "mv7" (builtins.readFile ./scripts/mv7.sh))
+    (writeShellScriptBin "rempods" (builtins.readFile ./scripts/rempods.sh))
+    (writeShellScriptBin "earmuffs" (builtins.readFile ./scripts/earmuffs.sh))
+    (writeShellScriptBin "mixed-mode-rempods" (builtins.readFile ./scripts/mixed-mode-rempods.sh))
+    (writeShellScriptBin "mixed-mode-earmuffs" (builtins.readFile ./scripts/mixed-mode-earmuffs.sh))
+    (writeShellScriptBin "speakers" (builtins.readFile ./scripts/speakers.sh))
+    (writeShellScriptBin "audio-list" (builtins.readFile ./scripts/audio-list.sh))
+  ];
 
 in
 {
@@ -25,10 +21,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = audioScripts.packages;
+    environment.systemPackages = audioScripts;
 
-    # Add fish shell aliases
-    programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable 
-      audioScripts.fishShellAbbrs;
+    # Add fish shell aliases for convenience
+    programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable {
+      "mv7" = "mv7";
+      "rempods" = "rempods";
+      "earmuffs" = "earmuffs";
+      "mmr" = "mixed-mode-rempods";
+      "mme" = "mixed-mode-earmuffs";
+      "speakers" = "speakers";
+      "audio-list" = "audio-list";
+    };
   };
 }

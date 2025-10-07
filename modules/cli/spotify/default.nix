@@ -9,17 +9,10 @@
 let
   cfg = config.cli.spotify;
 
-  makeScriptPackages = pkgs.callPackage ../../../lib/make-script-packages { };
-
-  spotifyScripts = makeScriptPackages {
-    scriptsDir = ./scripts;
-    scripts = [ "ncspot-save-playing" ];
-    runtimeInputs = with pkgs; [
-      netcat-gnu  # for nc command
-      jq          # for JSON parsing
-      libnotify   # for notify-send
-    ];
-  };
+  # Spotify script packages using standard pattern
+  spotifyScripts = with pkgs; [
+    (writeShellScriptBin "ncspot-save-playing" (builtins.readFile ./scripts/ncspot-save-playing.sh))
+  ];
 
 in
 {
@@ -39,12 +32,13 @@ in
       unstable.librespot
       unstable.spotify # official
       unstable.spotify-player
+      # Script runtime dependencies
+      netcat-gnu  # for nc command
+      jq          # for JSON parsing
+      libnotify   # for notify-send
       # keep-sorted end
-    ] ++ spotifyScripts.packages;
+    ] ++ spotifyScripts;
 
-    # Add fish shell abbreviations if fish is enabled
-    programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable
-      spotifyScripts.fishShellAbbrs;
 
     home-manager.users."${user-settings.user.username}" = {
 

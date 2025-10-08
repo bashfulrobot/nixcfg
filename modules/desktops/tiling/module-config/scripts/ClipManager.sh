@@ -11,7 +11,7 @@ while true; do
     rofi -dmenu \
       -kb-custom-1 "Control-Delete" \
       -kb-custom-2 "Alt-Delete" \
-      -theme $HOME/.config/rofi/launchers/type-1/style-6.rasi < <(cliphist list)
+      -theme "$HOME/.config/rofi/launchers/type-1/style-6.rasi" < <(cliphist list)
   )
 
   case "$?" in

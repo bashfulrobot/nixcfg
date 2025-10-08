@@ -120,7 +120,7 @@ BINDINGS=(
 rofi_theme="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/launchers/type-2/style-2.rasi"
 r_override="entry{placeholder:' Search Keybinds...';}listview{lines:15;columns:2;}window{width:80%;}"
 
-CHOICE=$(printf '%s\n' "${BINDINGS[@]}" | rofi -dmenu -i -markup-rows -p " Hyprland Keybinds" -theme-str "$r_override" -theme "$rofi_theme")
+# Display keybinds menu (display-only, no command execution)
+printf '%s\n' "${BINDINGS[@]}" | rofi -dmenu -i -markup-rows -p " Hyprland Keybinds" -theme-str "$r_override" -theme "$rofi_theme"
 
-# Since this is display-only, we don't execute commands
 # The user can see the keybinds and use them directly

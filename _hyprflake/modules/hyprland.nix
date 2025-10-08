@@ -15,20 +15,6 @@ let
   browser = getExe pkgs.chromium;
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
-
-  makeScriptPackages = pkgs.callPackage ../lib/make-script-packages { };
-
-  # Create script packages for hyprland module
-  scriptPackages = makeScriptPackages {
-    scriptsDir = ./scripts;
-    scripts = [
-      {
-        name = "rofi-hyprland-keybinds";
-        command = "hyprland-keybinds";
-      }
-    ];
-    createFishAbbrs = false;
-  };
 in
 {
 
@@ -196,8 +182,7 @@ in
       shared-mime-info
       desktop-file-utils
       gtk3.out # for gtk-update-icon-cache
-    ]
-    ++ scriptPackages.packages;
+    ];
 
   # Enable PAM keyring for automatic unlock on login
   security.pam.services = {

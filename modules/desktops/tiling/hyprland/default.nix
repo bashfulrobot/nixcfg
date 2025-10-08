@@ -15,17 +15,6 @@ let
   browser = "${pkgs.chromium}/bin/chromium";
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
-
-  makeScriptPackages = pkgs.callPackage ../../../../lib/make-script-packages { };
-
-  # Create script packages for hyprland module
-  scriptPackages = makeScriptPackages {
-    scriptsDir = ./scripts;
-    scripts = [
-      { name = "rofi-hyprland-keybinds"; command = "hyprland-keybinds"; }
-    ];
-    createFishAbbrs = false;
-  };
 in
 {
 
@@ -204,7 +193,21 @@ in
       # socat # for and autowaybar.sh
       # jq # for and autowaybar.sh
       # keep-sorted end
-    ] ++ scriptPackages.packages;
+
+      # Hyprland scripts - using writeShellScriptBin (no shellcheck, no dependency management)
+      (pkgs.writeShellScriptBin "hyprland-keybinds" (builtins.readFile ./scripts/rofi-hyprland-keybinds.sh))
+      (pkgs.writeShellScriptBin "batterynotify" (builtins.readFile ../module-config/scripts/batterynotify.sh))
+      (pkgs.writeShellScriptBin "dontkillsteam" (builtins.readFile ../module-config/scripts/dontkillsteam.sh))
+      (pkgs.writeShellScriptBin "ClipManager" (builtins.readFile ../module-config/scripts/ClipManager.sh))
+      (pkgs.writeShellScriptBin "rofi-launcher" (builtins.readFile ../module-config/scripts/rofi.sh))
+      (pkgs.writeShellScriptBin "hypr-screenshot" (builtins.readFile ../module-config/scripts/screenshot.sh))
+      (pkgs.writeShellScriptBin "screenshot-annotate" (builtins.readFile ../module-config/scripts/screenshot-annotate.sh))
+      (pkgs.writeShellScriptBin "espanso-rofi" (builtins.readFile ../module-config/scripts/espanso-rofi.sh))
+      (pkgs.writeShellScriptBin "keyboardswitch" (builtins.readFile ../module-config/scripts/keyboardswitch.sh))
+      (pkgs.writeShellScriptBin "gamemode-toggle" (builtins.readFile ../module-config/scripts/gamemode.sh))
+      (pkgs.writeShellScriptBin "hypr-rebuild" (builtins.readFile ../module-config/scripts/rebuild.sh))
+      (pkgs.writeShellScriptBin "ssh-add-keys" (builtins.readFile ../module-config/scripts/ssh-add-keys.sh))
+    ];
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
     # Enable PAM keyring for automatic unlock on login
@@ -371,11 +374,11 @@ in
             "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch cliphist store" # clipboard store text data
             "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch cliphist store" # clipboard store image data
             "rm '$XDG_CACHE_HOME/cliphist/db'" # Clear clipboard
-            "${../module-config/scripts/batterynotify.sh}" # battery notification
+            "batterynotify" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
             "polkit-agent-helper-1"
             "${pkgs.gcr_4}/libexec/gcr4-ssh-askpass" # GCR SSH askpass for keyring password prompts
-            "${../module-config/scripts/ssh-add-keys.sh}" # Auto-load SSH keys into keyring
+            "ssh-add-keys" # Auto-load SSH keys into keyring
             "pamixer --set-volume 50"
           ]
           ++ lib.optionals config.apps.one-password.enable [
@@ -387,7 +390,7 @@ in
             repeat_delay = 300; # or 212
             repeat_rate = 30;
 
-            follow_mouse = 1;
+            follow_mouse = 0;
 
             touchpad.natural_scroll = false;
 
@@ -697,7 +700,7 @@ in
               "$mainMod ALT, question, exec, rofi-fish-commands"
               "$mainMod ALT, slash, exec, rofi-fish-commands"
               # Espanso shortcuts menu
-              "$mainMod SHIFT, question, exec, ${../module-config/scripts/espanso-rofi.sh}"
+              "$mainMod SHIFT, question, exec, espanso-rofi"
 
               "$mainMod, F8, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${autoclicker}/bin/autoclicker --cps 40"
               # "$mainMod ALT, mouse:276, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${autoclicker}/bin/autoclicker --cps 60"
@@ -707,8 +710,8 @@ in
               "$mainMod, F10, exec, pkill hyprsunset"
 
               # Window/Session actions
-              "$mainMod, Q, exec, ${../module-config/scripts/dontkillsteam.sh}" # killactive, kill the window on focus
-              "ALT, F4, exec, ${../module-config/scripts/dontkillsteam.sh}" # killactive, kill the window on focus
+              "$mainMod, Q, exec, dontkillsteam" # killactive, kill the window on focus
+              "ALT, F4, exec, dontkillsteam" # killactive, kill the window on focus
               "$mainMod, delete, exit" # kill hyperland session
               "$mainMod, W, togglefloating" # toggle the window on focus to float
               "$mainMod SHIFT, G, togglegroup" # toggle the window on focus to float
@@ -732,26 +735,25 @@ in
               "$CONTROL ALT, DELETE, exec, $term -e '${pkgs.btop}/bin/btop'" # System Monitor
               "$mainMod CTRL, C, exec, hyprpicker --autocopy --format=hex" # Colour Picker
 
-              "$mainMod, A, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} drun" # launch desktop applications
-              "$mainMod, SPACE, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} drun" # launch desktop applications
-              "$mainMod CTRL, SPACE, exec, pkill -x rofi || rofi -show window -show-icons" # window switcher with icons
-              "$mainMod, Z, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} emoji" # launch emoji picker
-              # "$mainMod, tab, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} window" # switch between desktop applications
-              # "$mainMod, R, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} file" # brrwse system files
-              "$mainMod ALT, K, exec, ${../module-config/scripts/keyboardswitch.sh}" # change keyboard layout
+              "$mainMod, A, exec, rofi-launcher drun" # launch desktop applications
+              "$mainMod, SPACE, exec, rofi-launcher drun" # launch desktop applications
+              "$mainMod CTRL, SPACE, exec, rofi-launcher window" # window switcher with icons
+              "$mainMod, Z, exec, rofi-launcher emoji" # launch emoji picker
+              # "$mainMod, tab, exec, pkill -x rofi || rofi-launcher window" # switch between desktop applications
+              # "$mainMod, R, exec, pkill -x rofi || rofi-launcher file" # brrwse system files
+              "$mainMod ALT, K, exec, keyboardswitch" # change keyboard layout
               "$mainMod ALT, B, exec, blueman-manager" # bluetooth manager
               "$mainMod SHIFT, N, exec, swaync-client -t -sw" # swayNC panel
-              "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher
-              "$mainMod ALT, G, exec, ${../module-config/scripts/gamemode.sh}" # disable hypr effects for gamemode
-              "$mainMod, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
-              "$mainMod, M, exec, pkill -x rofi || ${../module-config/scripts/rofimusic.sh}" # online music
+              "$mainMod, G, exec, rofi-launcher games" # game launcher
+              "$mainMod ALT, G, exec, gamemode-toggle" # disable hypr effects for gamemode
+              "$mainMod, V, exec, ClipManager" # Clipboard Manager
 
               # Screenshot/Screencapture
-              "$mainMod CTRL, P, exec, ${../module-config/scripts/screenshot.sh} s" # drag to snip an area / click on a window to /* print */ it
-              "$mainMod, P, exec, ${../module-config/scripts/screenshot.sh} sf" # frozen screen, drag to snip an area / click on a window to print it
-              "$mainMod, print, exec, ${../module-config/scripts/screenshot.sh} m" # print focused monitor
-              "$mainMod ALT, P, exec, ${../module-config/scripts/screenshot.sh} p" # print all monitor outputs
-              "CTRL ALT, A, exec, ${../module-config/scripts/screenshot-annotate.sh}" # screenshot + annotate workflow
+              "$mainMod CTRL, P, exec, hypr-screenshot s" # drag to snip an area / click on a window to /* print */ it
+              "$mainMod, P, exec, hypr-screenshot sf" # frozen screen, drag to snip an area / click on a window to print it
+              "$mainMod, print, exec, hypr-screenshot m" # print focused monitor
+              "$mainMod ALT, P, exec, hypr-screenshot p" # print all monitor outputs
+              "CTRL ALT, A, exec, screenshot-annotate" # screenshot + annotate workflow
 
               # Functional keybinds
               ",xf86Sleep, exec, systemctl suspend" # Put computer into sleep mode
@@ -777,9 +779,9 @@ in
               # F6 icon (person head + sound waves) - Works natively, no binding needed
               # F7 icon (happy face) - Works natively for window selector, no binding needed
               # F8 icon (screenshot) - Screenshot function
-              ",Print,exec,bash -c '${../module-config/scripts/screenshot.sh} s && ${swayosd-custom} screenshot-taken'" # F8 icon: Screenshot with OSD feedback
+              ",Print,exec,bash -c 'hypr-screenshot s && ${swayosd-custom} screenshot-taken'" # F8 icon: Screenshot with OSD feedback
               # F10 icon (search) - Search/launcher function
-              ",XF86Search,exec,bash -c 'pkill rofi || rofi -show run && ${swayosd-custom} launcher-opened'" # F10 icon: Search/launcher with OSD feedback
+              ",XF86Search,exec,bash -c 'pkill -x rofi 2>/dev/null || true; rofi -show run && ${swayosd-custom} launcher-opened'" # F10 icon: Search/launcher with OSD feedback
 
               # ",xf86AudioNext,exec,${../module-config/scripts/MediaCtrl.sh} next" # go to next media
               # ",xf86AudioPrev,exec,${../module-config/scripts/MediaCtrl.sh} previous" # go to previous media
@@ -819,7 +821,7 @@ in
               "$mainMod CTRL, mouse:275, movetoworkspacesilent, 6"
 
               # Rebuild NixOS with a KeyBind
-              "$mainMod, U, exec, $term -e ${../module-config/scripts/rebuild.sh}"
+              "$mainMod, U, exec, $term -e hypr-rebuild"
 
               # Split window horizontal (next window opens to the right)
               "$mainMod ALT, h, layoutmsg, preselect r"

@@ -468,7 +468,6 @@
           "$mainMod, G, exec, ${../module-config/scripts/rofi.sh} games" # game launcher
           "$mainMod ALT, G, exec, ${../module-config/scripts/gamemode.sh}" # disable hypr effects for gamemode
           "$mainMod, V, exec, ${../module-config/scripts/ClipManager.sh}" # Clipboard Manager
-          "$mainMod, M, exec, pkill -x rofi || ${../module-config/scripts/rofimusic.sh}" # online music
 
           # Screenshot/Screencapture
           "$mainMod CTRL, P, exec, ${../module-config/scripts/screenshot.sh} s" # drag to snip an area / click on a window to /* print */ it

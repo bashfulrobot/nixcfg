@@ -85,3 +85,4 @@ fi
 ```
 
 This system provides clean, declarative feature detection for build scripts without complex configuration parsing.
+- never run just check anymore. I will run just commands externally.

@@ -10,11 +10,9 @@
 }:
 let
   cfg = config.desktops.tiling.hyprland;
-  inherit (lib) getExe getExe';
-
   terminal = "kitty";
   terminalFileManager = "yazi";
-  browser = getExe pkgs.chromium;
+  browser = "${pkgs.chromium}/bin/chromium";
   kbdLayout = "us"; # US layout
   kbdVariant = ""; # Standard US variant
 
@@ -315,7 +313,7 @@ in
         };
         settings = {
           "$mainMod" = "SUPER";
-          "$term" = "${getExe pkgs.${terminal}}";
+          "$term" = "${pkgs.kitty}/bin/kitty";
           "$editor" = "code --disable-gpu";
           "$fileManager" = "$term --class \"terminalFileManager\" -e ${terminalFileManager}";
           "$browser" = browser;
@@ -370,8 +368,8 @@ in
             #"blueman-applet"
             "pwvucontrol --hide-window"
             "wl-clipboard-history -t"
-            "${getExe' pkgs.wl-clipboard "wl-paste"} --type text --watch cliphist store" # clipboard store text data
-            "${getExe' pkgs.wl-clipboard "wl-paste"} --type image --watch cliphist store" # clipboard store image data
+            "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch cliphist store" # clipboard store text data
+            "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch cliphist store" # clipboard store image data
             "rm '$XDG_CACHE_HOME/cliphist/db'" # Clear clipboard
             "${../module-config/scripts/batterynotify.sh}" # battery notification
             # "${../module-config/scripts/autowaybar.sh}" # uncomment packages at the top
@@ -701,11 +699,11 @@ in
               # Espanso shortcuts menu
               "$mainMod SHIFT, question, exec, ${../module-config/scripts/espanso-rofi.sh}"
 
-              "$mainMod, F8, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 40"
-              # "$mainMod ALT, mouse:276, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${lib.getExe autoclicker} --cps 60"
+              "$mainMod, F8, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${autoclicker}/bin/autoclicker --cps 40"
+              # "$mainMod ALT, mouse:276, exec, kill $(cat /tmp/auto-clicker.pid) 2>/dev/null || ${autoclicker}/bin/autoclicker --cps 60"
 
               # Night Mode (lower value means warmer temp)
-              "$mainMod, F9, exec, ${getExe pkgs.hyprsunset} --temperature 3500" # good values: 3500, 3000, 2500
+              "$mainMod, F9, exec, ${pkgs.hyprsunset}/bin/hyprsunset --temperature 3500" # good values: 3500, 3000, 2500
               "$mainMod, F10, exec, pkill hyprsunset"
 
               # Window/Session actions
@@ -731,7 +729,7 @@ in
               "$mainMod, F, fullscreen"
               "$mainMod SHIFT, S, exec, spotify"
               "$mainMod SHIFT, Y, exec, youtube-music"
-              "$CONTROL ALT, DELETE, exec, $term -e '${getExe pkgs.btop}'" # System Monitor
+              "$CONTROL ALT, DELETE, exec, $term -e '${pkgs.btop}/bin/btop'" # System Monitor
               "$mainMod CTRL, C, exec, hyprpicker --autocopy --format=hex" # Colour Picker
 
               "$mainMod, A, exec, pkill -x rofi || ${../module-config/scripts/rofi.sh} drun" # launch desktop applications

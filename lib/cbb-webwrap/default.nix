@@ -1,7 +1,14 @@
 { pkgs, lib, makeDesktopItem, ... }:
 #  https://peter.sh/experiments/chromium-command-line-switches/
 let
-  makeDesktopApp = { name, url, binary, iconSizes, iconPath, useAppFlag ? true, enableLogging ? false }:
+  # Standardized icon sizes for all web apps
+  # Note: 64px is at index 3 and is used for desktop file absolute path
+  standardIconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
+
+  makeDesktopApp = { name, url, binary, iconSizes ? standardIconSizes, iconPath, useAppFlag ? true, enableLogging ? false }:
+    # NOTE: The 'url' parameter should avoid special characters like ?, #, %, +, etc.
+    # These characters in URLs create WMClass names that break hyprshell's window icon matching.
+    # Use clean URLs without query parameters when possible (e.g., https://site.com/ instead of https://site.com/?param=value)
     let
       desktopName =
         lib.strings.toLower (lib.strings.replaceStrings [ " " ] [ "_" ] name);
@@ -53,13 +60,16 @@ let
         ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}
         ''}
       '';
+      # Get 64px icon for desktop file absolute path (avoids hyprshell theme cache issues)
+      icon64 = builtins.elemAt icons 3; # 64px is at index 3 in standardIconSizes
+
       desktopItem = makeDesktopItem {
         type = "Application";
         name = desktopName;
         desktopName = name;
         startupWMClass = predictedWMClass;
         exec = "${scriptPath}/bin/${desktopName}"; # use the script to open the app - accounts for url encoding. which breaks due to the desktop file spec.
-        icon = desktopName; # Use icon name for proper hicolor theme lookup
+        icon = "/run/current-system/sw/share/icons/hicolor/64x64/apps/${desktopName}.png"; # Use stable absolute path to current generation
         categories = [ "Application" ];
       };
 
@@ -92,12 +102,16 @@ let
           message = "binary is a required parameter for makeDesktopApp";
         }
         {
-          assertion = iconSizes != null;
-          message = "iconSizes is a required parameter for makeDesktopApp";
-        }
-        {
           assertion = iconPath != null;
           message = "iconPath is a required parameter for makeDesktopApp";
+        }
+        {
+          assertion = !(lib.strings.hasInfix "?" url || lib.strings.hasInfix "#" url || lib.strings.hasInfix "%" url || lib.strings.hasInfix "+" url);
+          message = "URL contains special characters (?, #, %, +) that create problematic WMClass names. Use clean URLs without query parameters or fragments.";
+        }
+        {
+          assertion = lib.strings.hasSuffix "/" url;
+          message = "URL should end with a trailing slash for consistent WMClass generation.";
         }
       ];
       inherit desktopItem;

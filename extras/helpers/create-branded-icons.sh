@@ -20,7 +20,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$SCRIPT_DIR/../modules/apps"
 PRISTINE_DIR="$SCRIPT_DIR/pristine-icons"
-SIZES=(16 32 48 64 96 128 192 256 512)
+SIZES=(16 32 48 64 96 128 256)
 
 # Default overlay fraction (0.5 = 1/4 of icon area)
 DEFAULT_OVERLAY_FRACTION=0.5

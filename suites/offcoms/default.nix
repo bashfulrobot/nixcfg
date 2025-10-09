@@ -62,8 +62,7 @@ in
 
       # Office
       # libreoffice # office suite
-      unstable.typora # markdown editor
-      unstable.kdePackages.ghostwriter # markdown editor
+      unstable.typora
 
       # PDF
 

@@ -1,5 +1,5 @@
 { user-settings, lib, pkgs, config, inputs, ... }:
-let 
+let
   cfg = config.cli.claude-code;
 in {
   options = {
@@ -15,13 +15,14 @@ in {
 
       # keep-sorted start case=no numeric=yes
       inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
+      unstable.nodejs-slim_24 # Dependency of claude-code
       # keep-sorted end
     ];
 
     home-manager.users."${user-settings.user.username}" = {
       home.file = {
         ".claude/CLAUDE.md".source = ./CLAUDE.md;
-        
+
         ".claude/settings.json".text = builtins.toJSON {
           cleanupPeriodDays = 15;
           includeCoAuthoredBy = false;
@@ -75,7 +76,7 @@ in {
 
         Examples of when to split:
         - Frontend changes + backend changes = 2 commits
-        - Feature addition + bug fix = 2 commits  
+        - Feature addition + bug fix = 2 commits
         - Documentation + code changes = 2 commits
         - Different modules/components = separate commits
 

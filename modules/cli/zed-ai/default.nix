@@ -16,11 +16,7 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       home.file.".config/nix-flags/zed-ai-enabled".text = "";
 
-      programs.fish.shellInit = lib.mkAfter ''
-        # GLM-4.6 integration via Z.AI API
-        set -gx ANTHROPIC_BASE_URL "${zedaiSecrets.base_url or "https://api.z.ai/api/anthropic"}"
-        set -gx ANTHROPIC_AUTH_TOKEN "${zedaiSecrets.auth_token or ""}"
-      '';
+      # No automatic environment variable setup - user controls via fish functions
 
       programs.fish.functions = {
         zed-ai-status = {
@@ -53,17 +49,23 @@ in {
           body = ''
             set -e ANTHROPIC_BASE_URL
             set -e ANTHROPIC_AUTH_TOKEN
+            set -e ANTHROPIC_DEFAULT_HAIKU_MODEL
+            set -e ANTHROPIC_DEFAULT_SONNET_MODEL
+            set -e ANTHROPIC_DEFAULT_OPUS_MODEL
             echo "ZED-AI environment variables unset for current session"
             echo "Note: Variables will be restored on next shell reload"
           '';
         };
 
         zed-ai-set = {
-          description = "Manually set ZED-AI environment variables in current session";
+          description = "Manually set ZED-AI environment variables and GLM model overrides";
           body = ''
             set -gx ANTHROPIC_BASE_URL "${zedaiSecrets.base_url or "https://api.z.ai/api/anthropic"}"
             set -gx ANTHROPIC_AUTH_TOKEN "${zedaiSecrets.auth_token or ""}"
-            echo "ZED-AI environment variables set for current session"
+            set -gx ANTHROPIC_DEFAULT_HAIKU_MODEL "glm-4.5-air"
+            set -gx ANTHROPIC_DEFAULT_SONNET_MODEL "glm-4.6"
+            set -gx ANTHROPIC_DEFAULT_OPUS_MODEL "glm-4.6"
+            echo "ZED-AI environment variables and GLM model overrides set"
           '';
         };
       };

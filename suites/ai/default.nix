@@ -39,6 +39,7 @@ in
       gemini-cli.enable = true;
       catwalk.enable = false;
       crush.enable = false;
+      zed-ai.enable = true;
     };
 
     home-manager.users."${user-settings.user.username}" = {

@@ -23,9 +23,9 @@ This module provides GLM-4.6 integration with claude-code via the Z.AI API.
 
 ### Environment Variables
 
-When enabled, the module automatically sets:
-- `ANTHROPIC_BASE_URL`: Points to Z.AI's Anthropic-compatible API endpoint
-- `ANTHROPIC_AUTH_TOKEN`: Your Z.AI API key
+The module does NOT automatically set environment variables. You control when to use GLM-4.6 via manual commands:
+- `ANTHROPIC_BASE_URL`: Points to Z.AI's Anthropic-compatible API endpoint (when set)
+- `ANTHROPIC_AUTH_TOKEN`: Your Z.AI API key (when set)
 
 ### Fish Shell Commands
 

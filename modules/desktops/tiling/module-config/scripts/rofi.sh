@@ -13,7 +13,7 @@ window)
   rofi_theme="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/launchers/type-2/style-2.rasi"
   r_override="entry{placeholder:'Search Windows...';}listview{lines:9;}"
 
-  pkill -x rofi 2>/dev/null || true; rofi -show window -show-icons -theme-str "$r_override" -theme "$rofi_theme"
+  pkill -x rofi 2>/dev/null || true; rofi -show window -window-format "{t}" -theme-str "$r_override" -theme "$rofi_theme"
   ;;
 file)
   rofi_theme="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/launchers/type-2/style-2.rasi"

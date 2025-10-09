@@ -12,8 +12,6 @@ gcalBashfulrobotApp = makeDesktopApp {
     url = "https://calendar.google.com/calendar/u/0";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-calendar.google.com__calendar_u_0-Default";
-    iconSizes = [ "32" "48" "64" "96" "128" "256" "512" ];
-    # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
     useAppFlag = true;

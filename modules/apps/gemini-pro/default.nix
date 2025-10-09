@@ -10,7 +10,6 @@ let
     name = "Gemini Pro";
     url = "https://gemini.google.com/u/1/app";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

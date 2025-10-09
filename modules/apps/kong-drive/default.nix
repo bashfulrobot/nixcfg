@@ -10,7 +10,6 @@ let
     name = "Kong Drive";
     url = "https://drive.google.com/drive/u/1/my-drive";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "32" "48" "64" "96" "128" "256"];
     iconPath = ./icons;
     useAppFlag = true;
   };

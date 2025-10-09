@@ -9,10 +9,8 @@ let
 
   sfdcApp = makeDesktopApp {
     name = "Sfdc";
-    url = "https://kong.lightning.force.com/lightning/r/Dashboard/01ZPJ000004TcSb2AK/view?queryScope=userFolders";
+    url = "https://kong.lightning.force.com/lightning/r/Dashboard/01ZPJ000004TcSb2AK";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "180" "256" ];
-    # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
     useAppFlag = true;

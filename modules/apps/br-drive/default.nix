@@ -10,7 +10,6 @@ let
     name = "Bashfulrobot Drive";
     url = "https://drive.google.com/drive/u/0/my-drive";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "32" "48" "64" "96" "128" "256"];
     iconPath = ./icons;
     useAppFlag = true;
   };

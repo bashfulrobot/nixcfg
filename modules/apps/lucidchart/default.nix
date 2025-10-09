@@ -9,9 +9,8 @@ let
 
   lucidchartApp = makeDesktopApp {
     name = "Lucidchart";
-    url = "https://lucid.app/documents#/home?folder_id=recent";
+    url = "https://lucid.app/documents";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

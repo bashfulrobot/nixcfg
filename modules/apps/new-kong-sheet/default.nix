@@ -11,7 +11,6 @@ let
     name = "New Kong Sheet";
     url = "https://sheets.new/2";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

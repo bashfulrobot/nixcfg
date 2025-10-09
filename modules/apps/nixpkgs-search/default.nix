@@ -13,8 +13,6 @@ let
     url = "https://search.nixos.org/packages";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-search.nixos.org__packages-Default";
-    iconSizes = [ "16" "32" "64" "96" "128" "256" ];
-    # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # iconPath = ././modules/apps/nixos-search/icons; # path to icons
     # Open In Browser vs Open as App

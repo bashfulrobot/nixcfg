@@ -9,9 +9,8 @@ let
 
   avantiApp = makeDesktopApp {
     name = "Avanti";
-    url = "https://avanti.letter.ai/?scope=all";
+    url = "https://avanti.letter.ai/";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

@@ -10,7 +10,6 @@ let
     name = "Freshdesk";
     url = "https://kong.freshservice.com/support/home";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

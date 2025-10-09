@@ -8,9 +8,8 @@ let
 
   kongEmailApp = makeDesktopApp {
     name = "Kong Mail";
-    url = "https://mail.google.com/mail/u/1/#search/is%3Aunread+in%3Ainbox";
+    url = "https://mail.google.com/mail/u/1/";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

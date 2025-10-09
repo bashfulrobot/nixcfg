@@ -13,8 +13,6 @@ let
     url = "https://home-manager-options.extranix.com/";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-home-manager-options.extranix.com__-Default";
-    iconSizes = [ "32" "48" "64" "96" "128" "256" ];
-    # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
     useAppFlag = true;

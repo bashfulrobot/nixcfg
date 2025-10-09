@@ -11,7 +11,6 @@ let
     name = "Jira";
     url = "https://konghq.atlassian.net/jira/for-you";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
     useAppFlag = true;

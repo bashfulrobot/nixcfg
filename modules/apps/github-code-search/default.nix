@@ -7,14 +7,11 @@ let
   # Import the makeDesktopApp function
   makeDesktopApp = pkgs.callPackage ../../../lib/cbb-webwrap { };
 
-
   githubCodeSearchApp = makeDesktopApp {
     name = "Github Code Search";
-    url = "https://github.com/search?type=code&auto_enroll=true";
+    url = "https://github.com/search/";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
     # myStartupWMClass = "chrome-github.com__search-Default";
-    iconSizes = [ "32" "48" "64" "96" "128" "256" "512" ];
-    # iconSizes = [ "256" ]; # forcing large icon use
     iconPath = ./icons; # path to icons
     # Open In Browser vs Open as App
     useAppFlag = true;

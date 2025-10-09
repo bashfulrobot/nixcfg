@@ -10,7 +10,6 @@ let
     name = "Kong Calendar";
     url = "https://calendar.google.com/calendar/u/1/r";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "32" "48" "64" "96" "128" "192" "256" "512" ];
     iconPath = ./icons;
     useAppFlag = true;
   };

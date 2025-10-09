@@ -10,7 +10,6 @@ let
     name = "Kongfluence";
     url = "https://konghq.atlassian.net/wiki/spaces/KCX/overview";
     binary = "${pkgs.unstable.chromium}/bin/chromium";
-    iconSizes = [ "16" "32" "48" "64" "96" "128" "256" ];
     iconPath = ./icons;
     useAppFlag = true;
     enableLogging = false;

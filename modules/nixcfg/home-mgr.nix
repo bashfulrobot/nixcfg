@@ -1,4 +1,4 @@
-{ user-settings, lib, config, ... }:
+{ user-settings, lib, config, inputs, ... }:
 let cfg = config.nixcfg.home-manager;
 
 in {

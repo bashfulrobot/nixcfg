@@ -40,6 +40,7 @@ in
       direnv.enable = true;
       git.enable = true;
       helix.enable = true;
+      oq.enable = true;
 
     };
 

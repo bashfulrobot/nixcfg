@@ -5,16 +5,38 @@ let
     let
       desktopName =
         lib.strings.toLower (lib.strings.replaceStrings [ " " ] [ "_" ] name);
+
+      # Predict the actual WM class that Chromium will generate for --app mode
+      predictedWMClass =
+        if useAppFlag then
+          let
+            # Extract browser prefix based on binary name
+            browserPrefix =
+              if lib.strings.hasInfix "chromium" binary then "chrome-"
+              else if lib.strings.hasInfix "chrome" binary then "chrome-"
+              else if lib.strings.hasInfix "brave" binary then "brave-"
+              else "chrome-"; # fallback to chrome prefix
+
+            # Parse URL to extract domain and path
+            urlWithoutProtocol = lib.strings.removePrefix "https://" (lib.strings.removePrefix "http://" url);
+            urlParts = lib.strings.splitString "/" urlWithoutProtocol;
+            domain = lib.lists.head urlParts;
+            pathParts = lib.lists.tail urlParts;
+            pathString = if pathParts != [] then "__" + (lib.strings.concatStringsSep "_" pathParts) else "";
+
+          in "${browserPrefix}${domain}${pathString}-Default"
+        else desktopName;
       scriptPath = pkgs.writeShellScriptBin desktopName ''
         ${if enableLogging then ''
         # Log file in nixcfg repo root
         LOGFILE="/home/dustin/dev/nix/nixcfg/${desktopName}-debug.log"
 
         echo "Starting ${name} at $(date)" >> "$LOGFILE"
-        echo "Command: ${binary} --class=${desktopName} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}" >> "$LOGFILE"
+        echo "Command: ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}" >> "$LOGFILE"
+        echo "Predicted WM Class: ${predictedWMClass}" >> "$LOGFILE"
 
         # Run with standard flags
-        ${binary} --class=${desktopName} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"} >> "$LOGFILE" 2>&1 &
 
         # Store PID and wait
         PID=$!
@@ -28,16 +50,16 @@ let
           echo "❌ ${name} crashed with exit code $EXIT_CODE. See log: $LOGFILE" >&2
         fi
         '' else ''
-        ${binary} --class=${desktopName} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}
+        ${binary} --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window ${if useAppFlag then "--app=${url}" else "${url}"}
         ''}
       '';
       desktopItem = makeDesktopItem {
         type = "Application";
         name = desktopName;
         desktopName = name;
-        startupWMClass = desktopName;
+        startupWMClass = predictedWMClass;
         exec = "${scriptPath}/bin/${desktopName}"; # use the script to open the app - accounts for url encoding. which breaks due to the desktop file spec.
-        icon = desktopName;
+        icon = desktopName; # Use icon name for proper hicolor theme lookup
         categories = [ "Application" ];
       };
 
@@ -49,6 +71,10 @@ let
           installPhase = ''
             mkdir -p $out/share/icons/hicolor/${size}x${size}/apps
             cp $src $out/share/icons/hicolor/${size}x${size}/apps/${desktopName}.png
+            ${if predictedWMClass != desktopName then ''
+            # Also install icon with predicted WM class name for window manager matching
+            cp $src "$out/share/icons/hicolor/${size}x${size}/apps/${predictedWMClass}.png"
+            '' else ""}
           '';
         }) iconSizes;
     in {

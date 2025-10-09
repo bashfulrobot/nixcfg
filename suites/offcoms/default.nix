@@ -62,6 +62,7 @@ in
 
       # Office
       # libreoffice # office suite
+      unstable.typora
 
       # PDF
 

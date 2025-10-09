@@ -28,14 +28,14 @@ in
     environment.systemPackages = with pkgs; [
 
       # keep-sorted start case=no numeric=yes
+      jq          # for JSON parsing
+      libnotify   # for notify-send
+      # Script runtime dependencies
+      netcat-gnu  # for nc command
       unstable.curl
       unstable.librespot
       unstable.spotify # official
       unstable.spotify-player
-      # Script runtime dependencies
-      netcat-gnu  # for nc command
-      jq          # for JSON parsing
-      libnotify   # for notify-send
       # keep-sorted end
     ] ++ spotifyScripts;
 

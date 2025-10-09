@@ -19,15 +19,17 @@ in
 {
 
   imports = [
-    ../module-config/programs/waybar
-    ../module-config/programs/wlogout
-    ../module-config/programs/rofi
+    # keep-sorted start case=no numeric=yes
+    ../module-config/programs/hyprdim
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
+    ../module-config/programs/hyprshell
+    ../module-config/programs/rofi
     ../module-config/programs/swaync
     ../module-config/programs/swayosd
-    ../module-config/programs/hyprdim
-    # ../module-config/programs/dunst
+    ../module-config/programs/waybar
+    ../module-config/programs/wlogout
+    # keep-sorted end
   ];
 
   options = {
@@ -137,10 +139,16 @@ in
       ];
       config = {
         common = {
-          default = [ "hyprland" "gtk" ];
+          default = [
+            "hyprland"
+            "gtk"
+          ];
         };
         hyprland = {
-          default = [ "hyprland" "gtk" ];
+          default = [
+            "hyprland"
+            "gtk"
+          ];
         };
       };
     };
@@ -195,18 +203,36 @@ in
       # keep-sorted end
 
       # Hyprland scripts - using writeShellScriptBin (no shellcheck, no dependency management)
-      (pkgs.writeShellScriptBin "hyprland-keybinds" (builtins.readFile ./scripts/rofi-hyprland-keybinds.sh))
-      (pkgs.writeShellScriptBin "batterynotify" (builtins.readFile ../module-config/scripts/batterynotify.sh))
-      (pkgs.writeShellScriptBin "dontkillsteam" (builtins.readFile ../module-config/scripts/dontkillsteam.sh))
+      (pkgs.writeShellScriptBin "hyprland-keybinds" (
+        builtins.readFile ./scripts/rofi-hyprland-keybinds.sh
+      ))
+      (pkgs.writeShellScriptBin "batterynotify" (
+        builtins.readFile ../module-config/scripts/batterynotify.sh
+      ))
+      (pkgs.writeShellScriptBin "dontkillsteam" (
+        builtins.readFile ../module-config/scripts/dontkillsteam.sh
+      ))
       (pkgs.writeShellScriptBin "ClipManager" (builtins.readFile ../module-config/scripts/ClipManager.sh))
       (pkgs.writeShellScriptBin "rofi-launcher" (builtins.readFile ../module-config/scripts/rofi.sh))
-      (pkgs.writeShellScriptBin "hypr-screenshot" (builtins.readFile ../module-config/scripts/screenshot.sh))
-      (pkgs.writeShellScriptBin "screenshot-annotate" (builtins.readFile ../module-config/scripts/screenshot-annotate.sh))
-      (pkgs.writeShellScriptBin "espanso-rofi" (builtins.readFile ../module-config/scripts/espanso-rofi.sh))
-      (pkgs.writeShellScriptBin "keyboardswitch" (builtins.readFile ../module-config/scripts/keyboardswitch.sh))
-      (pkgs.writeShellScriptBin "gamemode-toggle" (builtins.readFile ../module-config/scripts/gamemode.sh))
+      (pkgs.writeShellScriptBin "hypr-screenshot" (
+        builtins.readFile ../module-config/scripts/screenshot.sh
+      ))
+      (pkgs.writeShellScriptBin "screenshot-annotate" (
+        builtins.readFile ../module-config/scripts/screenshot-annotate.sh
+      ))
+      (pkgs.writeShellScriptBin "espanso-rofi" (
+        builtins.readFile ../module-config/scripts/espanso-rofi.sh
+      ))
+      (pkgs.writeShellScriptBin "keyboardswitch" (
+        builtins.readFile ../module-config/scripts/keyboardswitch.sh
+      ))
+      (pkgs.writeShellScriptBin "gamemode-toggle" (
+        builtins.readFile ../module-config/scripts/gamemode.sh
+      ))
       (pkgs.writeShellScriptBin "hypr-rebuild" (builtins.readFile ../module-config/scripts/rebuild.sh))
-      (pkgs.writeShellScriptBin "ssh-add-keys" (builtins.readFile ../module-config/scripts/ssh-add-keys.sh))
+      (pkgs.writeShellScriptBin "ssh-add-keys" (
+        builtins.readFile ../module-config/scripts/ssh-add-keys.sh
+      ))
     ];
 
     # security.pam.services.sddm.enableGnomeKeyring = true;
@@ -413,6 +439,8 @@ in
             shadow.enabled = false;
             rounding = 10;
             dim_special = 0.3;
+            dim_inactive = true;
+            dim_strength = 0.5; # Match hyprdim strength for consistency
             blur = {
               enabled = true;
               special = true;
@@ -878,7 +906,7 @@ in
               # 3. Add to submap: bind = , [letter], togglespecialworkspace, [name]
               "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia"
               "$mainMod, S, submap,  special"
-              "$mainMod SHIFT, S, movetoworkspace, special"  # Move current window to default scratchpad
+              "$mainMod SHIFT, S, movetoworkspace, special" # Move current window to default scratchpad
             ]
             ++ (builtins.concatLists (
               builtins.genList (

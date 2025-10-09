@@ -20,7 +20,7 @@ in
 
   imports = [
     # keep-sorted start case=no numeric=yes
-    ../module-config/programs/hyprdim
+    # ../module-config/programs/hyprdim
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/hyprshell
@@ -428,9 +428,9 @@ in
           general = {
             gaps_in = 4;
             gaps_out = 9;
-            border_size = 2;
-            "col.active_border" = lib.mkDefault "rgba(ca9ee6ff) rgba(f2d5cfff) 45deg";
-            "col.inactive_border" = lib.mkForce "rgba(${config.lib.stylix.colors.base00}66)";
+            border_size = 3;
+            "col.active_border" = lib.mkDefault "rgba(89b4faff) rgba(cba6f7ff) 45deg";
+            "col.inactive_border" = lib.mkForce "rgba(${config.lib.stylix.colors.base00}88)";
             resize_on_border = true;
             layout = "dwindle"; # dwindle or master
             # allow_tearing = true; # Allow tearing for games (use immediate window rules for specific games or all titles)
@@ -765,7 +765,6 @@ in
 
               "$mainMod, A, exec, rofi-launcher drun" # launch desktop applications
               "$mainMod, SPACE, exec, rofi-launcher drun" # launch desktop applications
-              "$mainMod CTRL, SPACE, exec, rofi-launcher window" # window switcher with icons
               "$mainMod, Z, exec, rofi-launcher emoji" # launch emoji picker
               # "$mainMod, tab, exec, pkill -x rofi || rofi-launcher window" # switch between desktop applications
               # "$mainMod, R, exec, pkill -x rofi || rofi-launcher file" # brrwse system files

@@ -22,17 +22,17 @@
     # Custom CSS styling for hyprshell
     xdg.configFile."hyprshell/styles.css".text = ''
       :root {
-        /* Remove outer border by setting transparent border */
-        --border-color: rgba(0, 0, 0, 0);
+        /* Border colors from Stylix */
+        --border-color: #${config.lib.stylix.colors.base03};
         --border-color-active: #${config.lib.stylix.colors.base0D};
 
         /* Background colors from Stylix */
         --bg-color: #${config.lib.stylix.colors.base00};
         --bg-color-hover: #${config.lib.stylix.colors.base02};
 
-        /* Border styling - set size to 0 to remove outer border */
+        /* Border styling */
         --border-radius: 8px;
-        --border-size: 0px;
+        --border-size: 1px;
         --border-style: solid;
 
         /* Text color from Stylix */

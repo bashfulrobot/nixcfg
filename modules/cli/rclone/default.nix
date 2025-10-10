@@ -158,9 +158,10 @@ EOF
           };
         };
 
-        # Ensure mount directory exists
+        # Ensure mount directory and log directory exist
         home.activation.createMountDir = lib.mkAfter ''
           $DRY_RUN_CMD mkdir -p ${cfg.mountPath}
+          $DRY_RUN_CMD mkdir -p ${user-settings.user.home}/.local/share/rclone
         '';
       })
 

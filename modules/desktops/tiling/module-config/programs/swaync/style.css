@@ -1,12 +1,12 @@
-@define-color text            @base05;
-@define-color bg              @base01;
-@define-color selected        @base0D;
+@define-color text            #@base05;
+@define-color bg              #@base01;
+@define-color selected        #@base0D;
 @define-color hover           alpha(@selected, .4);
-@define-color background      @base00;
-@define-color color1          @base01;
-@define-color color2          @base02;
-@define-color color6          @base06;
-@define-color foreground      @base05;
+@define-color background      #@base00;
+@define-color color1          #@base01;
+@define-color color2          #@base02;
+@define-color color6          #@base06;
+@define-color foreground      #@base05;
 
 * {
     outline: none;

@@ -27,8 +27,8 @@
 
           # Layer and behavior
           fit-to-screen = false;
-          layer-shell-cover-screen = true;
-          layer = "overlay";
+          layer-shell-cover-screen = false;
+          layer = "top";
           cssPriority = "user";
 
           # Notification settings
@@ -37,11 +37,11 @@
           notification-icon-size = 64;
           notification-body-image-height = 100;
           notification-body-image-width = 200;
-          notification-window-width = 500;
+          notification-window-width = 400;
 
           # Timeout settings
-          timeout = 10;
-          timeout-low = 5;
+          timeout = 5;
+          timeout-low = 3;
           timeout-critical = 0;
 
           # Behavior settings
@@ -58,6 +58,9 @@
             "title"
             "dnd"
             "mpris"
+            "volume"
+            "backlight"
+            "menubar"
             "notifications"
           ];
 
@@ -85,6 +88,30 @@
               autohide = true;
               blacklist = ["playerctld"];
             };
+            volume = {
+              label = "󰕾";
+              show-per-app = true;
+            };
+            backlight = {
+              label = "󰃟";
+              device = "intel_backlight";
+            };
+            menubar = {
+              "menu#power-buttons" = {
+                label = "⏻";
+                position = "right";
+                actions = [
+                  {
+                    label = "Reboot";
+                    command = "systemctl reboot";
+                  }
+                  {
+                    label = "Shutdown";
+                    command = "systemctl poweroff";
+                  }
+                ];
+              };
+            };
           };
         };
 
@@ -97,6 +124,15 @@
             background-color: @noti-bg !important;
           }
 
+          /* Remove fade out effect at bottom */
+          .control-center .notification-row:last-child {
+            background: none !important;
+          }
+
+          .control-center::after {
+            display: none !important;
+          }
+
           /* Widget styling */
           .widget-title > button {
             border-radius: 12px;
@@ -107,6 +143,18 @@
           }
 
           .widget-mpris-player {
+            border-radius: 12px;
+          }
+
+          .widget-volume {
+            border-radius: 12px;
+          }
+
+          .widget-backlight {
+            border-radius: 12px;
+          }
+
+          .widget-menubar {
             border-radius: 12px;
           }
         '';

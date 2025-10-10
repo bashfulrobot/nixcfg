@@ -26,6 +26,11 @@ in {
         ".claude/settings.json".text = builtins.toJSON {
           cleanupPeriodDays = 15;
           includeCoAuthoredBy = false;
+          statusLine = {
+            enabled = true;
+            format = "{{ .Username }}@{{ .Hostname }} in {{ .PWD | cyan }} {{ if .GitBranch }}on {{ .GitBranch | green }}{{ end }}{{ if .GitStatus }} [{{ .GitStatus | yellow }}]{{ end }}\n{{ .Prompt }} ";
+            gitEnabled = true;
+          };
         };
 
         # Deploy subagents to ~/.claude/agents/

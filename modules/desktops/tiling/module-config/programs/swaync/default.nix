@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  buildTheme = pkgs.callPackage ../../../../../lib/stylix-theme.nix { };
+  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme.nix { };
   style = buildTheme.build {
-    inherit (config.lib.stylix) colors fonts;
+    inherit (config.lib.stylix) colors;
+    inherit (config.stylix) fonts;
     file = builtins.readFile ./style.css;
   };
 in
@@ -66,7 +67,7 @@ in
             buttons-grid = {
               actions = [
                 {
-                  label = " ";
+                  label = "󰤨";
                   command = "nm-connection-editor";
                 }
                 {
@@ -74,12 +75,12 @@ in
                   command = "blueman-manager";
                 }
                 {
-                  label = "󰏘";
-                  command = "nwg-look";
+                  label = "󰕾";
+                  command = "pwvucontrol";
                 }
                 {
                   label = "⏻";
-                  command = "wlogout";
+                  command = "wlogout -b 4";
                 }
               ];
             };

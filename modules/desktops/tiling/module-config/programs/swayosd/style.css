@@ -1,0 +1,29 @@
+window {
+  border-radius: 8px;
+  opacity: 0.95;
+  border: 2px solid @base0D;
+  background-color: @base00;
+  padding: 12px;
+}
+
+label {
+  font-family: '@monospace';
+  font-size: @fontSize;
+  color: @base05;
+  font-weight: bold;
+}
+
+image {
+  color: @base0D;
+}
+
+progressbar {
+  border-radius: 4px;
+  background-color: @base01;
+  border: 1px solid @base03;
+}
+
+progress {
+  background-color: @base0D;
+  border-radius: 4px;
+}

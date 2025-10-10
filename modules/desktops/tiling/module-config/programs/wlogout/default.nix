@@ -13,7 +13,7 @@ in
     (_: {
       programs.wlogout = {
         enable = true;
-        style = style;
+        inherit style;
         layout = [
           {
             label = "logout";

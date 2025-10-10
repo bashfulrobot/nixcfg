@@ -15,38 +15,16 @@ let
     max_volume = ${toString cfg.swayosd.maxVolume}
   '';
 
-  # Generate styled CSS with stylix colors and fonts
-  styleCss = with config.lib.stylix.colors.withHashtag; ''
-    window {
-      border-radius: 8px;
-      opacity: 0.95;
-      border: 2px solid ${base0D};
-      background-color: ${base00};
-      padding: 12px;
-    }
-
-    label {
-      font-family: '${config.stylix.fonts.monospace.name}';
-      font-size: ${toString config.stylix.fonts.sizes.applications}pt;
-      color: ${base05};
-      font-weight: bold;
-    }
-
-    image {
-      color: ${base0D};
-    }
-
-    progressbar {
-      border-radius: 4px;
-      background-color: ${base01};
-      border: 1px solid ${base03};
-    }
-
-    progress {
-      background-color: ${base0D};
-      border-radius: 4px;
-    }
-  '';
+  # Use stylix-theme library for CSS generation
+  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme.nix { };
+  styleCss = buildTheme.build {
+    inherit (config.lib.stylix) colors;
+    inherit (config.stylix) fonts;
+    file = builtins.replaceStrings
+      [ "@fontSize" ]
+      [ "${toString config.stylix.fonts.sizes.applications}pt" ]
+      (builtins.readFile ./style.css);
+  };
 in
 {
   options = {
@@ -127,7 +105,7 @@ in
       services.swayosd = {
         enable = true;
         package = pkgs.swayosd;
-        topMargin = cfg.swayosd.topMargin;
+        inherit (cfg.swayosd) topMargin;
         stylePath = "${user-settings.user.home}/.config/swayosd/style.css";
       };
     };

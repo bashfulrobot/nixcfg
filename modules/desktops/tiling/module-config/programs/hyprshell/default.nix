@@ -1,4 +1,13 @@
-{ user-settings, pkgs, inputs, config, ... }: {
+{ user-settings, pkgs, inputs, config, ... }:
+
+let
+  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme.nix { };
+  styles = buildTheme.build {
+    inherit (config.lib.stylix) colors;
+    file = builtins.readFile ./styles.css;
+  };
+in
+{
   # Home manager configuration with hyprshell module
   home-manager.users."${user-settings.user.username}" = {
     imports = [
@@ -19,28 +28,7 @@
       };
     };
 
-    # Custom CSS styling for hyprshell
-    xdg.configFile."hyprshell/styles.css".text = ''
-      :root {
-        /* Border colors from Stylix */
-        --border-color: #${config.lib.stylix.colors.base03};
-        --border-color-active: #${config.lib.stylix.colors.base0D};
-
-        /* Background colors from Stylix */
-        --bg-color: #${config.lib.stylix.colors.base00};
-        --bg-color-hover: #${config.lib.stylix.colors.base02};
-
-        /* Border styling */
-        --border-radius: 8px;
-        --border-size: 1px;
-        --border-style: solid;
-
-        /* Text color from Stylix */
-        --text-color: #${config.lib.stylix.colors.base05};
-
-        /* Window padding */
-        --window-padding: 2px;
-      }
-    '';
+    # Custom CSS styling for hyprshell using stylix-theme library
+    xdg.configFile."hyprshell/styles.css".text = styles;
   };
 }

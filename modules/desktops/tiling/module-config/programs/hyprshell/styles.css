@@ -1,0 +1,20 @@
+:root {
+  /* Border colors from Stylix */
+  --border-color: @base03;
+  --border-color-active: @base0D;
+
+  /* Background colors from Stylix */
+  --bg-color: @base00;
+  --bg-color-hover: @base02;
+
+  /* Border styling */
+  --border-radius: 8px;
+  --border-size: 1px;
+  --border-style: solid;
+
+  /* Text color from Stylix */
+  --text-color: @base05;
+
+  /* Window padding */
+  --window-padding: 2px;
+}

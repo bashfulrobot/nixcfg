@@ -136,26 +136,26 @@ in
           version: 2
 
           backends:
-            b2-tower:
+            b2-${cfg.folderName}:
               type: b2
-              path: 'ws-bups:tower'
+              path: 'ws-bups:${cfg.folderName}'
               env:
                 B2_ACCOUNT_ID: ${secrets.restic.b2_account_id}
                 B2_ACCOUNT_KEY: ${secrets.restic.b2_account_key}
-                RESTIC_PASSWORD: ${secrets.restic.restic_password}
-            local-tower:
+                RESTIC_PASSWORD: ${secrets.restic.restic_password}${lib.optionalString cfg.localBackup.enable ''
+            local-${cfg.folderName}:
               type: local
-              path: '/run/media/dustin/dk-data/Restic-backups/tower'
+              path: '${cfg.localBackup.path}'
               env:
-                RESTIC_PASSWORD: ${secrets.restic.restic_password}
+                RESTIC_PASSWORD: ${secrets.restic.restic_password}''}
 
           locations:
             ${cfg.folderName}-backup:
               from:
 ${lib.concatMapStringsSep "\n" (path: "                - ${path}") cfg.backupPaths}
               to:
-                - b2-tower
-                - local-tower
+                - b2-${cfg.folderName}${lib.optionalString cfg.localBackup.enable ''
+                - local-${cfg.folderName}''}
               cron: "${cfg.schedule}"
               forget: prune
               hooks:${lib.optionalString (cfg.localBackup.enable && cfg.localBackup.mountCheck.enable) ''
@@ -294,7 +294,7 @@ ${lib.concatStringsSep "
                       fi
 
                       # Select backend
-                      if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable ''&& [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
+                      if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable ''&& [ -d "${cfg.localBackup.path}" ]''}; then
                         BACKEND_FLAG="--from local-${cfg.folderName}"
                         gum style --foreground 75 "📂 Restoring from local backup..."
                       else
@@ -348,7 +348,7 @@ ${lib.concatStringsSep "
             echo ""
             gum style --foreground 226 "📁 Listing files from $BACKEND backup..."
 
-            if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable ''&& [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]''}; then
+            if [ "$BACKEND" = "local" ]${lib.optionalString cfg.localBackup.enable ''&& [ -d "${cfg.localBackup.path}" ]''}; then
               echo ""
               gum spin --spinner dot --title "Fetching local snapshot contents..." -- sleep 1
               gum style --foreground 75 "📂 Files in latest local snapshot:"
@@ -411,7 +411,7 @@ ${lib.concatStringsSep "
             echo "  Cloud: $CLOUD_COUNT snapshots"
 
             ${lib.optionalString cfg.localBackup.enable ''
-              if [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]; then
+              if [ -d "${cfg.localBackup.path}" ]; then
                 LOCAL_COUNT=$(autorestic exec -b local-${cfg.folderName} -- snapshots 2>>"$LOG_FILE" | grep -c "^[a-f0-9]" || echo "?")
                 echo "  Local: $LOCAL_COUNT snapshots"
               else
@@ -533,7 +533,7 @@ ${lib.concatStringsSep "
 
             ${lib.optionalString cfg.localBackup.enable ''
               # Validate local backend if enabled and accessible
-              if [ -d "${cfg.localBackup.path}/${cfg.folderName}" ]; then
+              if [ -d "${cfg.localBackup.path}" ]; then
                 echo "$(date -Iseconds): VALIDATION_START local $VALIDATION_FLAGS" >> ~/.local/var/logs/restic/validation.log
                 if ${pkgs.unstable.autorestic}/bin/autorestic exec -b local-${cfg.folderName} -- check $VALIDATION_FLAGS; then
                   echo "$(date -Iseconds): VALIDATION_SUCCESS local" >> ~/.local/var/logs/restic/validation.log

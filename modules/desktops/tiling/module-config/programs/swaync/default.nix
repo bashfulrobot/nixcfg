@@ -1,163 +1,90 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ config, lib, pkgs, ... }:
+
+let
+  buildTheme = pkgs.callPackage ../../../../../lib/stylix-theme.nix { };
+  style = buildTheme.build {
+    inherit (config.lib.stylix) colors fonts;
+    file = builtins.readFile ./style.css;
+  };
+in
 {
   home-manager.sharedModules = lib.mkIf (config.desktops.tiling.hyprland.enable or false) [
     (_: {
       services.swaync = {
         enable = true;
+        inherit style;
         settings = {
           "$schema" = "/etc/xdg/swaync/configSchema.json";
 
-          # Position settings - notifications center, control center right
-          positionX = "center";
+          # Position settings - notifications and control center on right
+          positionX = "right";
           positionY = "top";
-          control-center-positionX = "none";
-          control-center-positionY = "none";
+          layer = "overlay";
+          layer-shell = true;
+          cssPriority = "user";
 
-          # Control center settings
+          # Control center settings (from reference)
+          control-center-width = 380;
+          control-center-height = 860;
           control-center-margin-top = 8;
           control-center-margin-bottom = 8;
           control-center-margin-right = 8;
           control-center-margin-left = 8;
-          control-center-width = 500;
-          control-center-height = -1;
 
-          # Layer and behavior
-          fit-to-screen = false;
-          layer-shell-cover-screen = false;
-          layer = "top";
-          cssPriority = "user";
-
-          # Notification settings
-          notification-2fa-command = true;
-          notification-inline-replies = true;
-          notification-icon-size = 64;
-          notification-body-image-height = 100;
-          notification-body-image-width = 200;
+          # Notification settings (from reference)
           notification-window-width = 400;
+          notification-icon-size = 48;
+          notification-body-image-height = 160;
+          notification-body-image-width = 200;
 
-          # Timeout settings
-          timeout = 5;
-          timeout-low = 3;
-          timeout-critical = 0;
-
-          # Behavior settings
-          keyboard-shortcuts = true;
-          image-visibility = "always";
-          transition-time = 200;
-          hide-on-clear = true;
-          hide-on-action = true;
-          script-fail-notify = true;
-
-          # Widgets (from ErikReider's config)
+          # Widgets (based on reference but keeping useful elements from current)
           widgets = [
-            "inhibitors"
+            "buttons-grid"
             "title"
             "dnd"
-            "mpris"
-            "volume"
-            "backlight"
-            "menubar"
             "notifications"
+            "mpris"
           ];
 
           widget-config = {
-            inhibitors = {
-              text = "Inhibitors";
-              button-text = "";
-              clear-all-button = true;
-            };
             title = {
               text = "Notifications";
               clear-all-button = true;
-              button-text = "󰩺";
+              button-text = "Clear All";
             };
             dnd = {
               text = "Do Not Disturb";
             };
             label = {
-              max-lines = 5;
-              text = "Label Text";
+              max-lines = 1;
+              text = " ";
             };
             mpris = {
-              image-size = 96;
-              image-radius = 4;
-              autohide = true;
-              blacklist = ["playerctld"];
+              image-size = 60;
+              image-radius = 12;
             };
-            volume = {
-              label = "󰕾";
-              show-per-app = true;
-            };
-            backlight = {
-              label = "󰃟";
-              device = "intel_backlight";
-            };
-            menubar = {
-              "menu#power-buttons" = {
-                label = "⏻";
-                position = "right";
-                actions = [
-                  {
-                    label = "Reboot";
-                    command = "systemctl reboot";
-                  }
-                  {
-                    label = "Shutdown";
-                    command = "systemctl poweroff";
-                  }
-                ];
-              };
+            buttons-grid = {
+              actions = [
+                {
+                  label = " ";
+                  command = "nm-connection-editor";
+                }
+                {
+                  label = "󰂯";
+                  command = "blueman-manager";
+                }
+                {
+                  label = "󰏘";
+                  command = "nwg-look";
+                }
+                {
+                  label = "⏻";
+                  command = "wlogout";
+                }
+              ];
             };
           };
         };
-
-        style = ''
-          /* Custom styling additions to Stylix base */
-
-          /* Control center background - use solid color */
-          .control-center {
-            background: @noti-bg !important;
-            background-color: @noti-bg !important;
-          }
-
-          /* Remove fade out effect at bottom */
-          .control-center .notification-row:last-child {
-            background: none !important;
-          }
-
-          .control-center::after {
-            display: none !important;
-          }
-
-          /* Widget styling */
-          .widget-title > button {
-            border-radius: 12px;
-          }
-
-          .widget-dnd > switch {
-            border-radius: 12px;
-          }
-
-          .widget-mpris-player {
-            border-radius: 12px;
-          }
-
-          .widget-volume {
-            border-radius: 12px;
-          }
-
-          .widget-backlight {
-            border-radius: 12px;
-          }
-
-          .widget-menubar {
-            border-radius: 12px;
-          }
-        '';
       };
     })
   ];

@@ -49,6 +49,8 @@ in {
 
         **CRITICAL: NEVER include Claude branding or attribution in commit messages. EVER.**
 
+        **CRITICAL: NEVER include secrets values in commit messages. EVER.**
+
         When creating git commits, strictly adhere to these requirements:
         • Use conventional commits format with semantic prefixes and emoji
         • Craft commit messages based strictly on actual git changes, not assumptions

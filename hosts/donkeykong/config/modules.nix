@@ -36,6 +36,16 @@
     # not powerful enough for full suite.
     gemini-cli.enable = true;
     claude-code.enable = true;
+
+    rclone = {
+      enable = true;
+      enableSync = false;  # Laptop - don't sync to avoid conflicts
+      enableMount = true;  # Use mount for safe access
+      mountPath = "/home/${user-settings.user.username}/GoogleDrive";
+      mountCacheMode = "full";
+      mountCacheSize = "500M"; # Smaller cache for laptop
+    };
+
     restic = {
       enable = true;
       folderName = "donkeykong";

@@ -46,6 +46,12 @@
   };
 
   cli = {
+    rclone = {
+      enable = true;
+      enableSync = true;   # Primary desktop - use sync
+      enableMount = false; # Don't mount on primary
+    };
+
     restic = {
       enable = true;
       folderName = "tower";

@@ -30,8 +30,8 @@
                else "hyprland/workspaces")  # fallback
               # "mpris"
             ];
-            modules-center = ["clock" "custom/notification"];
-            modules-right = ["group/system-info" "custom/power"];
+            modules-center = ["clock"];
+            modules-right = ["group/system-info" "custom/notification" "custom/power"];
 
             "group/system-info" = {
               orientation = "inherit";

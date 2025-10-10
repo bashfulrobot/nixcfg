@@ -20,7 +20,7 @@ in
 
   imports = [
     # keep-sorted start case=no numeric=yes
-    ../module-config/programs/hyprdim
+    # ../module-config/programs/hyprdim
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/hyprshell

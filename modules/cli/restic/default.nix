@@ -482,8 +482,6 @@ ${lib.concatStringsSep "
             cd /home/${user-settings.user.username}
             ${pkgs.unstable.autorestic}/bin/autorestic backup -a
           ''}";
-          User = user-settings.user.username;
-          Group = "users";
         };
       };
 
@@ -554,8 +552,6 @@ ${lib.concatStringsSep "
               exit 1
             fi
           ''}";
-          User = user-settings.user.username;
-          Group = "users";
         };
       };
 

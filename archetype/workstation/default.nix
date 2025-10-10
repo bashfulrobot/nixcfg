@@ -59,5 +59,9 @@ in {
       power.enable = true;
     };
 
+    apps = {
+      nautilus.enable = true;
+    };
+
   };
 }

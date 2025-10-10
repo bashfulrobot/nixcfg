@@ -54,15 +54,12 @@ in
       note.enable = true;
       espanso.enable = false;
       meetsum.enable = true;
+      rclone.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
 
       # keep-sorted start case=no numeric=yes
-
-      # Office
-      # libreoffice # office suite
-      unstable.typora
 
       # PDF
 
@@ -95,6 +92,9 @@ in
       # Organize
       unstable.morgen # AI calendar - testing
       unstable.todoist-electron # task manager
+      # Office
+      # libreoffice # office suite
+      unstable.typora
       # Networking
       unstable.wgnord
       unstable.zulip

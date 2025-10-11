@@ -1,5 +1,15 @@
 { user-settings, pkgs, secrets, config, lib, ... }:
-let cfg = config.cli.kubie;
+let
+  cfg = config.cli.kubie;
+  yamlFormat = pkgs.formats.yaml {};
+
+  kubieConfig = {
+    shell = "fish";
+    default_editor = "hx";
+    prompt = {
+      fish_use_rprompt = true;
+    };
+  };
 
 in {
   options = {
@@ -19,13 +29,7 @@ in {
     ];
 
     home-manager.users."${user-settings.user.username}" = {
-      home.file.".kube/kubie.yaml".text = ''
-        # kubie configuration
-        shell: fish
-        default_editor: hx
-        prompt:
-          fish_use_rprompt: true
-        '';
+      home.file.".kube/kubie.yaml".source = yamlFormat.generate "kubie.yaml" kubieConfig;
     };
   };
 }

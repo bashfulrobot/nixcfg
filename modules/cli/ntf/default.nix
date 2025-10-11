@@ -3,6 +3,17 @@
 let
   cfg = config.cli.ntf;
   ntf = pkgs.callPackage ./build { };
+  yamlFormat = pkgs.formats.yaml {};
+
+  ntfConfig = {
+    backends = [ "pushover" ];
+    pushover = {
+      user_key = secrets.pushover.user_key;
+      priority = "emergency"; # options: emergency|high|normal|low|lowest
+      retry = 30;
+      expire = 3600;
+    };
+  };
 
 in {
   options = {
@@ -17,15 +28,7 @@ in {
     home-manager.users."${user-settings.user.username}" = {
       home.packages = with pkgs; [ ntf ];
 
-      home.file.".ntf.yml".text = ''
-        backends:
-          - pushover
-        pushover:
-          user_key: '${secrets.pushover.user_key}'
-          priority: 'emergency' #option (emergency|high|normal|low|lowest)
-          retry: 30 #option
-          expire: 3600 #option
-      '';
+      home.file.".ntf.yml".source = yamlFormat.generate "ntf.yml" ntfConfig;
 
     };
   };

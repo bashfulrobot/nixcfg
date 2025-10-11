@@ -3,6 +3,31 @@
 let
   cfg = config.cli.note;
   note = pkgs.callPackage ./build { };
+  yamlFormat = pkgs.formats.yaml {};
+
+  noteConfig = {
+    notes_dir = "/home/${user-settings.user.username}/Documents/Notes";
+    archive_dir = "/home/${user-settings.user.username}/Documents/Notes/Archive";
+    default_editor = "hx";
+    layout = {
+      sidebar_width = 30;
+      padding = {
+        horizontal = 2;
+        vertical = 1;
+      };
+      heights = {
+        header = 1;
+        footer = 1;
+        status = 1;
+        help = 1;
+      };
+      header_gap = 1;
+    };
+    theme = {
+      light = "default";
+      dark = "default";
+    };
+  };
 
 in {
 
@@ -24,25 +49,7 @@ in {
     ];
     home-manager.users."${user-settings.user.username}" = {
 
-      home.file.".config/note/config.yaml".text = ''
-        notes_dir: /home/dustin/Documents/Notes
-        archive_dir: /home/dustin/Documents/Notes/Archive
-        default_editor: hx
-        layout:
-            sidebar_width: 30
-            padding:
-                horizontal: 2
-                vertical: 1
-            heights:
-                header: 1
-                footer: 1
-                status: 1
-                help: 1
-            header_gap: 1
-        theme:
-            light: default
-            dark: default
-      '';
+      home.file.".config/note/config.yaml".source = yamlFormat.generate "note-config.yaml" noteConfig;
 
     };
   };

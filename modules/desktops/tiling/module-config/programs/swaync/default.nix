@@ -43,7 +43,6 @@ in
             "buttons-grid"
             "title"
             "dnd"
-            "bluetooth"
             "notifications"
             "mpris"
           ];
@@ -65,19 +64,12 @@ in
               image-size = 60;
               image-radius = 12;
             };
-            bluetooth = {
-              format = "{icon}";
-              format-icons = {
-                enabled = "󰂯";
-                disabled = "󰂲";
-              };
-              format-connected = "󰂱";
-              format-connected-battery = "󰂱";
-              on-click = "blueman-manager";
-              on-click-right = "rfkill toggle bluetooth";
-            };
             buttons-grid = {
               actions = [
+                {
+                  label = "󰂯";
+                  command = "blueman-manager &";
+                }
                 {
                   label = "󰤨";
                   command = "nm-connection-editor";

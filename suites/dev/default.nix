@@ -41,7 +41,7 @@ in
       git.enable = true;
       helix.enable = true;
       oq.enable = true;
-
+      yamllint.enable = true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -63,6 +63,7 @@ in
       unstable.netlify-cli # Netlify CLI tool
       # unstable.jetbrains.goland # Go IDE
       unstable.pre-commit # pre-commit hooks
+      unstable.yq-go # YAML processor (Go version)
       zed-editor # text editor
       # keep-sorted end
     ];

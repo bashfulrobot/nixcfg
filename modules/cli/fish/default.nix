@@ -948,6 +948,7 @@ let
     copy-icons = "copy_icons";
     echo-home = "echo ${user-settings.user.home}";
     bless = "sudo xattr -r -d com.apple.quarantine";
+    yq = "yq-go";
     # y = "cd ~/; yazi";
 
     # Help system

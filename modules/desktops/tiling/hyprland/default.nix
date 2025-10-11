@@ -25,6 +25,7 @@ in
     ../module-config/programs/hyprlock
     ../module-config/programs/hyprshell
     ../module-config/programs/rofi
+    ../module-config/programs/submap-hints
     ../module-config/programs/swaync
     ../module-config/programs/swayosd
     ../module-config/programs/waybar
@@ -753,7 +754,7 @@ in
               # Applications/Programs
               "$mainMod, Return, exec, $term"
               "$mainMod, T, exec, $term"
-              "$mainMod, E, exec, notify-send '󰉋 Explore Mode' 'd=Downloads, o=Documents, v=dev, s=Screenshots, n=nixcfg, ESC/Enter=Exit' -u normal -t 8000 -i folder"
+              "$mainMod, E, exec, submap-hints explore"
               "$mainMod, E, submap, 󰉋 Explore"
               "$mainMod, C, exec, $editor"
               "$mainMod, B, exec, $browser"
@@ -895,7 +896,7 @@ in
               "$mainMod, O, togglesplit" # Toggle split direction of focused window
 
               # Enter resize mode
-              "$mainMod, R, exec, notify-send '↔ Resize Mode' 'h/l=width, k/j=height, ESC/Enter=Exit' -u normal -t 8000 -i view-fullscreen"
+              "$mainMod, R, exec, submap-hints resize"
               "$mainMod, R, submap, ↔ resize" # Enter resize mode
 
               # Special workspaces submap - follows existing submap pattern
@@ -903,8 +904,9 @@ in
               # 1. Add window rule: "workspace special:[name], class:^([AppClass])$"
               # 2. Add to notification: update letters in notification
               # 3. Add to submap: bind = , [letter], togglespecialworkspace, [name]
-              "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia"
-              "$mainMod, S, submap,  special"
+              # "$mainMod, S, exec, notify-send ' Special Workspaces' 's=Scratch, m=Music, p=Password, ESC/Enter=Exit' -u normal -t 8000 -i applications-multimedia"
+              "$mainMod, S, exec, submap-hints special"
+              "$mainMod, S, submap, special"
               "$mainMod SHIFT, S, movetoworkspace, special" # Move current window to default scratchpad
             ]
             ++ (builtins.concatLists (
@@ -945,38 +947,51 @@ in
 
           # Submap for exploring directories
           submap = 󰉋 Explore
-          bind = , d, exec, nautilus ~/Downloads
+          bind = , d, exec, pkill rofi; nautilus ~/Downloads
           bind = , d, submap, reset
-          bind = , o, exec, nautilus ~/Documents
+          bind = , o, exec, pkill rofi; nautilus ~/Documents
           bind = , o, submap, reset
-          bind = , v, exec, nautilus ~/dev
+          bind = , v, exec, pkill rofi; nautilus ~/dev
           bind = , v, submap, reset
-          bind = , s, exec, nautilus ~/Pictures/Screenshots
+          bind = , s, exec, pkill rofi; nautilus ~/Pictures/Screenshots
           bind = , s, submap, reset
-          bind = , n, exec, nautilus ~/dev/nix/nixcfg
+          bind = , n, exec, pkill rofi; nautilus ~/dev/nix/nixcfg
           bind = , n, submap, reset
+          bind = , escape, exec, pkill rofi
           bind = , escape, submap, reset
+          bind = , return, exec, pkill rofi
           bind = , return, submap, reset
 
           # Special workspaces submap
           submap =  special
+          bind = , s, exec, pkill rofi
           bind = , s, togglespecialworkspace
           bind = , s, submap, reset
+          bind = , m, exec, pkill rofi
           bind = , m, togglespecialworkspace, spotify
           bind = , m, submap, reset
+          bind = , p, exec, pkill rofi
           bind = , p, togglespecialworkspace, 1password
           bind = , p, submap, reset
+          bind = , escape, exec, pkill rofi
           bind = , escape, submap, reset
+          bind = , return, exec, pkill rofi
           bind = , return, submap, reset
           submap = reset
 
           # Resize submap for cleaner resize workflow
           submap = ↔ resize
+          binde = , h, exec, pkill rofi
           binde = , h, resizeactive, -30 0
+          binde = , l, exec, pkill rofi
           binde = , l, resizeactive, 30 0
+          binde = , k, exec, pkill rofi
           binde = , k, resizeactive, 0 -30
+          binde = , j, exec, pkill rofi
           binde = , j, resizeactive, 0 30
+          bind = , escape, exec, pkill rofi
           bind = , escape, submap, reset
+          bind = , return, exec, pkill rofi
           bind = , return, submap, reset
           submap = reset
 

@@ -25,12 +25,11 @@
             margin-bottom = 0;
 
             modules-left = [
-              "hyprland/submap"
               (if config.desktops.tiling.hyprland.enable then "hyprland/workspaces"
                else "hyprland/workspaces")  # fallback
               # "mpris"
             ];
-            modules-center = ["custom/notification" "clock"];
+            modules-center = ["hyprland/submap" "custom/notification" "clock"];
             modules-right = ["group/system-info" "custom/power"];
 
             "group/system-info" = {
@@ -147,7 +146,9 @@
             "hyprland/submap" = {
               format = "{}";
               format-map = {
-                "resize" = "󰆾 resize";
+                "↔ resize" = "󰆾 resize";
+                "󰉋 Explore" = "󰉋 explore";
+                " special" = " special";
               };
               tooltip = false;
             };

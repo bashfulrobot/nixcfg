@@ -24,6 +24,7 @@ in
     ../module-config/programs/rofi
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
+    ../module-config/programs/submap-hints
     ../module-config/programs/swaync
     ../module-config/programs/swayosd
     ../module-config/programs/hyprdim

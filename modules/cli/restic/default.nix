@@ -9,6 +9,64 @@
 let
   cfg = config.cli.restic;
   hostname = config.networking.hostName;
+  yamlFormat = pkgs.formats.yaml {};
+
+  autoresticConfig = {
+    version = 2;
+
+    backends = {
+      "b2-${cfg.folderName}" = {
+        type = "b2";
+        path = "ws-bups:${cfg.folderName}";
+        env = {
+          B2_ACCOUNT_ID = secrets.restic.b2_account_id;
+          B2_ACCOUNT_KEY = secrets.restic.b2_account_key;
+          RESTIC_PASSWORD = secrets.restic.restic_password;
+        };
+      };
+    } // lib.optionalAttrs cfg.localBackup.enable {
+      "local-${cfg.folderName}" = {
+        type = "local";
+        path = cfg.localBackup.path;
+        env = {
+          RESTIC_PASSWORD = secrets.restic.restic_password;
+        };
+      };
+    };
+
+    locations."${cfg.folderName}-backup" = {
+      from = cfg.backupPaths;
+      to = [ "b2-${cfg.folderName}" ] ++ lib.optional cfg.localBackup.enable "local-${cfg.folderName}";
+      cron = cfg.schedule;
+      forget = "prune";
+      hooks = {
+        success = [
+          "mkdir -p ~/.local/var/logs/restic"
+          "echo \"$(date -Iseconds): SUCCESS\" >> ~/.local/var/logs/restic/backup.log"
+        ];
+        failure = [
+          "mkdir -p ~/.local/var/logs/restic"
+          "echo \"$(date -Iseconds): FAILED\" >> ~/.local/var/logs/restic/backup.log"
+        ];
+      } // lib.optionalAttrs (cfg.localBackup.enable && cfg.localBackup.mountCheck.enable) {
+        prevalidate = [
+          "test -d \"${cfg.localBackup.path}\" || { echo \"❌ Local backup path not accessible\"; exit 1; }"
+          "mountpoint -q \"$(dirname \"${cfg.localBackup.path}\")\" || { echo \"❌ Mount point not accessible\"; exit 1; }"
+          "test \"$(df \"${cfg.localBackup.path}\" --output=avail | tail -1)\" -gt 10485760 || { echo \"❌ Insufficient disk space\"; exit 1; }"
+        ];
+      };
+      options = {
+        backup = {
+          exclude-file = "/home/${user-settings.user.username}/.autorestic-exclude";
+        };
+        forget = cfg.retentionPolicy;
+      };
+    };
+
+    global = {
+      forget = cfg.retentionPolicy;
+    };
+  };
 in
 {
   options = {
@@ -132,55 +190,7 @@ in
     home-manager.users."${user-settings.user.username}" = {
       home = {
         file = {
-          ".autorestic.yml".text = ''
-          version: 2
-
-          backends:
-            b2-${cfg.folderName}:
-              type: b2
-              path: 'ws-bups:${cfg.folderName}'
-              env:
-                B2_ACCOUNT_ID: ${secrets.restic.b2_account_id}
-                B2_ACCOUNT_KEY: ${secrets.restic.b2_account_key}
-                RESTIC_PASSWORD: ${secrets.restic.restic_password}${lib.optionalString cfg.localBackup.enable ''
-            local-${cfg.folderName}:
-              type: local
-              path: '${cfg.localBackup.path}'
-              env:
-                RESTIC_PASSWORD: ${secrets.restic.restic_password}''}
-
-          locations:
-            ${cfg.folderName}-backup:
-              from:
-${lib.concatMapStringsSep "\n" (path: "                - ${path}") cfg.backupPaths}
-              to:
-                - b2-${cfg.folderName}${lib.optionalString cfg.localBackup.enable ''
-                - local-${cfg.folderName}''}
-              cron: "${cfg.schedule}"
-              forget: prune
-              hooks:${lib.optionalString (cfg.localBackup.enable && cfg.localBackup.mountCheck.enable) ''
-                prevalidate:
-                  - test -d "${cfg.localBackup.path}" || (echo "❌ Local backup path not accessible at ${cfg.localBackup.path}" && exit 1)
-                  - mountpoint -q "$(dirname "${cfg.localBackup.path}")" || (echo "❌ Parent directory $(dirname "${cfg.localBackup.path}") is not a mounted filesystem" && exit 1)
-                  - test "$(df "${cfg.localBackup.path}" --output=avail | tail -1)" -gt 10485760 || (echo "❌ Insufficient disk space on ${cfg.localBackup.path} (less than 10GB available)" && exit 1)''}
-                success:
-                  - mkdir -p ~/.local/var/logs/restic
-                  - 'echo "$(date -Iseconds): SUCCESS" >> ~/.local/var/logs/restic/backup.log'
-                failure:
-                  - mkdir -p ~/.local/var/logs/restic
-                  - 'echo "$(date -Iseconds): FAILED" >> ~/.local/var/logs/restic/backup.log'
-              options:
-                backup:
-                  exclude-file: /home/dustin/.autorestic-exclude
-                forget:
-${lib.concatStringsSep "
-" (lib.mapAttrsToList (k: v: "                  ${k}: ${toString v}") cfg.retentionPolicy)}
-
-          global:
-            forget:
-${lib.concatStringsSep "
-" (lib.mapAttrsToList (k: v: "              ${k}: ${toString v}") cfg.retentionPolicy)}
-        '';
+          ".autorestic.yml".source = yamlFormat.generate "autorestic.yml" autoresticConfig;
 
           ".autorestic-exclude".text = lib.concatStringsSep "\n" cfg.excludePaths;
         };

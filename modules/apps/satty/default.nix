@@ -54,25 +54,8 @@ in
         primary-highlighter = "block"
         # Disable notifications
         disable-notifications = false
-        # Actions to trigger on right click (order is important)
-        # [possible values: save-to-clipboard, save-to-file, exit]
-        actions-on-right-click = []
-        # Actions to trigger on Enter key (order is important)
-        # [possible values: save-to-clipboard, save-to-file, exit]
-        actions-on-enter = ["save-to-clipboard"]
-        # Actions to trigger on Escape key (order is important)
-        # [possible values: save-to-clipboard, save-to-file, exit]
-        actions-on-escape = ["exit"]
-        # Action to perform when the Enter key is pressed [possible values: save-to-clipboard, save-to-file]
-        # Deprecated: use actions-on-enter instead
-        action-on-enter = "save-to-clipboard"
-        # Right click to copy
-        # Deprecated: use actions-on-right-click instead
-        right-click-copy = false
-        # request no window decoration. Please note that the compositor has the final say in this. At this point. requires xdg-decoration-unstable-v1.
-        no-window-decoration = true
-        # experimental feature: adjust history size for brush input smooting (0: disabled, default: 0, try e.g. 5 or 10)
-        brush-smooth-history-size = 10
+        # Note: Removed deprecated and unsupported options
+        # These were causing config errors with current satty version
 
         # Font to use for text annotations
         [font]

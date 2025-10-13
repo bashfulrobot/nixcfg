@@ -71,7 +71,8 @@ in
       # TODO: COnfirm: ENabled with logitech.solaar, not needed?
       #solaar # Linux manager for many Logitech keyboards, mice
       # junction # default app selector
-      kooha # Screen recorder for x11/Wayland
+      unstable.wayfarer # screen recorder for x11/wayland
+      unstable.kooha # Screen recorder for x11/Wayland
       libnotify # notification library
       libthai # Needed for some appImages
       lshw # hardware lister

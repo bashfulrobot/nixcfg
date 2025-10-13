@@ -41,6 +41,7 @@ in
       git.enable = true;
       helix.enable = true;
       oq.enable = true;
+      sitemcp.enable = true;
       yamllint.enable = true;
     };
 

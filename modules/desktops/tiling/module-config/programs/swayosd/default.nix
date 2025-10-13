@@ -16,7 +16,7 @@ let
   '';
 
   # Use stylix-theme library for CSS generation
-  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme.nix { };
+  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme { };
   styleCss = buildTheme.build {
     inherit (config.lib.stylix) colors;
     inherit (config.stylix) fonts;

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme.nix { };
+  buildTheme = pkgs.callPackage ../../../../../../lib/stylix-theme { };
   style = buildTheme.build {
     inherit (config.lib.stylix) colors;
     inherit (config.stylix) fonts;

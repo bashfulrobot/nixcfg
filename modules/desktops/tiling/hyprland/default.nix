@@ -25,10 +25,12 @@ in
     ../module-config/programs/hyprlock
     ../module-config/programs/hyprshell
     ../module-config/programs/rofi
+    ../module-config/programs/screenshot
     ../module-config/programs/submap-hints
     ../module-config/programs/swaync
     ../module-config/programs/swayosd
     ../module-config/programs/waybar
+    ../module-config/programs/wf-recorder
     ../module-config/programs/wlogout
     # keep-sorted end
   ];
@@ -42,6 +44,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    # Enable screenshot module
+    desktops.tiling.screenshot.enable = true;
 
     # sys.gtk-theme.enable = true;
 
@@ -776,12 +781,15 @@ in
               "$mainMod ALT, G, exec, gamemode-toggle" # disable hypr effects for gamemode
               "$mainMod, V, exec, ClipManager" # Clipboard Manager
 
-              # Screenshot/Screencapture
-              "$mainMod CTRL, P, exec, hypr-screenshot s" # drag to snip an area / click on a window to /* print */ it
-              "$mainMod, P, exec, hypr-screenshot sf" # frozen screen, drag to snip an area / click on a window to print it
-              "$mainMod, print, exec, hypr-screenshot m" # print focused monitor
-              "$mainMod ALT, P, exec, hypr-screenshot p" # print all monitor outputs
-              "CTRL ALT, A, exec, screenshot-annotate" # screenshot + annotate workflow
+              # Screenshot/Screencapture - clipboard first workflow
+              "$mainMod CTRL, P, exec, screenshot-region" # region screenshot (Ctrl+Super+P)
+              "$mainMod SHIFT CTRL, P, exec, screenshot-fullscreen" # fullscreen screenshot (Ctrl+Shift+Super+P)
+              "$mainMod CTRL, A, exec, screenshot-annotate" # annotate latest screenshot (Ctrl+Super+A)
+              "$mainMod CTRL, O, exec, screenshot-ocr" # screenshot OCR (Ctrl+Super+O)
+
+              # Screen recording
+              "$mainMod CTRL, R, exec, wf-recorder-toggle" # toggle fullscreen recording
+              "$mainMod SHIFT CTRL, R, exec, wf-recorder-area" # toggle area recording
 
               # Functional keybinds
               ",xf86Sleep, exec, systemctl suspend" # Put computer into sleep mode
@@ -955,6 +963,8 @@ in
           bind = , v, submap, reset
           bind = , s, exec, pkill rofi; nautilus ~/Pictures/Screenshots
           bind = , s, submap, reset
+          bind = , r, exec, pkill rofi; nautilus ~/Videos
+          bind = , r, submap, reset
           bind = , n, exec, pkill rofi; nautilus ~/dev/nix/nixcfg
           bind = , n, submap, reset
           bind = , escape, exec, pkill rofi

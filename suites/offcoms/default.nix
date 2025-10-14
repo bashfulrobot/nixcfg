@@ -99,7 +99,6 @@ in
       # # IM
       # fractal # Matrix Client
       whatsapp-for-linux # instant messaging
-      unstable.teams
       # keep-sorted end
     ];
 

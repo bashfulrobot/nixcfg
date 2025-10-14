@@ -23,7 +23,7 @@
   # Desktop configuration - testing hash fix in custom COSMIC build
   desktops = {
     # gnome.enable = false;
-    # cosmic.enable = false;
+    # cosmic.enable = true;
     tiling = {
       hyprland.enable = true;
     };

@@ -445,7 +445,7 @@ in
             shadow.enabled = false;
             rounding = 10;
             dim_special = 0.3;
-            dim_inactive = true;
+            dim_inactive = false;
             dim_strength = 0.5; # Match hyprdim strength for consistency
             blur = {
               enabled = true;

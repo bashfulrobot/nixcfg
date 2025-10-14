@@ -8,6 +8,12 @@
 }:
 let
   cfg = config.desktops.cosmic;
+
+  # Import our custom COSMIC build module
+  cosmicBuild = import ./build {
+    inherit pkgs lib;
+    fetchFromGitHub = pkgs.fetchFromGitHub;
+  };
 in
 {
   imports = [
@@ -23,28 +29,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
-    # Override all COSMIC packages to use unstable versions
-    nixpkgs.overlays = [
-      (final: prev:
-        let
-          cosmicPackages = [
-            "cosmic-applets" "cosmic-applibrary" "cosmic-bg" "cosmic-comp"
-            "cosmic-design-demo" "cosmic-edit" "cosmic-ext-calculator" "cosmic-ext-ctl"
-            "cosmic-ext-tweaks" "cosmic-files" "cosmic-greeter" "cosmic-icons"
-            "cosmic-idle" "cosmic-launcher" "cosmic-notifications" "cosmic-osd"
-            "cosmic-panel" "cosmic-player" "cosmic-protocols" "cosmic-randr"
-            "cosmic-screenshot" "cosmic-session" "cosmic-settings" "cosmic-settings-daemon"
-            "cosmic-store" "cosmic-tasks" "cosmic-term" "cosmic-wallpapers"
-            "cosmic-workspaces-epoch"
-          ];
-        in
-        builtins.listToAttrs (map (pkg: {
-          name = pkg;
-          value = pkgs.unstable.${pkg};
-        }) cosmicPackages)
-      )
-    ];
 
     # Enable dev.cachix for personal cache functionality
     dev.cachix.enable = true;
@@ -92,10 +76,12 @@ in
     # Exclude specific COSMIC packages if needed
     # TODO: Available as of 25.11 but not in 25.05
     # environment.cosmic.excludePackages = with pkgs; [
-    #   # unstable.cosmic-edit
-    #   # unstable.cosmic-player
+    #   # cosmic-edit
+    #   # cosmic-player
     # ];
 
+    # Apply our custom COSMIC overlay with pinned package versions (nightly builds available for fixes I need. TODO: Will remove once the beta releases are out)
+    nixpkgs.overlays = [ cosmicBuild.cosmicOverlay ];
 
     # Configure xdg-desktop-portal for proper URL handling
     # COSMIC portal doesn't support AppChooser interface, so use GTK backend

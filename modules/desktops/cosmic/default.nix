@@ -26,15 +26,21 @@ in
       default = false;
       description = "Enable COSMIC Desktop Environment";
     };
+
+    desktops.cosmic.nightly-build = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Use nightly builds from custom overlay instead of nixpkgs unstable packages";
+    };
   };
 
   config = lib.mkIf cfg.enable {
 
-    # Enable dev.cachix for personal cache functionality
-    dev.cachix.enable = true;
+    # Enable dev.cachix for personal cache functionality when using nightly builds
+    dev.cachix.enable = cfg.nightly-build;
 
-    # COSMIC binary cache for faster package downloads
-    nix.settings = {
+    # COSMIC binary cache for faster package downloads (only needed for nightly builds)
+    nix.settings = lib.mkIf cfg.nightly-build {
       substituters = [ "https://bashfulrobot.cachix.org" ];
       trusted-public-keys = [ "bashfulrobot.cachix.org-1:dV0OEgd/ccYivTMyL8nsIE4nmlSZs+X30bTrvgPL7rg=" ];
     };
@@ -80,8 +86,8 @@ in
     #   # cosmic-player
     # ];
 
-    # Apply our custom COSMIC overlay with pinned package versions (nightly builds available for fixes I need. TODO: Will remove once the beta releases are out)
-    nixpkgs.overlays = [ cosmicBuild.cosmicOverlay ];
+    # Apply our custom COSMIC overlay with pinned package versions only when using nightly builds
+    nixpkgs.overlays = lib.mkIf cfg.nightly-build [ cosmicBuild.cosmicOverlay ];
 
     # Configure xdg-desktop-portal for proper URL handling
     # COSMIC portal doesn't support AppChooser interface, so use GTK backend

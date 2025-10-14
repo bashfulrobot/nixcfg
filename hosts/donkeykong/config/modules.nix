@@ -25,9 +25,9 @@
   # Enable desktop environments
   desktops = {
     # gnome.enable = false;
-    # cosmic.enable = false;
+    cosmic.enable = true;
     tiling = {
-      hyprland.enable = true;
+      hyprland.enable = false;
     };
   };
 

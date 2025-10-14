@@ -42,7 +42,9 @@ in
       br-gcal.enable = true;
       br-gmail.enable = true;
       br-drive.enable = true;
-      zoom-flatpak.enable = true;
+      # zoom-flatpak.enable = true;
+      # zoom-web.enable = true;
+      zoom-url-handler.enable = true;
       slack.enable = true;
       signal = {
         enable = true;

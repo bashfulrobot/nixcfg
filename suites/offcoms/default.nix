@@ -84,13 +84,11 @@ in
       # Static Site Generation
       hugo # static site generator
       # Email
-      meli # terminal email client
+      # meli # terminal email client
       pandoc # document converter
-      unstable.annotator # image annotation tool
-      # Annotation
-      unstable.gromit-mpx # on-screen annotation tool
+      #unstable.annotator # image annotation tool
       # Organize
-      unstable.morgen # AI calendar - testing
+      # unstable.morgen # AI calendar - testing
       unstable.todoist-electron # task manager
       # Office
       # libreoffice # office suite
@@ -101,6 +99,7 @@ in
       # # IM
       # fractal # Matrix Client
       whatsapp-for-linux # instant messaging
+      unstable.teams
       # keep-sorted end
     ];
 

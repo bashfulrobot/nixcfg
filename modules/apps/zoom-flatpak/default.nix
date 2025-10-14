@@ -9,6 +9,12 @@
 with lib;
 let
   cfg = config.apps.zoom-flatpak;
+
+  # Zoom helper scripts using standard pattern
+  zoomScripts = with pkgs; [
+    (writeShellScriptBin "zoom-screenshare-reset" (builtins.readFile ./scripts/zoom-screenshare-reset.sh))
+    (writeShellScriptBin "zoom-screenshare-fix" (builtins.readFile ./scripts/zoom-screenshare-fix.sh))
+  ];
 in
 {
   options = {
@@ -24,6 +30,9 @@ in
   config = mkIf cfg.enable {
     services.flatpak.packages = [ "us.zoom.Zoom" ];
 
+    # Add zoom helper scripts to system packages
+    environment.systemPackages = zoomScripts;
+
     services.flatpak.overrides = {
       "us.zoom.Zoom" = {
         Context.shared = [ "network" "ipc" ];  # Required: IPC and network access
@@ -35,19 +44,23 @@ in
           "xdg-documents/Zoom:create"  # Required: Zoom documents folder
         ];
         Context.talks = [
-          "org.freedesktop.portal.Desktop"  # Desktop portal for launching apps
-          "org.freedesktop.portal.OpenURI"  # URI opening portal
-          "org.freedesktop.secrets"         # Access to GNOME keyring via Secret Service API
-          "org.freedesktop.ScreenSaver"     # Required: Screen saver control
+          "org.freedesktop.portal.Desktop"     # Desktop portal for launching apps
+          "org.freedesktop.portal.OpenURI"     # URI opening portal
+          "org.freedesktop.portal.ScreenCast"  # Required: Screen casting portal
+          "org.freedesktop.secrets"            # Access to GNOME keyring via Secret Service API
+          "org.freedesktop.ScreenSaver"        # Required: Screen saver control
         ];
         Context.owns = [ "org.kde.*" ];  # Required: KDE namespace (for Qt integration)
         Context.persistent = [ ".zoom" ];  # Required: Persistent Zoom config
         Environment = {
           XDG_CURRENT_DESKTOP = "Hyprland";
+          XDG_SESSION_TYPE = "wayland";
           QT_QPA_PLATFORM = "";  # Required: Qt platform environment
           GTK_THEME = "Adwaita:dark";
           QT_STYLE_OVERRIDE = "adwaita-dark";
           QT_QPA_PLATFORMTHEME = "gnome";
+          # Help with screencopy session management
+          WAYLAND_DISPLAY = "wayland-1";
         };
       };
     };

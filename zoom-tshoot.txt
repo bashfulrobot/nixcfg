@@ -3,11 +3,31 @@
 ## Problem Summary
 Zoom flatpak screensharing works on first attempt but subsequent attempts show black screen. This is a common issue with Wayland portal session management where screencopy sessions become stale.
 
+**UPDATE**: Issue confirmed as native/flatpak Zoom session restoration problem. Browser Zoom works fine, indicating the portal itself is functional but native apps have session caching issues.
+
 ## Current Setup Analysis
-- **Zoom**: Flatpak version with comprehensive portal permissions
-- **Desktop**: Hyprland with xdg-desktop-portal-hyprland and xdg-desktop-portal-gtk
-- **Portal Config**: Hyprland set as primary, GTK as fallback
+- **Zoom**: Flatpak version with comprehensive portal permissions (now also testing native)
+- **Desktop**: Hyprland with xdg-desktop-portal-hyprland only (GTK portal removed per NixOS wiki)
+- **Portal Config**: Hyprland-only configuration following official recommendations
 - **Existing Tools**: zoom-screenshare-fix.sh and zoom-screenshare-reset.sh scripts
+
+## Reference Documentation
+- **NixOS Wiki**: https://wiki.nixos.org/wiki/Hyprland#Screensharing
+- **Hyprland Portal Guide**: https://wiki.hypr.land/0.41.0/Useful-Utilities/xdg-desktop-portal-hyprland/
+- **Hyprland Screen Sharing**: https://wiki.hypr.land/0.41.0/Useful-Utilities/Screen-Sharing/
+- **Bruno's Detailed Guide**: https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580
+- **Related Hyprland Issue**: https://github.com/hyprwm/Hyprland/issues/7743 (bitdepth monitor config causing screenshare issues)
+- **Portal-Specific Issue**: https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/136 (WebRTC screensharing failures)
+
+## Root Cause Analysis
+
+**Confirmed Issue**: Native/Flatpak Zoom attempts session restoration between screenshares, but portal session data becomes invalid, causing "restore data invalid / missing" error and subsequent black screen.
+
+**Evidence**:
+- Browser Zoom works perfectly (no session restoration)
+- Portal logs show restoration failure: `[LOG] [screencopy] restore data invalid / missing, prompting`
+- D-Bus communication succeeds, but screen selection restoration fails
+- First screenshare always works (no restoration attempt)
 
 ## Research-Based Root Causes
 

@@ -137,27 +137,10 @@ in
       # withUWSM = true;
     };
 
-    # Configure XDG Desktop Portals for better app compatibility
+    # Configure XDG Desktop Portals for screensharing
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-        xdg-desktop-portal-gtk
-      ];
-      config = {
-        common = {
-          default = [
-            "hyprland"
-            "gtk"
-          ];
-        };
-        hyprland = {
-          default = [
-            "hyprland"
-            "gtk"
-          ];
-        };
-      };
+      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
     };
 
     environment.systemPackages = with pkgs; [

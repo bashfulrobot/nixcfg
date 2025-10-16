@@ -111,24 +111,47 @@ in
     # Hyprland UWSM: If withUWSM is enabled, use 'hyprland-uwsm' session name.
     # This is required for UWSM support (Hyprland 0.34+). Roll back to 'hyprland' if disabling UWSM.
     services = {
-      # To roll back: change 'hyprland-uwsm' back to 'hyprland' below.
-      displayManager.defaultSession = if config.programs.hyprland.withUWSM or false then "hyprland-uwsm" else "hyprland";
-      xserver = {
-        enable = true;
-        displayManager = {
-          gdm = {
-            enable = true;
-            wayland = true;
+        # To roll back: change 'hyprland-uwsm' back to 'hyprland' below.
+        xserver = {
+          enable = true;
+          displayManager = {
+            # GDM config commented out for migration
+            # gdm = {
+            #   enable = true;
+            #   wayland = true;
+            # };
+            # LightDM config commented out for SDDM migration
+            # lightdm = {
+            #   enable = true;
+            #   greeters.gtk.enable = true;
+            #   greeters.gtk.theme.name = "Adwaita-dark";
+            #   greeters.gtk.iconTheme.name = "Papirus-Dark";
+            #   greeters.gtk.cursorTheme.name = "Bibata-Modern-Classic";
+            #   greeters.gtk.cursorTheme.size = 24;
+            # };
           };
+          # Configure keymap in X11
+          xkb = {
+            layout = "us";
+            variant = "";
+          };
+          excludePackages = [ pkgs.xterm ];
         };
-        # Configure keymap in X11
-        xkb = {
-          layout = "us";
-          variant = "";
+        # SDDM config commented out for revert to GDM
+        # displayManager.sddm = {
+        #   enable = true;
+        #   wayland.enable = true;
+        #   theme = "adwaita-dark";
+        #   enableHidpi = true;
+        #   # Optionally, set up extraPackages or settings here
+        #   # settings = { ... };
+        # };
+        displayManager.defaultSession = if config.programs.hyprland.withUWSM or false then "hyprland-uwsm" else "hyprland";
+        xserver.displayManager.gdm = {
+          enable = true;
+          wayland = true;
         };
-        excludePackages = [ pkgs.xterm ];
-      };
-      blueman.enable = false;
+        blueman.enable = false;
     };
 
     programs.hyprland = {
@@ -138,7 +161,7 @@ in
       # nixpkgs-unstable has build issues and outdated 0.49.0 version
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      withUWSM = true; # testing
+      withUWSM = false; # testing
     };
 
     # Configure XDG Desktop Portals for screensharing
@@ -233,9 +256,11 @@ in
     # security.pam.services.sddm.enableGnomeKeyring = true;
     # Enable PAM keyring for automatic unlock on login
     security.pam.services = {
-      gdm.enableGnomeKeyring = true;
-      gdm-password.enableGnomeKeyring = true;
-      login.enableGnomeKeyring = true;
+  gdm.enableGnomeKeyring = true;
+  gdm-password.enableGnomeKeyring = true;
+  # lightdm.enableGnomeKeyring = true;
+  # sddm.enableGnomeKeyring = true;
+  login.enableGnomeKeyring = true;
     };
 
     hw.bluetooth.enable = true;

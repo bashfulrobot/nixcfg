@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 url="$1"
 web_url="https://app.zoom.us/wc/home"
@@ -17,5 +17,4 @@ if [[ $url =~ ^zoom(mtg|us):// ]]; then
   fi
 fi
 
-# Open URL in chromium app mode with basic flags and custom class
-exec /run/current-system/sw/bin/chromium --ozone-platform-hint=auto --force-dark-mode --enable-features=WebUIDarkMode,WaylandWindowDecorations --disable-features=TranslateUI --disable-default-apps --new-window --class=zoom-web-client --app="$web_url"
+exec zoom-launch-webapp "$web_url"

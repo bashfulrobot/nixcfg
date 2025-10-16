@@ -1,0 +1,18 @@
+#!/bin/bash
+
+browser=$(xdg-settings get default-web-browser)
+
+case $browser in
+google-chrome* | brave-browser* | microsoft-edge* | opera* | vivaldi*) ;;
+*) browser="chromium-browser.desktop" ;;
+esac
+
+exec setsid uwsm app -- $(sed -n 's/^Exec=\([^ ]*\).*/\1/p' {~/.local,~/.nix-profile,/usr}/share/applications/$browser 2>/dev/null | head -1) \
+  --ozone-platform-hint=auto \
+  --force-dark-mode \
+  --enable-features=WebUIDarkMode,WaylandWindowDecorations \
+  --disable-features=TranslateUI \
+  --disable-default-apps \
+  --new-window \
+  --class=zoom-web-client \
+  --app="$1" "${@:2}"

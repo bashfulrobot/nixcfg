@@ -9,6 +9,7 @@ let
   # Zoom URL handler script using standard pattern
   zoomScripts = with pkgs; [
     (writeShellScriptBin "zoom-url-handler" (builtins.readFile ./scripts/zoom-url-handler.sh))
+    (writeShellScriptBin "zoom-launch-webapp" (builtins.readFile ./scripts/zoom-launch-webapp.sh))
   ];
 
   # Create icon packages for all sizes

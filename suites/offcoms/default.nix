@@ -44,8 +44,7 @@ in
       br-drive.enable = true;
       zoom.enable = false;
       zoom-flatpak.enable = false;
-      zoom-web.enable = false;
-      zoom-url-handler.enable = true;
+      zoom-web.enable = true;
       slack.enable = true;
       signal = {
         enable = true;

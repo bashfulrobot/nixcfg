@@ -336,8 +336,10 @@ in
         plugins = [
           # inputs.hyprland-plugins.packages.${pkgs.system}.hyprwinwrap
         ];
+        # Disable systemd integration if withUWSM is enabled to avoid conflicts.
+        # See: https://wiki.hypr.land/Useful-Utilities/Systemd-start/#uwsm
         systemd = {
-          enable = true;
+          enable = !(config.programs.hyprland.withUWSM or false);
           variables = [ "--all" ];
         };
         settings = {

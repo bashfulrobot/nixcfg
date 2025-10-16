@@ -1,35 +1,6 @@
 {
   description = "NixOS configuration for Dustin Krysak";
 
-  nixConfig = {
-    # Standard substituters in priority order
-    substituters = [
-      "https://cache.nixos.org/"                    # Official NixOS cache (highest priority)
-      "https://hyprland.cachix.org"                 # Hyprland builds
-      "https://nix-community.cachix.org"            # Community packages
-      "https://numtide.cachix.org"                  # Popular development tools
-      "https://devenv.cachix.org"                   # Development environments
-      "https://pre-commit-hooks.cachix.org"         # Pre-commit hooks
-    ];
-    trusted-substituters = [
-      "https://cache.nixos.org/"
-      "https://hyprland.cachix.org"
-      "https://nix-community.cachix.org"
-      "https://numtide.cachix.org"
-      "https://devenv.cachix.org"
-      "https://pre-commit-hooks.cachix.org"
-    ];
-    # Corresponding public keys for verification
-    trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "numtide.cachix.org-1:2ps1kLBUWjxIneOy2Aw+uQ9yNNhCNrOzwy3A+k0EVKA="
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBr7Vo="
-    ];
-  };
-
   # --- defines external dependencies (inputs)
   inputs = {
     nixpkgs = {

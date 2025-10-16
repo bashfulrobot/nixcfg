@@ -55,12 +55,10 @@ in
         Environment = {
           XDG_CURRENT_DESKTOP = "Hyprland";
           XDG_SESSION_TYPE = "wayland";
-          QT_QPA_PLATFORM = "";  # Required: Qt platform environment
+          QT_QPA_PLATFORM = "";
           GTK_THEME = "Adwaita:dark";
           QT_STYLE_OVERRIDE = "adwaita-dark";
           QT_QPA_PLATFORMTHEME = "gnome";
-          # Help with screencopy session management
-          WAYLAND_DISPLAY = "wayland-1";
         };
       };
     };

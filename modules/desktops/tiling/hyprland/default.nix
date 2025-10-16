@@ -107,8 +107,11 @@ in
 
     # GNOME Keyring is now started automatically by PAM during login
     # This ensures proper unlock integration with GDM password authentication
+    # Hyprland UWSM: If withUWSM is enabled, use 'hyprland-uwsm' session name.
+    # This is required for UWSM support (Hyprland 0.34+). Roll back to 'hyprland' if disabling UWSM.
     services = {
-      displayManager.defaultSession = "hyprland";
+      # To roll back: change 'hyprland-uwsm' back to 'hyprland' below.
+      displayManager.defaultSession = if config.programs.hyprland.withUWSM or false then "hyprland-uwsm" else "hyprland";
       xserver = {
         enable = true;
         displayManager = {

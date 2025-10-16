@@ -134,7 +134,7 @@ in
       # nixpkgs-unstable has build issues and outdated 0.49.0 version
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      # withUWSM = true;
+      withUWSM = true; # testing
     };
 
     # Configure XDG Desktop Portals for screensharing

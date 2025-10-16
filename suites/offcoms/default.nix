@@ -43,8 +43,8 @@ in
       br-gmail.enable = true;
       br-drive.enable = true;
       zoom.enable = false;
-      zoom-flatpak.enable = false;
-      zoom-web.enable = true;
+      zoom-flatpak.enable = true;
+      zoom-web.enable = false;
       slack.enable = true;
       signal = {
         enable = true;

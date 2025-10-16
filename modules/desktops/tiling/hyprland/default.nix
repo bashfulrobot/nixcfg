@@ -54,11 +54,6 @@ in
     # Enable D-Bus for proper desktop session integration
     services.dbus.enable = true;
 
-    nix.settings = {
-      substituters = [ "https://hyprland.cachix.org" ];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-    };
-
     systemd.user.services = {
       hyprpolkitagent = {
         description = "Hyprpolkitagent - Polkit authentication agent";
@@ -134,13 +129,19 @@ in
 
     programs.hyprland = {
       enable = true;
+      xwayland.enable = true; # Xwayland can be disabled.
+      # Use Hyprland from flake to get latest version (0.51.x+) for portal/screensharing fixes
+      # nixpkgs-unstable has build issues and outdated 0.49.0 version
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       # withUWSM = true;
     };
 
     # Configure XDG Desktop Portals for screensharing
+    # Portal is automatically provided by programs.hyprland when using flake package
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+      # extraPortals managed by programs.hyprland module
     };
 
     environment.systemPackages = with pkgs; [
@@ -323,6 +324,12 @@ in
 
       wayland.windowManager.hyprland = {
         enable = true;
+        # Use same Hyprland package as system configuration
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        # Use matching portal package from same flake
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+        # Enable XWayland support (matches NixOS config)
+        xwayland.enable = true;
         plugins = [
           # inputs.hyprland-plugins.packages.${pkgs.system}.hyprwinwrap
         ];
@@ -500,11 +507,12 @@ in
           };
           xwayland.force_zero_scaling = false;
           gestures = {
-            workspace_swipe = true;
-            workspace_swipe_fingers = 3;
-            workspace_swipe_distance = 300;
-            workspace_swipe_forever = true;
-            workspace_swipe_cancel_ratio = 0.15;
+            # New gesture system in Hyprland 0.51+
+            # 3-finger horizontal swipe to switch workspaces
+            gesture = [
+              "3, left, workspace"   # 3-finger left swipe: workspace gesture
+              "3, right, workspace"  # 3-finger right swipe: workspace gesture
+            ];
           };
           dwindle = {
             pseudotile = true;

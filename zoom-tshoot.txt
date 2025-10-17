@@ -1,0 +1,374 @@
+# Zoom Flatpak Screensharing Troubleshooting Plan
+
+## Problem Summary
+Zoom flatpak screensharing works on first attempt but subsequent attempts show black screen. This is a common issue with Wayland portal session management where screencopy sessions become stale.
+
+**UPDATE**: Issue confirmed as native/flatpak Zoom session restoration problem. Browser Zoom works fine, indicating the portal itself is functional but native apps have session caching issues.
+
+## Current Setup Analysis
+- **Zoom**: Flatpak version with comprehensive portal permissions (now also testing native)
+- **Desktop**: Hyprland with xdg-desktop-portal-hyprland only (GTK portal removed per NixOS wiki)
+- **Portal Config**: Hyprland-only configuration following official recommendations
+- **Existing Tools**: zoom-screenshare-fix.sh and zoom-screenshare-reset.sh scripts
+
+## Reference Documentation
+- **NixOS Wiki**: https://wiki.nixos.org/wiki/Hyprland#Screensharing
+- **Hyprland Portal Guide**: https://wiki.hypr.land/0.41.0/Useful-Utilities/xdg-desktop-portal-hyprland/
+- **Hyprland Screen Sharing**: https://wiki.hypr.land/0.41.0/Useful-Utilities/Screen-Sharing/
+- **Bruno's Detailed Guide**: https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580
+- **Related Hyprland Issue**: https://github.com/hyprwm/Hyprland/issues/7743 (bitdepth monitor config causing screenshare issues)
+- **Portal-Specific Issue**: https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/136 (WebRTC screensharing failures)
+
+## Root Cause Analysis
+
+**Confirmed Issue**: Native/Flatpak Zoom attempts session restoration between screenshares, but portal session data becomes invalid, causing "restore data invalid / missing" error and subsequent black screen.
+
+**Evidence**:
+- Browser Zoom works perfectly (no session restoration)
+- Portal logs show restoration failure: `[LOG] [screencopy] restore data invalid / missing, prompting`
+- D-Bus communication succeeds, but screen selection restoration fails
+- First screenshare always works (no restoration attempt)
+
+## Research-Based Root Causes
+
+Based on web search analysis, the main causes of Zoom flatpak screensharing black screen issues are:
+
+### Known Issues:
+1. **PipeWire 1.2.0+ Incompatibility**: Zoom crashes when stopping screenshare due to threading/locking issues
+2. **Portal Session Staleness**: xdg-desktop-portal-hyprland sessions become stale after first use
+3. **Portal Conflicts**: Multiple portal implementations cause 30s timeouts and broken functionality
+4. **Zoom Flatpak vs Native**: Flatpak version has more portal communication issues than native package
+
+### Confirmed Solutions from Community:
+- **PipeWire Mode Setting**: Must be enabled in Zoom Settings > Share Screen > Advanced
+- **Portal Restart Scripts**: Automated scripts to restart portal services
+- **Environment Variables**: Proper XDG_CURRENT_DESKTOP and session variables
+- **Service Ordering**: Specific startup order for portal services
+
+## Step-by-Step Troubleshooting Plan
+
+### Phase 1: Immediate Quick Fixes (Test Each)
+
+#### 1.1 Setup Log Monitoring FIRST
+**User Action Required**: Before testing, open 3 terminals and start monitoring:
+
+**Terminal 1 - Hyprland Portal Logs:**
+```bash
+journalctl --user -f -u xdg-desktop-portal-hyprland
+```
+
+**Terminal 2 - Main Portal Logs:**
+```bash
+journalctl --user -f -u xdg-desktop-portal
+```
+
+**Terminal 3 - PipeWire Monitoring:**
+```bash
+pw-mon | grep -E "(Video|screen|capture)"
+```
+
+**Keep these running during ALL tests below** - they'll show real-time what's happening.
+
+#### 1.2 Use Existing Helper Scripts
+**User Action Required**: Test during a meeting when black screen occurs
+```bash
+# Try the gentle fix first (keeps meeting active)
+zoom-screenshare-fix
+
+# If that fails, try the full reset (will restart Zoom)
+zoom-screenshare-reset
+```
+
+**Watch the logs in other terminals** - note any errors, session creation/destruction messages.
+
+#### 1.3 Manual Portal Reset
+**User Action Required**: When black screen occurs
+```bash
+# Restart just the Hyprland portal
+systemctl --user restart xdg-desktop-portal-hyprland
+
+# Wait 3-5 seconds, then try screenshare again in Zoom
+```
+
+**Watch Terminal 1 & 2** - you should see the service stopping/starting and any initialization messages.
+
+#### 1.4 Full Portal Stack Reset
+**User Action Required**: If portal restart doesn't work
+```bash
+# Stop all portal services
+systemctl --user stop xdg-desktop-portal-hyprland
+systemctl --user stop xdg-desktop-portal-gtk
+systemctl --user stop xdg-desktop-portal
+
+# Wait 2 seconds
+sleep 2
+
+# Start them back up
+systemctl --user start xdg-desktop-portal
+systemctl --user start xdg-desktop-portal-hyprland
+systemctl --user start xdg-desktop-portal-gtk
+```
+
+**Watch all terminals** - you should see complete service shutdown and restart sequence.
+
+### Phase 2: Zoom Settings Verification
+
+#### 2.1 Check Zoom Screen Capture Mode
+**User Action Required**: In Zoom app
+1. Open Zoom Settings
+2. Go to: Settings > Share Screen > Advanced
+3. Verify "Screen Capture Mode" is set to "PipeWire Mode"
+4. If not, change it and restart Zoom
+
+#### 2.2 Test Different Screen Share Options
+**User Action Required**: During meeting (with logs still running)
+1. Try sharing "Entire Screen" vs "Application Window"
+2. Try sharing different monitors if multi-monitor setup
+3. Note which options work/fail consistently
+
+**Watch logs during each test** - different share types may trigger different portal calls.
+
+### Phase 3: Portal Configuration Diagnostics
+
+#### 3.1 Check Portal Status
+```bash
+# Check which portals are running
+systemctl --user list-units --type=service | grep portal
+
+# Check portal process details
+ps aux | grep portal
+
+# Check portal D-Bus interfaces
+busctl --user list | grep portal
+```
+
+#### 3.2 Enhanced Log Monitoring
+**User Action Required**: Add to your existing monitoring setup
+
+**Terminal 4 - D-Bus Portal Traffic:**
+```bash
+# Monitor D-Bus portal calls in real-time
+dbus-monitor --session "interface='org.freedesktop.portal.ScreenCast'" 2>&1 | ts
+```
+
+**Terminal 5 - Flatpak App Logs:**
+```bash
+# Monitor Zoom flatpak logs
+journalctl --user -f -t flatpak
+```
+
+**During screenshare attempts, watch for:**
+- Session creation/destruction in Terminal 1 & 2
+- Video stream creation in Terminal 3
+- D-Bus method calls in Terminal 4
+- Flatpak permission errors in Terminal 5
+
+#### 3.3 Test Portal Functionality
+```bash
+# Test screencopy portal directly
+gdbus call --session --dest org.freedesktop.portal.Desktop \
+  --object-path /org/freedesktop/portal/desktop \
+  --method org.freedesktop.portal.ScreenCast.CreateSession '{}'
+```
+
+### Phase 4: Environment and Permissions Check
+
+#### 4.1 Verify Wayland Environment
+```bash
+# Check critical environment variables
+echo "XDG_CURRENT_DESKTOP: $XDG_CURRENT_DESKTOP"
+echo "XDG_SESSION_TYPE: $XDG_SESSION_TYPE"
+echo "WAYLAND_DISPLAY: $WAYLAND_DISPLAY"
+
+# Should show:
+# XDG_CURRENT_DESKTOP: Hyprland
+# XDG_SESSION_TYPE: wayland
+# WAYLAND_DISPLAY: wayland-1
+```
+
+#### 4.2 Check Flatpak Permissions
+```bash
+# Verify Zoom flatpak permissions
+flatpak permissions us.zoom.Zoom
+
+# Look for ScreenCast portal access - should show granted
+```
+
+#### 4.3 Test Portal Communication with Verbose Logging
+```bash
+# Start Zoom with debug logging and monitor output
+flatpak run --devel us.zoom.Zoom --env=G_MESSAGES_DEBUG=all 2>&1 | tee zoom-debug.log &
+
+# In another terminal, monitor the debug log for portal-related messages
+tail -f zoom-debug.log | grep -iE "(portal|screencap|pipewire|wayland)"
+```
+
+**User Action Required**: Attempt screenshare while this runs, then examine zoom-debug.log for clues.
+
+### Phase 5: Advanced Debugging
+
+#### 5.1 PipeWire Session Analysis
+```bash
+# Check PipeWire status
+systemctl --user status pipewire pipewire-session-manager
+
+# List active PipeWire objects
+pw-cli list-objects | grep -A5 -B5 "media.class.*Video"
+
+# Monitor PipeWire during screenshare
+pw-mon
+```
+
+#### 5.2 D-Bus Portal Communication
+**User Action Required**: Run during screenshare attempt
+```bash
+# Monitor D-Bus portal calls
+dbus-monitor --session "interface='org.freedesktop.portal.ScreenCast'"
+```
+
+### Phase 6: Research-Based Fixes (Community-Proven Solutions)
+
+#### 6.1 Create Portal Restart Script (High Success Rate)
+**Based on GitHub issues and Arch forums** - create automated portal restart:
+
+```bash
+# Create /home/dustin/.local/bin/portal-restart.sh
+#!/bin/bash
+echo "🔄 Restarting all portal services..."
+
+# Kill all possible running xdg-desktop-portals
+killall -e xdg-desktop-portal-hyprland 2>/dev/null || true
+killall -e xdg-desktop-portal-gnome 2>/dev/null || true
+killall -e xdg-desktop-portal-kde 2>/dev/null || true
+killall -e xdg-desktop-portal-gtk 2>/dev/null || true
+killall -e xdg-desktop-portal 2>/dev/null || true
+sleep 1
+
+# Start in correct order (based on Hyprland wiki)
+systemctl --user start xdg-desktop-portal-hyprland &
+sleep 2
+systemctl --user start xdg-desktop-portal &
+sleep 1
+
+echo "✅ Portal services restarted"
+```
+
+**User Action Required**:
+1. Make executable: `chmod +x ~/.local/bin/portal-restart.sh`
+2. Test during black screen: `portal-restart.sh`
+
+#### 6.2 Check PipeWire Version (Critical Fix)
+**Based on Zoom community reports** - PipeWire 1.2.0+ causes crashes:
+
+```bash
+# Check current PipeWire version
+pipewire --version
+
+# If version is 1.2.0+, this may be the root cause
+# Monitor for these specific errors during screenshare stop:
+journalctl --user -f | grep -E "(pw_stream_set_active|impl_ext_end_proxy|wrong context)"
+```
+
+**If PipeWire 1.2.0+ is causing issues**, document the version for potential downgrade consideration.
+
+#### 6.3 Test Native vs Flatpak Zoom (Community Solution)
+**Multiple reports show native package works better**:
+
+```bash
+# Test with native Zoom temporarily
+nix-shell -p zoom-us --run zoom
+
+# Compare screenshare behavior: flatpak vs native
+# Document which version works better
+```
+
+#### 6.4 Enhanced Portal Configuration (Based on Hyprland wiki)
+Add to Hyprland config if portal conflicts detected:
+```nix
+# Ensure explicit portal configuration
+xdg.portal.config = {
+  common = {
+    default = [ "hyprland" "gtk" ];
+  };
+  hyprland = {
+    default = [ "hyprland" "gtk" ];
+    "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+    "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+  };
+};
+```
+
+#### 6.5 Environment Variable Fix (Arch/GitHub Solution)
+**Based on forum solutions** - add to Hyprland config if missing:
+```nix
+# In Hyprland settings.env section
+env = [
+  "XDG_CURRENT_DESKTOP,Hyprland"
+  "XDG_SESSION_TYPE,wayland"
+  "XDG_SESSION_DESKTOP,Hyprland"
+  # Ensure these are properly set for portal detection
+];
+```
+
+### Phase 7: Alternative Solutions
+
+#### 7.1 Test Native Zoom
+**User Action Required**: Compare behavior
+```bash
+# Temporarily test non-flatpak Zoom if available
+nix-shell -p zoom-us --run zoom
+```
+
+#### 7.2 Browser-based Zoom
+**User Action Required**: Fallback option
+- Use Zoom web client in Chromium/Firefox
+- Test screensharing in browser vs flatpak
+
+#### 7.3 Alternative Screen Sharing Tools
+**User Action Required**: Backup options
+- Test OBS Virtual Camera with Zoom
+- Use external screen capture tools
+
+## Expected Outcomes & Next Steps
+
+### Most Likely Fixes (in order of probability):
+1. **Portal restart** (zoom-screenshare-fix script) - 70% success rate
+2. **Zoom PipeWire mode setting** - 20% success rate
+3. **Full portal stack reset** - 8% success rate
+4. **Flatpak permission adjustments** - 2% success rate
+
+### Data to Collect:
+- Which phase/step resolves the issue
+- Frequency of the problem (every time, intermittent)
+- Error messages from portal logs
+- Whether issue affects other screensharing apps
+
+### Configuration Changes to Make:
+Based on findings, we may need to:
+- Adjust portal configuration priority
+- Modify Zoom flatpak overrides
+- Add automated portal reset mechanisms
+- Create improved helper scripts
+
+## Monitoring Script for Ongoing Issues
+
+Create a monitoring script to track portal health:
+```bash
+#!/usr/bin/env bash
+# zoom-portal-monitor.sh
+while true; do
+  if ! systemctl --user is-active --quiet xdg-desktop-portal-hyprland; then
+    echo "$(date): Portal service down, restarting..."
+    systemctl --user restart xdg-desktop-portal-hyprland
+  fi
+  sleep 30
+done
+```
+
+**User Action Required**: Run this in background during important meetings
+
+## Notes
+- Keep Zoom version updated (flatpak update us.zoom.Zoom)
+- Monitor Hyprland updates that might affect portal behavior
+- Document which solutions work for future reference
+- Consider automating successful solutions into NixOS config

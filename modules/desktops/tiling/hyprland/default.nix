@@ -1,5 +1,6 @@
 # Screenshare guide for hyprland
 # https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580
+# TODO: Eval https://wiki.hypr.land/Useful-Utilities/Systemd-start/#uwsm
 {
   user-settings,
   pkgs,
@@ -21,6 +22,7 @@ in
   imports = [
     # keep-sorted start case=no numeric=yes
     # ../module-config/programs/hyprdim
+
     ../module-config/programs/hypridle
     ../module-config/programs/hyprlock
     ../module-config/programs/hyprshell
@@ -52,11 +54,6 @@ in
 
     # Enable D-Bus for proper desktop session integration
     services.dbus.enable = true;
-
-    nix.settings = {
-      substituters = [ "https://hyprland.cachix.org" ];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-    };
 
     systemd.user.services = {
       hyprpolkitagent = {
@@ -111,52 +108,67 @@ in
 
     # GNOME Keyring is now started automatically by PAM during login
     # This ensures proper unlock integration with GDM password authentication
+    # Hyprland UWSM: If withUWSM is enabled, use 'hyprland-uwsm' session name.
+    # This is required for UWSM support (Hyprland 0.34+). Roll back to 'hyprland' if disabling UWSM.
     services = {
-      displayManager.defaultSession = "hyprland";
-      xserver = {
-        enable = true;
-        displayManager = {
-          gdm = {
-            enable = true;
-            wayland = true;
+        # To roll back: change 'hyprland-uwsm' back to 'hyprland' below.
+        xserver = {
+          enable = true;
+          displayManager = {
+            # GDM config commented out for migration
+            # gdm = {
+            #   enable = true;
+            #   wayland = true;
+            # };
+            # LightDM config commented out for SDDM migration
+            # lightdm = {
+            #   enable = true;
+            #   greeters.gtk.enable = true;
+            #   greeters.gtk.theme.name = "Adwaita-dark";
+            #   greeters.gtk.iconTheme.name = "Papirus-Dark";
+            #   greeters.gtk.cursorTheme.name = "Bibata-Modern-Classic";
+            #   greeters.gtk.cursorTheme.size = 24;
+            # };
           };
+          # Configure keymap in X11
+          xkb = {
+            layout = "us";
+            variant = "";
+          };
+          excludePackages = [ pkgs.xterm ];
         };
-        # Configure keymap in X11
-        xkb = {
-          layout = "us";
-          variant = "";
+        # SDDM config commented out for revert to GDM
+        # displayManager.sddm = {
+        #   enable = true;
+        #   wayland.enable = true;
+        #   theme = "adwaita-dark";
+        #   enableHidpi = true;
+        #   # Optionally, set up extraPackages or settings here
+        #   # settings = { ... };
+        # };
+        displayManager.defaultSession = if config.programs.hyprland.withUWSM or false then "hyprland-uwsm" else "hyprland";
+        xserver.displayManager.gdm = {
+          enable = true;
+          wayland = true;
         };
-        excludePackages = [ pkgs.xterm ];
-      };
-      blueman.enable = false;
+        blueman.enable = false;
     };
 
     programs.hyprland = {
       enable = true;
-      # withUWSM = true;
+      xwayland.enable = true; # Xwayland can be disabled.
+      # Use Hyprland from flake to get latest version (0.51.x+) for portal/screensharing fixes
+      # nixpkgs-unstable has build issues and outdated 0.49.0 version
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      withUWSM = false; # testing
     };
 
-    # Configure XDG Desktop Portals for better app compatibility
+    # Configure XDG Desktop Portals for screensharing
+    # Portal is automatically provided by programs.hyprland when using flake package
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-        xdg-desktop-portal-gtk
-      ];
-      config = {
-        common = {
-          default = [
-            "hyprland"
-            "gtk"
-          ];
-        };
-        hyprland = {
-          default = [
-            "hyprland"
-            "gtk"
-          ];
-        };
-      };
+      # extraPortals managed by programs.hyprland module
     };
 
     environment.systemPackages = with pkgs; [
@@ -244,9 +256,11 @@ in
     # security.pam.services.sddm.enableGnomeKeyring = true;
     # Enable PAM keyring for automatic unlock on login
     security.pam.services = {
-      gdm.enableGnomeKeyring = true;
-      gdm-password.enableGnomeKeyring = true;
-      login.enableGnomeKeyring = true;
+  gdm.enableGnomeKeyring = true;
+  gdm-password.enableGnomeKeyring = true;
+  # lightdm.enableGnomeKeyring = true;
+  # sddm.enableGnomeKeyring = true;
+  login.enableGnomeKeyring = true;
     };
 
     hw.bluetooth.enable = true;
@@ -339,11 +353,19 @@ in
 
       wayland.windowManager.hyprland = {
         enable = true;
+        # Use same Hyprland package as system configuration
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        # Use matching portal package from same flake
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+        # Enable XWayland support (matches NixOS config)
+        xwayland.enable = true;
         plugins = [
           # inputs.hyprland-plugins.packages.${pkgs.system}.hyprwinwrap
         ];
+        # Disable systemd integration if withUWSM is enabled to avoid conflicts.
+        # See: https://wiki.hypr.land/Useful-Utilities/Systemd-start/#uwsm
         systemd = {
-          enable = true;
+          enable = !(config.programs.hyprland.withUWSM or false);
           variables = [ "--all" ];
         };
         settings = {
@@ -516,11 +538,12 @@ in
           };
           xwayland.force_zero_scaling = false;
           gestures = {
-            workspace_swipe = true;
-            workspace_swipe_fingers = 3;
-            workspace_swipe_distance = 300;
-            workspace_swipe_forever = true;
-            workspace_swipe_cancel_ratio = 0.15;
+            # New gesture system in Hyprland 0.51+
+            # 3-finger horizontal swipe to switch workspaces
+            gesture = [
+              "3, left, workspace"   # 3-finger left swipe: workspace gesture
+              "3, right, workspace"  # 3-finger right swipe: workspace gesture
+            ];
           };
           dwindle = {
             pseudotile = true;

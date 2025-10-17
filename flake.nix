@@ -36,6 +36,9 @@
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:hyprwm/Hyprland/71a1216abcc7031776630a6d88f105605c4dc1c9";
+    };
   };
 
   # --- outputs function receives all inputs as parameters
@@ -52,6 +55,7 @@
       disko,
       nixos-hardware,
       stylix,
+      hyprland,
       nixai,
       nix-ai-tools,
       ...

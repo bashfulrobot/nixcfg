@@ -31,7 +31,7 @@
 
   apps = {
     syncthing = {
-      enable = true;
+      enable = false;
       host.qbert = true;
     };
     ollama = {

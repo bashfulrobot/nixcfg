@@ -9,7 +9,7 @@
 
   /* Border styling */
   --border-radius: 8px;
-  --border-size: 1px;
+  --border-size: 3px;
   --border-style: solid;
 
   /* Text color from Stylix */
@@ -17,4 +17,53 @@
 
   /* Window padding */
   --window-padding: 2px;
+}
+
+/* Window switcher general client styling */
+.client {
+  padding: var(--window-padding);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  border: var(--border-size) var(--border-style) var(--border-color);
+  background-color: var(--bg-color);
+}
+
+/* Window switcher client hover and focus states */
+.client:hover,
+.client:focus,
+.client:selected,
+.client:active {
+  background-color: var(--bg-color-hover);
+  border-color: var(--border-color-active);
+  border: var(--border-size) var(--border-style) var(--border-color-active);
+}
+
+/* Window switcher client image styling */
+.client-image {
+  margin: 8px;
+}
+
+/* Window switcher index numbers */
+.index {
+  margin: 4px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+/* Window switcher workspace styling */
+.workspace {
+  font-size: 16px;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  border: var(--border-size) var(--border-style) var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--window-padding);
+}
+
+/* Window switcher monitor styling */
+.monitor {
+  background-color: var(--bg-color);
+  border: var(--border-size) var(--border-style) var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--window-padding);
 }

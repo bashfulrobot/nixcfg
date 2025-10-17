@@ -16,7 +16,7 @@ in {
       home-manager.enable = true;
       insecure-packages.enable = true;
       nix-settings.enable = true;
-      binary-caches.enable = true;
+      # binary-caches.enable = true; # Moved to flake.nix nixConfig
     };
 
     services = {

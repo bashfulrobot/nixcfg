@@ -12,8 +12,7 @@ let
 
   # Zoom helper scripts using standard pattern
   zoomScripts = with pkgs; [
-    (writeShellScriptBin "zoom-screenshare-reset" (builtins.readFile ./scripts/zoom-screenshare-reset.sh))
-    (writeShellScriptBin "zoom-screenshare-fix" (builtins.readFile ./scripts/zoom-screenshare-fix.sh))
+    (writeShellScriptBin "zoom-screenshare-debug" (builtins.readFile ./scripts/zoom-screenshare-debug.sh))
   ];
 in
 {

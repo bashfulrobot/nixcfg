@@ -1,17 +1,25 @@
 # Zoom Screen Sharing on Hyprland/Wayland
 
-This document summarizes the configuration changes made to resolve Zoom screen sharing issues on Hyprland/Wayland.
+This document describes Zoom screen sharing issues and workarounds on Hyprland/Wayland.
 
-## Problem Summary
+## Current Known Issue (2024-2025)
+
+**Problem:** Screen sharing works the first time, but the second attempt shows a black screen.
+
+**Root Cause:** This is a **known Zoom client bug** on Wayland (reported since Zoom 6.3.10+) affecting all distributions (Fedora, NixOS, Ubuntu, Arch). The bug is in Zoom's internal state management - the portal and PipeWire infrastructure work correctly, but Zoom doesn't properly reset its screenshare state between sessions.
+
+**Evidence:**
+- Portal sessions are created correctly (`zoomcast1`, `zoomcast2`, etc.)
+- PipeWire nodes are established properly
+- WirePlumber shows `wp_event_dispatcher_unregister_hook` assertion failures when Zoom stops sharing
+- The issue persists even after cleaning up portal sessions and PipeWire nodes
+
+## Previous Issue (Resolved)
 
 Zoom screen sharing was failing with the error message:
 > "Screen sharing has stopped as the shared window has closed"
 
-**Root Cause:** The issue was caused by PipeWire buffer exhaustion in the screen capture pipeline between Zoom, xdg-desktop-portal-hyprland, and the Wayland compositor. Logs showed:
-
-- `[screencopy/pipewire] Out of buffers` errors
-- Rapid creation/destruction of screencopy sessions (`zoomcast1` through `zoomcast18`)
-- `[ERR] [screencopy] tried scheduling on already scheduled cb (type 1)`
+**Root Cause:** PipeWire buffer exhaustion in the screen capture pipeline. This was resolved by updating to unstable portal versions.
 
 ## Solution Implementation
 
@@ -204,23 +212,56 @@ journalctl --since "5 minutes ago" | grep -i zoom
 journalctl --since "5 minutes ago" | grep -i screencopy
 ```
 
+## Workarounds for Second Screenshare Black Screen
+
+### Option 1: Restart Zoom Manually (Only Solution)
+
+When you encounter a black screen on the second screenshare attempt:
+
+1. Close Zoom completely
+2. Restart Zoom
+3. Rejoin your meeting
+4. Screenshare will work again (once)
+
+**Note:** You will be temporarily disconnected from the meeting (~15 seconds).
+
+### Option 2: Use Screenshare Only Once
+
+If you need to share your screen multiple times during a meeting:
+
+- Start screenshare once
+- Keep it running for the entire duration you need
+- Don't stop and restart - just switch what you're showing
+
+### Option 3: Monitor for Zoom Updates
+
+This is a known bug reported to Zoom. Check for updates regularly:
+
+```bash
+just flatpak-update
+```
+
+The issue may be fixed in future Zoom releases.
+
 ## Troubleshooting
 
-### If Issues Persist
+### If First Screenshare Fails
 
-1. **Check Zoom Settings:** Ensure PipeWire mode is enabled in Zoom settings
+1. **Check Zoom Settings:** Ensure PipeWire mode is enabled
+   - Settings > Screen Share > Advanced > Screen Capture Mode: **PipeWire Mode**
 2. **Check Portal Status:** `systemctl --user status xdg-desktop-portal-hyprland`
 3. **Check PipeWire:** `systemctl --user status pipewire`
 4. **Update Zoom:** `just flatpak-update`
-5. **Check Logs:** `journalctl --user -f | grep -E "(zoom|screencopy|pipewire)"`
 
-### Alternative Solutions
+### Debug Screenshare Issues
 
-If screen sharing still fails, consider:
+To capture diagnostic logs:
 
-- Restarting PipeWire: `systemctl --user restart pipewire`
-- Restarting desktop portals: `systemctl --user restart xdg-desktop-portal*`
-- Using alternative screen sharing tools for critical meetings
+```bash
+zoom-screenshare-debug
+```
+
+This will monitor PipeWire, portal sessions, and Zoom state while you reproduce the issue.
 
 ## Related Commits
 

@@ -20,13 +20,13 @@
     timezone.enable = true;
   };
 
-  # Desktop configuration - testing hash fix in custom COSMIC build
+  # Desktop configuration
   desktops = {
-    # gnome.enable = false;
-    # cosmic.enable = true;
-    tiling = {
-      hyprland.enable = true;
-    };
+    gnome.enable = true;
+    # cosmic.enable = false;
+    # tiling = {
+    #   hyprland.enable = false;
+    # };
   };
 
   apps = {
